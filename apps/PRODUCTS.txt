@@ -1,0 +1,19 @@
+Spill monorepo — layout
+=======================
+
+Platform (shared infrastructure)
+--------------------------------
+  apps/api     — spill-api Worker (all Tea products)
+  apps/cms     — Spill CMS (set VITE_APP_ID for which product you edit)
+
+Per Tea product (clone for a new app, e.g. history-tea)
+-------------------------------------------------------
+  apps/bible-tea/mobile   — Expo (@spillapps/bible-tea-mobile)
+  apps/bible-tea/web      — Marketing (@spillapps/bible-tea-web)
+
+New product: copy `apps/bible-tea` → `apps/history-tea`, rename packages to
+`@spillapps/history-tea-*`, add workspaces in root `package.json`, new bundle IDs,
+same spill-api with `app_id` in the client.
+
+Local: `npm run dev:mobile` or `cd apps/bible-tea/mobile && npx expo …`
+EAS builds run from `apps/bible-tea/mobile`.

@@ -1,0 +1,2135 @@
+[
+  {
+    "id": "creation",
+    "title": "The Creation",
+    "description": "God builds the entire universe in 6 days and takes a day off. The origin story of literally everything.",
+    "section": "Genesis",
+    "bibleRef": "Genesis 1-2",
+    "inSeed": true,
+    "seedId": "st-creation"
+  },
+  {
+    "id": "adam-and-eve",
+    "title": "Adam & Eve",
+    "description": "One rule. They had one rule. And they couldn't even do that. The original trust issues.",
+    "section": "Genesis",
+    "bibleRef": "Genesis 2-3",
+    "inSeed": true,
+    "seedId": "st-adam-eve"
+  },
+  {
+    "id": "cain-and-abel",
+    "title": "Cain & Abel",
+    "description": "The first brothers. The first jealousy. The first murder. Things escalated terrifyingly fast.",
+    "section": "Genesis",
+    "bibleRef": "Genesis 4",
+    "inSeed": true,
+    "seedId": "st-cain-abel"
+  },
+  {
+    "id": "noahs-ark",
+    "title": "Noah's Ark",
+    "description": "God hits reset on the whole planet. One man builds a floating zoo and survives the apocalypse.",
+    "section": "Genesis",
+    "bibleRef": "Genesis 6-9",
+    "inSeed": true,
+    "seedId": "st-noah"
+  },
+  {
+    "id": "tower-of-babel",
+    "title": "Tower of Babel",
+    "description": "Humanity bands together to reach heaven. God scrambles their languages and scatters them everywhere.",
+    "section": "Genesis",
+    "bibleRef": "Genesis 11",
+    "inSeed": true,
+    "seedId": "st-babel"
+  },
+  {
+    "id": "abrahams-call",
+    "title": "Abraham's Call",
+    "description": "A 75-year-old hears God say 'leave everything and go.' No map. No GPS. Just faith.",
+    "section": "Genesis",
+    "bibleRef": "Genesis 12",
+    "inSeed": true,
+    "seedId": "st-abraham-call"
+  },
+  {
+    "id": "abrahams-sister-lie",
+    "title": "Abraham's Sister Lie",
+    "description": "Abraham tells the Pharaoh his wife is his sister to save his own skin. Not his finest moment.",
+    "section": "Genesis",
+    "bibleRef": "Genesis 12:10-20",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-same-lie-again",
+    "title": "The Same Lie, Different King",
+    "description": "Abraham pulls the exact same 'she's my sister' stunt with another king. You'd think he'd learn.",
+    "section": "Genesis",
+    "bibleRef": "Genesis 20",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "gods-promise-of-a-son",
+    "title": "God's Promise of a Son",
+    "description": "God promises a 100-year-old couple they'll have a baby. Sarah literally laughs in God's face.",
+    "section": "Genesis",
+    "bibleRef": "Genesis 15-17",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "tired-of-waiting",
+    "title": "Tired of Waiting",
+    "description": "Abraham and Sarah get impatient with God's promise and try to force it with Hagar. It backfires spectacularly.",
+    "section": "Genesis",
+    "bibleRef": "Genesis 16",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "sodom-and-gomorrah",
+    "title": "Sodom & Gomorrah",
+    "description": "Two cities so far gone that God rains fire from the sky. Abraham negotiates, but there aren't even 10 good people.",
+    "section": "Genesis",
+    "bibleRef": "Genesis 18-19",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "lots-escape-gone-wrong",
+    "title": "Lot's Escape Gone Wrong",
+    "description": "They escape the burning city, his wife looks back and turns to salt, then things get even weirder in a cave.",
+    "section": "Genesis",
+    "bibleRef": "Genesis 19:30-38",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "birth-of-isaac",
+    "title": "The Birth of Isaac",
+    "description": "The miracle baby finally arrives. Laughter fills the tent where doubt lived for decades.",
+    "section": "Genesis",
+    "bibleRef": "Genesis 21",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "abraham-and-isaac",
+    "title": "Abraham & Isaac",
+    "description": "God asks Abraham to sacrifice his only son. The most intense trust test in history.",
+    "section": "Genesis",
+    "bibleRef": "Genesis 22",
+    "inSeed": true,
+    "seedId": "st-abraham-isaac"
+  },
+  {
+    "id": "isaac-and-rebekah",
+    "title": "Isaac & Rebekah",
+    "description": "A servant, some camels, a well, and a prayer. The original long-distance relationship works out perfectly.",
+    "section": "Genesis",
+    "bibleRef": "Genesis 24",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "jacob-and-esau",
+    "title": "Jacob & Esau",
+    "description": "Twin brothers, a stolen blessing, and decades of beef. Family drama at its absolute finest.",
+    "section": "Genesis",
+    "bibleRef": "Genesis 25, 27",
+    "inSeed": true,
+    "seedId": "st-jacob-esau"
+  },
+  {
+    "id": "jacobs-ladder",
+    "title": "Jacob's Ladder",
+    "description": "On the run and sleeping on a rock, Jacob dreams of a stairway to heaven and God makes him a promise.",
+    "section": "Genesis",
+    "bibleRef": "Genesis 28",
+    "inSeed": true,
+    "seedId": "st-jacobs-ladder"
+  },
+  {
+    "id": "jacob-rachel-and-leah",
+    "title": "Jacob, Rachel & Leah",
+    "description": "He works 7 years for the girl he loves, gets tricked into marrying her sister, then works 7 more. Love triangle from hell.",
+    "section": "Genesis",
+    "bibleRef": "Genesis 29-30",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "jacob-wrestles-god",
+    "title": "Jacob Wrestles God",
+    "description": "An all-night wrestling match with a mysterious stranger. Jacob won't let go until he gets a blessing — and a new name.",
+    "section": "Genesis",
+    "bibleRef": "Genesis 32",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "joseph-and-his-brothers",
+    "title": "Joseph & His Brothers",
+    "description": "His brothers sold him into slavery because they were jealous of his outfit. Yes, a coat started all this.",
+    "section": "Genesis",
+    "bibleRef": "Genesis 37",
+    "inSeed": true,
+    "seedId": "st-joseph-brothers"
+  },
+  {
+    "id": "joseph-in-egypt",
+    "title": "Joseph in Egypt",
+    "description": "From prison to running the entire country. The glow-up to end all glow-ups.",
+    "section": "Genesis",
+    "bibleRef": "Genesis 39-41",
+    "inSeed": true,
+    "seedId": "st-joseph-egypt"
+  },
+  {
+    "id": "joseph-forgives-his-brothers",
+    "title": "Joseph Forgives His Brothers",
+    "description": "His brothers show up begging for food, not knowing he's basically the vice president now. The reveal is everything.",
+    "section": "Genesis",
+    "bibleRef": "Genesis 42-45",
+    "inSeed": true,
+    "seedId": "st-joseph-forgives"
+  },
+  {
+    "id": "jacobs-family-moves-to-egypt",
+    "title": "Jacob's Family Moves to Egypt",
+    "description": "The whole clan relocates to Egypt. What starts as refuge becomes a 400-year stay nobody planned for.",
+    "section": "Genesis",
+    "bibleRef": "Genesis 46-47",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "baby-moses",
+    "title": "Baby Moses",
+    "description": "His mom hid him in a basket on the river to save his life. Pharaoh's daughter found him and raised him as royalty.",
+    "section": "Exodus",
+    "bibleRef": "Exodus 2",
+    "inSeed": true,
+    "seedId": "st-baby-moses"
+  },
+  {
+    "id": "the-burning-bush",
+    "title": "The Burning Bush",
+    "description": "Moses sees a bush on fire that won't burn down. Then God starts talking from it. Career change incoming.",
+    "section": "Exodus",
+    "bibleRef": "Exodus 3-4",
+    "inSeed": true,
+    "seedId": "st-burning-bush"
+  },
+  {
+    "id": "the-ten-plagues",
+    "title": "The 10 Plagues",
+    "description": "God sent 10 increasingly unhinged plagues on Egypt. Blood rivers, frog invasions, total darkness. Pharaoh still said no.",
+    "section": "Exodus",
+    "bibleRef": "Exodus 7-12",
+    "inSeed": true,
+    "seedId": "st-ten-plagues"
+  },
+  {
+    "id": "crossing-the-red-sea",
+    "title": "Crossing the Red Sea",
+    "description": "Trapped between the sea and an army. Moses raises his staff and the sea splits in two. The army doesn't make it.",
+    "section": "Exodus",
+    "bibleRef": "Exodus 14",
+    "inSeed": true,
+    "seedId": "st-red-sea"
+  },
+  {
+    "id": "bread-from-heaven",
+    "title": "Bread from Heaven, Water from Rock",
+    "description": "No food? God sends bread from the sky every morning. No water? Moses hits a rock and it pours out.",
+    "section": "Exodus",
+    "bibleRef": "Exodus 16-17",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-ten-commandments",
+    "title": "The 10 Commandments",
+    "description": "Thunder, fire, and God's voice from a mountain. Moses comes down with the ultimate terms of service carved in stone.",
+    "section": "Exodus",
+    "bibleRef": "Exodus 19-20",
+    "inSeed": true,
+    "seedId": "st-ten-commandments"
+  },
+  {
+    "id": "the-golden-calf",
+    "title": "The Golden Calf",
+    "description": "Moses was gone 40 days and the people immediately melted their jewelry into a fake god. The audacity was unreal.",
+    "section": "Exodus",
+    "bibleRef": "Exodus 32",
+    "inSeed": true,
+    "seedId": "st-golden-calf"
+  },
+  {
+    "id": "god-gives-a-second-chance",
+    "title": "God Gives a Second Chance",
+    "description": "After the golden calf disaster, Moses goes back up the mountain. God renews the covenant. His face literally glows.",
+    "section": "Exodus",
+    "bibleRef": "Exodus 34",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "building-gods-tent",
+    "title": "Building God's Tent",
+    "description": "God gives blueprints for a portable temple. Every detail matters — this is where heaven meets earth in the desert.",
+    "section": "Exodus",
+    "bibleRef": "Exodus 35-40",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-first-priests",
+    "title": "The First Priests",
+    "description": "Aaron and his sons get ordained. Holy fire falls. Then two of them do their own thing and it costs them everything.",
+    "section": "Leviticus",
+    "bibleRef": "Leviticus 8-10",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "offerings-and-sacrifices",
+    "title": "Offerings & Sacrifices",
+    "description": "Burnt offerings, grain offerings, peace offerings — God creates a whole language for getting close to him.",
+    "section": "Leviticus",
+    "bibleRef": "Leviticus 1-7",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "clean-and-unclean",
+    "title": "Clean & Unclean",
+    "description": "Rules about food, skin, mold, and bodily fluids. Sounds weird, but it's God teaching them that holiness touches everything.",
+    "section": "Leviticus",
+    "bibleRef": "Leviticus 11-15",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-day-of-atonement",
+    "title": "The Day of Atonement",
+    "description": "One day a year, one priest enters God's presence to cover the sins of the entire nation. The weight of it is staggering.",
+    "section": "Leviticus",
+    "bibleRef": "Leviticus 16",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "real-world-holiness",
+    "title": "Real-World Holiness",
+    "description": "'Love your neighbor as yourself' shows up here first. God spells out what justice and kindness look like in everyday life.",
+    "section": "Leviticus",
+    "bibleRef": "Leviticus 19",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "sacred-feasts-and-rhythms",
+    "title": "Sacred Feasts & Rhythms",
+    "description": "Passover, harvest festivals, and the Day of Atonement. God builds a calendar around remembering what he's done.",
+    "section": "Leviticus",
+    "bibleRef": "Leviticus 23",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "sabbath-jubilee-and-justice",
+    "title": "Sabbath, Jubilee & Justice",
+    "description": "Every 7 years, debts cancelled. Every 50 years, everything resets. God's economic policy is wild.",
+    "section": "Leviticus",
+    "bibleRef": "Leviticus 25",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "organizing-the-camp",
+    "title": "Organizing the Camp",
+    "description": "Two million people in the desert need structure. God arranges every tribe around his presence at the center.",
+    "section": "Numbers",
+    "bibleRef": "Numbers 1-4",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "camp-rules-and-the-cloud",
+    "title": "Camp Rules & the Cloud",
+    "description": "Purity laws, trumpets, and a cloud that tells them when to move and when to stay. God leads in real-time.",
+    "section": "Numbers",
+    "bibleRef": "Numbers 5-10",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "complaining-craving-and-chaos",
+    "title": "Complaining, Craving & Chaos",
+    "description": "They're sick of manna and want meat. God sends quail — so much quail it makes them sick. Be careful what you ask for.",
+    "section": "Numbers",
+    "bibleRef": "Numbers 11",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "12-spies-and-a-40-year-detour",
+    "title": "12 Spies & a 40-Year Detour",
+    "description": "They send 12 spies into the promised land. 10 come back terrified, 2 say 'let's go.' Fear wins, and it costs them 40 years.",
+    "section": "Numbers",
+    "bibleRef": "Numbers 13-14",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "rebellion-and-the-earth-opens",
+    "title": "Rebellion & the Earth Opens Up",
+    "description": "Korah challenges Moses' authority. The ground literally opens and swallows the rebels. God does not play.",
+    "section": "Numbers",
+    "bibleRef": "Numbers 16",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "snakes-water-and-the-long-road",
+    "title": "Snakes, Water & the Long Road",
+    "description": "More complaining, poisonous snakes, a bronze serpent on a pole, and Moses loses his cool at a rock.",
+    "section": "Numbers",
+    "bibleRef": "Numbers 20-21",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "a-new-census-a-new-start",
+    "title": "A New Census, a New Start",
+    "description": "The old generation is gone. A new census counts a new people ready to finally enter the promised land.",
+    "section": "Numbers",
+    "bibleRef": "Numbers 26",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "make-your-promises-count",
+    "title": "Make Your Promises Count",
+    "description": "Laws about vows and offerings. God takes your word seriously — don't make promises you won't keep.",
+    "section": "Numbers",
+    "bibleRef": "Numbers 30",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "a-talking-donkey-and-a-hired-prophet",
+    "title": "A Talking Donkey & a Hired Prophet",
+    "description": "A prophet gets hired to curse Israel, but his donkey sees an angel and starts talking. You can't make this up.",
+    "section": "Numbers",
+    "bibleRef": "Numbers 22",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "when-curses-wont-stick",
+    "title": "When Curses Won't Stick",
+    "description": "Balaam tries to curse Israel three times. Every time, blessings come out instead. The enemy switches to a dirtier tactic.",
+    "section": "Numbers",
+    "bibleRef": "Numbers 23-24",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-battle-against-midian",
+    "title": "The Battle Against Midian",
+    "description": "Justice is served on Midian for leading Israel astray. War in the ancient world was brutal and decisive.",
+    "section": "Numbers",
+    "bibleRef": "Numbers 31",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "dont-get-comfortable-too-early",
+    "title": "Don't Get Comfortable Too Early",
+    "description": "Two tribes want to settle east of the Jordan. Moses almost loses it — you can't quit before you cross the finish line.",
+    "section": "Numbers",
+    "bibleRef": "Numbers 32",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "wandering-the-desert",
+    "title": "Wandering the Desert",
+    "description": "40 years of walking because they couldn't trust God. The world's longest road trip with the worst vibes.",
+    "section": "Numbers",
+    "bibleRef": "Numbers 14-36",
+    "inSeed": true,
+    "seedId": "st-wandering"
+  },
+  {
+    "id": "what-kind-of-leaders-god-wants",
+    "title": "What Kind of Leaders God Wants",
+    "description": "Kings, priests, prophets — God lays out the job description. Power must be leashed by Scripture and humility.",
+    "section": "Deuteronomy",
+    "bibleRef": "Deuteronomy 17-18",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "rules-for-war",
+    "title": "Rules for War",
+    "description": "Even in battle, there are limits. Protect the vulnerable, spare the fruit trees, offer peace first.",
+    "section": "Deuteronomy",
+    "bibleRef": "Deuteronomy 20",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "law-for-messy-lives",
+    "title": "Law for Messy Lives",
+    "description": "Murder, marriage, lost property, stubborn kids — God has something to say about all of it. Holiness gets practical.",
+    "section": "Deuteronomy",
+    "bibleRef": "Deuteronomy 21-22",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "community-standards",
+    "title": "Community Standards",
+    "description": "Honesty in court, limits on punishment, care for workers. Covenant love looks like a community that protects its weakest.",
+    "section": "Deuteronomy",
+    "bibleRef": "Deuteronomy 23-25",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "one-god-one-place",
+    "title": "One God, One Place of Worship",
+    "description": "No shrines on every hill. One name, one altar, one God. Identity starts with who you worship and how.",
+    "section": "Deuteronomy",
+    "bibleRef": "Deuteronomy 12-14",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "what-god-really-wants",
+    "title": "What God Really Wants",
+    "description": "Not just rituals — heart-level loyalty. Love him, walk in his ways, serve with everything you've got.",
+    "section": "Deuteronomy",
+    "bibleRef": "Deuteronomy 10",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "dont-let-success-ruin-you",
+    "title": "Don't Let Success Ruin You",
+    "description": "When the blessings roll in, don't forget who gave them. Gratitude is the guardrail against arrogance.",
+    "section": "Deuteronomy",
+    "bibleRef": "Deuteronomy 8",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "remember-where-you-started",
+    "title": "Remember Where You Started",
+    "description": "You were slaves. You were nobody. Memory is the best armor against pride and the shortest path to gratitude.",
+    "section": "Deuteronomy",
+    "bibleRef": "Deuteronomy 7-9",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "cancel-debts-set-people-free",
+    "title": "Cancel Debts, Set People Free",
+    "description": "Every 7 years, wipe the slate clean. Generosity isn't optional — it's how the community stays whole.",
+    "section": "Deuteronomy",
+    "bibleRef": "Deuteronomy 15",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-ultimate-choice",
+    "title": "The Ultimate Choice",
+    "description": "Blessing or curse, life or death. God puts both options on the table and says choose.",
+    "section": "Deuteronomy",
+    "bibleRef": "Deuteronomy 30",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "cities-of-refuge",
+    "title": "Cities of Refuge",
+    "description": "Safe havens for accidental killers. Even ancient justice had nuance — intent matters.",
+    "section": "Deuteronomy",
+    "bibleRef": "Deuteronomy 19",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "setting-boundaries",
+    "title": "Setting Boundaries",
+    "description": "Property lines and power plays. God cares about borders, honesty, and keeping your word.",
+    "section": "Deuteronomy",
+    "bibleRef": "Deuteronomy 27",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "fair-play-and-fair-trade",
+    "title": "Fair Play & Fair Trade",
+    "description": "Honest scales, fair treatment, no cheating in business or worship. Integrity in the small stuff matters.",
+    "section": "Deuteronomy",
+    "bibleRef": "Deuteronomy 25",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "moses-farewell-address",
+    "title": "Moses' Farewell Address",
+    "description": "A song, a blessing over each tribe, one last look from a mountain. The final words of the greatest prophet.",
+    "section": "Deuteronomy",
+    "bibleRef": "Deuteronomy 33",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "choose-life-or-death",
+    "title": "Choose Life or Death",
+    "description": "The choice is near you — in your mouth and in your heart. God begs them to choose life.",
+    "section": "Deuteronomy",
+    "bibleRef": "Deuteronomy 30:15-20",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "blessings-and-curses",
+    "title": "Blessings & Curses",
+    "description": "Obey and flourish, disobey and everything falls apart. Moses lays out the two paths with brutal clarity.",
+    "section": "Deuteronomy",
+    "bibleRef": "Deuteronomy 28",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-warning-song",
+    "title": "The Warning Song",
+    "description": "Moses writes a song predicting exactly how Israel will mess up. It's a warning disguised as poetry.",
+    "section": "Deuteronomy",
+    "bibleRef": "Deuteronomy 31-32",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "moses-final-days",
+    "title": "Moses' Final Days",
+    "description": "He led them all the way there but never got to enter. He sees the promised land from a mountain and dies.",
+    "section": "Deuteronomy",
+    "bibleRef": "Deuteronomy 34",
+    "inSeed": true,
+    "seedId": "st-moses-final"
+  },
+  {
+    "id": "joshua-takes-command",
+    "title": "Joshua Takes Command",
+    "description": "New leader, same God. Joshua steps up, sends spies, and a prostitute named Rahab hides them on her roof.",
+    "section": "Joshua",
+    "bibleRef": "Joshua 1-2",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "crossing-the-jordan",
+    "title": "Crossing the Jordan",
+    "description": "The priests step into the flooding river and it stops. They walk across on dry ground and stack stones to remember.",
+    "section": "Joshua",
+    "bibleRef": "Joshua 3-4",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "joshua-and-jericho",
+    "title": "Joshua & Jericho",
+    "description": "Walk around the city 7 days, blow trumpets, shout. The walls collapse. Military strategy: trust God.",
+    "section": "Joshua",
+    "bibleRef": "Joshua 6",
+    "inSeed": true,
+    "seedId": "st-jericho"
+  },
+  {
+    "id": "achans-hidden-sin",
+    "title": "Achan's Hidden Sin",
+    "description": "One man steals forbidden loot and hides it under his tent. Israel loses the next battle because of it.",
+    "section": "Joshua",
+    "bibleRef": "Joshua 7",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-gibeonite-trick",
+    "title": "The Gibeonite Trick & the Sun Stands Still",
+    "description": "A fake peace treaty fools Joshua. Then God stops the sun mid-sky so Israel can win a battle. Wild day.",
+    "section": "Joshua",
+    "bibleRef": "Joshua 9-10",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "conquering-the-land",
+    "title": "Conquering the Land",
+    "description": "Campaign after campaign, the map fills in. The promise takes shape one battle at a time.",
+    "section": "Joshua",
+    "bibleRef": "Joshua 10-12",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "caleb-claims-his-mountain",
+    "title": "Caleb Claims His Mountain",
+    "description": "85 years old, still swinging. Caleb says 'give me the hill with the giants on it' and takes it.",
+    "section": "Joshua",
+    "bibleRef": "Joshua 14",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "claim-your-inheritance",
+    "title": "Claim Your Inheritance",
+    "description": "The land is divided but some tribes are lazy about claiming it. Don't settle for tents when God promised territory.",
+    "section": "Joshua",
+    "bibleRef": "Joshua 18",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "safe-cities-sacred-spaces",
+    "title": "Safe Cities, Sacred Spaces",
+    "description": "Cities of refuge get assigned. Levite towns are scattered across the land. Justice and worship everywhere.",
+    "section": "Joshua",
+    "bibleRef": "Joshua 20-21",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-altar-that-almost-started-a-war",
+    "title": "The Altar That Almost Started a War",
+    "description": "Two and a half tribes build an altar and the rest of Israel almost goes to civil war over it. Talking it out saves them.",
+    "section": "Joshua",
+    "bibleRef": "Joshua 22",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "joshuas-final-challenge",
+    "title": "Joshua's Final Challenge",
+    "description": "'Choose this day who you will serve.' Joshua draws a line and dares Israel to commit.",
+    "section": "Joshua",
+    "bibleRef": "Joshua 24",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-cycle-of-disobedience",
+    "title": "The Cycle of Disobedience",
+    "description": "Sin, suffering, crying out, rescue, repeat. Israel falls into a pattern that defines an entire era.",
+    "section": "Judges",
+    "bibleRef": "Judges 1-3",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "deborah-and-jael",
+    "title": "Deborah & the Tent Peg",
+    "description": "A female judge leads Israel to battle. Then another woman ends the war with a tent stake. Don't underestimate them.",
+    "section": "Judges",
+    "bibleRef": "Judges 4-5",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "gideon-vs-the-midianites",
+    "title": "Gideon vs. the Midianites",
+    "description": "God cuts Gideon's army from 32,000 to 300. Torches, jars, and trumpets vs a massive army. God loves impossible odds.",
+    "section": "Judges",
+    "bibleRef": "Judges 6-7",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "when-victory-goes-to-your-head",
+    "title": "When Victory Goes to Your Head",
+    "description": "Gideon wins but makes an idol from the gold. Victory without humility turns sour fast.",
+    "section": "Judges",
+    "bibleRef": "Judges 8",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-bramble-king",
+    "title": "The Bramble King",
+    "description": "Abimelech murders 70 brothers to become king. A parable about a bramble bush predicts his downfall. Ego destroys.",
+    "section": "Judges",
+    "bibleRef": "Judges 9",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "jephthahs-reckless-vow",
+    "title": "Jephthah's Reckless Vow",
+    "description": "A rough-edged warrior makes a vow he can't take back. It costs him the thing he loves most.",
+    "section": "Judges",
+    "bibleRef": "Judges 11",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "samson-and-delilah",
+    "title": "Samson & Delilah",
+    "description": "The strongest man alive had one weakness — a woman who asked his secret three times and he still told her.",
+    "section": "Judges",
+    "bibleRef": "Judges 13-16",
+    "inSeed": true,
+    "seedId": "st-samson"
+  },
+  {
+    "id": "everyone-did-what-they-wanted",
+    "title": "Everyone Did What They Wanted",
+    "description": "No king, no rules, pure chaos. Israel hits rock bottom. The horror shows what happens without God.",
+    "section": "Judges",
+    "bibleRef": "Judges 17-21",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "homemade-religion",
+    "title": "Homemade Religion",
+    "description": "A guy builds his own shrine, hires his own priest, and a whole tribe steals it. DIY worship leads nowhere good.",
+    "section": "Judges",
+    "bibleRef": "Judges 17-18",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "ruth-and-naomi",
+    "title": "Ruth & Naomi",
+    "description": "A foreign widow chooses loyalty over comfort. 'Where you go, I go.' Her faithfulness changes everything.",
+    "section": "Ruth",
+    "bibleRef": "Ruth 1-4",
+    "inSeed": true,
+    "seedId": "st-ruth"
+  },
+  {
+    "id": "david-and-goliath",
+    "title": "David & Goliath",
+    "description": "A teenager with a slingshot vs a 9-foot giant in full armor. Everyone thought he was crazy. He wasn't.",
+    "section": "1 Samuel",
+    "bibleRef": "1 Samuel 17",
+    "inSeed": true,
+    "seedId": "st-david-goliath"
+  },
+  {
+    "id": "sauls-last-stand",
+    "title": "Saul's Last Stand",
+    "description": "The first king falls in battle. David mourns his enemy with one of the most beautiful laments ever written.",
+    "section": "2 Samuel",
+    "bibleRef": "2 Samuel 1",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "two-kings-two-armies",
+    "title": "Two Kings, Two Armies",
+    "description": "Israel splits between David and Saul's son. Rival generals, risky diplomacy, and a long power struggle.",
+    "section": "2 Samuel",
+    "bibleRef": "2 Samuel 2-4",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "david-becomes-king",
+    "title": "David Becomes King",
+    "description": "The shepherd boy finally takes the throne. Israel unites under one crown after years of civil war.",
+    "section": "2 Samuel",
+    "bibleRef": "2 Samuel 5",
+    "inSeed": true,
+    "seedId": "st-david-king"
+  },
+  {
+    "id": "david-dances-before-the-ark",
+    "title": "David Dances Before the Ark",
+    "description": "The Ark comes to Jerusalem. David dances with zero shame. His wife watches from the window and judges him hard.",
+    "section": "2 Samuel",
+    "bibleRef": "2 Samuel 6",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "gods-promise-to-david",
+    "title": "God's Promise to David",
+    "description": "David wants to build God a house. God flips it — 'I'll build YOUR house. Your throne will last forever.'",
+    "section": "2 Samuel",
+    "bibleRef": "2 Samuel 7",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "kindness-to-mephibosheth",
+    "title": "Kindness to Mephibosheth",
+    "description": "At the peak of his power, David hunts down Saul's disabled grandson — not to kill him, but to invite him to dinner forever.",
+    "section": "2 Samuel",
+    "bibleRef": "2 Samuel 9",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "david-and-bathsheba",
+    "title": "David & Bathsheba",
+    "description": "Even the greatest king fell hard. Power, lust, a cover-up, and a murder. Then a prophet walks in and calls it out.",
+    "section": "2 Samuel",
+    "bibleRef": "2 Samuel 11-12",
+    "inSeed": true,
+    "seedId": "st-david-bathsheba"
+  },
+  {
+    "id": "absaloms-rise",
+    "title": "Absalom's Rise",
+    "description": "David's family fractures. Rape, revenge, exile — the consequences of Bathsheba ripple through his own house.",
+    "section": "2 Samuel",
+    "bibleRef": "2 Samuel 13-14",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "absaloms-rebellion",
+    "title": "Absalom's Rebellion",
+    "description": "David's own son steals the hearts of the people and forces the king to flee his own capital. Charisma without character.",
+    "section": "2 Samuel",
+    "bibleRef": "2 Samuel 15-17",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "a-fathers-worst-battle",
+    "title": "A Father's Worst Battle",
+    "description": "David's army fights Absalom's. David wins the war but loses his son. 'O Absalom, my son, my son.' Devastating.",
+    "section": "2 Samuel",
+    "bibleRef": "2 Samuel 18",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "davids-broken-return",
+    "title": "David's Broken Return",
+    "description": "The king comes back to Jerusalem, but nothing is the same. Forgiveness is messy and repair takes longer than ruin.",
+    "section": "2 Samuel",
+    "bibleRef": "2 Samuel 19-20",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "davids-last-battles",
+    "title": "David's Last Battles",
+    "description": "Giants fall, debts are settled, and psalms of thanks close out an era of warfare.",
+    "section": "2 Samuel",
+    "bibleRef": "2 Samuel 21-23",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "davids-final-mistake",
+    "title": "David's Final Mistake",
+    "description": "David orders a census out of pride. A plague follows. He buys a threshing floor that becomes the future temple site.",
+    "section": "2 Samuel",
+    "bibleRef": "2 Samuel 24",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "solomons-wisdom",
+    "title": "Solomon's Wisdom",
+    "description": "God says 'ask for anything.' Solomon picks wisdom. Then immediately proves it with the wildest judgment call ever.",
+    "section": "1 Kings",
+    "bibleRef": "1 Kings 3",
+    "inSeed": true,
+    "seedId": "st-solomon"
+  },
+  {
+    "id": "elijah-on-mount-carmel",
+    "title": "Elijah on Mount Carmel",
+    "description": "One prophet vs 450 prophets of Baal. Build altars, call for fire. Only one God answers. Elijah doesn't flinch.",
+    "section": "1 Kings",
+    "bibleRef": "1 Kings 18",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-kingdom-splits",
+    "title": "The Kingdom Splits",
+    "description": "Solomon's son ignores wise advice and doubles down on harsh rule. One nation becomes two over one dumb decision.",
+    "section": "1 Kings",
+    "bibleRef": "1 Kings 12",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "kings-who-copied-the-worst",
+    "title": "Kings Who Copied the Worst",
+    "description": "One bad king after another copies the sins of those before. Cosmetic religion can't cure deep rot.",
+    "section": "1-2 Kings",
+    "bibleRef": "1-2 Kings various",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "decay-coups-and-leprosy",
+    "title": "Decay, Coups & Leprosy",
+    "description": "Internal corruption invites external disaster. The monarchy slowly rots from the inside out.",
+    "section": "2 Kings",
+    "bibleRef": "2 Kings various",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "manasseh-hits-reverse",
+    "title": "Manasseh Hits Reverse",
+    "description": "A son undoes his father's reforms and drags the nation to its worst spiritual low. One generation can undo decades of progress.",
+    "section": "2 Kings",
+    "bibleRef": "2 Kings 21",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "josiah-finds-the-lost-book",
+    "title": "Josiah Finds the Lost Book",
+    "description": "Workers find the Book of the Law buried in temple rubble. When the king hears it read, he tears his clothes and reforms everything.",
+    "section": "2 Kings",
+    "bibleRef": "2 Kings 22-23",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "josiahs-last-battle",
+    "title": "Josiah's Last Battle",
+    "description": "The revival king wages one final war. Altars are smashed, hearts are called home, but the clock is ticking on Judah.",
+    "section": "2 Chronicles",
+    "bibleRef": "2 Chronicles 35",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "hezekiahs-extra-years",
+    "title": "Hezekiah's Extra Years",
+    "description": "God gives Hezekiah 15 more years, then he blows it by showing off his treasures to the wrong people.",
+    "section": "2 Kings",
+    "bibleRef": "2 Kings 20",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "one-angel-one-army-destroyed",
+    "title": "One Angel, One Army Destroyed",
+    "description": "185,000 Assyrian soldiers surround Jerusalem. Hezekiah prays. One angel. One night. The entire army is gone by morning.",
+    "section": "2 Kings",
+    "bibleRef": "2 Kings 19",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "hezekiah-vs-the-empire",
+    "title": "Hezekiah vs. the Empire",
+    "description": "A faithful king stares down the Assyrian war machine. Intimidation letters arrive. He spreads them before God and prays.",
+    "section": "2 Chronicles",
+    "bibleRef": "2 Chronicles 32",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-northern-kingdom-falls",
+    "title": "The Northern Kingdom Falls",
+    "description": "Centuries of bad kings catch up. Assyria conquers Israel and scatters the 10 tribes. They never come back.",
+    "section": "2 Kings",
+    "bibleRef": "2 Kings 17",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "jerusalem-burns",
+    "title": "Jerusalem Burns",
+    "description": "Babylon breaks through the walls and burns the temple to the ground. The people are dragged into exile. Everything is gone.",
+    "section": "2 Kings",
+    "bibleRef": "2 Kings 25",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "daniel-and-the-lions-den",
+    "title": "Daniel & the Lions' Den",
+    "description": "They threw him in a pit of lions because he wouldn't stop praying. The lions didn't touch him.",
+    "section": "Daniel",
+    "bibleRef": "Daniel 6",
+    "inSeed": true,
+    "seedId": "st-daniel-lions"
+  },
+  {
+    "id": "esther-saves-her-people",
+    "title": "Esther Saves Her People",
+    "description": "A secret Jewish queen risks everything to stop a genocide. She walks in uninvited to the king. Ultimate main character energy.",
+    "section": "Esther",
+    "bibleRef": "Esther 1-10",
+    "inSeed": true,
+    "seedId": "st-esther"
+  },
+  {
+    "id": "jonah-and-the-whale",
+    "title": "Jonah & the Whale",
+    "description": "God said go left. Jonah went right. A giant fish swallowed him for 3 days. Lesson learned the hard way.",
+    "section": "Jonah",
+    "bibleRef": "Jonah 1-4",
+    "inSeed": true,
+    "seedId": "st-jonah"
+  },
+  {
+    "id": "angel-visits-zechariah",
+    "title": "An Angel Visits Zechariah",
+    "description": "An old priest gets an angel visit promising a miracle baby. He doubts it and loses his voice for 9 months.",
+    "section": "Gospels",
+    "bibleRef": "Luke 1:5-25",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "angel-visits-mary",
+    "title": "An Angel Visits Mary",
+    "description": "A teenage girl gets told she'll carry God's son. She says yes. Joseph almost walks away. The most important pregnancy in history.",
+    "section": "Gospels",
+    "bibleRef": "Luke 1:26-38",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "birth-of-john-the-baptist",
+    "title": "The Birth of John the Baptist",
+    "description": "The miracle baby arrives. Zechariah gets his voice back and prophesies. The forerunner of Jesus is born.",
+    "section": "Gospels",
+    "bibleRef": "Luke 1:57-80",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "birth-of-jesus",
+    "title": "The Birth of Jesus",
+    "description": "A teenage girl, no room at the inn, a baby born in a barn with animals. Angels sing to shepherds. Christmas but make it real.",
+    "section": "Gospels",
+    "bibleRef": "Luke 2:1-20",
+    "inSeed": true,
+    "seedId": "st-birth-jesus"
+  },
+  {
+    "id": "simeon-and-anna",
+    "title": "Simeon & Anna at the Temple",
+    "description": "Two elderly believers waited their whole lives to see the Messiah. They recognize a baby in his parents' arms.",
+    "section": "Gospels",
+    "bibleRef": "Luke 2:22-40",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-wise-men",
+    "title": "The Wise Men",
+    "description": "Star-following scholars from the east bring gold, frankincense, and myrrh. King Herod is not happy about the competition.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 2:1-12",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "flight-to-egypt",
+    "title": "Flight to Egypt",
+    "description": "An angel warns Joseph in a dream. The family flees to Egypt in the night. Herod slaughters every baby boy in Bethlehem.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 2:13-23",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "boy-jesus-at-the-temple",
+    "title": "Boy Jesus at the Temple",
+    "description": "Twelve-year-old Jesus stays behind in the temple, debating scholars. His parents panic. He says 'I'm in my Father's house.'",
+    "section": "Gospels",
+    "bibleRef": "Luke 2:41-52",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "john-the-baptist-preaches",
+    "title": "John the Baptist Preaches",
+    "description": "A wild man in the desert wearing camel hair, eating locusts, screaming 'repent.' He's preparing the way for someone bigger.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 3:1-12",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "john-declares-the-lamb",
+    "title": "John Declares 'The Lamb of God'",
+    "description": "John sees Jesus coming and says 'Look — the Lamb of God.' A prophet points past himself to the one who matters.",
+    "section": "Gospels",
+    "bibleRef": "John 1:29-34",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "jesus-gets-baptized",
+    "title": "Jesus Gets Baptized",
+    "description": "Jesus walks into the Jordan River and the sky opens. A dove descends. God says 'that's my son' out loud.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 3:13-17",
+    "inSeed": true,
+    "seedId": "st-baptism"
+  },
+  {
+    "id": "40-days-in-the-desert",
+    "title": "40 Days in the Desert",
+    "description": "Starving and alone, Jesus faces the devil's three best tricks. He shuts them all down with Scripture.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 4:1-11",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "meeting-the-first-disciples",
+    "title": "Meeting the First Disciples",
+    "description": "Simple invitations — 'come and see' — change the course of history. Fishermen drop their nets and follow.",
+    "section": "Gospels",
+    "bibleRef": "John 1:35-51",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "water-to-wine",
+    "title": "Water to Wine",
+    "description": "Jesus' first miracle happens at a wedding party because his mom basically peer-pressured him into it. Iconic.",
+    "section": "Gospels",
+    "bibleRef": "John 2:1-11",
+    "inSeed": true,
+    "seedId": "st-first-miracles"
+  },
+  {
+    "id": "nicodemus-comes-at-night",
+    "title": "Nicodemus Comes at Night",
+    "description": "A religious leader sneaks to Jesus after dark. 'You must be born again.' The conversation that explains everything.",
+    "section": "Gospels",
+    "bibleRef": "John 3:1-21",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "jesus-flips-tables",
+    "title": "Jesus Flips Tables in the Temple",
+    "description": "Jesus walks into the temple, sees it turned into a marketplace, and starts flipping tables. Nobody stops him.",
+    "section": "Gospels",
+    "bibleRef": "John 2:13-25",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "john-the-baptists-last-words",
+    "title": "John the Baptist's Last Words",
+    "description": "As his own following shrinks, John says 'He must increase, I must decrease.' A prophet who knew his role.",
+    "section": "Gospels",
+    "bibleRef": "John 3:22-36",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "healing-at-the-pool",
+    "title": "Healing at the Pool of Bethesda",
+    "description": "A man waits 38 years by a pool hoping for healing. Jesus walks up and says 'do you want to get well?' One word and it's done.",
+    "section": "Gospels",
+    "bibleRef": "John 5",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-miraculous-catch",
+    "title": "The Miraculous Catch of Fish",
+    "description": "Professional fishermen catch nothing all night. Jesus says try again. The nets nearly break from the haul.",
+    "section": "Gospels",
+    "bibleRef": "Luke 5:1-11",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "casting-out-an-evil-spirit",
+    "title": "Casting Out an Evil Spirit",
+    "description": "In the synagogue, a demon screams at Jesus. One command and it's gone. The crowd is stunned — who IS this guy?",
+    "section": "Gospels",
+    "bibleRef": "Mark 1:21-28",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "peters-mother-in-law-healed",
+    "title": "Peter's Mother-in-Law Healed",
+    "description": "Jesus touches her hand, the fever leaves, and she immediately gets up and starts serving dinner. Word spreads fast.",
+    "section": "Gospels",
+    "bibleRef": "Mark 1:29-34",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "touching-the-leper",
+    "title": "Touching the Leper",
+    "description": "Nobody touches lepers. Jesus reaches out his hand. 'I am willing. Be clean.' The outcast is restored.",
+    "section": "Gospels",
+    "bibleRef": "Mark 1:40-45",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "through-the-roof",
+    "title": "Through the Roof",
+    "description": "Four friends can't get through the crowd, so they rip open the roof and lower their paralyzed friend to Jesus. That's friendship.",
+    "section": "Gospels",
+    "bibleRef": "Mark 2:1-12",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "matthew-leaves-everything",
+    "title": "Matthew Leaves Everything",
+    "description": "A hated tax collector hears 'follow me,' walks away from the money table, and throws Jesus a dinner party with all his shady friends.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 9:9-13",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-sabbath-showdowns",
+    "title": "The Sabbath Showdowns",
+    "description": "Jesus heals on the Sabbath and the religious leaders lose their minds. Rules were made for people, not the other way around.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 12:1-14",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "picking-the-twelve",
+    "title": "Picking the Twelve",
+    "description": "After a night of prayer, Jesus picks his squad — fishermen, a tax collector, a zealot, and a traitor. Interesting choices.",
+    "section": "Gospels",
+    "bibleRef": "Luke 6:12-49",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-centurions-faith",
+    "title": "The Centurion's Faith",
+    "description": "A Roman soldier says 'just say the word and my servant will be healed.' Jesus is blown away — this outsider has more faith than Israel.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 8:5-13",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-widows-son-lives-again",
+    "title": "The Widow's Son Lives Again",
+    "description": "A funeral procession. A grieving mother. Jesus touches the coffin, says 'get up,' and the dead man sits up. The crowd freaks out.",
+    "section": "Gospels",
+    "bibleRef": "Luke 7:11-17",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "deaf-ears-opened",
+    "title": "Deaf Ears Opened",
+    "description": "A deaf man with a speech impediment meets Jesus. Ears open, tongue loosens, and the crowd can't stop talking about it.",
+    "section": "Gospels",
+    "bibleRef": "Mark 7:31-37",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "jesus-stops-a-storm",
+    "title": "Jesus Stops a Storm",
+    "description": "Waves crashing, boat sinking, disciples screaming. Jesus wakes up from a nap and tells the storm to shut up. It does.",
+    "section": "Gospels",
+    "bibleRef": "Mark 4:35-41",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "legion-and-the-pigs",
+    "title": "Legion & the Pigs",
+    "description": "A man possessed by thousands of demons lives in a graveyard. Jesus frees him in one sentence. The demons go into pigs.",
+    "section": "Gospels",
+    "bibleRef": "Mark 5:1-20",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "jairus-daughter-and-the-bleeding-woman",
+    "title": "Jairus's Daughter & the Bleeding Woman",
+    "description": "One desperate father and one daring woman. Both need a miracle. Both get one. Faith interrupts death.",
+    "section": "Gospels",
+    "bibleRef": "Mark 5:21-43",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "healing-the-officials-son",
+    "title": "Healing the Official's Son",
+    "description": "A royal official begs Jesus to heal his dying kid. Jesus says 'go home, your son is fine.' He is.",
+    "section": "Gospels",
+    "bibleRef": "John 4:43-54",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "demons-and-accusations",
+    "title": "Demons & Accusations",
+    "description": "Jesus casts out a demon and the Pharisees accuse him of working for Satan. Jesus dismantles their logic in seconds.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 12:22-37",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "john-the-baptist-beheaded",
+    "title": "John the Baptist Beheaded",
+    "description": "A birthday party, a dance, and a horrifying request. The greatest prophet loses his head because of a grudge.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 14:1-12",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "feeding-5000",
+    "title": "Jesus Feeds 5,000",
+    "description": "5 loaves, 2 fish, 5,000 hungry people. He made it work. And there were leftovers.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 14:13-21",
+    "inSeed": true,
+    "seedId": "st-feeds-5000"
+  },
+  {
+    "id": "walking-on-water",
+    "title": "Jesus Walks on Water",
+    "description": "Middle of a storm. Disciples panicking. Then they see someone walking on the waves toward them.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 14:22-33",
+    "inSeed": true,
+    "seedId": "st-walks-water"
+  },
+  {
+    "id": "feeding-4000",
+    "title": "Jesus Feeds 4,000",
+    "description": "Different crowd, same compassion. A few loaves, a few fish, thousands fed. Bread becomes a recurring theme.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 15:32-39",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "bread-of-life",
+    "title": "Bread of Life",
+    "description": "After the miracle meal, Jesus says 'I AM the bread of life.' The crowd wanted food. He offered himself. Many walk away.",
+    "section": "Gospels",
+    "bibleRef": "John 6:22-71",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-purity-debate",
+    "title": "The Purity Debate",
+    "description": "The Pharisees obsess over hand-washing rituals. Jesus says it's not what goes into you that defiles — it's what comes out of your heart.",
+    "section": "Gospels",
+    "bibleRef": "Mark 7:1-23",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "a-mothers-desperate-faith",
+    "title": "A Mother's Desperate Faith",
+    "description": "A Syrophoenician woman begs Jesus to heal her daughter. He tests her. She fires back with one of the best comebacks in the Bible.",
+    "section": "Gospels",
+    "bibleRef": "Mark 7:24-30",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "peters-big-confession",
+    "title": "Peter's Big Confession",
+    "description": "'Who do you say I am?' Peter nails it — 'You're the Christ.' Then Jesus drops the first prediction of his death.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 16:13-28",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-transfiguration",
+    "title": "The Transfiguration",
+    "description": "Jesus takes three disciples up a mountain. His face blazes like the sun. Moses and Elijah appear. Peter wants to build tents.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 17:1-13",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-boy-with-a-demon",
+    "title": "The Boy with a Demon",
+    "description": "The disciples can't heal a demon-possessed boy. Jesus does it instantly and says 'this kind requires prayer and fasting.'",
+    "section": "Gospels",
+    "bibleRef": "Matthew 17:14-21",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "jesus-predicts-his-death",
+    "title": "Jesus Predicts His Death",
+    "description": "Jesus tells the disciples exactly what's coming — betrayal, death, resurrection. They don't understand. He says it three times.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 20:17-19",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-fish-with-a-coin",
+    "title": "The Fish with a Coin",
+    "description": "Tax collectors come asking. Jesus tells Peter to catch a fish — there'll be a coin in its mouth. There is. Bill paid.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 17:24-27",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-festival-showdown",
+    "title": "The Festival Showdown",
+    "description": "Jesus shows up at the Feast of Tabernacles and the crowds are split — prophet, deceiver, or Messiah? Tension is thick.",
+    "section": "Gospels",
+    "bibleRef": "John 7",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "born-blind-now-sees",
+    "title": "Born Blind, Now Sees",
+    "description": "Jesus heals a man blind from birth. The Pharisees interrogate him relentlessly. His answer is simple: 'I was blind. Now I see.'",
+    "section": "Gospels",
+    "bibleRef": "John 9",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-good-shepherd",
+    "title": "The Good Shepherd",
+    "description": "'I am the good shepherd. The good shepherd lays down his life for the sheep.' Jesus defines leadership by sacrifice.",
+    "section": "Gospels",
+    "bibleRef": "John 10",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "sending-out-72",
+    "title": "Sending Out 72 Missionaries",
+    "description": "Jesus sends 72 followers ahead of him in pairs. They come back amazed — even demons obey them.",
+    "section": "Gospels",
+    "bibleRef": "Luke 10:1-24",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-good-samaritan",
+    "title": "The Good Samaritan",
+    "description": "A man gets robbed and left for dead. Religious people walk past. The despised outsider stops to help. 'Who was the neighbor?'",
+    "section": "Gospels",
+    "bibleRef": "Luke 10:25-37",
+    "inSeed": true,
+    "seedId": "st-good-samaritan"
+  },
+  {
+    "id": "mary-and-martha",
+    "title": "Mary & Martha",
+    "description": "One sister is hustling in the kitchen, the other is sitting at Jesus' feet. Martha complains. Jesus sides with Mary.",
+    "section": "Gospels",
+    "bibleRef": "Luke 10:38-42",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "teaching-them-to-pray",
+    "title": "Teaching Them to Pray",
+    "description": "'Lord, teach us to pray.' Jesus gives them the simplest, most powerful prayer in history. Then tells a story about persistence.",
+    "section": "Gospels",
+    "bibleRef": "Luke 11:1-13",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "casting-out-demons-and-taking-heat",
+    "title": "Casting Out Demons & Taking Heat",
+    "description": "Jesus drives out a demon. Some say he's using Satan's power. Jesus dismantles the accusation and warns about empty houses.",
+    "section": "Gospels",
+    "bibleRef": "Luke 11:14-28",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "calling-out-the-pharisees",
+    "title": "Calling Out the Pharisees",
+    "description": "Jesus accepts a dinner invite then absolutely roasts the Pharisees to their faces. Hypocrisy gets exposed at the table.",
+    "section": "Gospels",
+    "bibleRef": "Luke 11:37-54",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-woman-at-the-well",
+    "title": "The Woman at the Well",
+    "description": "A Samaritan outcast meets Jesus at a well. He knows everything about her. She becomes the first evangelist.",
+    "section": "Gospels",
+    "bibleRef": "John 4:1-42",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "lazarus-lives-again",
+    "title": "Lazarus Lives Again",
+    "description": "Dead four days, sealed in a tomb. Jesus weeps, then shouts 'Lazarus, come out!' And he does. The ultimate mic drop.",
+    "section": "Gospels",
+    "bibleRef": "John 11:1-44",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "go-ahead-throw-a-stone",
+    "title": "Go Ahead, Throw a Stone",
+    "description": "A woman caught in adultery is dragged before Jesus. 'Let the one without sin throw first.' One by one, they walk away.",
+    "section": "Gospels",
+    "bibleRef": "John 8:1-11",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-wedding-feast-parables",
+    "title": "The Wedding Feast Parables",
+    "description": "Invitations go out to the VIPs. They all make excuses. So the host invites everyone from the streets instead.",
+    "section": "Gospels",
+    "bibleRef": "Luke 14:1-24",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-narrow-door",
+    "title": "The Narrow Door",
+    "description": "'Strive to enter through the narrow door.' Many will try and fail. Urgency rings out — don't wait.",
+    "section": "Gospels",
+    "bibleRef": "Luke 13:22-30",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "counting-the-cost",
+    "title": "Counting the Cost",
+    "description": "Following Jesus isn't casual. Count the cost first. He's not looking for fans — he wants people who'll carry a cross.",
+    "section": "Gospels",
+    "bibleRef": "Luke 14:25-35",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-prodigal-son",
+    "title": "The Prodigal Son",
+    "description": "He took his inheritance, blew it all, and came crawling back to eat pig food. His dad threw him a party anyway.",
+    "section": "Gospels",
+    "bibleRef": "Luke 15",
+    "inSeed": true,
+    "seedId": "st-prodigal-son"
+  },
+  {
+    "id": "the-shrewd-manager",
+    "title": "The Shrewd Manager",
+    "description": "A manager about to get fired cuts deals with his boss's debtors. Jesus praises the hustle. Wait, what?",
+    "section": "Gospels",
+    "bibleRef": "Luke 16:1-15",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-rich-man-and-lazarus",
+    "title": "The Rich Man & Lazarus",
+    "description": "A rich man ignores a beggar at his gate. They both die. The reversal on the other side is permanent.",
+    "section": "Gospels",
+    "bibleRef": "Luke 16:19-31",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "zacchaeus-climbs-a-tree",
+    "title": "Zacchaeus Climbs a Tree",
+    "description": "A short, rich tax collector climbs a sycamore to see Jesus. Jesus spots him and invites himself to dinner. Everything changes.",
+    "section": "Gospels",
+    "bibleRef": "Luke 19:1-10",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-cursed-fig-tree",
+    "title": "The Cursed Fig Tree & Temple Fury",
+    "description": "Jesus curses a fruitless fig tree and clears the temple of merchants. Both acts say the same thing: bear fruit or be cut off.",
+    "section": "Gospels",
+    "bibleRef": "Mark 11:12-25",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "palm-sunday",
+    "title": "Palm Sunday",
+    "description": "Jesus rides into Jerusalem on a donkey. Crowds wave palms and shout 'Hosanna!' The king arrives — but not how anyone expected.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 21:1-11",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "caesars-coin",
+    "title": "Caesar's Coin",
+    "description": "They try to trap Jesus with a political question. He asks for a coin. 'Give to Caesar what's Caesar's, and to God what's God's.' Mic drop.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 22:15-22",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "faith-figs-and-loaded-questions",
+    "title": "Faith, Figs & Loaded Questions",
+    "description": "Religious leaders fire trap after trap at Jesus. He answers every one and fires back harder.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 21-22",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "marriage-and-the-afterlife",
+    "title": "Marriage & the Afterlife",
+    "description": "The Sadducees think they've got Jesus with a brain teaser about marriage after death. He shuts it down in one sentence.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 22:23-33",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-greatest-commandment",
+    "title": "The Greatest Commandment",
+    "description": "'Love God with everything. Love your neighbor as yourself.' The entire law and prophets hang on these two lines.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 22:34-40",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "whose-son-is-the-messiah",
+    "title": "Whose Son Is the Messiah?",
+    "description": "Jesus asks the Pharisees a riddle about David's son. Nobody can answer. He reveals the Messiah is bigger than they imagined.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 22:41-46",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "signs-of-the-end",
+    "title": "Signs of the End",
+    "description": "On the Mount of Olives, Jesus describes the end of the world — wars, earthquakes, deception. 'Stay ready. You don't know the day.'",
+    "section": "Gospels",
+    "bibleRef": "Matthew 24-25",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-plot-against-jesus",
+    "title": "The Plot Against Jesus",
+    "description": "The religious leaders have had enough. They start scheming in secret to arrest and kill Jesus before the festival ends.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 26:1-5",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "judas-makes-a-deal",
+    "title": "Judas Makes a Deal",
+    "description": "Thirty silver coins. That's the price Judas puts on Jesus. He walks to the priests and offers to hand him over.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 26:14-16",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "anointed-at-bethany",
+    "title": "Anointed at Bethany",
+    "description": "A woman pours expensive perfume on Jesus. The disciples say it's wasteful. Jesus says she's preparing him for burial.",
+    "section": "Gospels",
+    "bibleRef": "John 12:1-8",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-last-supper",
+    "title": "The Last Supper",
+    "description": "His final meal with his 12 closest friends. Bread and wine become his body and blood. One of them is about to betray him.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 26:17-30",
+    "inSeed": true,
+    "seedId": "st-last-supper"
+  },
+  {
+    "id": "gethsemane",
+    "title": "Gethsemane",
+    "description": "'Take this cup from me. But not my will — yours.' In crushing sorrow, Jesus chooses obedience over escape.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 26:36-46",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "arrested-in-the-garden",
+    "title": "Arrested in the Garden",
+    "description": "A kiss from Judas. Torches and swords. Peter swings a sword and cuts off an ear. Jesus heals it and surrenders.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 26:47-56",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "before-the-sanhedrin",
+    "title": "Before the Sanhedrin",
+    "description": "False witnesses, loaded questions, and one honest answer: 'I am.' The high priest tears his robes. Guilty of blasphemy.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 26:57-68",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "peters-three-denials",
+    "title": "Peter's Three Denials",
+    "description": "'I don't know him.' Three times. Then the rooster crows. Peter remembers and breaks down crying.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 26:69-75",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "jesus-before-pilate",
+    "title": "Jesus Before Pilate",
+    "description": "Pilate finds no fault in him. The crowd screams for crucifixion. He washes his hands and hands Jesus over.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 27:11-26",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-crucifixion",
+    "title": "The Crucifixion",
+    "description": "They mocked him, beat him, and nailed him to a cross. The sky went dark. He said 'It is finished' and gave up his spirit.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 27:32-56",
+    "inSeed": true,
+    "seedId": "st-crucifixion"
+  },
+  {
+    "id": "buried-in-a-borrowed-tomb",
+    "title": "Buried in a Borrowed Tomb",
+    "description": "Joseph of Arimathea takes the body down, wraps it in linen, and places it in his own new tomb. A stone seals the entrance.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 27:57-66",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-resurrection",
+    "title": "The Resurrection",
+    "description": "Three days later, the tomb is empty. He's alive. Everything he said was true. The greatest comeback in history.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 28:1-10",
+    "inSeed": true,
+    "seedId": "st-resurrection"
+  },
+  {
+    "id": "the-road-to-emmaus",
+    "title": "The Road to Emmaus",
+    "description": "Two heartbroken disciples walk home. A stranger joins them and explains the Scriptures. When he breaks bread, they realize — it's Jesus.",
+    "section": "Gospels",
+    "bibleRef": "Luke 24:13-35",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "doubting-thomas",
+    "title": "Doubting Thomas",
+    "description": "'Unless I put my finger in the nail holes, I won't believe.' Jesus shows up and says 'go ahead.' Thomas falls to his knees.",
+    "section": "Gospels",
+    "bibleRef": "John 20:24-29",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-great-commission",
+    "title": "The Great Commission",
+    "description": "'Go and make disciples of all nations.' Jesus gives the final mission statement before leaving earth.",
+    "section": "Gospels",
+    "bibleRef": "Matthew 28:16-20",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-ascension",
+    "title": "The Ascension",
+    "description": "Jesus leads his disciples to a hillside, blesses them, and rises into the sky. Two angels say 'he'll be back.'",
+    "section": "Acts",
+    "bibleRef": "Acts 1:1-11",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "pentecost",
+    "title": "Pentecost",
+    "description": "The Holy Spirit arrives like fire and wind. Everyone starts speaking languages they never learned. The church is born.",
+    "section": "Acts",
+    "bibleRef": "Acts 2",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-beautiful-gate-miracle",
+    "title": "The Beautiful Gate Miracle",
+    "description": "A disabled beggar asks Peter for money. Peter says 'I don't have money, but I have something better.' The man walks.",
+    "section": "Acts",
+    "bibleRef": "Acts 3",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "ananias-and-sapphira",
+    "title": "Ananias & Sapphira",
+    "description": "A couple lies about their donation to the church. They both drop dead. God is not messing around with fakes in the early church.",
+    "section": "Acts",
+    "bibleRef": "Acts 5",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "stephen-the-first-martyr",
+    "title": "Stephen, the First Martyr",
+    "description": "A man full of faith and fire preaches the truth. They stone him to death. He forgives them while dying.",
+    "section": "Acts",
+    "bibleRef": "Acts 6-7",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-church-scatters",
+    "title": "The Church Scatters & Philip",
+    "description": "Persecution scatters believers everywhere. Philip ends up baptizing an Ethiopian official on a desert road. The gospel spreads.",
+    "section": "Acts",
+    "bibleRef": "Acts 8",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "saul-meets-jesus",
+    "title": "Saul Meets Jesus on the Road",
+    "description": "A Christian-hunter gets blinded by a light. Jesus says 'why are you persecuting me?' Saul becomes Paul. The greatest 180 in history.",
+    "section": "Acts",
+    "bibleRef": "Acts 9:1-31",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "peters-miracles",
+    "title": "Peter's Miracles in Lydda & Joppa",
+    "description": "Peter heals a paralyzed man and raises a dead woman. The apostles are walking in the same power Jesus had.",
+    "section": "Acts",
+    "bibleRef": "Acts 9:32-43",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "cornelius-and-the-vision",
+    "title": "Cornelius & the Sheet Vision",
+    "description": "God sends Peter a vision of forbidden food and says 'eat.' The message: salvation isn't just for Jews anymore.",
+    "section": "Acts",
+    "bibleRef": "Acts 10",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-antioch-church",
+    "title": "The Antioch Church",
+    "description": "A diverse church launches in Antioch. For the first time, followers of Jesus are called 'Christians.'",
+    "section": "Acts",
+    "bibleRef": "Acts 11",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "james-killed-peter-escapes",
+    "title": "James Killed, Peter Escapes",
+    "description": "King Herod executes James. He arrests Peter too — but an angel breaks him out of prison in the middle of the night.",
+    "section": "Acts",
+    "bibleRef": "Acts 12",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "pauls-first-journey",
+    "title": "Paul's First Missionary Journey",
+    "description": "Paul and Barnabas hit the road. New churches spring up, old habits resist, and the gospel goes where it's never been.",
+    "section": "Acts",
+    "bibleRef": "Acts 13-14",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-jerusalem-council",
+    "title": "The Jerusalem Council",
+    "description": "The early church debates the biggest question: do non-Jews have to follow Jewish law? They land on grace.",
+    "section": "Acts",
+    "bibleRef": "Acts 15",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "earthquake-at-philippi",
+    "title": "Earthquake at Philippi",
+    "description": "Paul and Silas are in prison, singing hymns at midnight. An earthquake blows the doors open. The jailer converts.",
+    "section": "Acts",
+    "bibleRef": "Acts 16",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "thessalonica-riot-and-berea",
+    "title": "Thessalonica Riot & Berean Scholars",
+    "description": "One city riots, the next one fact-checks Scripture daily. Two very different receptions for the same message.",
+    "section": "Acts",
+    "bibleRef": "Acts 17:1-14",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "athens-the-unknown-god",
+    "title": "Athens: The Unknown God",
+    "description": "Paul finds an altar labeled 'To an Unknown God.' He says 'let me introduce him.' Philosophy meets revelation.",
+    "section": "Acts",
+    "bibleRef": "Acts 17:15-34",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "riot-in-ephesus",
+    "title": "Riot in Ephesus & the Bonfire",
+    "description": "Believers burn their magic books worth millions. Silversmiths riot because they're losing money. Power confronts profit.",
+    "section": "Acts",
+    "bibleRef": "Acts 19",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "eutychus-falls-out-a-window",
+    "title": "Eutychus Falls Out a Window",
+    "description": "Paul preaches so long that a young man falls asleep, falls out a third-story window, and dies. Paul raises him back.",
+    "section": "Acts",
+    "bibleRef": "Acts 20:7-12",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "farewell-at-miletus",
+    "title": "Farewell at Miletus",
+    "description": "Paul says goodbye to the church leaders at Miletus. There are tears on the shore. He knows he won't see them again.",
+    "section": "Acts",
+    "bibleRef": "Acts 20:17-38",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "arrested-at-the-temple",
+    "title": "Arrested at the Temple",
+    "description": "Paul visits the temple in Jerusalem and a mob drags him out. Roman soldiers save his life. The trials begin.",
+    "section": "Acts",
+    "bibleRef": "Acts 21",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "trials-before-governors",
+    "title": "Trials Before Governors",
+    "description": "Paul gets passed from one Roman official to another. Each one finds no fault, but nobody sets him free. He appeals to Caesar.",
+    "section": "Acts",
+    "bibleRef": "Acts 24-26",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "shipwreck-and-malta",
+    "title": "Shipwreck & Malta",
+    "description": "A brutal storm, 14 days lost at sea, the ship breaks apart. Everyone makes it to shore. A snake bites Paul. He shakes it off.",
+    "section": "Acts",
+    "bibleRef": "Acts 27-28",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "paul-under-house-arrest",
+    "title": "Paul Under House Arrest",
+    "description": "Chained to a Roman guard in a rented room, Paul keeps preaching. Chains can't stop the word.",
+    "section": "Acts",
+    "bibleRef": "Acts 28:16-31",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "james-writes-to-the-church",
+    "title": "James Writes to the Church",
+    "description": "Practical wisdom for scattered believers. Faith without action is dead. Control your tongue. Help the poor. No excuses.",
+    "section": "Epistles",
+    "bibleRef": "James",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "peters-final-letter",
+    "title": "Peter's Final Letter",
+    "description": "An aging apostle warns about false teachers and reminds the church: he SAW Jesus transfigured on that mountain. This isn't fiction.",
+    "section": "Epistles",
+    "bibleRef": "2 Peter",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "pauls-last-letter",
+    "title": "Paul's Last Letter",
+    "description": "From a Roman prison, Paul writes to Timothy one final time. 'I have fought the good fight. I have finished the race.'",
+    "section": "Epistles",
+    "bibleRef": "2 Timothy",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "johns-exile-and-revelation",
+    "title": "John's Exile & Revelation",
+    "description": "Exiled to an island, the last living apostle receives a vision of heaven, judgment, and the end of all things.",
+    "section": "Revelation",
+    "bibleRef": "Revelation 1",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-new-heaven-and-new-earth",
+    "title": "The New Heaven & New Earth",
+    "description": "God wipes every tear. No more death, pain, or crying. Everything is made new. The story ends where it began — God with his people.",
+    "section": "Revelation",
+    "bibleRef": "Revelation 21-22",
+    "inSeed": false,
+    "seedId": null
+  }
+]

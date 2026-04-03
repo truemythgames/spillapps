@@ -1,0 +1,4 @@
+# Pages project id (must match the project in Cloudflare). Deploy: npm run deploy (from apps/cms).
+# Pin account: CLOUDFLARE_ACCOUNT_ID=c34e072d06363120d0fedf55fc673661 npx wrangler pages deploy dist
+name = "spill-cms"
+pages_build_output_dir = "dist"

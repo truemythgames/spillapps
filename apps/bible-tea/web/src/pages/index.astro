@@ -1,0 +1,305 @@
+---
+const title = "Bible Tea — Bible Stories for Gen Z";
+const description = "The Bible, but make it relatable. Short audio stories narrated by your bestie. Available on iOS & Android.";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://spillapps.com" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+
+      :root {
+        --bg: #0A0A0F;
+        --surface: #141420;
+        --surface-light: #1E1E2E;
+        --primary: #C8A2FF;
+        --primary-dark: #9B6FDB;
+        --accent: #FFD166;
+        --text: #FFFFFF;
+        --text-secondary: #A0A0B8;
+        --text-muted: #6B6B80;
+      }
+
+      body {
+        font-family: 'Inter', -apple-system, sans-serif;
+        background-color: var(--bg);
+        color: var(--text);
+        overflow-x: hidden;
+      }
+
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 2rem;
+        position: relative;
+      }
+
+      .hero::before {
+        content: '';
+        position: absolute;
+        top: -20%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(circle, rgba(200,162,255,0.12) 0%, transparent 70%);
+        pointer-events: none;
+      }
+
+      .badge {
+        display: inline-block;
+        background: rgba(200,162,255,0.15);
+        border: 1px solid rgba(200,162,255,0.3);
+        padding: 6px 16px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--primary);
+        letter-spacing: 0.5px;
+        margin-bottom: 2rem;
+      }
+
+      h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(2.5rem, 8vw, 5rem);
+        font-weight: 700;
+        line-height: 1.1;
+        max-width: 700px;
+        margin-bottom: 1.5rem;
+      }
+
+      h1 span {
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .subtitle {
+        font-size: 1.125rem;
+        color: var(--text-secondary);
+        max-width: 500px;
+        line-height: 1.7;
+        margin-bottom: 2.5rem;
+      }
+
+      .cta-row {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 14px 28px;
+        border-radius: 999px;
+        font-size: 16px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .btn:hover { transform: translateY(-2px); }
+
+      .btn-primary {
+        background: var(--primary);
+        color: var(--bg);
+        box-shadow: 0 4px 24px rgba(200,162,255,0.3);
+      }
+
+      .btn-secondary {
+        background: var(--surface-light);
+        color: var(--text);
+        border: 1px solid rgba(255,255,255,0.1);
+      }
+
+      .features {
+        padding: 6rem 2rem;
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+
+      .features h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.5rem;
+        text-align: center;
+        margin-bottom: 3rem;
+      }
+
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .feature-card {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 16px;
+        padding: 2rem;
+        transition: transform 0.2s;
+      }
+
+      .feature-card:hover { transform: translateY(-4px); }
+
+      .feature-emoji {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .feature-card h3 {
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+
+      .feature-card p {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        line-height: 1.6;
+      }
+
+      .social-proof {
+        padding: 4rem 2rem;
+        text-align: center;
+        background: var(--surface);
+      }
+
+      .social-proof h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2rem;
+        margin-bottom: 1rem;
+      }
+
+      .social-proof p {
+        color: var(--text-secondary);
+        font-size: 1rem;
+        max-width: 500px;
+        margin: 0 auto 2rem;
+      }
+
+      .stories-preview {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .story-chip {
+        background: var(--surface-light);
+        border: 1px solid rgba(255,255,255,0.08);
+        padding: 10px 20px;
+        border-radius: 999px;
+        font-size: 14px;
+        color: var(--text-secondary);
+      }
+
+      footer {
+        padding: 3rem 2rem;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 14px;
+      }
+
+      footer a {
+        color: var(--primary);
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="hero">
+      <div class="badge">NEW — Now on iOS & Android</div>
+      <h1>Bible Stories <span>for Gen Z</span></h1>
+      <p class="subtitle">
+        The Bible, but make it relatable. Short audio stories narrated like your
+        bestie is spilling the tea on scripture.
+      </p>
+      <div class="cta-row">
+        <a href="#" class="btn btn-primary">Download on iOS</a>
+        <a href="#" class="btn btn-secondary">Get it on Android</a>
+      </div>
+    </section>
+
+    <section class="features">
+      <h2>Why Bible Tea?</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-emoji">🎧</div>
+          <h3>Audio Stories</h3>
+          <p>5-7 minute audio stories you can listen to anywhere. Perfect for your commute, gym, or bedtime.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-emoji">🗣️</div>
+          <h3>Choose Your Narrator</h3>
+          <p>Pick from different narrators with unique styles. From chill vibes to maximum drama.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-emoji">📖</div>
+          <h3>40+ Stories</h3>
+          <p>From Genesis to Revelation. All the greatest hits, told in a way that actually makes sense.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-emoji">🔥</div>
+          <h3>Daily Streaks</h3>
+          <p>Build a listening habit with daily streaks. One story a day keeps the existential dread away.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-emoji">💬</div>
+          <h3>Modern Language</h3>
+          <p>No "thou shalt" here. We speak your language while keeping the wisdom 100% real.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-emoji">✨</div>
+          <h3>New Every Week</h3>
+          <p>Fresh stories drop weekly. There's always something new to discover.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="social-proof">
+      <h2>Stories You'll Actually Listen To</h2>
+      <p>Start with the classics. Go deeper each week.</p>
+      <div class="stories-preview">
+        <span class="story-chip">David & Goliath</span>
+        <span class="story-chip">Noah's Ark</span>
+        <span class="story-chip">The Creation</span>
+        <span class="story-chip">Joseph & His Brothers</span>
+        <span class="story-chip">The Resurrection</span>
+        <span class="story-chip">Esther Saves Her People</span>
+        <span class="story-chip">Daniel & the Lions</span>
+        <span class="story-chip">+ 33 more</span>
+      </div>
+    </section>
+
+    <footer>
+      <p>&copy; 2026 Spill. Bible Tea is a Spill app.</p>
+      <p style="margin-top: 0.5rem;">
+        <a href="/privacy">Privacy Policy</a> &middot;
+        <a href="/terms">Terms of Service</a> &middot;
+        <a href="mailto:hello@truemythgames.com">Contact</a>
+      </p>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,4 @@
+# Pages project name (must match the project in Cloudflare). Deploy from apps/bible-tea/web after astro build.
+# Pin account if needed: CLOUDFLARE_ACCOUNT_ID=... npx wrangler pages deploy dist
+name = "bible-tea-web"
+pages_build_output_dir = "dist"

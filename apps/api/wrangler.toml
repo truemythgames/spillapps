@@ -1,0 +1,43 @@
+# Spill = platform Worker. APP_ID / product slugs (e.g. bible-tea) scope data & auth per app.
+# Account: hello@truemythgames.com (pins deploy; avoids stale cached account from another login)
+account_id = "c34e072d06363120d0fedf55fc673661"
+
+name = "spill-api"
+main = "src/index.ts"
+compatibility_date = "2025-04-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+ENVIRONMENT = "production"
+APP_NAME = "spillapps"
+APP_ID = "bible-tea"
+ALLOWED_APP_IDS = "bible-tea"
+PUBLIC_API_BASE = "https://api.spillapps.com"
+PUBLIC_MEDIA_BASE = "https://media.spillapps.com"
+# Public OAuth Web client ID (same as CMS VITE_GOOGLE_CLIENT_ID).
+GOOGLE_CLIENT_ID = "207520231816-gol616972ookbd3rh4p5q4dch4avon71.apps.googleusercontent.com"
+APPLE_BUNDLE_ID = "app.bibletea"
+ADMIN_EMAIL = "hello@truemythgames.com"
+# Comma-separated browser origins. Add your Cloudflare Pages URL (…pages.dev) after CMS deploy.
+CORS_ALLOWED_ORIGINS = "http://localhost:5173,http://127.0.0.1:5173,https://spillapps.com,https://www.spillapps.com,https://spill-cms.pages.dev,https://cms.spillapps.com"
+# JWT_SECRET and OPENAI_API_KEY: `wrangler secret put <NAME>` (never commit). Local: apps/api/.dev.vars
+
+[[d1_databases]]
+binding = "DB"
+database_name = "spill-db"
+database_id = "81d74040-fbaa-4e9b-a4a7-37d412cd0b33"
+
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "spill-media"
+
+[[kv_namespaces]]
+binding = "CACHE"
+id = "9b6560ab38db43c1ab643a569d01184c"
+
+[triggers]
+crons = ["0 0 * * *"]
+
+# Custom domain (after spillapps.com is on Cloudflare): Workers → spill-api → Custom domains → api.spillapps.com
+# R2: spill-media. Public URL: media.spillapps.com
+# See deploy-spillapps.txt for the full checklist.

@@ -1,0 +1,202 @@
+[
+  {
+    "id": "adam",
+    "name": "Adam",
+    "subtitle": "The first man",
+    "overview": "The very first human, shaped from dust and given the breath of life. Adam walked with God in paradise, named every living creature, and had it all — until one choice changed everything. His story is the starting point of the entire Bible narrative.",
+    "imagePrompt": "Portrait of Adam, the first man, in the Garden of Eden, surrounded by lush vegetation, golden light, classical oil painting style, Renaissance master quality, warm tones, no text",
+    "storyIds": ["creation", "adam-and-eve"]
+  },
+  {
+    "id": "eve",
+    "name": "Eve",
+    "subtitle": "Mother of all living",
+    "overview": "Created as Adam's equal partner, Eve was the first woman and the mother of all humanity. Curious and bold, she faced the serpent's temptation in the Garden — a moment that would echo through every generation after her.",
+    "imagePrompt": "Portrait of Eve, the first woman, in the Garden of Eden with flowers and fruit trees, soft golden light, classical oil painting style, Renaissance master quality, warm tones, no text",
+    "storyIds": ["adam-and-eve", "cain-and-abel"]
+  },
+  {
+    "id": "noah",
+    "name": "Noah",
+    "subtitle": "Builder of the ark",
+    "overview": "In a world drowning in corruption, Noah was the one righteous man God found worth saving. He spent decades building a massive boat while everyone laughed — then the rain came. His faith literally kept humanity alive.",
+    "imagePrompt": "Portrait of Noah, elderly bearded man, standing before a massive wooden ark under stormy skies, dramatic lighting, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": ["noahs-ark"]
+  },
+  {
+    "id": "abraham",
+    "name": "Abraham",
+    "subtitle": "Father of nations",
+    "overview": "Abraham left everything — his home, his family, his comfort — because God told him to. He waited decades for a promised son, lied to save his own skin more than once, and was asked to sacrifice the child he loved most. Flawed but faithful, he became the father of three world religions.",
+    "imagePrompt": "Portrait of Abraham, wise elderly patriarch with long white beard, gazing at a starlit desert sky, warm golden tones, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": ["abrahams-call", "abrahams-sister-lie", "gods-promise-of-a-son", "birth-of-isaac", "abraham-and-isaac"]
+  },
+  {
+    "id": "moses",
+    "name": "Moses",
+    "subtitle": "Deliverer of Israel",
+    "overview": "Born under a death sentence, raised in Pharaoh's palace, fugitive in the desert — Moses had one of the wildest resumes in history before God even called him. He stuttered, argued with God, and still led an entire nation out of slavery. The ultimate reluctant hero.",
+    "imagePrompt": "Portrait of Moses, powerful bearded figure holding a wooden staff, dramatic desert background with a pillar of fire, intense lighting, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": ["baby-moses", "the-burning-bush", "the-ten-plagues", "crossing-the-red-sea", "the-ten-commandments", "the-golden-calf", "moses-farewell-address", "moses-final-days"]
+  },
+  {
+    "id": "david",
+    "name": "David",
+    "subtitle": "Shepherd king",
+    "overview": "A shepherd boy who killed a giant, wrote psalms that still hit different 3,000 years later, and became Israel's greatest king. But David was also deeply flawed — adultery, murder cover-ups, family chaos. His story is proof that God uses broken people for extraordinary things.",
+    "imagePrompt": "Portrait of young King David, handsome shepherd with a crown and harp, standing on a hilltop overlooking Jerusalem, golden hour lighting, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": ["david-and-goliath", "david-becomes-king", "david-dances-before-the-ark", "gods-promise-to-david", "kindness-to-mephibosheth", "david-and-bathsheba", "davids-last-battles", "davids-final-mistake"]
+  },
+  {
+    "id": "jesus",
+    "name": "Jesus",
+    "subtitle": "Son of God",
+    "overview": "Born in a stable, raised as a carpenter's kid, executed as a criminal — and somehow the most influential person who ever lived. Jesus healed the sick, challenged the powerful, befriended outcasts, and claimed to be God in human form. His death and resurrection are the hinge point of all of history.",
+    "imagePrompt": "Portrait of Jesus Christ, serene and compassionate face, white and golden robes, radiant divine light behind him, classical oil painting style, Renaissance master quality, warm ethereal tones, no text",
+    "storyIds": ["birth-of-jesus", "jesus-gets-baptized", "water-to-wine", "feeding-5000", "walking-on-water", "the-transfiguration", "the-last-supper", "the-crucifixion", "the-resurrection", "the-ascension"]
+  },
+  {
+    "id": "joseph",
+    "name": "Joseph",
+    "subtitle": "Dreamer of dreams",
+    "overview": "Sold into slavery by his own brothers at 17, falsely accused, thrown in prison — and somehow ended up running all of Egypt. Joseph's story is the ultimate comeback arc. He had every reason to be bitter, but chose forgiveness instead.",
+    "imagePrompt": "Portrait of Joseph, young man wearing a colorful coat of many colors, Egyptian palace in background, warm golden light, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": ["joseph-and-his-brothers", "joseph-in-egypt", "joseph-forgives-his-brothers", "jacobs-family-moves-to-egypt"]
+  },
+  {
+    "id": "daniel",
+    "name": "Daniel",
+    "subtitle": "Man of visions",
+    "overview": "Taken from his homeland as a teenager and dropped into the heart of the Babylonian empire, Daniel refused to compromise his faith — even when it meant a night in a den of hungry lions. His courage and integrity made him an advisor to kings.",
+    "imagePrompt": "Portrait of Daniel, calm dignified young man praying in a den of lions, divine light protecting him, dramatic atmosphere, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": ["daniel-and-the-lions-den"]
+  },
+  {
+    "id": "esther",
+    "name": "Esther",
+    "subtitle": "Brave queen",
+    "overview": "An orphan girl who became queen of Persia and saved her entire people from genocide. Esther risked her life by approaching the king uninvited — something that could have gotten her killed on the spot. Her courage came at the exact right moment in history.",
+    "imagePrompt": "Portrait of Queen Esther, beautiful young woman in royal Persian robes and crown, standing in a grand palace, dramatic golden lighting, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": ["esther-saves-her-people"]
+  },
+  {
+    "id": "ruth",
+    "name": "Ruth",
+    "subtitle": "Loyal daughter",
+    "overview": "A foreign widow who chose loyalty over comfort. When her mother-in-law Naomi lost everything, Ruth refused to leave her side — walking away from her own homeland, her own gods, her own future. That radical faithfulness landed her in the family line of Jesus himself.",
+    "imagePrompt": "Portrait of Ruth, humble young woman gleaning wheat in golden harvest fields, warm sunset light, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": ["ruth-and-naomi"]
+  },
+  {
+    "id": "jonah",
+    "name": "Jonah",
+    "subtitle": "Reluctant prophet",
+    "overview": "God told him to go east. He booked a boat west. Jonah is the prophet who ran from his mission, got swallowed by a giant fish, and still had the audacity to be mad when his preaching actually worked. His story is hilarious, honest, and uncomfortably relatable.",
+    "imagePrompt": "Portrait of Jonah, drenched man emerging from the sea with a massive whale in the background, dramatic stormy ocean, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": ["jonah-and-the-whale"]
+  },
+  {
+    "id": "samson",
+    "name": "Samson",
+    "subtitle": "Mighty judge",
+    "overview": "Supernaturally strong but emotionally reckless, Samson tore apart lions with his bare hands and toppled armies — but couldn't resist the wrong woman. His story is a cautionary tale about wasted potential and a final act of redemption that brought the house down. Literally.",
+    "imagePrompt": "Portrait of Samson, powerfully built man with long flowing hair, standing between two massive temple pillars, dramatic lighting, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": ["samson-and-delilah"]
+  },
+  {
+    "id": "solomon",
+    "name": "Solomon",
+    "subtitle": "Wisest king",
+    "overview": "When God offered him anything, Solomon asked for wisdom — and got it, along with unimaginable wealth and power. He built the most magnificent temple in history and wrote some of the Bible's most beautiful poetry. But even the wisest man alive couldn't keep his own heart in check.",
+    "imagePrompt": "Portrait of King Solomon, regal figure on a golden throne, wearing a magnificent crown, opulent temple interior, rich warm tones, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": ["solomons-wisdom"]
+  },
+  {
+    "id": "joshua",
+    "name": "Joshua",
+    "subtitle": "Conqueror of Canaan",
+    "overview": "Moses' right-hand man who had to fill the biggest shoes in Israel's history. Joshua led the nation across the Jordan River, brought down the walls of Jericho, and conquered the Promised Land. A military genius and a man of unshakable faith.",
+    "imagePrompt": "Portrait of Joshua, strong warrior leader holding a sword and shield, walls of Jericho crumbling in background, dramatic dust and light, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": ["joshua-takes-command", "crossing-the-jordan", "joshua-and-jericho", "conquering-the-land", "joshuas-final-challenge"]
+  },
+  {
+    "id": "jacob",
+    "name": "Jacob",
+    "subtitle": "The trickster who wrestled God",
+    "overview": "A schemer from birth — he tricked his brother out of a birthright and conned his blind father for a blessing. But Jacob's life was a long journey from con artist to patriarch. He wrestled with God all night and limped away with a new name: Israel. The entire nation carries his story.",
+    "imagePrompt": "Portrait of Jacob, rugged man wrestling with a mysterious luminous angelic figure at night by a river, dramatic moonlight, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": ["jacob-and-esau", "jacobs-ladder", "jacob-rachel-and-leah", "jacob-wrestles-god"]
+  },
+  {
+    "id": "isaac",
+    "name": "Isaac",
+    "subtitle": "Child of the promise",
+    "overview": "The miracle baby born to parents who were way too old to have kids. Isaac was nearly sacrificed by his own father on a mountaintop, then grew up to become a quiet, steady link in the chain between Abraham and the nation of Israel. Not flashy, but essential.",
+    "imagePrompt": "Portrait of Isaac, gentle bearded man in pastoral desert landscape with sheep, soft golden sunset, classical oil painting style, Renaissance master quality, warm tones, no text",
+    "storyIds": ["birth-of-isaac", "abraham-and-isaac", "isaac-and-rebekah"]
+  },
+  {
+    "id": "sarah",
+    "name": "Sarah",
+    "subtitle": "Mother of nations",
+    "overview": "She laughed when God promised her a baby at 90 — and honestly, who wouldn't? Sarah waited decades for the child she was promised, struggled with doubt, made some messy decisions along the way, and still became the mother of a nation. Her laugh became her son's name: Isaac means \"he laughs.\"",
+    "imagePrompt": "Portrait of Sarah, beautiful elderly woman laughing joyfully while holding a baby, desert tent in background, warm golden light, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": ["gods-promise-of-a-son", "birth-of-isaac"]
+  },
+  {
+    "id": "elijah",
+    "name": "Elijah",
+    "subtitle": "Prophet of fire",
+    "overview": "The most dramatic prophet in the Bible. Elijah called down fire from heaven, outran a chariot, and single-handedly took on 450 false prophets on a mountaintop. Then he crashed into depression and wanted to die. His story is a raw picture of spiritual highs and lows — and God showing up in both.",
+    "imagePrompt": "Portrait of Elijah, fierce wild-haired prophet with arms raised as fire falls from heaven onto a stone altar on Mount Carmel, dramatic storm clouds, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": ["elijah-on-mount-carmel"]
+  },
+  {
+    "id": "peter",
+    "name": "Peter",
+    "subtitle": "The rock of the church",
+    "overview": "Loud, impulsive, and completely devoted — Peter was the disciple who walked on water then immediately sank, swore he'd die for Jesus then denied knowing him three times before sunrise. But Jesus saw something in this fisherman and built his entire church on him.",
+    "imagePrompt": "Portrait of Peter, weathered fisherman with strong hands and earnest face, standing on the shore of the Sea of Galilee at dawn, classical oil painting style, Renaissance master quality, warm tones, no text",
+    "storyIds": ["peters-big-confession", "peters-three-denials", "peters-miracles", "the-beautiful-gate-miracle"]
+  },
+  {
+    "id": "paul",
+    "name": "Paul",
+    "subtitle": "Apostle to the nations",
+    "overview": "He started as Christianity's most violent enemy — hunting down believers and watching them get executed. Then Jesus showed up on a road and blinded him. Paul went from persecutor to the most influential missionary in history, planting churches across the Roman Empire and writing nearly half the New Testament from prison cells.",
+    "imagePrompt": "Portrait of Paul the Apostle, intense scholarly man writing letters by candlelight in a Roman prison cell, dramatic chiaroscuro lighting, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": ["saul-meets-jesus", "pauls-first-journey", "earthquake-at-philippi", "athens-the-unknown-god", "riot-in-ephesus", "shipwreck-and-malta"]
+  },
+  {
+    "id": "mary",
+    "name": "Mary",
+    "subtitle": "Mother of Jesus",
+    "overview": "A teenage girl in a small town who said yes to the most impossible thing ever asked of a human being. Mary carried and raised the Son of God, stood at the foot of his cross, and watched him die. Her quiet strength and faith anchor the entire story of Jesus.",
+    "imagePrompt": "Portrait of the Virgin Mary, young woman in blue robes with serene expression, soft divine glow, holding baby Jesus, classical oil painting style, Renaissance master quality, ethereal warm tones, no text",
+    "storyIds": ["angel-visits-mary", "birth-of-jesus"]
+  },
+  {
+    "id": "john-the-baptist",
+    "name": "John the Baptist",
+    "subtitle": "Voice in the wilderness",
+    "overview": "Wild-looking, locust-eating, brutally honest — John the Baptist was the opening act for Jesus. He baptized people in the Jordan River, called out the religious elite to their faces, and pointed everyone toward the Messiah. His boldness cost him his head, but his message changed everything.",
+    "imagePrompt": "Portrait of John the Baptist, wild rugged man in animal skin garments standing in the Jordan River, intense prophetic gaze, desert wilderness background, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": ["angel-visits-zechariah", "birth-of-john-the-baptist", "john-the-baptist-preaches", "john-declares-the-lamb", "john-the-baptists-last-words", "john-the-baptist-beheaded"]
+  },
+  {
+    "id": "gideon",
+    "name": "Gideon",
+    "subtitle": "Unlikely warrior",
+    "overview": "God called him a mighty warrior while he was literally hiding in a winepress. Gideon needed multiple signs just to believe God was serious, then defeated an army of 135,000 with just 300 men, some torches, and clay jars. The ultimate underdog story.",
+    "imagePrompt": "Portrait of Gideon, humble young farmer holding a torch and trumpet at night, army of 300 men behind him, dramatic moonlit battlefield, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": ["gideon-vs-the-midianites"]
+  },
+  {
+    "id": "deborah",
+    "name": "Deborah",
+    "subtitle": "Judge and prophetess",
+    "overview": "In an era when women were sidelined, Deborah led the entire nation. She was a judge, a prophetess, and a military strategist who directed Israel's army to victory. When the general was too scared to go to battle without her, she went — and called the win before it happened.",
+    "imagePrompt": "Portrait of Deborah, powerful woman judge sitting under a palm tree, commanding presence, Israelite warriors gathered around her, warm golden light, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": ["deborah-and-jael"]
+  }
+]

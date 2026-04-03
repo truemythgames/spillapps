@@ -1,0 +1,64 @@
+Spill Platform — API deploy & DNS (spillapps.com)
+================================================
+
+Concept
+-------
+- **Spill** = platform: `spill-api`, `spill-db`, `spill-media`, `spill-cms`, spillapps.com DNS.
+- **Products** = Tea apps with their own `app_id` (e.g. `bible-tea`), mobile/web under `apps/<product>/`, same API + bucket with prefixed keys.
+
+Already wired in repo
+----------------------
+- Worker name: spill-api (wrangler.toml `name`).
+- Remote D1 `spill-db` — database_id in wrangler.toml.
+- R2 bucket `spill-media` — shared platform storage; object keys use per-app prefixes (`bible-tea/…`, etc.).
+- KV CACHE — id in wrangler.toml.
+- API CORS: `CORS_ALLOWED_ORIGINS` in wrangler.toml (includes CMS `https://spill-cms.pages.dev` and `https://cms.spillapps.com` when you add DNS).
+
+Secrets and env (before production traffic)
+-------------------------------------------
+- GOOGLE_CLIENT_ID: set in `apps/api/wrangler.toml` [vars] (same ID as CMS `VITE_GOOGLE_CLIENT_ID`).
+- JWT_SECRET (required for auth): `cd apps/api && npx wrangler secret put JWT_SECRET` — never commit.
+- OPENAI_API_KEY (chat): `npx wrangler secret put OPENAI_API_KEY` — never commit.
+- Local API (`wrangler dev`): `apps/api/.dev.vars` with `JWT_SECRET`, `GOOGLE_CLIENT_ID`, optional `OPENAI_API_KEY` (gitignored). See `.dev.vars.example`.
+
+CMS (Cloudflare Pages)
+----------------------
+- Copy `apps/cms/.env.example` → `apps/cms/.env` and set `VITE_GOOGLE_CLIENT_ID` (same as API).
+- Production: `npm run build --workspace=@spillapps/cms` then `npm run deploy --workspace=@spillapps/cms` (project `spill-cms`).
+- Live site: `https://spill-cms.pages.dev` (production branch). API CORS already allows this origin.
+
+Google Cloud Console (OAuth client used by API + CMS + mobile web client id)
+-----------------------------------------------------------------------------
+- Web client → Authorized JavaScript origins must include:
+  - `http://localhost:5173`
+  - `https://spill-cms.pages.dev`
+  - When DNS is ready: `https://cms.spillapps.com`
+- Create a separate iOS OAuth client (type iOS, bundle id `app.bibletea`) for native Google Sign-In; put its client id in `apps/bible-tea/mobile/app.json` → `expo.extra.googleIosClientId` or `EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID`.
+- Authorized redirect URIs: align with whatever your Google Sign-In / CMS flow requires (often same origins as above for SPA).
+
+D1 migrations
+-------------
+- New environments: from repo root, `npm run migrate:all:local --workspace=@spillapps/db` (or run 0001→0005 files in order).
+- Remote: run each new `packages/db/migrations/*.sql` once with `wrangler d1 execute spill-db --remote --file=...`
+- `0005_schema_migrations.sql` adds a `schema_migrations` table for optional tracking (insert a row when you apply a migration manually).
+
+Before deploy (R2)
+------------------
+- If deploy fails with code 10042, enable R2 in the Cloudflare account (Dashboard → R2), then redeploy.
+- Bucket `spill-media` is declared in wrangler.toml (Wrangler can create it on deploy). If you had objects in another bucket, copy them into `spill-media` before relying on production URLs.
+
+After you own spillapps.com
+---------------------------
+1) Add the domain to Cloudflare; set registrar nameservers to Cloudflare; wait until Active.
+
+2) Workers & Pages → spill-api → Custom domains → api.spillapps.com
+
+3) R2 → bucket spill-media → Settings → Custom domain → media.spillapps.com (public URLs must match PUBLIC_MEDIA_BASE / Worker media routes).
+
+4) Optional: redirect any previous API hostname → `https://api.spillapps.com`
+
+Mobile (Bible Tea — product app)
+--------------------------------
+- Production API: `apps/bible-tea/mobile/app.json` → `expo.extra.apiUrl` (`https://api.spillapps.com`). See `apps/bible-tea/mobile/.env.example` for `EXPO_PUBLIC_*` overrides.
+- Google: `expo.extra.googleWebClientId` matches the API web client; set `googleIosClientId` after you create the iOS OAuth client in Google Cloud (required for reliable iOS Google sign-in).
+- Release builds: `eas build --platform ios|android` from `apps/bible-tea/mobile`; configure `eas.json` submit credentials (Apple / Play) via EAS secrets or dashboard when you ship to stores.

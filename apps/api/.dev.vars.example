@@ -1,0 +1,10 @@
+# Copy to .dev.vars in this directory (gitignored). Used by: wrangler dev
+# https://developers.cloudflare.com/workers/wrangler/configuration/#secrets
+#
+# JWT_SECRET: generate with `openssl rand -base64 48` or match production after `wrangler secret put`
+# GOOGLE_CLIENT_ID: same as wrangler.toml [vars] and CMS VITE_GOOGLE_CLIENT_ID
+# OPENAI_API_KEY: optional, for chat routes
+
+JWT_SECRET=replace-with-a-long-random-string-for-local-dev-only
+GOOGLE_CLIENT_ID=your-id.apps.googleusercontent.com
+OPENAI_API_KEY=
