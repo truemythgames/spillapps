@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { View, Text, StyleSheet, Pressable, Dimensions } from "react-native";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -12,13 +12,13 @@ import Animated, {
   withSequence,
 } from "react-native-reanimated";
 import { useAppStore } from "@/stores/app";
+import { storage, StorageKeys } from "@/lib/storage";
 import { coverUrl } from "@/lib/content";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
 const { height: SCREEN_H } = Dimensions.get("window");
 
-
-type Plan = "weekly" | "yearly";
+type Plan = "weekly" | "quarterly";
 
 export default function PaywallScreen() {
   const router = useRouter();
@@ -27,8 +27,9 @@ export default function PaywallScreen() {
   const isSubscribed = useAppStore((s) => s.isSubscribed);
 
   const [step, setStep] = useState<1 | 2>(1);
-  const [plan, setPlan] = useState<Plan>("yearly");
+  const [plan, setPlan] = useState<Plan>("weekly");
   const [busy, setBusy] = useState(false);
+  const returning = !!storage.getBoolean(StorageKeys.HAS_SEEN_INITIAL_OFFER);
 
   const s1Y = useSharedValue(SCREEN_H);
   const s2Y = useSharedValue(SCREEN_H);
@@ -71,7 +72,7 @@ export default function PaywallScreen() {
 
   function dismiss() {
     if (busy) return;
-    if (step === 1) {
+    if (step === 1 && !returning) {
       showOffer();
     } else {
       goBack();
@@ -99,39 +100,92 @@ export default function PaywallScreen() {
         <View style={[styles.body, { paddingBottom: insets.bottom + 16 }]}>
           <Text style={styles.title}>Unlock Bible Tea</Text>
           <Text style={styles.sub}>3-day free trial.</Text>
-          <NoPay />
 
-          <Pressable
-            style={[styles.plan, plan === "weekly" && styles.planOn]}
-            onPress={() => setPlan("weekly")}
-          >
-            <View style={styles.radio}>
-              {plan === "weekly" && <View style={styles.radioDot} />}
-            </View>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.planName}>Weekly Access</Text>
-              <Text style={styles.planPrice}>3 days free then $1.99/week</Text>
-            </View>
-          </Pressable>
+          {returning ? (
+            <>
+              <NoPay />
+              <Pressable
+                style={[styles.plan, plan === "weekly" && styles.planOn]}
+                onPress={() => setPlan("weekly")}
+              >
+                <View style={styles.radio}>
+                  {plan === "weekly" && <View style={styles.radioDot} />}
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.planName}>Weekly Access</Text>
+                  <Text style={styles.planPrice}>3 days free then $6.99/week</Text>
+                </View>
+              </Pressable>
 
-          <Pressable
-            style={[styles.plan, plan === "yearly" && styles.planOn]}
-            onPress={() => setPlan("yearly")}
-          >
-            <View style={styles.radio}>
-              {plan === "yearly" && <View style={styles.radioDot} />}
-            </View>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.planName}>Yearly Access</Text>
-              <Text style={styles.planPrice}>3 days free then $29.99/year</Text>
-            </View>
-            <Text style={styles.planBadge}>BEST VALUE</Text>
-          </Pressable>
+              <Pressable
+                style={[styles.plan, plan === "quarterly" && styles.planOn]}
+                onPress={() => setPlan("quarterly")}
+              >
+                <View style={styles.radio}>
+                  {plan === "quarterly" && <View style={styles.radioDot} />}
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.planName}>3 Month Access</Text>
+                  <Text style={styles.planPrice}>3 days free then $39.99/every 3 mo</Text>
+                </View>
+                <View style={styles.discountBadge}>
+                  <Text style={styles.discountBadgeText}>50% off</Text>
+                </View>
+              </Pressable>
 
-          <Pressable style={styles.cta} onPress={subscribe}>
-            <Text style={styles.ctaText}>Try for FREE</Text>
-          </Pressable>
-          <Legal />
+              <Pressable style={styles.cta} onPress={subscribe}>
+                <Text style={styles.ctaText}>Try for FREE</Text>
+              </Pressable>
+              <Legal />
+            </>
+          ) : (
+            <>
+              <View style={styles.noPay}>
+                <Text style={styles.noPayCheck}>✓</Text>
+                <Text style={styles.noPayText}>
+                  {plan === "weekly" ? "No Payment Due Now" : "No commitment, cancel anytime"}
+                </Text>
+              </View>
+
+              <Pressable
+                style={[styles.plan, plan === "weekly" && styles.planOn]}
+                onPress={() => setPlan("weekly")}
+              >
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.planName}>Free</Text>
+                  <Text style={styles.planPrice}>3 day trial</Text>
+                </View>
+                <View style={styles.radio}>
+                  {plan === "weekly" && <View style={styles.radioDot} />}
+                </View>
+              </Pressable>
+
+              <Pressable
+                style={[styles.plan, plan === "quarterly" && styles.planOn]}
+                onPress={() => setPlan("quarterly")}
+              >
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.planName}>$6.99</Text>
+                  <Text style={styles.planPrice}>30-Day trial</Text>
+                </View>
+                <View style={styles.radio}>
+                  {plan === "quarterly" && <View style={styles.radioDot} />}
+                </View>
+              </Pressable>
+
+              <Pressable style={styles.cta} onPress={subscribe}>
+                <Text style={styles.ctaText}>
+                  {plan === "weekly" ? "Try for free" : "Redeem 30 days for $6.99"}
+                </Text>
+              </Pressable>
+              <Text style={styles.pricingNote}>
+                {plan === "weekly"
+                  ? "3 days free, then $39.99/quarterly\nCancel anytime"
+                  : "30 days for $6.99, then $39.99/quarterly\nCancel anytime"}
+              </Text>
+              <Legal />
+            </>
+          )}
         </View>
       </Animated.View>
 
@@ -140,7 +194,7 @@ export default function PaywallScreen() {
         <>
           <Pressable style={styles.overlay} onPress={hideOffer} />
           <Animated.View style={[styles.sheet, { paddingBottom: insets.bottom + 20 }, s2Style]}>
-            <Pressable style={styles.sheetX} onPress={goBack} hitSlop={12}>
+            <Pressable style={styles.sheetX} onPress={() => { storage.set(StorageKeys.HAS_SEEN_INITIAL_OFFER, true); goBack(); }} hitSlop={12}>
               <Text style={styles.sheetXText}>✕</Text>
             </Pressable>
 
@@ -151,7 +205,7 @@ export default function PaywallScreen() {
 
             <View style={styles.sheetPlan}>
               <Text style={styles.sheetPlanName}>Weekly Plan</Text>
-              <Text style={styles.sheetPlanPrice}>$1.99/week</Text>
+              <Text style={styles.sheetPlanPrice}>$6.99/week</Text>
             </View>
 
             <View style={styles.sheetCheck}>
@@ -304,6 +358,18 @@ const styles = StyleSheet.create({
   planName: { fontFamily: fonts.bodySemiBold, fontSize: fontSize.md, color: colors.text },
   planPrice: { fontFamily: fonts.body, fontSize: fontSize.sm, color: colors.textMuted, marginTop: 2 },
   planBadge: { fontFamily: fonts.bodySemiBold, fontSize: 10, color: colors.accent, letterSpacing: 0.5 },
+  discountBadge: {
+    backgroundColor: "#FF6B35",
+    borderRadius: 20,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+  },
+  discountBadgeText: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: 12,
+    color: "#fff",
+    letterSpacing: 0.3,
+  },
 
   cta: {
     backgroundColor: colors.primary,
@@ -314,6 +380,14 @@ const styles = StyleSheet.create({
   },
   ctaText: { fontFamily: fonts.bodySemiBold, fontSize: fontSize.lg, color: colors.background },
 
+  pricingNote: {
+    fontFamily: fonts.bodyMedium,
+    fontSize: fontSize.sm,
+    color: colors.textSecondary,
+    textAlign: "center",
+    marginTop: 14,
+    lineHeight: 18,
+  },
   legalRow: {
     flexDirection: "row",
     justifyContent: "center",

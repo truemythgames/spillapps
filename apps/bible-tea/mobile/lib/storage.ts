@@ -47,6 +47,7 @@ export const StorageKeys = {
   STREAK_DATA: "streak_data",
   IS_SUBSCRIBED: "is_subscribed",
   LIKES: "likes",
+  HAS_SEEN_INITIAL_OFFER: "has_seen_initial_offer",
 } as const;
 
 // --- Progress ---
