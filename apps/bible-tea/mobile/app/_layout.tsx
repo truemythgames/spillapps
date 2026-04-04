@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { View } from "react-native";
-import { Stack, usePathname } from "expo-router";
+import { Stack, usePathname, Redirect } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { MiniPlayer } from "@/components/MiniPlayer";
 import { usePlayerStore } from "@/stores/player";
@@ -67,12 +67,16 @@ export default function RootLayout() {
 
   if (!fontsLoaded || !appReady) return null;
 
-  // DEV: reset onboarding on every reload — remove before shipping
+  // DEV: force onboarding on every reload — remove before shipping
   storage.set(StorageKeys.HAS_ONBOARDED, false);
   storage.set(StorageKeys.IS_SUBSCRIBED, false);
   const hasOnboarded = storage.getBoolean(StorageKeys.HAS_ONBOARDED);
 
   const hideMini = pathname === "/player" || pathname === "/onboarding" || pathname === "/paywall";
+
+  if (!hasOnboarded && pathname !== "/onboarding") {
+    return <Redirect href="/onboarding" />;
+  }
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
