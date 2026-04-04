@@ -67,9 +67,6 @@ export default function RootLayout() {
 
   if (!fontsLoaded || !appReady) return null;
 
-  // DEV: force onboarding on every reload — remove before shipping
-  storage.set(StorageKeys.HAS_ONBOARDED, false);
-  storage.set(StorageKeys.IS_SUBSCRIBED, false);
   const hasOnboarded = storage.getBoolean(StorageKeys.HAS_ONBOARDED);
 
   const hideMini = pathname === "/player" || pathname === "/onboarding" || pathname === "/paywall";

@@ -1,13 +1,13 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import {
   View,
   Text,
   StyleSheet,
   Pressable,
   Dimensions,
+  ScrollView,
   FlatList,
   ViewToken,
-  ScrollView,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -23,6 +23,7 @@ import Animated, {
   FadeIn,
   SlideInUp,
 } from "react-native-reanimated";
+import * as StoreReview from "expo-store-review";
 import { storage, StorageKeys } from "@/lib/storage";
 import { coverUrl } from "@/lib/content";
 import { colors, fonts, fontSize, spacing } from "@/lib/theme";
@@ -36,16 +37,19 @@ const CARD_BORDER = "rgba(255,255,255,0.5)";
 const OPTION_SELECTED_BORDER = "#5B8DBE";
 const OPTION_SELECTED_TEXT = "#2E6BA4";
 
+// One background per step in STEP_ORDER:
+// welcome, q1, q1comment, q2, q2comment, feature1, reviews, feature2, feature3, rate
 const BACKGROUNDS = [
-  coverUrl("creation"),
-  coverUrl("creation"),
-  coverUrl("noahs-ark"),
-  coverUrl("noahs-ark"),
-  coverUrl("joseph-in-egypt"),
-  coverUrl("joseph-in-egypt"),
-  coverUrl("crossing-the-red-sea"),
-  coverUrl("crossing-the-red-sea"),
-  coverUrl("birth-of-jesus"),
+  coverUrl("creation"),              // welcome
+  coverUrl("creation"),              // q1
+  coverUrl("noahs-ark"),             // q1comment
+  coverUrl("noahs-ark"),             // q2
+  coverUrl("joseph-in-egypt"),       // q2comment
+  coverUrl("david-and-goliath"),     // feature1
+  coverUrl("daniel-and-the-lions-den"), // reviews
+  coverUrl("samson-and-delilah"),    // feature2
+  coverUrl("feeding-5000"),            // feature3
+  coverUrl("the-crucifixion"),       // rate
 ];
 
 const Q1_OPTIONS = [
@@ -89,32 +93,32 @@ const Q2_COMMENTS: Record<string, string> = {
 
 interface FeatureSlide {
   title: string;
-  body: string;
+  image: string;
 }
 
 const FEATURE_SLIDES: FeatureSlide[] = [
   {
-    title: "Listen to Bible stories\nlike never before",
-    body: "Gen Z narrators bring ancient stories to life with modern language — short audio sessions you can enjoy anywhere.",
+    title: "Hear the Bible like\nyou've never heard it",
+    image: coverUrl("birth-of-jesus"),
   },
   {
-    title: "Meet the characters\nbehind the stories",
-    body: "Deep dives into biblical figures — their struggles, wins, and why they still matter today.",
+    title: "Every story, every hero —\nall in one place",
+    image: coverUrl("creation"),
   },
   {
-    title: "Told in a modern\nand relatable way",
-    body: "No stiff language, no judgment. Just real stories that actually hit different.",
+    title: "Scripture that actually\nspeaks your language",
+    image: coverUrl("joseph-in-egypt"),
   },
 ];
 
 const REVIEWS = [
   {
-    text: "It's like listening to a friend tell you Bible stories over coffee. I'm hooked.",
-    name: "Sarah K.",
+    text: "I never thought I'd binge Bible stories on my commute. This app changed that.",
+    name: "Mia R.",
   },
   {
-    text: "Finally, a Bible app that doesn't feel like homework. The narrators are amazing.",
-    name: "James T.",
+    text: "The narrators actually make you feel like you're IN the story. Obsessed.",
+    name: "Daniel P.",
   },
 ];
 
@@ -124,8 +128,11 @@ type Step =
   | "q1comment"
   | "q2"
   | "q2comment"
-  | "features"
-  | "reviews";
+  | "feature1"
+  | "feature2"
+  | "feature3"
+  | "reviews"
+  | "rate";
 
 const STEP_ORDER: Step[] = [
   "welcome",
@@ -133,9 +140,15 @@ const STEP_ORDER: Step[] = [
   "q1comment",
   "q2",
   "q2comment",
-  "features",
+  "feature1",
   "reviews",
+  "feature2",
+  "feature3",
+  "rate",
 ];
+
+const SHOWCASE_STEPS: Step[] = ["feature1", "reviews", "feature2", "feature3", "rate"];
+const SHOWCASE_START_IDX = STEP_ORDER.indexOf("feature1");
 
 export default function OnboardingScreen() {
   const router = useRouter();
@@ -143,12 +156,28 @@ export default function OnboardingScreen() {
   const [stepIdx, setStepIdx] = useState(0);
   const [q1Answer, setQ1Answer] = useState<string | null>(null);
   const [q2Answer, setQ2Answer] = useState<string | null>(null);
-  const [featureIdx, setFeatureIdx] = useState(0);
-  const featureListRef = useRef<FlatList>(null);
+  const [showcaseIdx, setShowcaseIdx] = useState(0);
+  const showcaseRef = useRef<FlatList>(null);
 
   const fadeAnim = useSharedValue(1);
+  const reviewPrompted = useRef(false);
   const step = STEP_ORDER[stepIdx];
-  const bgUri = BACKGROUNDS[stepIdx] ?? BACKGROUNDS[0];
+  const inShowcase = stepIdx >= SHOWCASE_START_IDX;
+  const showcaseStep = inShowcase ? SHOWCASE_STEPS[showcaseIdx] : null;
+  const currentStep = inShowcase ? showcaseStep! : step;
+  const bgIdx = inShowcase ? SHOWCASE_START_IDX + showcaseIdx : stepIdx;
+  const bgUri = BACKGROUNDS[bgIdx] ?? BACKGROUNDS[0];
+
+  if (showcaseStep === "rate" && !reviewPrompted.current) {
+    reviewPrompted.current = true;
+    setTimeout(async () => {
+      try {
+        if (await StoreReview.hasAction()) {
+          await StoreReview.requestReview();
+        }
+      } catch {}
+    }, 600);
+  }
 
   function animateTransition(next: () => void) {
     fadeAnim.value = withTiming(0, { duration: 150 }, () => {
@@ -158,23 +187,45 @@ export default function OnboardingScreen() {
   }
 
   function goNext() {
-    animateTransition(() => setStepIdx((i) => Math.min(i + 1, STEP_ORDER.length - 1)));
+    if (inShowcase) {
+      if (showcaseIdx < SHOWCASE_STEPS.length - 1) {
+        showcaseRef.current?.scrollToIndex({ index: showcaseIdx + 1, animated: true });
+      } else {
+        completeOnboarding();
+      }
+    } else if (stepIdx === SHOWCASE_START_IDX - 1) {
+      animateTransition(() => setStepIdx(SHOWCASE_START_IDX));
+    } else {
+      animateTransition(() => setStepIdx((i) => Math.min(i + 1, STEP_ORDER.length - 1)));
+    }
   }
 
   function goBack() {
-    if (stepIdx > 0) {
+    if (inShowcase && showcaseIdx > 0) {
+      showcaseRef.current?.scrollToIndex({ index: showcaseIdx - 1, animated: true });
+    } else if (inShowcase && showcaseIdx === 0) {
+      animateTransition(() => {
+        setStepIdx(SHOWCASE_START_IDX - 1);
+        setShowcaseIdx(0);
+      });
+    } else if (stepIdx > 0) {
       animateTransition(() => setStepIdx((i) => i - 1));
     }
   }
 
   function completeOnboarding() {
-    // DEV: stay on onboarding for polishing — restore router.replace("/paywall") when done
     storage.set(StorageKeys.HAS_ONBOARDED, true);
-    setStepIdx(0);
-    setQ1Answer(null);
-    setQ2Answer(null);
-    setFeatureIdx(0);
+    router.replace("/paywall");
   }
+
+  const onShowcaseViewChange = useCallback(
+    ({ viewableItems }: { viewableItems: ViewToken[] }) => {
+      if (viewableItems.length > 0 && viewableItems[0].index != null) {
+        setShowcaseIdx(viewableItems[0].index);
+      }
+    },
+    [],
+  );
 
   const contentStyle = useAnimatedStyle(() => ({
     opacity: fadeAnim.value,
@@ -190,14 +241,57 @@ export default function OnboardingScreen() {
     ],
   }));
 
-  const onFeatureViewChange = useCallback(
-    ({ viewableItems }: { viewableItems: ViewToken[] }) => {
-      if (viewableItems.length > 0 && viewableItems[0].index != null) {
-        setFeatureIdx(viewableItems[0].index);
+  function renderShowcasePage(pageStep: Step) {
+    switch (pageStep) {
+      case "feature1":
+      case "feature2":
+      case "feature3": {
+        const idx = pageStep === "feature1" ? 0 : pageStep === "feature2" ? 1 : 2;
+        const slide = FEATURE_SLIDES[idx];
+        return (
+          <View style={styles.featureView}>
+            <Text style={styles.featureTitle}>{slide.title}</Text>
+            <View style={styles.phoneFrame}>
+              <Image
+                source={{ uri: slide.image }}
+                style={styles.phoneScreen}
+                contentFit="cover"
+              />
+            </View>
+          </View>
+        );
       }
-    },
-    [],
-  );
+      case "reviews":
+        return (
+          <View style={styles.reviewsContent}>
+            <Text style={styles.reviewsTitle}>Don't just take our word for it</Text>
+            <Text style={styles.starsRow}>⭐⭐⭐⭐⭐</Text>
+            {REVIEWS.map((r, i) => (
+              <View key={i} style={styles.reviewCard}>
+                <Text style={styles.reviewText}>"{r.text}"</Text>
+                <Text style={styles.reviewName}>— {r.name}</Text>
+              </View>
+            ))}
+          </View>
+        );
+      case "rate":
+        return (
+          <View style={styles.rateContent}>
+            <Text style={styles.rateTitle}>Rate the App</Text>
+            <Text style={styles.starsRowLarge}>⭐⭐⭐⭐⭐</Text>
+            <View style={styles.rateCard}>
+              <Text style={styles.reviewText}>
+                "I put this on during my morning walk and honestly forgot I was
+                learning scripture. It just flows."
+              </Text>
+              <Text style={styles.reviewName}>— Priya S.</Text>
+            </View>
+          </View>
+        );
+      default:
+        return null;
+    }
+  }
 
   function renderContent() {
     switch (step) {
@@ -292,67 +386,20 @@ export default function OnboardingScreen() {
           </View>
         );
 
-      case "features":
-        return (
-          <View style={styles.featuresContent}>
-            <FlatList
-              ref={featureListRef}
-              data={FEATURE_SLIDES}
-              horizontal
-              pagingEnabled
-              showsHorizontalScrollIndicator={false}
-              keyExtractor={(_, i) => String(i)}
-              onViewableItemsChanged={onFeatureViewChange}
-              viewabilityConfig={{ itemVisiblePercentThreshold: 50 }}
-              renderItem={({ item }) => (
-                <View style={styles.featureSlide}>
-                  <Text style={styles.featureTitle}>{item.title}</Text>
-                  <View style={styles.featureCard}>
-                    <Text style={styles.featureBody}>{item.body}</Text>
-                  </View>
-                </View>
-              )}
-            />
-            <View style={styles.dotsRow}>
-              {FEATURE_SLIDES.map((_, i) => (
-                <View
-                  key={i}
-                  style={[styles.dot, i === featureIdx && styles.dotActive]}
-                />
-              ))}
-            </View>
-          </View>
-        );
-
-      case "reviews":
-        return (
-          <View style={styles.reviewsContent}>
-            <Text style={styles.reviewsTitle}>People love Bible Tea</Text>
-            <Text style={styles.starsRow}>⭐⭐⭐⭐⭐</Text>
-            {REVIEWS.map((r, i) => (
-              <View key={i} style={styles.reviewCard}>
-                <Text style={styles.reviewText}>"{r.text}"</Text>
-                <Text style={styles.reviewName}>— {r.name}</Text>
-              </View>
-            ))}
-          </View>
-        );
+      default:
+        return null;
     }
   }
 
   const isDisabled =
     (step === "q1" && !q1Answer) || (step === "q2" && !q2Answer);
-  const isLast = step === "reviews";
-  const showBack = stepIdx > 0;
-
-  const btnLabel =
-    step === "welcome"
-      ? "Get Started"
-      : step === "features"
-        ? "Next"
-        : isLast
-          ? "Continue"
-          : "Continue";
+  const isLastShowcase = showcaseIdx === SHOWCASE_STEPS.length - 1;
+  const showBack = inShowcase ? true : stepIdx > 0;
+  const btnLabel = step === "welcome"
+    ? "Get Started"
+    : inShowcase && isLastShowcase
+      ? "Continue"
+      : "Next";
 
   return (
     <View style={styles.root}>
@@ -383,25 +430,79 @@ export default function OnboardingScreen() {
         </Pressable>
       )}
 
-      <Animated.View
-        style={[
-          styles.content,
-          { paddingTop: insets.top + 56, paddingBottom: insets.bottom + spacing.lg },
-          contentStyle,
-        ]}
-      >
-        <View style={styles.contentInner}>{renderContent()}</View>
+      {inShowcase ? (
+        <View
+          style={[
+            styles.content,
+            {
+              paddingTop: insets.top + 12,
+              paddingBottom: insets.bottom + spacing.lg,
+            },
+          ]}
+        >
+          <View style={styles.contentInner}>
+            <FlatList
+              ref={showcaseRef}
+              data={SHOWCASE_STEPS}
+              horizontal
+              pagingEnabled
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={(item) => item}
+              onViewableItemsChanged={onShowcaseViewChange}
+              viewabilityConfig={{ itemVisiblePercentThreshold: 50 }}
+              renderItem={({ item }) => (
+                <View style={styles.showcasePage}>
+                  {renderShowcasePage(item)}
+                </View>
+              )}
+            />
+          </View>
 
-        <View style={styles.bottomArea}>
-          <Pressable
-            style={[styles.ctaBtn, isDisabled && styles.ctaBtnDisabled]}
-            onPress={isLast ? completeOnboarding : goNext}
-            disabled={isDisabled}
-          >
-            <Text style={styles.ctaBtnText}>{btnLabel}</Text>
-          </Pressable>
+          <View style={styles.bottomArea}>
+            <View style={styles.progressDots}>
+              {SHOWCASE_STEPS.map((s, i) => (
+                <View
+                  key={s}
+                  style={[
+                    styles.progressDot,
+                    i === showcaseIdx && styles.progressDotActive,
+                    i < showcaseIdx && styles.progressDotDone,
+                  ]}
+                />
+              ))}
+            </View>
+            <Pressable
+              style={styles.ctaBtn}
+              onPress={isLastShowcase ? completeOnboarding : goNext}
+            >
+              <Text style={styles.ctaBtnText}>{btnLabel}</Text>
+            </Pressable>
+          </View>
         </View>
-      </Animated.View>
+      ) : (
+        <Animated.View
+          style={[
+            styles.content,
+            {
+              paddingTop: insets.top + 56,
+              paddingBottom: insets.bottom + spacing.lg,
+            },
+            contentStyle,
+          ]}
+        >
+          <View style={styles.contentInner}>{renderContent()}</View>
+
+          <View style={styles.bottomArea}>
+            <Pressable
+              style={[styles.ctaBtn, isDisabled && styles.ctaBtnDisabled]}
+              onPress={goNext}
+              disabled={isDisabled}
+            >
+              <Text style={styles.ctaBtnText}>{btnLabel}</Text>
+            </Pressable>
+          </View>
+        </Animated.View>
+      )}
     </View>
   );
 }
@@ -495,8 +596,10 @@ const styles = StyleSheet.create({
     borderColor: "transparent",
   },
   optionPillSelected: {
-    borderColor: OPTION_SELECTED_BORDER,
+    borderColor: ACCENT,
+    borderWidth: 3,
     backgroundColor: "rgba(255,255,255,0.95)",
+    transform: [{ scale: 1.03 }],
   },
   optionText: {
     fontFamily: fonts.bodyMedium,
@@ -504,7 +607,7 @@ const styles = StyleSheet.create({
     color: "#1A1A2E",
   },
   optionTextSelected: {
-    color: OPTION_SELECTED_TEXT,
+    color: "#1A1A2E",
     fontFamily: fonts.bodySemiBold,
   },
 
@@ -523,35 +626,45 @@ const styles = StyleSheet.create({
   },
 
   // Features
-  featuresContent: {
-    flex: 1,
-    justifyContent: "flex-end",
-    paddingBottom: spacing.md,
-  },
-  featureSlide: {
+  showcasePage: {
     width: SCREEN_W,
-    paddingHorizontal: spacing.lg,
+    flex: 1,
     justifyContent: "center",
+  },
+  featureView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: spacing.lg,
   },
   featureTitle: {
     fontFamily: fonts.heading,
     fontSize: 28,
     color: "#fff",
     lineHeight: 38,
+    textAlign: "center",
     marginBottom: spacing.lg,
+    textShadowColor: "rgba(0,0,0,0.5)",
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 4,
   },
-  featureCard: {
-    backgroundColor: CARD_BG,
-    borderRadius: 16,
-    padding: 20,
-    borderWidth: 1,
-    borderColor: CARD_BORDER,
+  phoneFrame: {
+    width: SCREEN_W * 0.58,
+    aspectRatio: 9 / 19.5,
+    backgroundColor: "#000",
+    borderRadius: 40,
+    borderWidth: 3,
+    borderColor: "#444",
+    overflow: "hidden",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.5,
+    shadowRadius: 16,
+    elevation: 16,
   },
-  featureBody: {
-    fontFamily: fonts.body,
-    fontSize: fontSize.md,
-    color: "#1A1A2E",
-    lineHeight: 24,
+  phoneScreen: {
+    width: "100%",
+    height: "100%",
   },
   dotsRow: {
     flexDirection: "row",
@@ -608,6 +721,53 @@ const styles = StyleSheet.create({
     color: "#555",
     textAlign: "center",
     marginTop: spacing.sm,
+  },
+
+  // Rate
+  rateContent: {
+    paddingHorizontal: spacing.lg,
+    alignItems: "center",
+  },
+  rateTitle: {
+    fontFamily: fonts.heading,
+    fontSize: 30,
+    color: "#fff",
+    textAlign: "center",
+    marginBottom: spacing.lg,
+  },
+  starsRowLarge: {
+    fontSize: 36,
+    letterSpacing: 8,
+    marginBottom: spacing.xl,
+  },
+  rateCard: {
+    backgroundColor: CARD_BG,
+    borderRadius: 16,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: CARD_BORDER,
+    width: "100%",
+  },
+
+  // Progress dots
+  progressDots: {
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 6,
+    marginBottom: spacing.md,
+  },
+  progressDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: "rgba(255,255,255,0.25)",
+  },
+  progressDotActive: {
+    backgroundColor: "#fff",
+    width: 20,
+  },
+  progressDotDone: {
+    backgroundColor: "rgba(255,255,255,0.5)",
   },
 
   // CTA

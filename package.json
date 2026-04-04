@@ -52,6 +52,7 @@
     "dotenv": "^17.3.1",
     "expo-apple-authentication": "~7.2.4",
     "expo-crypto": "~14.1.5",
+    "expo-store-review": "~8.1.5",
     "express": "^5.2.1",
     "openai": "^6.33.0",
     "replicate": "^1.4.0"

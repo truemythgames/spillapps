@@ -17,7 +17,6 @@ import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
 const { height: SCREEN_H } = Dimensions.get("window");
 
-let offerShownThisSession = false;
 
 type Plan = "weekly" | "yearly";
 
@@ -40,27 +39,40 @@ export default function PaywallScreen() {
   }, []);
 
   function goBack() {
-    router.back();
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      router.replace("/(tabs)" as any);
+    }
   }
 
   function navigate(path: string) {
     router.replace(path as any);
   }
 
+  function showOffer() {
+    if (busy) return;
+    setBusy(true);
+    setStep(2);
+    s2Y.value = 400;
+    s2Y.value = withSpring(0, { damping: 20, stiffness: 120 });
+    setTimeout(() => setBusy(false), 500);
+  }
+
+  function hideOffer() {
+    if (busy) return;
+    setBusy(true);
+    s2Y.value = withSpring(400, { damping: 20, stiffness: 120 });
+    setTimeout(() => {
+      setStep(1);
+      setBusy(false);
+    }, 300);
+  }
+
   function dismiss() {
     if (busy) return;
     if (step === 1) {
-      if (isSubscribed || offerShownThisSession) { goBack(); return; }
-      offerShownThisSession = true;
-      setBusy(true);
-      setStep(2);
-      s2Y.value = SCREEN_H;
-      s2Y.value = withSpring(0, { damping: 22, stiffness: 90 });
-      badgeSc.value = withDelay(300, withSequence(
-        withSpring(1.2, { damping: 8, stiffness: 200 }),
-        withSpring(1, { damping: 12 })
-      ));
-      setTimeout(() => setBusy(false), 500);
+      showOffer();
     } else {
       goBack();
     }
@@ -123,34 +135,35 @@ export default function PaywallScreen() {
         </View>
       </Animated.View>
 
-      {/* STEP 2 */}
+      {/* STEP 2 — bottom sheet overlay */}
       {step === 2 && (
-        <Animated.View style={[styles.page, s2Style]}>
-          <Hero uri={coverUrl("creation")} />
-          <XBtn onPress={dismiss} disabled={busy} top={insets.top + 8} />
+        <>
+          <Pressable style={styles.overlay} onPress={hideOffer} />
+          <Animated.View style={[styles.sheet, { paddingBottom: insets.bottom + 20 }, s2Style]}>
+            <Pressable style={styles.sheetX} onPress={goBack} hitSlop={12}>
+              <Text style={styles.sheetXText}>✕</Text>
+            </Pressable>
 
-          <View style={[styles.body, { paddingBottom: insets.bottom + 16 }]}>
-            <Text style={styles.title}>Wait — Special Offer!</Text>
-            <Animated.View style={badgeStyle}>
-              <Text style={styles.offerBadge}>EXTENDED 7-DAY FREE TRIAL</Text>
-            </Animated.View>
-            <Text style={styles.sub}>Just for you — try everything free for a full week.</Text>
-            <NoPay />
+            <Text style={styles.sheetTitle}>Want to start small?</Text>
+            <Text style={styles.sheetSub}>
+              No pressure. Go <Text style={styles.sheetBold}>week by week</Text> instead
+            </Text>
 
-            <View style={[styles.plan, styles.planOn]}>
-              <View style={styles.radio}><View style={styles.radioDot} /></View>
-              <View style={{ flex: 1 }}>
-                <Text style={styles.planName}>7-Day Free Trial</Text>
-                <Text style={styles.planPrice}>Then $1.99/week · Cancel anytime</Text>
-              </View>
+            <View style={styles.sheetPlan}>
+              <Text style={styles.sheetPlanName}>Weekly Plan</Text>
+              <Text style={styles.sheetPlanPrice}>$1.99/week</Text>
             </View>
 
-            <Pressable style={[styles.cta, { backgroundColor: colors.accent }]} onPress={subscribe}>
-              <Text style={styles.ctaText}>Start Free Trial</Text>
+            <View style={styles.sheetCheck}>
+              <Text style={styles.sheetCheckIcon}>✓</Text>
+              <Text style={styles.sheetCheckText}>No commitment, cancel anytime</Text>
+            </View>
+
+            <Pressable style={styles.sheetCta} onPress={subscribe}>
+              <Text style={styles.sheetCtaText}>Unlock</Text>
             </Pressable>
-            <Legal />
-          </View>
-        </Animated.View>
+          </Animated.View>
+        </>
       )}
     </View>
   );
@@ -207,7 +220,7 @@ const styles = StyleSheet.create({
 
   x: {
     position: "absolute",
-    left: 20,
+    right: 20,
     zIndex: 20,
     width: 34,
     height: 34,
@@ -309,4 +322,96 @@ const styles = StyleSheet.create({
   },
   legalLink: { fontFamily: fonts.body, fontSize: 11, color: colors.textMuted },
   legalDot: { fontSize: 11, color: colors.textMuted },
+
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    zIndex: 30,
+  },
+  sheet: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 40,
+    backgroundColor: "#FFF8F0",
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+    paddingHorizontal: 28,
+    paddingTop: 24,
+  },
+  sheetX: {
+    position: "absolute",
+    top: 16,
+    right: 20,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: "rgba(0,0,0,0.08)",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 10,
+  },
+  sheetXText: { fontSize: 13, color: "#666", fontWeight: "600" },
+  sheetTitle: {
+    fontFamily: fonts.heading,
+    fontSize: 22,
+    color: "#1A1A2E",
+    textAlign: "center",
+    marginBottom: 6,
+  },
+  sheetSub: {
+    fontFamily: fonts.body,
+    fontSize: fontSize.md,
+    color: "#555",
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  sheetBold: {
+    fontFamily: fonts.bodySemiBold,
+    textDecorationLine: "underline",
+  },
+  sheetPlan: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: "#C49A3C",
+    borderRadius: 14,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    backgroundColor: "#fff",
+    marginBottom: 14,
+  },
+  sheetPlanName: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: fontSize.lg,
+    color: "#1A1A2E",
+  },
+  sheetPlanPrice: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: fontSize.md,
+    color: "#555",
+  },
+  sheetCheck: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 6,
+    marginBottom: 20,
+  },
+  sheetCheckIcon: { fontSize: 16, color: colors.success, fontWeight: "700" },
+  sheetCheckText: { fontFamily: fonts.bodyMedium, fontSize: fontSize.sm, color: "#555" },
+  sheetCta: {
+    backgroundColor: "#C49A3C",
+    borderRadius: 14,
+    paddingVertical: 16,
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  sheetCtaText: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: fontSize.lg,
+    color: "#fff",
+  },
 });
