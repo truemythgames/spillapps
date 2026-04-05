@@ -22,6 +22,7 @@ import { useAuthStore } from "@/stores/auth";
 import { setupPlayer } from "@/stores/player";
 import { colors } from "@/lib/theme";
 import { storage, StorageKeys } from "@/lib/storage";
+import { initPurchases } from "@/lib/purchases";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -29,6 +30,7 @@ export default function RootLayout() {
   const [appReady, setAppReady] = useState(false);
   const loadInitialData = useAppStore((s) => s.loadInitialData);
   const loadUserData = useAppStore((s) => s.loadUserData);
+  const refreshSubscription = useAppStore((s) => s.refreshSubscription);
   const hydrateAuth = useAuthStore((s) => s.hydrate);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const pathname = usePathname();
@@ -47,6 +49,7 @@ export default function RootLayout() {
     async function init() {
       await setupPlayer();
       await hydrateAuth();
+      await initPurchases();
       await loadInitialData();
       setAppReady(true);
     }
@@ -57,6 +60,7 @@ export default function RootLayout() {
     if (isAuthenticated) {
       loadUserData();
     }
+    refreshSubscription();
   }, [isAuthenticated]);
 
   useEffect(() => {

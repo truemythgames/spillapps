@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { View, Text, StyleSheet, Pressable, Dimensions } from "react-native";
+import { View, Text, StyleSheet, Pressable, Dimensions, Alert, ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
@@ -11,9 +11,10 @@ import Animated, {
   withSpring,
   withSequence,
 } from "react-native-reanimated";
+import { PurchasesPackage } from "react-native-purchases";
 import { useAppStore } from "@/stores/app";
 import { storage, StorageKeys } from "@/lib/storage";
-import { coverUrl } from "@/lib/content";
+import { getOfferings, purchasePackage, restorePurchases } from "@/lib/purchases";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
 const { height: SCREEN_H } = Dimensions.get("window");
@@ -29,6 +30,8 @@ export default function PaywallScreen() {
   const [step, setStep] = useState<1 | 2>(1);
   const [plan, setPlan] = useState<Plan>("weekly");
   const [busy, setBusy] = useState(false);
+  const [purchasing, setPurchasing] = useState(false);
+  const [packages, setPackages] = useState<PurchasesPackage[]>([]);
   const returning = !!storage.getBoolean(StorageKeys.HAS_SEEN_INITIAL_OFFER);
 
   const s1Y = useSharedValue(SCREEN_H);
@@ -37,6 +40,11 @@ export default function PaywallScreen() {
 
   useEffect(() => {
     s1Y.value = withSpring(0, { damping: 22, stiffness: 90 });
+    getOfferings().then((offering) => {
+      if (offering?.availablePackages) {
+        setPackages(offering.availablePackages);
+      }
+    });
   }, []);
 
   function goBack() {
@@ -54,6 +62,7 @@ export default function PaywallScreen() {
   function showOffer() {
     if (busy) return;
     setBusy(true);
+    storage.set(StorageKeys.HAS_SEEN_INITIAL_OFFER, true);
     setStep(2);
     s2Y.value = 400;
     s2Y.value = withSpring(0, { damping: 20, stiffness: 120 });
@@ -79,10 +88,66 @@ export default function PaywallScreen() {
     }
   }
 
-  function subscribe() {
-    if (busy) return;
-    setSubscribed(true);
-    navigate("/login");
+  function findPackage(identifier: string): PurchasesPackage | undefined {
+    return packages.find((p) => p.identifier === identifier);
+  }
+
+  function getTargetPackage(): PurchasesPackage | undefined {
+    if (step === 2) {
+      return findPackage("weekly_offer");
+    }
+    if (returning) {
+      return plan === "weekly"
+        ? findPackage("weekly_freetrial")
+        : findPackage("quarterly_3day");
+    }
+    return plan === "weekly"
+      ? findPackage("quarterly_onboarding")
+      : findPackage("quarterly_30day");
+  }
+
+  async function subscribe() {
+    if (busy || purchasing) return;
+
+    const pkg = getTargetPackage() ?? packages[0];
+
+    if (!pkg) {
+      setSubscribed(true);
+      goBack();
+      return;
+    }
+
+    setPurchasing(true);
+    try {
+      const success = await purchasePackage(pkg);
+      if (success) {
+        setSubscribed(true);
+        goBack();
+      }
+    } catch (e: any) {
+      Alert.alert("Purchase failed", e?.message ?? "Something went wrong. Please try again.");
+    } finally {
+      setPurchasing(false);
+    }
+  }
+
+  async function handleRestore() {
+    if (purchasing) return;
+    setPurchasing(true);
+    try {
+      const success = await restorePurchases();
+      if (success) {
+        setSubscribed(true);
+        Alert.alert("Restored!", "Your subscription has been restored.");
+        goBack();
+      } else {
+        Alert.alert("Nothing to restore", "No active subscription found for this account.");
+      }
+    } catch {
+      Alert.alert("Restore failed", "Please try again later.");
+    } finally {
+      setPurchasing(false);
+    }
   }
 
   const s1Style = useAnimatedStyle(() => ({ transform: [{ translateY: s1Y.value }] }));
@@ -94,7 +159,7 @@ export default function PaywallScreen() {
 
       {/* STEP 1 */}
       <Animated.View style={[styles.page, s1Style]}>
-        <Hero uri={coverUrl("noahs-ark")} />
+        <Hero source={require("@/assets/onboarding/noahs-ark.webp")} />
         <XBtn onPress={dismiss} disabled={busy} top={insets.top + 8} />
 
         <View style={[styles.body, { paddingBottom: insets.bottom + 16 }]}>
@@ -136,7 +201,7 @@ export default function PaywallScreen() {
               <Pressable style={styles.cta} onPress={subscribe}>
                 <Text style={styles.ctaText}>Try for FREE</Text>
               </Pressable>
-              <Legal />
+              <Legal onRestore={handleRestore} />
             </>
           ) : (
             <>
@@ -183,7 +248,7 @@ export default function PaywallScreen() {
                   ? "3 days free, then $39.99/quarterly\nCancel anytime"
                   : "30 days for $6.99, then $39.99/quarterly\nCancel anytime"}
               </Text>
-              <Legal />
+              <Legal onRestore={handleRestore} />
             </>
           )}
         </View>
@@ -194,7 +259,7 @@ export default function PaywallScreen() {
         <>
           <Pressable style={styles.overlay} onPress={hideOffer} />
           <Animated.View style={[styles.sheet, { paddingBottom: insets.bottom + 20 }, s2Style]}>
-            <Pressable style={styles.sheetX} onPress={() => { storage.set(StorageKeys.HAS_SEEN_INITIAL_OFFER, true); goBack(); }} hitSlop={12}>
+            <Pressable style={styles.sheetX} onPress={goBack} hitSlop={12}>
               <Text style={styles.sheetXText}>✕</Text>
             </Pressable>
 
@@ -223,10 +288,10 @@ export default function PaywallScreen() {
   );
 }
 
-function Hero({ uri }: { uri: string }) {
+function Hero({ source }: { source: number }) {
   return (
     <View style={styles.heroWrap} pointerEvents="none">
-      <Image source={{ uri }} style={styles.heroImg} contentFit="cover" />
+      <Image source={source} style={styles.heroImg} contentFit="cover" />
       <LinearGradient
         colors={["transparent", colors.background + "DD", colors.background]}
         style={styles.heroFade}
@@ -252,14 +317,16 @@ function NoPay() {
   );
 }
 
-function Legal() {
+function Legal({ onRestore }: { onRestore?: () => void }) {
   return (
     <View style={styles.legalRow}>
       <Text style={styles.legalLink}>Terms</Text>
       <Text style={styles.legalDot}>·</Text>
       <Text style={styles.legalLink}>Privacy Policy</Text>
       <Text style={styles.legalDot}>·</Text>
-      <Text style={styles.legalLink}>Restore</Text>
+      <Pressable onPress={onRestore} hitSlop={8}>
+        <Text style={styles.legalLink}>Restore</Text>
+      </Pressable>
     </View>
   );
 }

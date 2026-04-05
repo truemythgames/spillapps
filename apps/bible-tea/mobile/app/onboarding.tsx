@@ -23,9 +23,11 @@ import Animated, {
   FadeIn,
   SlideInUp,
 } from "react-native-reanimated";
-import * as StoreReview from "expo-store-review";
+let StoreReview: typeof import("expo-store-review") | null = null;
+try {
+  StoreReview = require("expo-store-review");
+} catch {}
 import { storage, StorageKeys } from "@/lib/storage";
-import { coverUrl } from "@/lib/content";
 import { colors, fonts, fontSize, spacing } from "@/lib/theme";
 
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get("window");
@@ -37,19 +39,29 @@ const CARD_BORDER = "rgba(255,255,255,0.5)";
 const OPTION_SELECTED_BORDER = "#5B8DBE";
 const OPTION_SELECTED_TEXT = "#2E6BA4";
 
-// One background per step in STEP_ORDER:
-// welcome, q1, q1comment, q2, q2comment, feature1, reviews, feature2, feature3, rate
+const LOCAL_COVERS = {
+  creation: require("@/assets/onboarding/creation.webp"),
+  "noahs-ark": require("@/assets/onboarding/noahs-ark.webp"),
+  "joseph-in-egypt": require("@/assets/onboarding/joseph-in-egypt.webp"),
+  "david-and-goliath": require("@/assets/onboarding/david-and-goliath.webp"),
+  "daniel-and-the-lions-den": require("@/assets/onboarding/daniel-and-the-lions-den.webp"),
+  "samson-and-delilah": require("@/assets/onboarding/samson-and-delilah.webp"),
+  "feeding-5000": require("@/assets/onboarding/feeding-5000.webp"),
+  "the-crucifixion": require("@/assets/onboarding/the-crucifixion.webp"),
+  "birth-of-jesus": require("@/assets/onboarding/birth-of-jesus.webp"),
+} as const;
+
 const BACKGROUNDS = [
-  coverUrl("creation"),              // welcome
-  coverUrl("creation"),              // q1
-  coverUrl("noahs-ark"),             // q1comment
-  coverUrl("noahs-ark"),             // q2
-  coverUrl("joseph-in-egypt"),       // q2comment
-  coverUrl("david-and-goliath"),     // feature1
-  coverUrl("daniel-and-the-lions-den"), // reviews
-  coverUrl("samson-and-delilah"),    // feature2
-  coverUrl("feeding-5000"),            // feature3
-  coverUrl("the-crucifixion"),       // rate
+  LOCAL_COVERS["creation"],              // welcome
+  LOCAL_COVERS["creation"],              // q1
+  LOCAL_COVERS["noahs-ark"],             // q1comment
+  LOCAL_COVERS["noahs-ark"],             // q2
+  LOCAL_COVERS["joseph-in-egypt"],       // q2comment
+  LOCAL_COVERS["david-and-goliath"],     // feature1
+  LOCAL_COVERS["daniel-and-the-lions-den"], // reviews
+  LOCAL_COVERS["samson-and-delilah"],    // feature2
+  LOCAL_COVERS["feeding-5000"],          // feature3
+  LOCAL_COVERS["the-crucifixion"],       // rate
 ];
 
 const Q1_OPTIONS = [
@@ -93,21 +105,21 @@ const Q2_COMMENTS: Record<string, string> = {
 
 interface FeatureSlide {
   title: string;
-  image: string;
+  image: number;
 }
 
 const FEATURE_SLIDES: FeatureSlide[] = [
   {
     title: "Hear the Bible like\nyou've never heard it",
-    image: coverUrl("birth-of-jesus"),
+    image: LOCAL_COVERS["birth-of-jesus"],
   },
   {
     title: "Every story, every hero —\nall in one place",
-    image: coverUrl("creation"),
+    image: LOCAL_COVERS["creation"],
   },
   {
     title: "Scripture that actually\nspeaks your language",
-    image: coverUrl("joseph-in-egypt"),
+    image: LOCAL_COVERS["joseph-in-egypt"],
   },
 ];
 
@@ -172,7 +184,7 @@ export default function OnboardingScreen() {
     reviewPrompted.current = true;
     setTimeout(async () => {
       try {
-        if (await StoreReview.hasAction()) {
+        if (StoreReview && (await StoreReview.hasAction())) {
           await StoreReview.requestReview();
         }
       } catch {}
@@ -253,7 +265,7 @@ export default function OnboardingScreen() {
             <Text style={styles.featureTitle}>{slide.title}</Text>
             <View style={styles.phoneFrame}>
               <Image
-                source={{ uri: slide.image }}
+                source={slide.image}
                 style={styles.phoneScreen}
                 contentFit="cover"
               />
@@ -404,7 +416,7 @@ export default function OnboardingScreen() {
   return (
     <View style={styles.root}>
       <Image
-        source={{ uri: bgUri }}
+        source={bgUri}
         style={StyleSheet.absoluteFill}
         contentFit="cover"
         transition={500}

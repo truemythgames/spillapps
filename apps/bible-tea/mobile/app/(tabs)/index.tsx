@@ -82,9 +82,6 @@ export default function HomeScreen() {
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Bible Tea</Text>
-        <Text style={styles.headerSubtitle}>
-          {stories.length} stories
-        </Text>
       </View>
 
       {/* Story of the Day */}
@@ -158,11 +155,9 @@ const styles = StyleSheet.create({
 
   /* Story of the Day */
   sotdCard: {
-    marginHorizontal: spacing.lg,
     marginBottom: spacing.xl,
-    borderRadius: radius.lg,
     overflow: "hidden",
-    height: 200,
+    height: 220,
   },
   sotdImage: {
     ...StyleSheet.absoluteFillObject,

@@ -32,6 +32,7 @@ AsyncStorage.multiGet([
   "streak_data",
   "is_subscribed",
   "likes",
+  "has_seen_initial_offer",
 ]).then((pairs) => {
   for (const [k, v] of pairs) {
     if (v !== null) memoryCache[k] = v;

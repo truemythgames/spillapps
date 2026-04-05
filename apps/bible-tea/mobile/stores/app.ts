@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { getSeedStories, coverUrl, type CatalogStory } from "@/lib/content";
 import { storage, StorageKeys } from "@/lib/storage";
 import { api } from "@/lib/api";
+import { checkSubscription } from "@/lib/purchases";
 
 export interface StoryWithCover extends CatalogStory {
   cover_image_url: string;
@@ -45,6 +46,7 @@ interface AppState {
   toggleLike: (storyId: string) => Promise<void>;
   setSpeaker: (speaker: any) => void;
   setSubscribed: (subscribed: boolean) => void;
+  refreshSubscription: () => Promise<void>;
 }
 
 function withCover(story: CatalogStory): StoryWithCover {
@@ -167,5 +169,14 @@ export const useAppStore = create<AppState>((set, get) => ({
   setSubscribed: (subscribed) => {
     storage.set(StorageKeys.IS_SUBSCRIBED, subscribed);
     set({ isSubscribed: subscribed });
+  },
+  refreshSubscription: async () => {
+    try {
+      const active = await checkSubscription();
+      storage.set(StorageKeys.IS_SUBSCRIBED, active);
+      set({ isSubscribed: active });
+    } catch {
+      // keep local cached value
+    }
   },
 }));
