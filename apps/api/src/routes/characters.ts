@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import type { Env } from "../types";
+import { mediaUrl } from "../lib/media";
 import { resolvePublicAppId } from "../lib/request-app";
 
 export const charactersRoutes = new Hono<{ Bindings: Env }>();
@@ -22,7 +23,14 @@ charactersRoutes.get("/", async (c) => {
       )
         .bind(appId, ch.id)
         .all();
-      return { ...ch, stories };
+      return {
+        ...ch,
+        image_url: mediaUrl(c.env, ch.cover_image_key),
+        stories: stories.map((s: any) => ({
+          ...s,
+          cover_image_url: mediaUrl(c.env, s.cover_image_key),
+        })),
+      };
     })
   );
 
@@ -50,5 +58,14 @@ charactersRoutes.get("/:id", async (c) => {
     .bind(appId, id)
     .all();
 
-  return c.json({ character, stories });
+  return c.json({
+    character: {
+      ...(character as any),
+      image_url: mediaUrl(c.env, (character as any).cover_image_key),
+    },
+    stories: stories.map((s: any) => ({
+      ...s,
+      cover_image_url: mediaUrl(c.env, s.cover_image_key),
+    })),
+  });
 });

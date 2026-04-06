@@ -7,10 +7,10 @@ import { useAppStore } from "@/stores/app";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
 export default function CollectionScreen() {
-  const { type, id } = useLocalSearchParams<{ type: string; id?: string }>();
+  const { type, id, name } = useLocalSearchParams<{ type: string; id?: string; name?: string }>();
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { playlists, recentStories } = useAppStore();
+  const { playlists, recentStories, stories: allStories } = useAppStore();
 
   let title = "";
   let stories: { id: string; title: string; description: string; cover_image_url: string | null }[] = [];
@@ -22,6 +22,9 @@ export default function CollectionScreen() {
   } else if (type === "recent") {
     title = "Recently Added";
     stories = recentStories;
+  } else if (type === "season" && name) {
+    title = name;
+    stories = allStories.filter((s) => s.section === name);
   }
 
   return (
@@ -42,7 +45,7 @@ export default function CollectionScreen() {
             style={styles.row}
             onPress={() => router.push(`/story/${story.id}` as any)}
           >
-            <Image source={{ uri: story.cover_image_url }} style={styles.thumb} contentFit="cover" />
+            <Image source={{ uri: story.cover_image_url ?? undefined }} style={styles.thumb} contentFit="cover" transition={300} />
             <View style={styles.info}>
               <Text style={styles.title} numberOfLines={1}>{story.title}</Text>
               <Text style={styles.sub} numberOfLines={2}>{story.description}</Text>

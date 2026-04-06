@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
     marginTop: -3,
   },
   clBarFill: { height: "100%", backgroundColor: colors.primary },
-  clTitle: { fontFamily: fonts.bodySemiBold, fontSize: fontSize.sm, color: colors.text, marginTop: spacing.xs },
+  clTitle: { fontFamily: fonts.bodySemiBold, fontSize: fontSize.sm, color: colors.textSecondary, marginTop: spacing.xs },
   clSub: { fontFamily: fonts.body, fontSize: fontSize.xs, color: colors.textMuted, marginTop: 2 },
 
   testamentRow: { flexDirection: "row", gap: spacing.md },

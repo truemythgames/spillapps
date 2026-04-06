@@ -1,6 +1,21 @@
-import { Settings, AppEventsLogger } from "react-native-fbsdk-next";
-import analytics from "@react-native-firebase/analytics";
-import crashlytics from "@react-native-firebase/crashlytics";
+let Settings: any = null;
+let AppEventsLogger: any = null;
+let analyticsModule: any = null;
+let crashlyticsModule: any = null;
+
+try {
+  const fbsdk = require("react-native-fbsdk-next");
+  Settings = fbsdk.Settings;
+  AppEventsLogger = fbsdk.AppEventsLogger;
+} catch {}
+
+try {
+  analyticsModule = require("@react-native-firebase/analytics").default;
+} catch {}
+
+try {
+  crashlyticsModule = require("@react-native-firebase/crashlytics").default;
+} catch {}
 
 let initialized = false;
 
@@ -8,14 +23,14 @@ export async function initAnalytics() {
   if (initialized) return;
 
   try {
-    Settings.initializeSDK();
-    Settings.setAdvertiserTrackingEnabled(true);
+    Settings?.initializeSDK();
+    Settings?.setAdvertiserTrackingEnabled(true);
   } catch (e) {
     console.warn("[Analytics] Facebook SDK init failed:", e);
   }
 
   try {
-    await crashlytics().setCrashlyticsCollectionEnabled(!__DEV__);
+    await crashlyticsModule?.()?.setCrashlyticsCollectionEnabled(!__DEV__);
   } catch (e) {
     console.warn("[Analytics] Crashlytics init failed:", e);
   }
@@ -26,24 +41,24 @@ export async function initAnalytics() {
 export function trackEvent(name: string, params?: Record<string, any>) {
   try {
     if (params) {
-      AppEventsLogger.logEvent(name, params);
+      AppEventsLogger?.logEvent(name, params);
     } else {
-      AppEventsLogger.logEvent(name);
+      AppEventsLogger?.logEvent(name);
     }
   } catch {}
 
   try {
-    analytics().logEvent(name, params);
+    analyticsModule?.()?.logEvent(name, params);
   } catch {}
 }
 
 export function trackScreen(screenName: string) {
   try {
-    AppEventsLogger.logEvent("screen_view", { screen: screenName });
+    AppEventsLogger?.logEvent("screen_view", { screen: screenName });
   } catch {}
 
   try {
-    analytics().logScreenView({ screen_name: screenName, screen_class: screenName });
+    analyticsModule?.()?.logScreenView({ screen_name: screenName, screen_class: screenName });
   } catch {}
 }
 
@@ -57,11 +72,11 @@ export function trackStoryPlayed(storyId: string, storyTitle: string) {
 
 export function trackSubscription(plan: string, value: number) {
   try {
-    AppEventsLogger.logPurchase(value, "USD", { plan });
+    AppEventsLogger?.logPurchase(value, "USD", { plan });
   } catch {}
 
   try {
-    analytics().logPurchase({ value, currency: "USD", items: [{ item_id: plan, item_name: plan }] });
+    analyticsModule?.()?.logPurchase({ value, currency: "USD", items: [{ item_id: plan, item_name: plan }] });
   } catch {}
 }
 
@@ -75,17 +90,17 @@ export function trackChatStarted(topic: string) {
 
 export function setUserId(userId: string) {
   try {
-    analytics().setUserId(userId);
+    analyticsModule?.()?.setUserId(userId);
   } catch {}
 
   try {
-    crashlytics().setUserId(userId);
+    crashlyticsModule?.()?.setUserId(userId);
   } catch {}
 }
 
 export function logError(error: Error, context?: string) {
   try {
-    if (context) crashlytics().log(context);
-    crashlytics().recordError(error);
+    if (context) crashlyticsModule?.()?.log(context);
+    crashlyticsModule?.()?.recordError(error);
   } catch {}
 }

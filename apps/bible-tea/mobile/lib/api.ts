@@ -17,7 +17,7 @@ const PROD_API_BASE =
 
 export const APP_ID = extra?.appId || "bible-tea";
 
-const API_BASE = __DEV__ ? `http://${devHost}:8787` : PROD_API_BASE;
+const API_BASE = PROD_API_BASE;
 
 const TOKEN_KEY = "auth_token";
 

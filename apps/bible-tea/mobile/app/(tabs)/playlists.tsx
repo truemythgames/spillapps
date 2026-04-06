@@ -50,7 +50,7 @@ function SkeletonDiscover({ paddingTop }: { paddingTop: number }) {
 export default function DiscoverScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const { stories, characters, recentStories, seasons } = useAppStore();
+  const { stories, characters, recentStories } = useAppStore();
   const [query, setQuery] = useState("");
 
   const fadeAnim = useRef(new RNAnimated.Value(0)).current;
@@ -203,29 +203,15 @@ export default function DiscoverScreen() {
                 keyExtractor={(item) => item.id}
                 showsHorizontalScrollIndicator={false}
                 renderItem={({ item }) => (
-                  <Pressable style={styles.storyCard} onPress={() => router.push(`/story/${item.id}` as any)}>
-                    <Image source={{ uri: item.cover_image_url ?? undefined }} style={styles.storyImg} contentFit="cover" transition={300} />
-                    <Text style={styles.storyTitle} numberOfLines={1}>{item.title}</Text>
-                    <Text style={styles.storySub} numberOfLines={2}>{item.description}</Text>
+                  <Pressable style={styles.recentCard} onPress={() => router.push(`/story/${item.id}` as any)}>
+                    <Image source={{ uri: item.cover_image_url ?? undefined }} style={styles.recentImg} contentFit="cover" transition={300} />
+                    <Text style={styles.recentTitle} numberOfLines={1}>{item.title}</Text>
+                    <Text style={styles.recentSub} numberOfLines={2}>{item.description}</Text>
                   </Pressable>
                 )}
               />
             </View>
           )}
-
-          {/* All Stories */}
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>All Stories</Text>
-            {stories.map((s) => (
-              <Pressable key={s.id} style={styles.resultRow} onPress={() => router.push(`/story/${s.id}` as any)}>
-                <Image source={{ uri: s.cover_image_url ?? undefined }} style={styles.resultThumb} contentFit="cover" transition={300} />
-                <View style={styles.resultInfo}>
-                  <Text style={styles.resultTitle} numberOfLines={1}>{s.title}</Text>
-                  <Text style={styles.resultSub} numberOfLines={1}>{s.bibleRef}</Text>
-                </View>
-              </Pressable>
-            ))}
-          </View>
         </>
       )}
     </ScrollView>
@@ -268,16 +254,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
-    marginBottom: spacing.sm,
   },
   sectionTitle: { fontFamily: fonts.heading, fontSize: fontSize.xl, color: colors.text, marginBottom: spacing.sm },
   seeAll: { fontFamily: fonts.bodySemiBold, fontSize: fontSize.sm, color: colors.primary, marginTop: 4 },
   emptyText: { fontFamily: fonts.body, fontSize: fontSize.md, color: colors.textMuted, marginTop: spacing.md },
-
-  storyCard: { width: 150, marginRight: spacing.md },
-  storyImg: { width: 150, height: 150, borderRadius: radius.md },
-  storyTitle: { fontFamily: fonts.bodySemiBold, fontSize: fontSize.sm, color: colors.text, marginTop: spacing.xs },
-  storySub: { fontFamily: fonts.body, fontSize: fontSize.xs, color: colors.textSecondary, marginTop: 2 },
 
   charCard: { alignItems: "center", marginRight: spacing.lg, width: 80 },
   charAvatar: { width: 72, height: 72, borderRadius: 36, borderWidth: 2, borderColor: colors.surfaceBorder },
@@ -297,6 +277,11 @@ const styles = StyleSheet.create({
   },
   seasonName: { fontFamily: fonts.heading, fontSize: fontSize.lg, color: "#fff" },
   seasonCount: { fontFamily: fonts.body, fontSize: fontSize.sm, color: "rgba(255,255,255,0.7)", marginTop: 2 },
+
+  recentCard: { width: 150, marginRight: spacing.md },
+  recentImg: { width: 150, height: 150, borderRadius: radius.md },
+  recentTitle: { fontFamily: fonts.bodySemiBold, fontSize: fontSize.sm, color: colors.textSecondary, marginTop: spacing.xs },
+  recentSub: { fontFamily: fonts.body, fontSize: fontSize.xs, color: colors.textSecondary, marginTop: 2 },
 
   resultRow: {
     flexDirection: "row",

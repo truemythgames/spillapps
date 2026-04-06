@@ -23,7 +23,8 @@ import Animated, {
   FadeIn,
   SlideInUp,
 } from "react-native-reanimated";
-import * as StoreReview from "expo-store-review";
+let StoreReview: any = null;
+try { StoreReview = require("expo-store-review"); } catch {}
 import { storage, StorageKeys } from "@/lib/storage";
 import { colors, fonts, fontSize, spacing } from "@/lib/theme";
 
@@ -187,7 +188,7 @@ export default function OnboardingScreen() {
     reviewPrompted.current = true;
     setTimeout(async () => {
       try {
-        if (await StoreReview.hasAction()) {
+        if (StoreReview && await StoreReview.hasAction()) {
           await StoreReview.requestReview();
         }
       } catch {}

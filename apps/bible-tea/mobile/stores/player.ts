@@ -1,10 +1,12 @@
 import { create } from "zustand";
-import { Audio } from "expo-av";
-import { storage, StorageKeys, setLocalProgress, recordStreakCheckIn } from "@/lib/storage";
+import { storage, StorageKeys, getLocalProgress, setLocalProgress, recordStreakCheckIn } from "@/lib/storage";
 import { api } from "@/lib/api";
 import { useAppStore } from "./app";
 
-let sound: Audio.Sound | null = null;
+let Audio: any = null;
+try { Audio = require("expo-av").Audio; } catch {}
+
+let sound: any = null;
 
 interface PlayerState {
   currentStory: any | null;
@@ -48,6 +50,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
   queueIndex: 0,
 
   play: async (story, speaker, audioUrl) => {
+    if (!Audio) return;
     try {
       if (sound) {
         await sound.unloadAsync();
@@ -59,10 +62,15 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
         staysActiveInBackground: true,
       });
 
+      const savedProgress = getLocalProgress()[story.id];
+      const startPos = savedProgress && !savedProgress.completed && savedProgress.position > 0
+        ? savedProgress.position * 1000
+        : 0;
+
       const { sound: newSound } = await Audio.Sound.createAsync(
         { uri: audioUrl },
-        { shouldPlay: true, rate: get().playbackSpeed },
-        (status) => {
+        { shouldPlay: true, rate: get().playbackSpeed, positionMillis: startPos },
+        (status: any) => {
           if (!status.isLoaded) return;
           get().updatePosition(
             status.positionMillis / 1000,
@@ -216,8 +224,11 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
 }));
 
 export async function setupPlayer() {
-  await Audio.setAudioModeAsync({
-    playsInSilentModeIOS: true,
-    staysActiveInBackground: true,
-  });
+  if (!Audio) return;
+  try {
+    await Audio.setAudioModeAsync({
+      playsInSilentModeIOS: true,
+      staysActiveInBackground: true,
+    });
+  } catch {}
 }

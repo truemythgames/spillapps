@@ -167,14 +167,11 @@ export const useAppStore = create<AppState>((set, get) => ({
           speakers: cached.speakers,
           isLoading: false,
         });
-
-        const isStale = Date.now() - cached.cachedAt > CACHE_TTL_MS;
-        if (isStale) {
-          get().loadRemoteData();
-        }
-      } else {
-        get().loadRemoteData();
       }
+      // Always refresh from API in background
+      get().loadRemoteData();
+    }).catch(() => {
+      get().loadRemoteData();
     });
   },
 
@@ -203,27 +200,23 @@ export const useAppStore = create<AppState>((set, get) => ({
       }
 
       if (playlistsRes.status === "fulfilled" && playlistsRes.value.playlists?.length) {
-        const apiPlaylists: Playlist[] = [];
-        for (const pl of playlistsRes.value.playlists) {
-          try {
+        const plResults = await Promise.allSettled(
+          playlistsRes.value.playlists.map(async (pl: any) => {
             const detail = await api.getPlaylist(pl.id);
-            apiPlaylists.push({
+            return {
               id: pl.id,
               name: pl.name,
               cover_image_url: pl.cover_image_url,
               stories: detail.stories.map(apiStoryToCover),
-            });
-          } catch {
-            apiPlaylists.push({
-              id: pl.id,
-              name: pl.name,
-              cover_image_url: pl.cover_image_url,
-              stories: [],
-            });
-          }
-        }
+            } as Playlist;
+          }),
+        );
+        const apiPlaylists = plResults
+          .filter((r): r is PromiseFulfilledResult<Playlist> => r.status === "fulfilled")
+          .map((r) => r.value)
+          .filter((p) => p.stories.length > 0);
         if (apiPlaylists.length) {
-          updates.playlists = apiPlaylists.filter((p) => p.stories.length > 0);
+          updates.playlists = apiPlaylists;
         }
       }
 

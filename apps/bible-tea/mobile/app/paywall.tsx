@@ -11,10 +11,9 @@ import Animated, {
   withSpring,
   withSequence,
 } from "react-native-reanimated";
-import { PurchasesPackage } from "react-native-purchases";
 import { useAppStore } from "@/stores/app";
 import { storage, StorageKeys } from "@/lib/storage";
-import { getOfferings, purchasePackage, restorePurchases } from "@/lib/purchases";
+import { getOfferings, purchasePackage, restorePurchases, type PurchasesPackage } from "@/lib/purchases";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
 const { height: SCREEN_H } = Dimensions.get("window");

@@ -1,11 +1,18 @@
-import Purchases, {
-  PurchasesOffering,
-  PurchasesPackage,
-  CustomerInfo,
-  LOG_LEVEL,
-} from "react-native-purchases";
 import { Platform } from "react-native";
 import { trackSubscription, trackEvent } from "@/lib/analytics";
+
+let Purchases: any = null;
+let LOG_LEVEL: any = {};
+
+try {
+  const mod = require("react-native-purchases");
+  Purchases = mod.default;
+  LOG_LEVEL = mod.LOG_LEVEL;
+} catch {}
+
+export type PurchasesOffering = any;
+export type PurchasesPackage = any;
+type CustomerInfo = any;
 
 const REVENUECAT_IOS_KEY = "appl_wkihlIqfRBLXmhtmZBUiijkxsxN";
 const REVENUECAT_ANDROID_KEY = "goog_REPLACE_WITH_YOUR_ANDROID_KEY";
@@ -23,7 +30,7 @@ export const PRODUCT_IDS = {
 let initialized = false;
 
 export async function initPurchases(userId?: string): Promise<void> {
-  if (initialized) return;
+  if (initialized || !Purchases) return;
 
   const apiKey = Platform.OS === "ios" ? REVENUECAT_IOS_KEY : REVENUECAT_ANDROID_KEY;
 
@@ -36,6 +43,7 @@ export async function initPurchases(userId?: string): Promise<void> {
 }
 
 export async function getOfferings(): Promise<PurchasesOffering | null> {
+  if (!Purchases) return null;
   try {
     const offerings = await Purchases.getOfferings();
     return offerings.current;
@@ -46,6 +54,7 @@ export async function getOfferings(): Promise<PurchasesOffering | null> {
 }
 
 export async function purchasePackage(pkg: PurchasesPackage): Promise<boolean> {
+  if (!Purchases) return false;
   try {
     const { customerInfo } = await Purchases.purchasePackage(pkg);
     const isActive = hasActiveEntitlement(customerInfo);
@@ -64,6 +73,7 @@ export async function purchasePackage(pkg: PurchasesPackage): Promise<boolean> {
 }
 
 export async function restorePurchases(): Promise<boolean> {
+  if (!Purchases) return false;
   try {
     const customerInfo = await Purchases.restorePurchases();
     return hasActiveEntitlement(customerInfo);
@@ -74,6 +84,7 @@ export async function restorePurchases(): Promise<boolean> {
 }
 
 export async function checkSubscription(): Promise<boolean | null> {
+  if (!Purchases) return null;
   try {
     const customerInfo = await Purchases.getCustomerInfo();
     return hasActiveEntitlement(customerInfo);
@@ -84,6 +95,7 @@ export async function checkSubscription(): Promise<boolean | null> {
 }
 
 export async function loginUser(appUserId: string): Promise<void> {
+  if (!Purchases) return;
   try {
     await Purchases.logIn(appUserId);
   } catch (e) {
@@ -92,6 +104,7 @@ export async function loginUser(appUserId: string): Promise<void> {
 }
 
 export async function logoutUser(): Promise<void> {
+  if (!Purchases) return;
   try {
     await Purchases.logOut();
   } catch (e) {
@@ -100,5 +113,5 @@ export async function logoutUser(): Promise<void> {
 }
 
 function hasActiveEntitlement(info: CustomerInfo): boolean {
-  return typeof info.entitlements.active[ENTITLEMENT_ID] !== "undefined";
+  return typeof info?.entitlements?.active?.[ENTITLEMENT_ID] !== "undefined";
 }

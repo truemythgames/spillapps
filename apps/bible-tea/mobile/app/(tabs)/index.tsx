@@ -291,7 +291,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontFamily: fonts.bodySemiBold,
     fontSize: fontSize.sm,
-    color: colors.text,
+    color: colors.textSecondary,
     marginTop: spacing.sm,
     lineHeight: 17,
   },
