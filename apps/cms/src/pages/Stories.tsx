@@ -1,52 +1,52 @@
 import { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import {
-  getCatalog,
-  coverUrl,
-  hasGeneratedContent,
-  type CatalogStory,
-} from "../lib/content";
+import { adminApi, getCmsApiBaseUrl } from "../lib/api";
 
-type Filter = "all" | "seed" | "generated";
+type Filter = "all" | "old" | "new";
+
+interface ApiStory {
+  id: string;
+  title: string;
+  description: string;
+  bible_ref: string;
+  season_name: string;
+  testament: string;
+  cover_image_url: string | null;
+  is_published: number;
+}
 
 export function Stories() {
-  const [catalog, setCatalog] = useState<CatalogStory[]>([]);
-  const [generated, setGenerated] = useState<Set<string>>(new Set());
+  const [stories, setStories] = useState<ApiStory[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<Filter>("seed");
+  const [filter, setFilter] = useState<Filter>("all");
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    getCatalog()
-      .then(async (stories) => {
-        setCatalog(stories);
-        const seeds = stories.filter((s) => s.inSeed);
-        const checks = await Promise.all(
-          seeds.map(async (s) => [s.id, await hasGeneratedContent(s.id)] as const)
-        );
-        setGenerated(new Set(checks.filter(([, ok]) => ok).map(([id]) => id)));
-      })
+    adminApi
+      .getStories()
+      .then((res) => setStories(res.stories))
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
 
   const filtered = useMemo(() => {
-    let list = catalog;
-    if (filter === "seed") list = list.filter((s) => s.inSeed);
-    if (filter === "generated") list = list.filter((s) => generated.has(s.id));
+    let list = stories;
+    if (filter === "old") list = list.filter((s) => s.testament === "old");
+    if (filter === "new") list = list.filter((s) => s.testament === "new");
     if (search) {
       const q = search.toLowerCase();
       list = list.filter(
         (s) =>
           s.title.toLowerCase().includes(q) ||
-          s.section.toLowerCase().includes(q) ||
-          s.bibleRef.toLowerCase().includes(q)
+          (s.season_name || "").toLowerCase().includes(q) ||
+          (s.bible_ref || "").toLowerCase().includes(q)
       );
     }
     return list;
-  }, [catalog, filter, search, generated]);
+  }, [stories, filter, search]);
 
-  const seedCount = catalog.filter((s) => s.inSeed).length;
+  const oldCount = stories.filter((s) => s.testament === "old").length;
+  const newCount = stories.filter((s) => s.testament === "new").length;
 
   return (
     <div>
@@ -54,24 +54,27 @@ export function Stories() {
         <div>
           <h2 className="text-2xl font-bold">Stories</h2>
           <p className="text-gray-500 text-sm mt-1">
-            {catalog.length} total · {seedCount} seed · {generated.size} generated
+            {stories.length} total · {oldCount} Old Testament · {newCount} New Testament
           </p>
         </div>
       </div>
 
-      {/* Filters */}
       <div className="flex items-center gap-3 mb-6">
-        {(["seed", "all", "generated"] as Filter[]).map((f) => (
+        {([
+          { key: "all", label: `All (${stories.length})` },
+          { key: "old", label: `Old Testament (${oldCount})` },
+          { key: "new", label: `New Testament (${newCount})` },
+        ] as { key: Filter; label: string }[]).map((f) => (
           <button
-            key={f}
-            onClick={() => setFilter(f)}
+            key={f.key}
+            onClick={() => setFilter(f.key)}
             className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
-              filter === f
+              filter === f.key
                 ? "bg-primary/15 text-primary border border-primary/30"
                 : "text-gray-400 border border-white/10 hover:border-white/20"
             }`}
           >
-            {f === "all" ? "All" : f === "seed" ? "Seed (40)" : "Generated"}
+            {f.label}
           </button>
         ))}
         <input
@@ -83,57 +86,52 @@ export function Stories() {
       </div>
 
       {loading ? (
-        <p className="text-gray-500">Loading catalog...</p>
+        <p className="text-gray-500">Loading stories...</p>
       ) : (
         <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {filtered.map((story) => {
-            const isGenerated = generated.has(story.id);
-            return (
-              <Link
-                key={story.id}
-                to={`/stories/${story.id}`}
-                className="group bg-surface border border-white/5 rounded-xl overflow-hidden hover:border-primary/30 transition-colors"
-              >
-                <div className="aspect-square relative bg-surface-light">
-                  {isGenerated ? (
-                    <img
-                      src={coverUrl(story.id)}
-                      alt={story.title}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gray-600 text-4xl">
-                      📖
-                    </div>
-                  )}
-                  {/* Status badges */}
-                  <div className="absolute top-2 right-2 flex gap-1.5">
-                    {story.inSeed && (
-                      <span className="bg-primary/80 text-black text-[10px] font-bold px-2 py-0.5 rounded-full">
-                        SEED
-                      </span>
-                    )}
-                    {isGenerated && (
-                      <span className="bg-green-500/80 text-black text-[10px] font-bold px-2 py-0.5 rounded-full">
-                        READY
-                      </span>
-                    )}
+          {filtered.map((story) => (
+            <Link
+              key={story.id}
+              to={`/stories/${story.id}`}
+              className="group bg-surface border border-white/5 rounded-xl overflow-hidden hover:border-primary/30 transition-colors"
+            >
+              <div className="aspect-square relative bg-surface-light">
+                {story.cover_image_url ? (
+                  <img
+                    src={story.cover_image_url}
+                    alt={story.title}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-gray-600 text-4xl">
+                    📖
                   </div>
+                )}
+                <div className="absolute top-2 right-2 flex gap-1.5">
+                  <span
+                    className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                      story.testament === "old"
+                        ? "bg-orange-500/80 text-black"
+                        : "bg-green-500/80 text-black"
+                    }`}
+                  >
+                    {story.testament === "old" ? "OT" : "NT"}
+                  </span>
                 </div>
-                <div className="p-3">
-                  <p className="text-[11px] text-primary/70 font-medium tracking-wide uppercase">
-                    {story.section} — {story.bibleRef}
-                  </p>
-                  <p className="font-semibold text-sm mt-0.5 group-hover:text-primary transition-colors">
-                    {story.title}
-                  </p>
-                  <p className="text-gray-500 text-xs mt-1 line-clamp-2">
-                    {story.description}
-                  </p>
-                </div>
-              </Link>
-            );
-          })}
+              </div>
+              <div className="p-3">
+                <p className="text-[11px] text-primary/70 font-medium tracking-wide uppercase">
+                  {story.season_name} — {story.bible_ref}
+                </p>
+                <p className="font-semibold text-sm mt-0.5 group-hover:text-primary transition-colors">
+                  {story.title}
+                </p>
+                <p className="text-gray-500 text-xs mt-1 line-clamp-2">
+                  {story.description}
+                </p>
+              </div>
+            </Link>
+          ))}
         </div>
       )}
     </div>

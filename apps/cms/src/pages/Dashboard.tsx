@@ -1,31 +1,31 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getCatalog, hasGeneratedContent, type CatalogStory } from "../lib/content";
+import { adminApi } from "../lib/api";
 
 export function Dashboard() {
-  const [catalog, setCatalog] = useState<CatalogStory[]>([]);
-  const [generatedCount, setGeneratedCount] = useState(0);
+  const [storyCount, setStoryCount] = useState(0);
+  const [seasonCount, setSeasonCount] = useState(0);
+  const [playlistCount, setPlaylistCount] = useState(0);
+  const [characterCount, setCharacterCount] = useState(0);
+  const [speakerCount, setSpeakerCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getCatalog()
-      .then(async (stories) => {
-        setCatalog(stories);
-        const seeds = stories.filter((s) => s.inSeed);
-        const checks = await Promise.all(seeds.map((s) => hasGeneratedContent(s.id)));
-        setGeneratedCount(checks.filter(Boolean).length);
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false));
+    Promise.allSettled([
+      adminApi.getStories().then((r) => setStoryCount(r.stories.length)),
+      adminApi.getSeasons().then((r) => setSeasonCount(r.seasons.length)),
+      adminApi.getPlaylists().then((r) => setPlaylistCount(r.playlists.length)),
+      adminApi.getCharacters().then((r) => setCharacterCount(r.characters.length)),
+      adminApi.getSpeakers().then((r) => setSpeakerCount(r.speakers.length)),
+    ]).finally(() => setLoading(false));
   }, []);
 
-  const seedCount = catalog.filter((s) => s.inSeed).length;
-
   const cards = [
-    { label: "Total Stories", value: catalog.length, icon: "📖" },
-    { label: "Seed Stories", value: seedCount, icon: "🌱" },
-    { label: "Generated", value: generatedCount, icon: "✅" },
-    { label: "Remaining", value: seedCount - generatedCount, icon: "⏳" },
+    { label: "Stories", value: storyCount, icon: "📖", to: "/stories" },
+    { label: "Seasons", value: seasonCount, icon: "📅", to: "/seasons" },
+    { label: "Playlists", value: playlistCount, icon: "🎵", to: "/playlists" },
+    { label: "Characters", value: characterCount, icon: "👤", to: "/characters" },
+    { label: "Speakers", value: speakerCount, icon: "🎙️", to: "/speakers" },
   ];
 
   return (
@@ -36,20 +36,21 @@ export function Dashboard() {
         <p className="text-gray-500">Loading...</p>
       ) : (
         <>
-          <div className="grid grid-cols-4 gap-4 mb-8">
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
             {cards.map((card) => (
-              <div
+              <Link
                 key={card.label}
-                className="bg-surface border border-white/5 rounded-xl p-6"
+                to={card.to}
+                className="bg-surface border border-white/5 rounded-xl p-6 hover:border-primary/30 transition-colors"
               >
                 <span className="text-3xl">{card.icon}</span>
                 <p className="text-3xl font-bold mt-3">{card.value}</p>
                 <p className="text-gray-500 text-sm mt-1">{card.label}</p>
-              </div>
+              </Link>
             ))}
           </div>
 
-          <div className="bg-surface border border-white/5 rounded-xl p-6 mb-8">
+          <div className="bg-surface border border-white/5 rounded-xl p-6">
             <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
             <div className="flex gap-3">
               <Link
@@ -58,34 +59,19 @@ export function Dashboard() {
               >
                 Browse Stories
               </Link>
-              <a
-                href="http://localhost:3456/stories/"
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                to="/characters"
                 className="bg-surface-light border border-white/10 text-white px-4 py-2 rounded-lg text-sm font-medium"
               >
-                Content Server
-              </a>
+                Manage Characters
+              </Link>
+              <Link
+                to="/playlists"
+                className="bg-surface-light border border-white/10 text-white px-4 py-2 rounded-lg text-sm font-medium"
+              >
+                Manage Playlists
+              </Link>
             </div>
-          </div>
-
-          {/* Generation progress */}
-          <div className="bg-surface border border-white/5 rounded-xl p-6">
-            <h3 className="text-lg font-semibold mb-2">Generation Progress</h3>
-            <p className="text-gray-500 text-sm mb-4">
-              {generatedCount} of {seedCount} seed stories generated
-            </p>
-            <div className="h-3 bg-white/5 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-primary to-green-400 rounded-full transition-all duration-500"
-                style={{
-                  width: seedCount > 0 ? `${(generatedCount / seedCount) * 100}%` : "0%",
-                }}
-              />
-            </div>
-            <p className="text-right text-xs text-gray-600 mt-1">
-              {seedCount > 0 ? Math.round((generatedCount / seedCount) * 100) : 0}%
-            </p>
           </div>
         </>
       )}

@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import { adminApi } from "../lib/api";
-import { coverUrl, getCatalog, type CatalogStory } from "../lib/content";
+
+interface ApiStory {
+  id: string;
+  title: string;
+  cover_image_url: string | null;
+}
 
 interface CharacterForm {
   id: string;
@@ -22,14 +27,14 @@ const EMPTY_FORM: CharacterForm = {
 
 export function Characters() {
   const [characters, setCharacters] = useState<any[]>([]);
-  const [catalog, setCatalog] = useState<CatalogStory[]>([]);
+  const [allStories, setAllStories] = useState<ApiStory[]>([]);
   const [editing, setEditing] = useState<CharacterForm | null>(null);
   const [storySearch, setStorySearch] = useState("");
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     load();
-    getCatalog().then(setCatalog).catch(() => {});
+    adminApi.getStories().then((r) => setAllStories(r.stories)).catch(() => {});
   }, []);
 
   async function load() {
@@ -97,13 +102,13 @@ export function Characters() {
     });
   }
 
-  const filteredCatalog = storySearch.trim()
-    ? catalog.filter(
+  const filteredStories = storySearch.trim()
+    ? allStories.filter(
         (s) =>
           s.title.toLowerCase().includes(storySearch.toLowerCase()) ||
           s.id.toLowerCase().includes(storySearch.toLowerCase())
       )
-    : catalog.slice(0, 20);
+    : allStories.slice(0, 20);
 
   return (
     <div>
@@ -153,7 +158,9 @@ export function Characters() {
                 <input
                   type="number"
                   value={editing.sort_order}
-                  onChange={(e) => setEditing({ ...editing, sort_order: parseInt(e.target.value) || 0 })}
+                  onChange={(e) =>
+                    setEditing({ ...editing, sort_order: parseInt(e.target.value) || 0 })
+                  }
                   className="w-24 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-primary"
                 />
               </div>
@@ -166,7 +173,7 @@ export function Characters() {
                 {editing.story_ids.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 mb-3">
                     {editing.story_ids.map((sid) => {
-                      const story = catalog.find((s) => s.id === sid);
+                      const story = allStories.find((s) => s.id === sid);
                       return (
                         <span
                           key={sid}
@@ -189,7 +196,7 @@ export function Characters() {
                   placeholder="Search stories to add..."
                 />
                 <div className="max-h-48 overflow-y-auto space-y-1 border border-white/5 rounded-lg p-2">
-                  {filteredCatalog.map((story) => {
+                  {filteredStories.map((story) => {
                     const selected = editing.story_ids.includes(story.id);
                     return (
                       <button
@@ -201,11 +208,17 @@ export function Characters() {
                             : "text-gray-300 hover:bg-white/5"
                         }`}
                       >
-                        <img
-                          src={coverUrl(story.id)}
-                          alt=""
-                          className="w-8 h-8 rounded object-cover flex-shrink-0"
-                        />
+                        {story.cover_image_url ? (
+                          <img
+                            src={story.cover_image_url}
+                            alt=""
+                            className="w-8 h-8 rounded object-cover flex-shrink-0"
+                          />
+                        ) : (
+                          <div className="w-8 h-8 rounded bg-white/10 flex-shrink-0 flex items-center justify-center text-xs">
+                            📖
+                          </div>
+                        )}
                         <span className="truncate">{story.title}</span>
                         {selected && <span className="ml-auto text-primary">✓</span>}
                       </button>
@@ -236,47 +249,50 @@ export function Characters() {
 
       {/* Character list */}
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-        {characters.map((ch) => (
-          <div
-            key={ch.id}
-            className="bg-surface border border-white/5 rounded-xl p-5 hover:border-white/10 transition-colors"
-          >
-            <div className="flex items-start gap-3">
-              {ch.stories?.[0]?.id ? (
-                <img
-                  src={coverUrl(ch.stories[0].id)}
-                  alt={ch.name}
-                  className="w-14 h-14 rounded-full object-cover flex-shrink-0 border-2 border-white/10"
-                />
-              ) : (
-                <div className="w-14 h-14 rounded-full bg-white/5 flex-shrink-0 flex items-center justify-center text-2xl">
-                  👤
+        {characters.map((ch) => {
+          const charImg = ch.image_url ?? ch.stories?.[0]?.cover_image_url ?? null;
+          return (
+            <div
+              key={ch.id}
+              className="bg-surface border border-white/5 rounded-xl p-5 hover:border-white/10 transition-colors"
+            >
+              <div className="flex items-start gap-3">
+                {charImg ? (
+                  <img
+                    src={charImg}
+                    alt={ch.name}
+                    className="w-14 h-14 rounded-full object-cover flex-shrink-0 border-2 border-white/10"
+                  />
+                ) : (
+                  <div className="w-14 h-14 rounded-full bg-white/5 flex-shrink-0 flex items-center justify-center text-2xl">
+                    👤
+                  </div>
+                )}
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-semibold text-white">{ch.name}</h3>
+                  <p className="text-gray-500 text-sm mt-0.5 truncate">{ch.description}</p>
+                  <p className="text-gray-600 text-xs mt-1">
+                    {ch.stories?.length || 0} stories · order {ch.sort_order}
+                  </p>
                 </div>
-              )}
-              <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-white">{ch.name}</h3>
-                <p className="text-gray-500 text-sm mt-0.5 truncate">{ch.description}</p>
-                <p className="text-gray-600 text-xs mt-1">
-                  {ch.stories?.length || 0} stories · order {ch.sort_order}
-                </p>
+              </div>
+              <div className="flex gap-2 mt-3 pt-3 border-t border-white/5">
+                <button
+                  onClick={() => startEdit(ch)}
+                  className="text-xs text-primary hover:text-primary/80 transition-colors"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => remove(ch.id)}
+                  className="text-xs text-red-400 hover:text-red-300 transition-colors"
+                >
+                  Delete
+                </button>
               </div>
             </div>
-            <div className="flex gap-2 mt-3 pt-3 border-t border-white/5">
-              <button
-                onClick={() => startEdit(ch)}
-                className="text-xs text-primary hover:text-primary/80 transition-colors"
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => remove(ch.id)}
-                className="text-xs text-red-400 hover:text-red-300 transition-colors"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        ))}
+          );
+        })}
 
         {characters.length === 0 && (
           <div className="col-span-full text-center py-12 text-gray-500">
