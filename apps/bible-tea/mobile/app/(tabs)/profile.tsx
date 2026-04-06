@@ -9,17 +9,17 @@ import { LinearGradient } from "expo-linear-gradient";
 const CHAT_TOPICS = [
   {
     id: "verse",
-    title: "Find a bible verse\nfor your situation",
+    title: "Spill a verse\nfor what I'm feeling",
     image: coverUrl("the-good-samaritan"),
   },
   {
     id: "advice",
-    title: "Get Biblical advice",
+    title: "What would\nGod say about...",
     image: coverUrl("solomons-wisdom"),
   },
   {
     id: "explain",
-    title: "Explain something\nin the Bible",
+    title: "Break down\na Bible passage",
     image: coverUrl("the-ten-commandments"),
   },
 ];
@@ -64,7 +64,7 @@ export default function ChatScreen() {
 
       {/* Free chat button */}
       <Pressable style={styles.freeBtn} onPress={handleFreeChat}>
-        <Text style={styles.freeBtnText}>Chat about something else</Text>
+        <Text style={styles.freeBtnText}>Just chat with me</Text>
       </Pressable>
     </ScrollView>
   );

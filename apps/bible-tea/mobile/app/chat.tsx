@@ -24,29 +24,29 @@ interface Message {
 
 const TOPIC_CONFIG: Record<string, { title: string; placeholder: string; greeting: string }> = {
   verse: {
-    title: "Find a Verse",
-    placeholder: "Describe your situation...",
-    greeting: "Tell me what you're going through, and I'll find a Bible verse that speaks to your situation.",
+    title: "Spill a Verse",
+    placeholder: "Tell me what's going on...",
+    greeting: "What's going on in your life right now? I'll find the perfect verse for you.",
   },
   advice: {
-    title: "Biblical Advice",
-    placeholder: "What do you need advice on?",
-    greeting: "What's on your mind? I'll share wisdom and guidance from Scripture to help you.",
+    title: "God's Take",
+    placeholder: "What's on your mind?",
+    greeting: "Spill the tea — what's the situation? I'll share what Scripture says about it.",
   },
   explain: {
-    title: "Explain the Bible",
-    placeholder: "What would you like explained?",
-    greeting: "Ask me about any passage, story, or concept in the Bible and I'll break it down for you.",
+    title: "Break It Down",
+    placeholder: "Which passage or topic?",
+    greeting: "Drop a passage, verse, or topic and I'll break it down so it actually makes sense.",
   },
   story: {
-    title: "Ask about this story",
+    title: "Story Chat",
     placeholder: "Ask anything about this story...",
     greeting: "",
   },
   free: {
-    title: "Chat",
-    placeholder: "Ask anything about the Bible...",
-    greeting: "Hey! Ask me anything about the Bible — stories, characters, theology, history, or how it relates to your life.",
+    title: "Open Chat",
+    placeholder: "Ask me anything...",
+    greeting: "Hey! Ask me literally anything about the Bible — I'm here for all of it.",
   },
 };
 

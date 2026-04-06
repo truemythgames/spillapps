@@ -51,6 +51,12 @@ const LOCAL_COVERS = {
   "birth-of-jesus": require("@/assets/onboarding/birth-of-jesus.webp"),
 } as const;
 
+const SCREENSHOTS = {
+  home: require("@/assets/onboarding/screenshot-home.png"),
+  discover: require("@/assets/onboarding/screenshot-discover.png"),
+  chat: require("@/assets/onboarding/screenshot-chat.png"),
+} as const;
+
 const BACKGROUNDS = [
   LOCAL_COVERS["creation"],              // welcome
   LOCAL_COVERS["creation"],              // q1
@@ -111,15 +117,15 @@ interface FeatureSlide {
 const FEATURE_SLIDES: FeatureSlide[] = [
   {
     title: "Hear the Bible like\nyou've never heard it",
-    image: LOCAL_COVERS["birth-of-jesus"],
+    image: SCREENSHOTS.home,
   },
   {
     title: "Every story, every hero —\nall in one place",
-    image: LOCAL_COVERS["creation"],
+    image: SCREENSHOTS.discover,
   },
   {
     title: "Scripture that actually\nspeaks your language",
-    image: LOCAL_COVERS["joseph-in-egypt"],
+    image: SCREENSHOTS.chat,
   },
 ];
 

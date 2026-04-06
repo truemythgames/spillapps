@@ -23,6 +23,7 @@ import { setupPlayer } from "@/stores/player";
 import { colors } from "@/lib/theme";
 import { storage, StorageKeys } from "@/lib/storage";
 import { initPurchases } from "@/lib/purchases";
+import { initAnalytics } from "@/lib/analytics";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -50,6 +51,7 @@ export default function RootLayout() {
       await setupPlayer();
       await hydrateAuth();
       await initPurchases();
+      await initAnalytics();
       await loadInitialData();
       setAppReady(true);
     }

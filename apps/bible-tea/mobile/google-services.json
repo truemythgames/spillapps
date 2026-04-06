@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "165144999776",
+    "project_id": "bible-tea",
+    "storage_bucket": "bible-tea.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:165144999776:android:d7dcd65ebe50d25ece5005",
+        "android_client_info": {
+          "package_name": "app.bibletea"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7OtL6BCAJKoAEbHCgDScz8yudPq5i1fU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

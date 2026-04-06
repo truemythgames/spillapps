@@ -5,6 +5,7 @@ import Purchases, {
   LOG_LEVEL,
 } from "react-native-purchases";
 import { Platform } from "react-native";
+import { trackSubscription, trackEvent } from "@/lib/analytics";
 
 const REVENUECAT_IOS_KEY = "appl_wkihlIqfRBLXmhtmZBUiijkxsxN";
 const REVENUECAT_ANDROID_KEY = "goog_REPLACE_WITH_YOUR_ANDROID_KEY";
@@ -47,7 +48,14 @@ export async function getOfferings(): Promise<PurchasesOffering | null> {
 export async function purchasePackage(pkg: PurchasesPackage): Promise<boolean> {
   try {
     const { customerInfo } = await Purchases.purchasePackage(pkg);
-    return hasActiveEntitlement(customerInfo);
+    const isActive = hasActiveEntitlement(customerInfo);
+    if (isActive) {
+      const price = pkg.product.price;
+      const productId = pkg.product.identifier;
+      trackSubscription(productId, price);
+      trackEvent("start_trial", { product_id: productId, price });
+    }
+    return isActive;
   } catch (e: any) {
     if (e.userCancelled) return false;
     console.warn("[Purchases] Purchase failed:", e);
