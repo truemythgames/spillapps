@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import {
   View,
   Text,
@@ -116,6 +116,16 @@ export default function HomeScreen() {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const hasData = stories.length > 0;
 
+  const sortedPlaylists = useMemo(() => {
+    const copy = [...playlists];
+    copy.sort((a, b) => {
+      const aStart = a.name.toLowerCase().includes("start here") ? 0 : 1;
+      const bStart = b.name.toLowerCase().includes("start here") ? 0 : 1;
+      return aStart - bStart;
+    });
+    return copy;
+  }, [playlists]);
+
   React.useEffect(() => {
     if (stories.length === 0) loadInitialData();
   }, []);
@@ -174,7 +184,7 @@ export default function HomeScreen() {
         )}
 
         {/* Playlist sections */}
-        {playlists.map((playlist) => (
+        {sortedPlaylists.map((playlist) => (
           <View key={playlist.id} style={styles.section}>
             <SectionHeader title={playlist.name} />
             <FlatList

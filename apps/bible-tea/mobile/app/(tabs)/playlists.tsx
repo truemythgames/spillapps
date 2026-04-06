@@ -162,7 +162,7 @@ export default function DiscoverScreen() {
 
           {/* Browse by Season */}
           {seasonList.length > 0 && (
-            <View style={styles.section}>
+            <View style={[styles.section, { paddingTop: spacing.md }]}>
               <Text style={styles.sectionTitle}>Browse by Season</Text>
               <View style={styles.seasonGrid}>
                 {seasonList.map((season) => (
