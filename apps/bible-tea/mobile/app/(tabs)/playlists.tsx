@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, ScrollView, Pressable, FlatList, TextInput, Animated as RNAnimated } from "react-native";
 import { Image } from "expo-image";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -22,22 +22,27 @@ function SkeletonDiscover({ paddingTop }: { paddingTop: number }) {
           <SkeletonText width={200} />
         </View>
       </View>
-      {[1, 2].map((i) => (
-        <View key={i} style={styles.section}>
-          <View style={{ marginBottom: spacing.sm }}>
-            <SkeletonText width={160} height={20} />
-          </View>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {[1, 2, 3].map((j) => (
-              <View key={j} style={{ width: 150, marginRight: spacing.md }}>
-                <Skeleton width={150} height={150} />
-                <SkeletonText width={120} style={{ marginTop: spacing.xs }} />
-                <SkeletonText width={90} height={11} style={{ marginTop: 4 }} />
-              </View>
-            ))}
-          </ScrollView>
+      {/* Characters skeleton */}
+      <View style={styles.section}>
+        <SkeletonText width={160} height={20} style={{ marginBottom: spacing.sm }} />
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {[1, 2, 3, 4].map((j) => (
+            <View key={j} style={{ alignItems: "center", marginRight: spacing.lg, width: 80 }}>
+              <Skeleton width={72} height={72} borderRadius={36} />
+              <SkeletonText width={60} style={{ marginTop: spacing.xs }} />
+            </View>
+          ))}
+        </ScrollView>
+      </View>
+      {/* Seasons skeleton */}
+      <View style={styles.section}>
+        <SkeletonText width={140} height={20} style={{ marginBottom: spacing.sm }} />
+        <View style={{ gap: spacing.sm }}>
+          {[1, 2, 3].map((j) => (
+            <Skeleton key={j} width="100%" height={80} borderRadius={radius.md} />
+          ))}
         </View>
-      ))}
+      </View>
     </ScrollView>
   );
 }
@@ -45,7 +50,7 @@ function SkeletonDiscover({ paddingTop }: { paddingTop: number }) {
 export default function DiscoverScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const { playlists, stories, characters, recentStories, isLoading } = useAppStore();
+  const { stories, characters, recentStories, seasons } = useAppStore();
   const [query, setQuery] = useState("");
 
   const fadeAnim = useRef(new RNAnimated.Value(0)).current;
@@ -64,6 +69,18 @@ export default function DiscoverScreen() {
           s.description.toLowerCase().includes(query.toLowerCase()),
       )
     : null;
+
+  const seasonList = useMemo(() => {
+    const grouped: Record<string, { name: string; testament: string; count: number; cover: string | null }> = {};
+    for (const s of stories) {
+      const key = s.section || "Other";
+      if (!grouped[key]) {
+        grouped[key] = { name: key, testament: s.testament ?? "", count: 0, cover: s.cover_image_url };
+      }
+      grouped[key].count++;
+    }
+    return Object.values(grouped);
+  }, [stories]);
 
   if (!hasData) {
     return <SkeletonDiscover paddingTop={insets.top} />;
@@ -110,36 +127,6 @@ export default function DiscoverScreen() {
         </View>
       ) : (
         <>
-          {/* Playlists */}
-          {playlists.map((pl) => (
-            <View key={pl.id} style={styles.section}>
-              <View style={styles.sectionRow}>
-                <View>
-                  <Text style={styles.sectionTitle}>{pl.name}</Text>
-                  <Text style={styles.sectionSub}>
-                    {pl.stories.length} stories
-                  </Text>
-                </View>
-                <Pressable onPress={() => router.push(`/collection?type=playlist&id=${pl.id}` as any)}>
-                  <Text style={styles.seeAll}>See all</Text>
-                </Pressable>
-              </View>
-              <FlatList
-                horizontal
-                data={pl.stories}
-                keyExtractor={(item) => item.id}
-                showsHorizontalScrollIndicator={false}
-                renderItem={({ item }) => (
-                  <Pressable style={styles.storyCard} onPress={() => router.push(`/story/${item.id}` as any)}>
-                    <Image source={{ uri: item.cover_image_url ?? undefined }} style={styles.storyImg} contentFit="cover" transition={300} />
-                    <Text style={styles.storyTitle} numberOfLines={1}>{item.title}</Text>
-                    <Text style={styles.storySub} numberOfLines={2}>{item.description}</Text>
-                  </Pressable>
-                )}
-              />
-            </View>
-          ))}
-
           {/* Bible Characters */}
           {characters.length > 0 && (
             <View style={styles.section}>
@@ -162,6 +149,7 @@ export default function DiscoverScreen() {
                         source={{ uri: charCover ?? undefined }}
                         style={styles.charAvatar}
                         contentFit="cover"
+                        transition={300}
                       />
                       <Text style={styles.charName}>{item.name}</Text>
                       <Text style={styles.charSub} numberOfLines={1}>{item.subtitle ?? item.title ?? ""}</Text>
@@ -169,6 +157,34 @@ export default function DiscoverScreen() {
                   );
                 }}
               />
+            </View>
+          )}
+
+          {/* Browse by Season */}
+          {seasonList.length > 0 && (
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Browse by Season</Text>
+              <View style={styles.seasonGrid}>
+                {seasonList.map((season) => (
+                  <Pressable
+                    key={season.name}
+                    style={styles.seasonCard}
+                    onPress={() => router.push(`/collection?type=season&name=${encodeURIComponent(season.name)}` as any)}
+                  >
+                    <Image
+                      source={{ uri: season.cover ?? undefined }}
+                      style={StyleSheet.absoluteFill}
+                      contentFit="cover"
+                      transition={300}
+                    />
+                    <View style={styles.seasonOverlay} />
+                    <View style={styles.seasonContent}>
+                      <Text style={styles.seasonName}>{season.name}</Text>
+                      <Text style={styles.seasonCount}>{season.count} stories</Text>
+                    </View>
+                  </Pressable>
+                ))}
+              </View>
             </View>
           )}
 
@@ -196,6 +212,20 @@ export default function DiscoverScreen() {
               />
             </View>
           )}
+
+          {/* All Stories */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>All Stories</Text>
+            {stories.map((s) => (
+              <Pressable key={s.id} style={styles.resultRow} onPress={() => router.push(`/story/${s.id}` as any)}>
+                <Image source={{ uri: s.cover_image_url ?? undefined }} style={styles.resultThumb} contentFit="cover" transition={300} />
+                <View style={styles.resultInfo}>
+                  <Text style={styles.resultTitle} numberOfLines={1}>{s.title}</Text>
+                  <Text style={styles.resultSub} numberOfLines={1}>{s.bibleRef}</Text>
+                </View>
+              </Pressable>
+            ))}
+          </View>
         </>
       )}
     </ScrollView>
@@ -240,8 +270,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     marginBottom: spacing.sm,
   },
-  sectionTitle: { fontFamily: fonts.heading, fontSize: fontSize.xl, color: colors.text },
-  sectionSub: { fontFamily: fonts.body, fontSize: fontSize.sm, color: colors.textSecondary, marginTop: 2 },
+  sectionTitle: { fontFamily: fonts.heading, fontSize: fontSize.xl, color: colors.text, marginBottom: spacing.sm },
   seeAll: { fontFamily: fonts.bodySemiBold, fontSize: fontSize.sm, color: colors.primary, marginTop: 4 },
   emptyText: { fontFamily: fonts.body, fontSize: fontSize.md, color: colors.textMuted, marginTop: spacing.md },
 
@@ -254,6 +283,20 @@ const styles = StyleSheet.create({
   charAvatar: { width: 72, height: 72, borderRadius: 36, borderWidth: 2, borderColor: colors.surfaceBorder },
   charName: { fontFamily: fonts.bodySemiBold, fontSize: fontSize.sm, color: colors.text, marginTop: spacing.xs, textAlign: "center" },
   charSub: { fontFamily: fonts.body, fontSize: fontSize.xs, color: colors.textSecondary, textAlign: "center" },
+
+  seasonGrid: { gap: spacing.sm },
+  seasonCard: {
+    height: 80,
+    borderRadius: radius.md,
+    overflow: "hidden",
+    justifyContent: "center",
+  },
+  seasonOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: "rgba(0,0,0,0.5)" },
+  seasonContent: {
+    paddingHorizontal: spacing.lg,
+  },
+  seasonName: { fontFamily: fonts.heading, fontSize: fontSize.lg, color: "#fff" },
+  seasonCount: { fontFamily: fonts.body, fontSize: fontSize.sm, color: "rgba(255,255,255,0.7)", marginTop: 2 },
 
   resultRow: {
     flexDirection: "row",

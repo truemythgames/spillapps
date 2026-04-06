@@ -8,22 +8,30 @@ import { useGate } from "@/lib/useGate";
 import { getLocalProgress } from "@/lib/storage";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
-const NEW_TESTAMENT = new Set(["Gospels"]);
-
 export default function TestamentScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { guardedPush } = useGate();
-  const { seasons } = useAppStore();
+  const { stories } = useAppStore();
   const progress = getLocalProgress();
 
   const isOT = id === "old";
   const title = isOT ? "Old Testament" : "New Testament";
-  const filtered = seasons.filter((s: any) =>
-    isOT ? !NEW_TESTAMENT.has(s.name) : NEW_TESTAMENT.has(s.name),
+
+  const testamentStories = stories.filter((s) =>
+    isOT ? s.testament === "old" : s.testament === "new",
   );
-  const totalStories = filtered.reduce((n: number, s: any) => n + s.stories.length, 0);
+
+  const grouped = testamentStories.reduce<Record<string, StoryWithCover[]>>((acc, s) => {
+    const key = s.section || "Other";
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(s);
+    return acc;
+  }, {});
+
+  const sectionNames = Object.keys(grouped);
+  const totalStories = testamentStories.length;
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -42,22 +50,22 @@ export default function TestamentScreen() {
         contentContainerStyle={{ paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
       >
-        {filtered.map((season: any) => {
-          const stories: StoryWithCover[] = season.stories;
-          const completed = stories.filter((s) => progress[s.id]?.completed).length;
-          const pct = stories.length > 0 ? Math.round((completed / stories.length) * 100) : 0;
+        {sectionNames.map((name) => {
+          const sectionStories = grouped[name];
+          const completed = sectionStories.filter((s) => progress[s.id]?.completed).length;
+          const pct = sectionStories.length > 0 ? Math.round((completed / sectionStories.length) * 100) : 0;
 
           return (
-            <View key={season.name} style={styles.seasonBlock}>
+            <View key={name} style={styles.seasonBlock}>
               <View style={styles.seasonHeader}>
-                <Text style={styles.seasonName}>{season.name}</Text>
-                <Text style={styles.seasonMeta}>{stories.length} stories · {pct}% done</Text>
+                <Text style={styles.seasonName}>{name}</Text>
+                <Text style={styles.seasonMeta}>{sectionStories.length} stories · {pct}% done</Text>
                 <View style={styles.seasonBar}>
                   <View style={[styles.seasonBarFill, { width: `${pct}%` }]} />
                 </View>
               </View>
 
-              {stories.map((story) => {
+              {sectionStories.map((story) => {
                 const done = progress[story.id]?.completed;
                 return (
                   <Pressable
@@ -65,7 +73,7 @@ export default function TestamentScreen() {
                     style={styles.storyRow}
                     onPress={() => guardedPush(`/story/${story.id}`)}
                   >
-                    <Image source={{ uri: story.cover_image_url }} style={styles.storyThumb} contentFit="cover" />
+                    <Image source={{ uri: story.cover_image_url ?? undefined }} style={styles.storyThumb} contentFit="cover" transition={300} />
                     <View style={styles.storyInfo}>
                       <Text style={styles.storyTitle} numberOfLines={1}>{story.title}</Text>
                       <Text style={styles.storySub} numberOfLines={1}>{story.description}</Text>
