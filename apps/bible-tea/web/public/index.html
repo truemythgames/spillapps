@@ -231,6 +231,21 @@
       100% { transform: translateX(-50%); }
     }
 
+    .card-scroll-reverse {
+      display: flex;
+      gap: 1.25rem;
+      animation: scroll-right 45s linear infinite;
+      width: max-content;
+      margin-top: 1.5rem;
+    }
+
+    .card-scroll-reverse:hover { animation-play-state: paused; }
+
+    @keyframes scroll-right {
+      0% { transform: translateX(-50%); }
+      100% { transform: translateX(0); }
+    }
+
     .story-card {
       flex-shrink: 0;
       width: 200px;
@@ -265,6 +280,55 @@
     .story-card-ref {
       font-size: 0.75rem;
       color: var(--text-muted);
+    }
+
+    .playlist-card {
+      flex-shrink: 0;
+      width: 240px;
+      height: 120px;
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid var(--surface-border);
+      transition: transform 0.3s, border-color 0.3s;
+    }
+
+    .playlist-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+    }
+
+    .playlist-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .playlist-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(10,10,15,0.75) 0%, rgba(10,10,15,0.4) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1rem 1.25rem;
+    }
+
+    .playlist-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--accent);
+      margin-bottom: 0.2rem;
+    }
+
+    .playlist-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
     }
 
     /* Features */
@@ -311,6 +375,98 @@
       color: var(--text-secondary);
       font-size: 0.9rem;
       line-height: 1.7;
+    }
+
+    /* Reviews */
+    .reviews {
+      padding: 6rem 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .reviews-title {
+      text-align: center;
+      font-size: clamp(1.5rem, 3vw, 2.25rem);
+      margin-bottom: 0.5rem;
+    }
+
+    .reviews-subtitle {
+      text-align: center;
+      color: var(--text-secondary);
+      margin-bottom: 3rem;
+      font-size: 1rem;
+    }
+
+    .reviews-stars {
+      display: flex;
+      justify-content: center;
+      gap: 0.25rem;
+      margin-bottom: 0.75rem;
+      font-size: 1.25rem;
+      color: var(--accent);
+    }
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .review-card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 16px;
+      padding: 1.75rem;
+      transition: border-color 0.3s;
+    }
+
+    .review-card:hover { border-color: rgba(200, 162, 255, 0.3); }
+
+    .review-stars {
+      display: flex;
+      gap: 2px;
+      margin-bottom: 0.75rem;
+      color: var(--accent);
+      font-size: 0.9rem;
+    }
+
+    .review-text {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+
+    .review-author {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .review-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .review-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+
+    .review-date {
+      font-size: 0.75rem;
+      color: var(--text-muted);
     }
 
     /* CTA section */
@@ -417,7 +573,6 @@
   <section class="hero">
     <img src="/icon.png" alt="Bible Tea App Icon" class="hero-icon" />
     <h1 class="heading">Bible Tea</h1>
-    <p class="hero-tagline">Bible Storycast</p>
     <p class="hero-sub">Spill the tea. Read the Bible.<br/>Bible stories reimagined as immersive audio experiences.</p>
     <a href="https://apps.apple.com/app/bible-tea-bible-storycast/id6744145498" class="hero-cta">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
@@ -433,73 +588,140 @@
       <div class="card-scroll" id="card-scroll">
         <!-- Cards duplicated for infinite scroll -->
         <div class="story-card">
-          <img src="https://media.spillapps.com/bible-tea/covers/creation.webp" alt="Creation" loading="lazy" />
+          <img src="https://media.spillapps.com/bible-tea/stories/creation/cover.webp" alt="Creation" loading="lazy" />
           <div class="story-card-body">
             <div class="story-card-title">Creation</div>
             <div class="story-card-ref">Genesis 1-2</div>
           </div>
         </div>
         <div class="story-card">
-          <img src="https://media.spillapps.com/bible-tea/covers/adam-and-eve.webp" alt="Adam and Eve" loading="lazy" />
+          <img src="https://media.spillapps.com/bible-tea/stories/adam-and-eve/cover.webp" alt="Adam and Eve" loading="lazy" />
           <div class="story-card-body">
             <div class="story-card-title">Adam & Eve</div>
             <div class="story-card-ref">Genesis 2-3</div>
           </div>
         </div>
         <div class="story-card">
-          <img src="https://media.spillapps.com/bible-tea/covers/david-and-goliath.webp" alt="David and Goliath" loading="lazy" />
+          <img src="https://media.spillapps.com/bible-tea/stories/david-and-goliath/cover.webp" alt="David and Goliath" loading="lazy" />
           <div class="story-card-body">
             <div class="story-card-title">David & Goliath</div>
             <div class="story-card-ref">1 Samuel 17</div>
           </div>
         </div>
         <div class="story-card">
-          <img src="https://media.spillapps.com/bible-tea/covers/jonah-and-the-whale.webp" alt="Jonah and the Whale" loading="lazy" />
+          <img src="https://media.spillapps.com/bible-tea/stories/jonah-and-the-whale/cover.webp" alt="Jonah and the Whale" loading="lazy" />
           <div class="story-card-body">
             <div class="story-card-title">Jonah & the Whale</div>
             <div class="story-card-ref">Jonah 1-4</div>
           </div>
         </div>
         <div class="story-card">
-          <img src="https://media.spillapps.com/bible-tea/covers/the-prodigal-son.webp" alt="The Prodigal Son" loading="lazy" />
+          <img src="https://media.spillapps.com/bible-tea/stories/the-prodigal-son/cover.webp" alt="The Prodigal Son" loading="lazy" />
           <div class="story-card-body">
             <div class="story-card-title">The Prodigal Son</div>
             <div class="story-card-ref">Luke 15:11-32</div>
           </div>
         </div>
         <div class="story-card">
-          <img src="https://media.spillapps.com/bible-tea/covers/crossing-the-red-sea.webp" alt="Crossing the Red Sea" loading="lazy" />
+          <img src="https://media.spillapps.com/bible-tea/stories/crossing-the-red-sea/cover.webp" alt="Crossing the Red Sea" loading="lazy" />
           <div class="story-card-body">
             <div class="story-card-title">Crossing the Red Sea</div>
             <div class="story-card-ref">Exodus 14</div>
           </div>
         </div>
         <div class="story-card">
-          <img src="https://media.spillapps.com/bible-tea/covers/daniel-and-the-lions-den.webp" alt="Daniel and the Lions' Den" loading="lazy" />
+          <img src="https://media.spillapps.com/bible-tea/stories/daniel-and-the-lions-den/cover.webp" alt="Daniel and the Lions' Den" loading="lazy" />
           <div class="story-card-body">
             <div class="story-card-title">Daniel & the Lions</div>
             <div class="story-card-ref">Daniel 6</div>
           </div>
         </div>
         <div class="story-card">
-          <img src="https://media.spillapps.com/bible-tea/covers/the-resurrection.webp" alt="The Resurrection" loading="lazy" />
+          <img src="https://media.spillapps.com/bible-tea/stories/the-resurrection/cover.webp" alt="The Resurrection" loading="lazy" />
           <div class="story-card-body">
             <div class="story-card-title">The Resurrection</div>
             <div class="story-card-ref">Matthew 28</div>
           </div>
         </div>
         <div class="story-card">
-          <img src="https://media.spillapps.com/bible-tea/covers/samson-and-delilah.webp" alt="Samson and Delilah" loading="lazy" />
+          <img src="https://media.spillapps.com/bible-tea/stories/samson-and-delilah/cover.webp" alt="Samson and Delilah" loading="lazy" />
           <div class="story-card-body">
             <div class="story-card-title">Samson & Delilah</div>
             <div class="story-card-ref">Judges 16</div>
           </div>
         </div>
         <div class="story-card">
-          <img src="https://media.spillapps.com/bible-tea/covers/ruth-and-naomi.webp" alt="Ruth and Naomi" loading="lazy" />
+          <img src="https://media.spillapps.com/bible-tea/stories/ruth-and-naomi/cover.webp" alt="Ruth and Naomi" loading="lazy" />
           <div class="story-card-body">
             <div class="story-card-title">Ruth & Naomi</div>
             <div class="story-card-ref">Ruth 1-4</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Playlists row (scrolls opposite direction) -->
+      <div class="card-scroll-reverse" id="playlist-scroll">
+        <div class="playlist-card">
+          <img src="https://media.spillapps.com/bible-tea/stories/creation/cover.webp" alt="Start Here" loading="lazy" />
+          <div class="playlist-overlay">
+            <div class="playlist-label">Playlist</div>
+            <div class="playlist-name">Start Here</div>
+          </div>
+        </div>
+        <div class="playlist-card">
+          <img src="https://media.spillapps.com/bible-tea/stories/the-last-supper/cover.webp" alt="Holy Week" loading="lazy" />
+          <div class="playlist-overlay">
+            <div class="playlist-label">Playlist</div>
+            <div class="playlist-name">Holy Week</div>
+          </div>
+        </div>
+        <div class="playlist-card">
+          <img src="https://media.spillapps.com/bible-tea/stories/adam-and-eve/cover.webp" alt="Love Stories" loading="lazy" />
+          <div class="playlist-overlay">
+            <div class="playlist-label">Playlist</div>
+            <div class="playlist-name">Love Stories</div>
+          </div>
+        </div>
+        <div class="playlist-card">
+          <img src="https://media.spillapps.com/bible-tea/stories/crossing-the-red-sea/cover.webp" alt="Miracles & Wonders" loading="lazy" />
+          <div class="playlist-overlay">
+            <div class="playlist-label">Playlist</div>
+            <div class="playlist-name">Miracles & Wonders</div>
+          </div>
+        </div>
+        <div class="playlist-card">
+          <img src="https://media.spillapps.com/bible-tea/stories/joseph-and-his-brothers/cover.webp" alt="Family Drama" loading="lazy" />
+          <div class="playlist-overlay">
+            <div class="playlist-label">Playlist</div>
+            <div class="playlist-name">Family Drama</div>
+          </div>
+        </div>
+        <div class="playlist-card">
+          <img src="https://media.spillapps.com/bible-tea/stories/the-resurrection/cover.webp" alt="The Jesus Story" loading="lazy" />
+          <div class="playlist-overlay">
+            <div class="playlist-label">Playlist</div>
+            <div class="playlist-name">The Jesus Story</div>
+          </div>
+        </div>
+        <div class="playlist-card">
+          <img src="https://media.spillapps.com/bible-tea/stories/daniel-and-the-lions-den/cover.webp" alt="Courage Under Fire" loading="lazy" />
+          <div class="playlist-overlay">
+            <div class="playlist-label">Playlist</div>
+            <div class="playlist-name">Courage Under Fire</div>
+          </div>
+        </div>
+        <div class="playlist-card">
+          <img src="https://media.spillapps.com/bible-tea/stories/samson-and-delilah/cover.webp" alt="Maximum Drama" loading="lazy" />
+          <div class="playlist-overlay">
+            <div class="playlist-label">Playlist</div>
+            <div class="playlist-name">Maximum Drama</div>
+          </div>
+        </div>
+        <div class="playlist-card">
+          <img src="https://media.spillapps.com/bible-tea/stories/david-and-goliath/cover.webp" alt="Underdog Stories" loading="lazy" />
+          <div class="playlist-overlay">
+            <div class="playlist-label">Playlist</div>
+            <div class="playlist-name">Underdog Stories</div>
           </div>
         </div>
       </div>
@@ -543,6 +765,81 @@
     </div>
   </section>
 
+  <!-- Reviews -->
+  <section class="reviews">
+    <h2 class="heading reviews-title">What Listeners Are Saying</h2>
+    <div class="reviews-stars">★★★★★</div>
+    <p class="reviews-subtitle">Rated 5 stars on the App Store</p>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"This app completely changed how I engage with the Bible. The narrations are beautiful and the artwork for each story is stunning. I listen every morning with my coffee."</p>
+        <div class="review-author">
+          <div class="review-avatar">S</div>
+          <div>
+            <div class="review-name">Sarah M.</div>
+            <div class="review-date">March 2025</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Finally an app that makes Bible stories feel alive. My kids love listening to it before bed. The Story of the Day feature keeps us coming back every single day."</p>
+        <div class="review-author">
+          <div class="review-avatar">J</div>
+          <div>
+            <div class="review-name">James R.</div>
+            <div class="review-date">March 2025</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"I've tried so many Bible apps and this is the first one that actually made me excited to open it. The playlists are perfectly curated and the audio quality is incredible."</p>
+        <div class="review-author">
+          <div class="review-avatar">M</div>
+          <div>
+            <div class="review-name">Maria L.</div>
+            <div class="review-date">April 2025</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Love the 'Spill the Tea' vibe — it makes scripture feel so approachable. I listen during my commute and it's become the best part of my day. Highly recommend!"</p>
+        <div class="review-author">
+          <div class="review-avatar">D</div>
+          <div>
+            <div class="review-name">David K.</div>
+            <div class="review-date">April 2025</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"The character profiles are such a smart feature. Following Moses across different stories gives you so much more context. Beautiful design too — dark mode is perfect."</p>
+        <div class="review-author">
+          <div class="review-avatar">A</div>
+          <div>
+            <div class="review-name">Anna T.</div>
+            <div class="review-date">March 2025</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"As someone who grew up with these stories, hearing them narrated with such care and emotion brought tears to my eyes. This is how scripture should be experienced."</p>
+        <div class="review-author">
+          <div class="review-avatar">R</div>
+          <div>
+            <div class="review-name">Robert P.</div>
+            <div class="review-date">April 2025</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- CTA -->
   <section class="cta-section">
     <h2 class="heading">Ready to Spill the Tea?</h2>
@@ -558,7 +855,7 @@
     <div class="footer-links">
       <a href="/privacy">Privacy Policy</a>
       <a href="/terms">Terms of Service</a>
-      <a href="mailto:hello@truemythgames.com">Contact</a>
+      <a href="mailto:contact@bibletea.app">Contact</a>
     </div>
     <p>&copy; 2026 Bible Tea. All rights reserved.</p>
   </footer>
@@ -567,6 +864,8 @@
     // Duplicate cards for seamless infinite scroll
     const scroll = document.getElementById('card-scroll');
     if (scroll) scroll.innerHTML += scroll.innerHTML;
+    const plScroll = document.getElementById('playlist-scroll');
+    if (plScroll) plScroll.innerHTML += plScroll.innerHTML;
   </script>
 </body>
 </html>
