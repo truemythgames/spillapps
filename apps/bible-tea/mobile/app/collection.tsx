@@ -4,30 +4,24 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAppStore } from "@/stores/app";
-import { coverUrl, getAllStories } from "@/lib/content";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
 export default function CollectionScreen() {
   const { type, id } = useLocalSearchParams<{ type: string; id?: string }>();
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { playlists } = useAppStore();
+  const { playlists, recentStories } = useAppStore();
 
   let title = "";
-  let stories: { id: string; title: string; description: string; cover_image_url: string }[] = [];
+  let stories: { id: string; title: string; description: string; cover_image_url: string | null }[] = [];
 
   if (type === "playlist" && id) {
     const pl = playlists.find((p) => p.id === id);
     title = pl?.name ?? "Playlist";
-    stories = pl?.stories.map((s) => ({ ...s, cover_image_url: coverUrl(s.id) })) ?? [];
+    stories = pl?.stories ?? [];
   } else if (type === "recent") {
     title = "Recently Added";
-    stories = [...getAllStories()].reverse().slice(0, 30).map((s) => ({
-      id: s.id,
-      title: s.title,
-      description: s.description,
-      cover_image_url: coverUrl(s.id),
-    }));
+    stories = recentStories;
   }
 
   return (

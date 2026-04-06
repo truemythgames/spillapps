@@ -1,11 +1,16 @@
 import { create } from "zustand";
-import { getSeedStories, coverUrl, type CatalogStory } from "@/lib/content";
+import { getSeedStories, type CatalogStory } from "@/lib/content";
 import { storage, StorageKeys, getLocalProgress, getStreakData } from "@/lib/storage";
 import { api } from "@/lib/api";
 import { checkSubscription } from "@/lib/purchases";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const CACHE_KEY = "app_data_cache";
+const CACHE_TTL_MS = 5 * 60 * 1000; // 5 min — background refresh if stale
 
 export interface StoryWithCover extends CatalogStory {
-  cover_image_url: string;
+  cover_image_url: string | null;
+  apiId?: string;
 }
 
 export interface Playlist {
@@ -25,6 +30,17 @@ interface StreakInfo {
   current_streak: number;
   max_streak: number;
   last_listen_date: string | null;
+}
+
+interface CachedData {
+  stories: StoryWithCover[];
+  storyOfTheDay: StoryWithCover | null;
+  playlists: Playlist[];
+  characters: any[];
+  recentStories: StoryWithCover[];
+  seasons: any[];
+  speakers: any[];
+  cachedAt: number;
 }
 
 interface AppState {
@@ -56,10 +72,6 @@ interface AppState {
   refreshSubscription: () => Promise<void>;
 }
 
-function withCover(story: CatalogStory): StoryWithCover {
-  return { ...story, cover_image_url: coverUrl(story.id) };
-}
-
 const seedIdToLocalId: Record<string, string> = {};
 for (const s of getSeedStories()) {
   if (s.seedId) seedIdToLocalId[s.seedId] = s.id;
@@ -69,22 +81,33 @@ function apiStoryToCover(s: any): StoryWithCover {
   const localId = seedIdToLocalId[s.id] ?? s.slug ?? s.id;
   return {
     id: localId,
+    apiId: s.id,
     title: s.title,
     description: s.description ?? "",
     bibleRef: s.bible_ref ?? s.bibleRef ?? "",
     section: s.season_name ?? s.section ?? "",
     testament: s.testament ?? "",
     order: s.sort_order ?? s.order ?? 0,
-    cover_image_url: s.cover_image_url ?? coverUrl(localId),
+    cover_image_url: s.cover_image_url ?? null,
   };
 }
 
-const PLAYLIST_DEFS: { id: string; name: string; match: (s: CatalogStory) => boolean }[] = [
-  { id: "epic", name: "Epic Bible Moments", match: (s) => ["david-and-goliath", "crossing-the-red-sea", "noahs-ark", "the-ten-plagues", "daniel-and-the-lions-den", "jonah-and-the-whale", "samson-and-delilah", "joshua-and-jericho", "the-crucifixion", "the-resurrection", "feeding-5000", "walking-on-water"].includes(s.id) },
-  { id: "heroes", name: "Heroes & Legends", match: (s) => ["Joshua", "Judges", "Ruth", "1 Samuel", "2 Samuel", "1 Kings", "Daniel", "Esther", "Jonah"].includes(s.section) },
-  { id: "exodus", name: "The Great Escape", match: (s) => ["Exodus", "Numbers", "Deuteronomy"].includes(s.section) },
-  { id: "genesis", name: "Origin Stories", match: (s) => s.section === "Genesis" },
-];
+async function loadCache(): Promise<CachedData | null> {
+  try {
+    const raw = await AsyncStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+async function saveCache(data: Omit<CachedData, "cachedAt">) {
+  try {
+    const payload: CachedData = { ...data, cachedAt: Date.now() };
+    await AsyncStorage.setItem(CACHE_KEY, JSON.stringify(payload));
+  } catch {}
+}
 
 export const useAppStore = create<AppState>((set, get) => ({
   stories: [],
@@ -105,26 +128,6 @@ export const useAppStore = create<AppState>((set, get) => ({
   progressVersion: 0,
 
   loadInitialData: () => {
-    const seeds = getSeedStories();
-    const today = new Date();
-    const dayIndex = Math.floor(today.getTime() / 86400000) % seeds.length;
-    const sotd = seeds[dayIndex];
-
-    const playlists: Playlist[] = PLAYLIST_DEFS
-      .map((def) => ({
-        id: def.id,
-        name: def.name,
-        stories: seeds.filter(def.match).map(withCover),
-      }))
-      .filter((p) => p.stories.length > 0);
-
-    const sections = [...new Set(seeds.map((s) => s.section))];
-    const seasons = sections.map((name, i) => ({
-      id: `section-${i}`,
-      name,
-      stories: seeds.filter((s) => s.section === name).map(withCover),
-    }));
-
     const subscribed = storage.getBoolean(StorageKeys.IS_SUBSCRIBED) ?? false;
 
     let localLikes: string[] = [];
@@ -141,10 +144,6 @@ export const useAppStore = create<AppState>((set, get) => ({
     const localStreak = getStreakData();
 
     set({
-      stories: seeds.map(withCover),
-      storyOfTheDay: sotd ? withCover(sotd) : null,
-      playlists,
-      seasons,
       isSubscribed: subscribed,
       likedStoryIds: localLikes,
       completedStoryIds: localCompleted,
@@ -153,78 +152,111 @@ export const useAppStore = create<AppState>((set, get) => ({
         max_streak: localStreak.longestStreak,
         last_listen_date: localStreak.lastCheckIn,
       },
-      isLoading: false,
+      isLoading: true,
     });
 
-    get().loadRemoteData();
+    loadCache().then((cached) => {
+      if (cached && cached.stories?.length) {
+        set({
+          stories: cached.stories,
+          storyOfTheDay: cached.storyOfTheDay,
+          playlists: cached.playlists,
+          characters: cached.characters,
+          recentStories: cached.recentStories,
+          seasons: cached.seasons,
+          speakers: cached.speakers,
+          isLoading: false,
+        });
+
+        const isStale = Date.now() - cached.cachedAt > CACHE_TTL_MS;
+        if (isStale) {
+          get().loadRemoteData();
+        }
+      } else {
+        get().loadRemoteData();
+      }
+    });
   },
 
   loadRemoteData: async () => {
-    const results = await Promise.allSettled([
-      api.getStories(),
-      api.getStoryOfTheDay(),
-      api.getPlaylists(),
-      api.getSeasons(),
-      api.getSpeakers(),
-      api.getCharacters(),
-      api.getRecentStories(),
-    ]);
+    try {
+      const results = await Promise.allSettled([
+        api.getStories(),
+        api.getStoryOfTheDay(),
+        api.getPlaylists(),
+        api.getSeasons(),
+        api.getSpeakers(),
+        api.getCharacters(),
+        api.getRecentStories(),
+      ]);
 
-    const updates: Partial<AppState> = {};
+      const updates: Partial<AppState> = {};
 
-    const [storiesRes, sotdRes, playlistsRes, seasonsRes, speakersRes, charsRes, recentRes] = results;
+      const [storiesRes, sotdRes, playlistsRes, seasonsRes, speakersRes, charsRes, recentRes] = results;
 
-    if (storiesRes.status === "fulfilled" && storiesRes.value.stories?.length) {
-      updates.stories = storiesRes.value.stories.map(apiStoryToCover);
-    }
+      if (storiesRes.status === "fulfilled" && storiesRes.value.stories?.length) {
+        updates.stories = storiesRes.value.stories.map(apiStoryToCover);
+      }
 
-    if (sotdRes.status === "fulfilled" && sotdRes.value.story) {
-      updates.storyOfTheDay = apiStoryToCover(sotdRes.value.story);
-    }
+      if (sotdRes.status === "fulfilled" && sotdRes.value.story) {
+        updates.storyOfTheDay = apiStoryToCover(sotdRes.value.story);
+      }
 
-    if (playlistsRes.status === "fulfilled" && playlistsRes.value.playlists?.length) {
-      const apiPlaylists: Playlist[] = [];
-      for (const pl of playlistsRes.value.playlists) {
-        try {
-          const detail = await api.getPlaylist(pl.id);
-          apiPlaylists.push({
-            id: pl.id,
-            name: pl.name,
-            cover_image_url: pl.cover_image_url,
-            stories: detail.stories.map(apiStoryToCover),
-          });
-        } catch {
-          apiPlaylists.push({
-            id: pl.id,
-            name: pl.name,
-            cover_image_url: pl.cover_image_url,
-            stories: [],
-          });
+      if (playlistsRes.status === "fulfilled" && playlistsRes.value.playlists?.length) {
+        const apiPlaylists: Playlist[] = [];
+        for (const pl of playlistsRes.value.playlists) {
+          try {
+            const detail = await api.getPlaylist(pl.id);
+            apiPlaylists.push({
+              id: pl.id,
+              name: pl.name,
+              cover_image_url: pl.cover_image_url,
+              stories: detail.stories.map(apiStoryToCover),
+            });
+          } catch {
+            apiPlaylists.push({
+              id: pl.id,
+              name: pl.name,
+              cover_image_url: pl.cover_image_url,
+              stories: [],
+            });
+          }
+        }
+        if (apiPlaylists.length) {
+          updates.playlists = apiPlaylists.filter((p) => p.stories.length > 0);
         }
       }
-      if (apiPlaylists.length) {
-        updates.playlists = apiPlaylists.filter((p) => p.stories.length > 0);
+
+      if (seasonsRes.status === "fulfilled" && seasonsRes.value.seasons?.length) {
+        updates.seasons = seasonsRes.value.seasons;
       }
-    }
 
-    if (seasonsRes.status === "fulfilled" && seasonsRes.value.seasons?.length) {
-      updates.seasons = seasonsRes.value.seasons;
-    }
+      if (speakersRes.status === "fulfilled" && speakersRes.value.speakers?.length) {
+        updates.speakers = speakersRes.value.speakers;
+      }
 
-    if (speakersRes.status === "fulfilled" && speakersRes.value.speakers?.length) {
-      updates.speakers = speakersRes.value.speakers;
-    }
+      if (charsRes.status === "fulfilled" && charsRes.value.characters?.length) {
+        updates.characters = charsRes.value.characters;
+      }
 
-    if (charsRes.status === "fulfilled" && charsRes.value.characters?.length) {
-      updates.characters = charsRes.value.characters;
-    }
+      if (recentRes.status === "fulfilled" && recentRes.value.stories?.length) {
+        updates.recentStories = recentRes.value.stories.map(apiStoryToCover);
+      }
 
-    if (recentRes.status === "fulfilled" && recentRes.value.stories?.length) {
-      updates.recentStories = recentRes.value.stories.map(apiStoryToCover);
-    }
+      set({ ...updates, isLoading: false });
 
-    if (Object.keys(updates).length > 0) {
-      set(updates);
+      const state = get();
+      saveCache({
+        stories: updates.stories ?? state.stories,
+        storyOfTheDay: updates.storyOfTheDay ?? state.storyOfTheDay,
+        playlists: updates.playlists ?? state.playlists,
+        characters: updates.characters ?? state.characters,
+        recentStories: updates.recentStories ?? state.recentStories,
+        seasons: updates.seasons ?? state.seasons,
+        speakers: updates.speakers ?? state.speakers,
+      });
+    } catch {
+      set({ isLoading: false });
     }
   },
 
@@ -256,9 +288,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       }
 
       set(updates);
-    } catch {
-      // offline or not yet authenticated — keep defaults
-    }
+    } catch {}
   },
 
   toggleLike: async (storyId) => {
@@ -273,9 +303,7 @@ export const useAppStore = create<AppState>((set, get) => ({
 
     try {
       await api.toggleLike(storyId);
-    } catch {
-      // keep local state even if API fails
-    }
+    } catch {}
   },
 
   markCompleted: (storyId) => {

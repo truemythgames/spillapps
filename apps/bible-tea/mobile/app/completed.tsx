@@ -4,18 +4,18 @@ import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAppStore } from "@/stores/app";
-import { getStoryById, coverUrl } from "@/lib/content";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
 export default function CompletedScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const completedIds = useAppStore((s) => s.completedStoryIds);
+  const stories = useAppStore((s) => s.stories);
 
+  const storyMap = Object.fromEntries(stories.map((s) => [s.id, s]));
   const completedStories = completedIds
-    .map((id) => getStoryById(id))
-    .filter(Boolean)
-    .map((s) => ({ ...s!, cover_image_url: coverUrl(s!.id) }));
+    .map((id) => storyMap[id])
+    .filter(Boolean);
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>

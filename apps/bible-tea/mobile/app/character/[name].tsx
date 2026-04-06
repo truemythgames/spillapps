@@ -3,21 +3,23 @@ import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { getStoryById, coverUrl, getAllCharacters, characterImageUrl } from "@/lib/content";
+import { getAllCharacters, characterImageUrl } from "@/lib/content";
+import { useAppStore } from "@/stores/app";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
 export default function CharacterScreen() {
   const { name } = useLocalSearchParams<{ name: string }>();
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const allStories = useAppStore((s) => s.stories);
 
   const char = getAllCharacters().find((c) => c.name === name);
   if (!char) return null;
 
+  const storyMap = Object.fromEntries(allStories.map((s) => [s.id, s]));
   const stories = char.storyIds
-    .map((id) => getStoryById(id))
-    .filter(Boolean)
-    .map((s) => ({ ...s!, cover_image_url: coverUrl(s!.id) }));
+    .map((id) => storyMap[id])
+    .filter(Boolean);
 
   const heroImage = characterImageUrl(char.id);
 

@@ -3,7 +3,7 @@ import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { getAllCharacters, characterImageUrl, coverUrl } from "@/lib/content";
+import { getAllCharacters, characterImageUrl } from "@/lib/content";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
 export default function CharactersScreen() {
@@ -30,7 +30,7 @@ export default function CharactersScreen() {
           >
             <Image
               source={{ uri: characterImageUrl(char.id) }}
-              placeholder={{ uri: coverUrl(char.storyIds[0]) }}
+              placeholder={undefined}
               style={styles.avatar}
               contentFit="cover"
             />

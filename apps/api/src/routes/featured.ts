@@ -7,71 +7,74 @@ export const featuredRoutes = new Hono<{ Bindings: Env }>();
 
 featuredRoutes.get("/story-of-the-day", async (c) => {
   const appId = resolvePublicAppId(c);
-  const cacheKey = `story-of-the-day:${appId}`;
+  const today = new Date().toISOString().split("T")[0];
+  const cacheKey = `sotd:${appId}:${today}`;
+
   const cached = await c.env.CACHE.get(cacheKey);
   if (cached) {
-    const feature = JSON.parse(cached);
-    const story = await c.env.DB.prepare(
-      `SELECT s.*, se.name as season_name, se.testament
-       FROM stories s JOIN seasons se ON s.season_id = se.id AND se.app_id = s.app_id
-       WHERE s.id = ? AND s.app_id = ?`
-    )
-      .bind(feature.story_id, appId)
-      .first();
-
-    if (story) {
-      return c.json({
-        story: {
-          ...(story as any),
-          cover_image_url: mediaUrl(c.env, (story as any).cover_image_key),
-        },
-        quote: feature.quote_text,
-        attribution: feature.quote_attribution,
-      });
-    }
+    return c.json(JSON.parse(cached));
   }
 
-  const today = new Date().toISOString().split("T")[0];
   const feature = await c.env.DB.prepare(
     "SELECT * FROM daily_features WHERE feature_date = ? AND app_id = ?"
   )
     .bind(today, appId)
     .first<any>();
 
-  if (!feature?.story_id) {
-    const randomStory = await c.env.DB.prepare(
-      "SELECT * FROM stories WHERE app_id = ? AND is_published = 1 AND is_free = 1 ORDER BY RANDOM() LIMIT 1"
+  let storyRow: any = null;
+  let quote: string | null = null;
+  let attribution: string | null = null;
+
+  if (feature?.story_id) {
+    storyRow = await c.env.DB.prepare(
+      `SELECT s.*, se.name as season_name, se.testament
+       FROM stories s JOIN seasons se ON s.season_id = se.id AND se.app_id = s.app_id
+       WHERE s.id = ? AND s.app_id = ?`
     )
-      .bind(appId)
+      .bind(feature.story_id, appId)
       .first();
-    return c.json({
-      story: randomStory
-        ? {
-            ...(randomStory as any),
-            cover_image_url: mediaUrl(c.env, (randomStory as any).cover_image_key),
-          }
-        : null,
-    });
+    quote = feature.quote_text;
+    attribution = feature.quote_attribution;
   }
 
-  const story = await c.env.DB.prepare(
-    `SELECT s.*, se.name as season_name, se.testament
-     FROM stories s JOIN seasons se ON s.season_id = se.id AND se.app_id = s.app_id
-     WHERE s.id = ? AND s.app_id = ?`
-  )
-    .bind(feature.story_id, appId)
-    .first();
+  if (!storyRow) {
+    const daysSinceEpoch = Math.floor(Date.now() / 86400000);
+    const countResult = await c.env.DB.prepare(
+      "SELECT COUNT(*) as cnt FROM stories WHERE app_id = ? AND is_published = 1"
+    )
+      .bind(appId)
+      .first<{ cnt: number }>();
+    const total = countResult?.cnt ?? 1;
+    const offset = daysSinceEpoch % total;
 
-  return c.json({
-    story: story
+    storyRow = await c.env.DB.prepare(
+      `SELECT s.*, se.name as season_name, se.testament
+       FROM stories s JOIN seasons se ON s.season_id = se.id AND se.app_id = s.app_id
+       WHERE s.app_id = ? AND s.is_published = 1
+       ORDER BY s.sort_order ASC
+       LIMIT 1 OFFSET ?`
+    )
+      .bind(appId, offset)
+      .first();
+  }
+
+  const response = {
+    story: storyRow
       ? {
-          ...(story as any),
-          cover_image_url: mediaUrl(c.env, (story as any).cover_image_key),
+          ...(storyRow as any),
+          cover_image_url: mediaUrl(c.env, (storyRow as any).cover_image_key),
         }
       : null,
-    quote: feature.quote_text,
-    attribution: feature.quote_attribution,
+    ...(quote ? { quote, attribution } : {}),
+  };
+
+  const secondsUntilMidnight =
+    86400 - ((Date.now() / 1000) % 86400);
+  await c.env.CACHE.put(cacheKey, JSON.stringify(response), {
+    expirationTtl: Math.max(Math.floor(secondsUntilMidnight), 60),
   });
+
+  return c.json(response);
 });
 
 featuredRoutes.get("/playlist-of-the-week", async (c) => {

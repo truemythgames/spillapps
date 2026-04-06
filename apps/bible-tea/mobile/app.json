@@ -17,7 +17,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "app.bibletea",
-      "buildNumber": "2",
+      "buildNumber": "5",
       "usesAppleSignIn": true,
       "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
@@ -60,7 +60,9 @@
           "iosUserTrackingPermission": "This identifier will be used to deliver personalized ads to you."
         }
       ],
-      "@react-native-firebase/app"
+      "@react-native-firebase/app",
+      "./plugins/firebase-modular-headers",
+      "./plugins/hermes-dsym-plugin"
     ],
     "experiments": {
       "typedRoutes": true

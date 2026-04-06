@@ -1,18 +1,61 @@
-import { View, Text, StyleSheet, ScrollView, Pressable, FlatList, TextInput } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Pressable, FlatList, TextInput, Animated as RNAnimated } from "react-native";
 import { Image } from "expo-image";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useAppStore } from "@/stores/app";
-import { coverUrl } from "@/lib/content";
+import { Skeleton, SkeletonText } from "@/components/Skeleton";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
+
+function SkeletonDiscover({ paddingTop }: { paddingTop: number }) {
+  return (
+    <ScrollView
+      style={[styles.container, { paddingTop }]}
+      contentContainerStyle={{ paddingBottom: 120 }}
+      showsVerticalScrollIndicator={false}
+    >
+      <Text style={styles.pageTitle}>Discover</Text>
+      <View style={styles.searchWrap}>
+        <Ionicons name="search" size={18} color={colors.textMuted} />
+        <View style={{ flex: 1, paddingVertical: 16, marginLeft: 8 }}>
+          <SkeletonText width={200} />
+        </View>
+      </View>
+      {[1, 2].map((i) => (
+        <View key={i} style={styles.section}>
+          <View style={{ marginBottom: spacing.sm }}>
+            <SkeletonText width={160} height={20} />
+          </View>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {[1, 2, 3].map((j) => (
+              <View key={j} style={{ width: 150, marginRight: spacing.md }}>
+                <Skeleton width={150} height={150} />
+                <SkeletonText width={120} style={{ marginTop: spacing.xs }} />
+                <SkeletonText width={90} height={11} style={{ marginTop: 4 }} />
+              </View>
+            ))}
+          </ScrollView>
+        </View>
+      ))}
+    </ScrollView>
+  );
+}
 
 export default function DiscoverScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const { playlists, stories, characters, recentStories } = useAppStore();
+  const { playlists, stories, characters, recentStories, isLoading } = useAppStore();
   const [query, setQuery] = useState("");
+
+  const fadeAnim = useRef(new RNAnimated.Value(0)).current;
+  const hasData = stories.length > 0;
+
+  useEffect(() => {
+    if (hasData) {
+      RNAnimated.timing(fadeAnim, { toValue: 1, duration: 400, useNativeDriver: true }).start();
+    }
+  }, [hasData]);
 
   const filtered = query.trim()
     ? stories.filter(
@@ -22,7 +65,12 @@ export default function DiscoverScreen() {
       )
     : null;
 
+  if (!hasData) {
+    return <SkeletonDiscover paddingTop={insets.top} />;
+  }
+
   return (
+    <RNAnimated.View style={{ flex: 1, opacity: fadeAnim }}>
     <ScrollView
       style={[styles.container, { paddingTop: insets.top }]}
       contentContainerStyle={{ paddingBottom: 120 }}
@@ -52,7 +100,7 @@ export default function DiscoverScreen() {
           )}
           {filtered.map((s) => (
             <Pressable key={s.id} style={styles.resultRow} onPress={() => router.push(`/story/${s.id}` as any)}>
-              <Image source={{ uri: s.cover_image_url }} style={styles.resultThumb} contentFit="cover" />
+              <Image source={{ uri: s.cover_image_url ?? undefined }} style={styles.resultThumb} contentFit="cover" transition={300} />
               <View style={styles.resultInfo}>
                 <Text style={styles.resultTitle} numberOfLines={1}>{s.title}</Text>
                 <Text style={styles.resultSub} numberOfLines={2}>{s.description}</Text>
@@ -83,7 +131,7 @@ export default function DiscoverScreen() {
                 showsHorizontalScrollIndicator={false}
                 renderItem={({ item }) => (
                   <Pressable style={styles.storyCard} onPress={() => router.push(`/story/${item.id}` as any)}>
-                    <Image source={{ uri: item.cover_image_url }} style={styles.storyImg} contentFit="cover" />
+                    <Image source={{ uri: item.cover_image_url ?? undefined }} style={styles.storyImg} contentFit="cover" transition={300} />
                     <Text style={styles.storyTitle} numberOfLines={1}>{item.title}</Text>
                     <Text style={styles.storySub} numberOfLines={2}>{item.description}</Text>
                   </Pressable>
@@ -107,13 +155,11 @@ export default function DiscoverScreen() {
                 keyExtractor={(item) => item.id}
                 showsHorizontalScrollIndicator={false}
                 renderItem={({ item }) => {
-                  const charCover = item.stories?.[0]?.cover_image_key
-                    ? item.stories[0].cover_image_url ?? coverUrl(item.stories[0].slug ?? item.stories[0].id)
-                    : coverUrl(item.id);
+                  const charCover = item.image_url ?? item.stories?.[0]?.cover_image_url ?? null;
                   return (
                     <Pressable style={styles.charCard} onPress={() => router.push(`/character/${item.name}` as any)}>
                       <Image
-                        source={{ uri: charCover }}
+                        source={{ uri: charCover ?? undefined }}
                         style={styles.charAvatar}
                         contentFit="cover"
                       />
@@ -142,7 +188,7 @@ export default function DiscoverScreen() {
                 showsHorizontalScrollIndicator={false}
                 renderItem={({ item }) => (
                   <Pressable style={styles.storyCard} onPress={() => router.push(`/story/${item.id}` as any)}>
-                    <Image source={{ uri: item.cover_image_url }} style={styles.storyImg} contentFit="cover" />
+                    <Image source={{ uri: item.cover_image_url ?? undefined }} style={styles.storyImg} contentFit="cover" transition={300} />
                     <Text style={styles.storyTitle} numberOfLines={1}>{item.title}</Text>
                     <Text style={styles.storySub} numberOfLines={2}>{item.description}</Text>
                   </Pressable>
@@ -153,6 +199,7 @@ export default function DiscoverScreen() {
         </>
       )}
     </ScrollView>
+    </RNAnimated.View>
   );
 }
 

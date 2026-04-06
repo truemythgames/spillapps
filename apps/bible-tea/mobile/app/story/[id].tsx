@@ -29,9 +29,7 @@ import { useAppStore } from "@/stores/app";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 import {
   getStoryById,
-  coverUrl,
   transcriptUrl,
-  speakersForStory,
   type Speaker,
 } from "@/lib/content";
 import { api } from "@/lib/api";
@@ -58,19 +56,20 @@ export default function StoryScreen() {
   const isLiked = likedStoryIds.includes(id);
 
   const story = getStoryById(id);
-  const localSpeakers = story ? speakersForStory(id) : [];
-  const [speakers, setSpeakers] = useState<Speaker[]>(localSpeakers);
-  const [activeSpeaker, setActiveSpeaker] = useState<Speaker | null>(
-    localSpeakers[0] ?? null
-  );
-  const [apiCoverUrl, setApiCoverUrl] = useState<string | null>(null);
+  const storeStory = useAppStore((s) => s.stories.find((st) => st.id === id));
+  const [speakers, setSpeakers] = useState<Speaker[]>([]);
+  const [activeSpeaker, setActiveSpeaker] = useState<Speaker | null>(null);
+  const [storyDetail, setStoryDetail] = useState<any>(null);
+
+  const coverImageUrl = storyDetail?.cover_image_url ?? storeStory?.cover_image_url ?? null;
+  const apiStoryId = storeStory?.apiId ?? id;
 
   useEffect(() => {
     let cancelled = false;
-    api.getStory(id).then((data) => {
+    api.getStory(apiStoryId).then((data) => {
       if (cancelled) return;
-      if (data.story?.cover_image_url) {
-        setApiCoverUrl(data.story.cover_image_url);
+      if (data.story) {
+        setStoryDetail(data.story);
       }
       if (data.audio_versions?.length) {
         const apiSpeakers: Speaker[] = data.audio_versions.map((a: any) => ({
@@ -155,7 +154,7 @@ export default function StoryScreen() {
       isPlaying ? await pause() : await resume();
     } else {
       await play(
-        { id: story.id, title: story.title, cover_image_url: apiCoverUrl ?? coverUrl(id) },
+        { id: story.id, title: story.title, cover_image_url: coverImageUrl },
         { id: activeSpeaker.key, name: activeSpeaker.name },
         activeSpeaker.audioUrl
       );
@@ -169,7 +168,7 @@ export default function StoryScreen() {
       closeSheet();
       if (!story) return;
       await play(
-        { id: story.id, title: story.title, cover_image_url: apiCoverUrl ?? coverUrl(id) },
+        { id: story.id, title: story.title, cover_image_url: coverImageUrl },
         { id: speaker.key, name: speaker.name },
         speaker.audioUrl
       );
@@ -203,7 +202,7 @@ export default function StoryScreen() {
         {/* Hero cover with overlay content */}
         <View style={styles.coverWrap}>
           <Image
-            source={{ uri: apiCoverUrl ?? coverUrl(id) }}
+            source={{ uri: coverImageUrl }}
             style={styles.coverImage}
             contentFit="cover"
           />

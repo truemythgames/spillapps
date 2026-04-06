@@ -108,7 +108,7 @@ storiesRoutes.get("/:id", async (c) => {
   const appId = resolvePublicAppId(c);
   const id = c.req.param("id");
 
-  const story = await c.env.DB.prepare(
+  let story = await c.env.DB.prepare(
     `SELECT s.*, se.name as season_name, se.testament
      FROM stories s
      JOIN seasons se ON s.season_id = se.id AND se.app_id = s.app_id
@@ -118,8 +118,21 @@ storiesRoutes.get("/:id", async (c) => {
     .first();
 
   if (!story) {
+    story = await c.env.DB.prepare(
+      `SELECT s.*, se.name as season_name, se.testament
+       FROM stories s
+       JOIN seasons se ON s.season_id = se.id AND se.app_id = s.app_id
+       WHERE s.slug = ? AND s.app_id = ?`
+    )
+      .bind(id, appId)
+      .first();
+  }
+
+  if (!story) {
     return c.json({ error: "Story not found" }, 404);
   }
+
+  const storyId = (story as any).id;
 
   const audioVersions = await c.env.DB.prepare(
     `SELECT sa.*, sp.name as speaker_name, sp.avatar_key as speaker_avatar
@@ -127,7 +140,7 @@ storiesRoutes.get("/:id", async (c) => {
      JOIN speakers sp ON sa.speaker_id = sp.id AND sp.app_id = ?
      WHERE sa.story_id = ?`
   )
-    .bind(appId, id)
+    .bind(appId, storyId)
     .all();
 
   const characters = await c.env.DB.prepare(
@@ -135,7 +148,7 @@ storiesRoutes.get("/:id", async (c) => {
      JOIN character_stories cs ON ch.id = cs.character_id
      WHERE cs.story_id = ? AND ch.app_id = ?`
   )
-    .bind(id, appId)
+    .bind(storyId, appId)
     .all();
 
   return c.json({

@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAppStore } from "@/stores/app";
 import { usePlayerStore } from "@/stores/player";
 import { useGate } from "@/lib/useGate";
-import { coverUrl, getStoryById } from "@/lib/content";
+
 import { getLocalProgress } from "@/lib/storage";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
@@ -16,22 +16,22 @@ export default function StoriesScreen() {
   const { stories, likedStoryIds, completedStoryIds, streak, progressVersion } = useAppStore();
   const currentStory = usePlayerStore((s) => s.currentStory);
 
-  const likedCount = likedStoryIds.filter((id) => getStoryById(id)).length;
+  const likedCount = likedStoryIds.length;
   const completedCount = completedStoryIds.length;
   const percent = stories.length > 0 ? Math.round((completedCount / stories.length) * 100) : 0;
 
   // progressVersion triggers re-render when progress is synced
   void progressVersion;
   const progress = getLocalProgress();
+  const storyMap = Object.fromEntries(stories.map((s) => [s.id, s]));
   const continueListening = Object.entries(progress)
-    .filter(([id, p]) => !p.completed && p.position > 0 && getStoryById(id))
+    .filter(([id, p]) => !p.completed && p.position > 0 && storyMap[id])
     .sort(([, a], [, b]) => (b.lastPlayedAt ?? "").localeCompare(a.lastPlayedAt ?? ""))
     .slice(0, 10)
     .map(([id, p]) => {
-      const story = getStoryById(id)!;
+      const story = storyMap[id];
       return {
         ...story,
-        cover_image_url: coverUrl(id),
         progressPercent: p.duration > 0 ? Math.round((p.position / p.duration) * 100) : 0,
       };
     });
@@ -85,7 +85,7 @@ export default function StoriesScreen() {
             style={styles.nowPlaying}
             onPress={() => guardedPush(`/story/${currentStory.id}`)}
           >
-            <Image source={{ uri: currentStory.cover_image_url }} style={styles.npThumb} contentFit="cover" />
+            <Image source={{ uri: currentStory.cover_image_url ?? undefined }} style={styles.npThumb} contentFit="cover" transition={300} />
             <View style={styles.npInfo}>
               <Text style={styles.npTitle} numberOfLines={1}>{currentStory.title}</Text>
               <Text style={styles.npSub}>Tap to continue</Text>
@@ -106,7 +106,7 @@ export default function StoriesScreen() {
             renderItem={({ item }) => (
               <Pressable style={styles.clCard} onPress={() => guardedPush(`/story/${item.id}`)}>
                 <View>
-                  <Image source={{ uri: item.cover_image_url }} style={styles.clImg} contentFit="cover" />
+                  <Image source={{ uri: item.cover_image_url ?? undefined }} style={styles.clImg} contentFit="cover" transition={300} />
                   <View style={styles.clBarBg}>
                     <View style={[styles.clBarFill, { width: `${item.progressPercent}%` }]} />
                   </View>
@@ -124,14 +124,14 @@ export default function StoriesScreen() {
         <Text style={styles.sectionTitle}>Browse</Text>
         <View style={styles.testamentRow}>
           <Pressable style={styles.testamentCard} onPress={() => router.push("/testament/old")}>
-            <Image source={{ uri: coverUrl("crossing-the-red-sea") }} style={styles.testamentImg} contentFit="cover" />
+            <Image source={{ uri: storyMap["crossing-the-red-sea"]?.cover_image_url ?? undefined }} style={styles.testamentImg} contentFit="cover" transition={300} />
             <View style={styles.testamentOverlay} />
             <View style={styles.testamentContent}>
               <Text style={styles.testamentLabel}>Old Testament</Text>
             </View>
           </Pressable>
           <Pressable style={styles.testamentCard} onPress={() => router.push("/testament/new")}>
-            <Image source={{ uri: coverUrl("the-resurrection") }} style={styles.testamentImg} contentFit="cover" />
+            <Image source={{ uri: storyMap["the-resurrection"]?.cover_image_url ?? undefined }} style={styles.testamentImg} contentFit="cover" transition={300} />
             <View style={styles.testamentOverlay} />
             <View style={styles.testamentContent}>
               <Text style={styles.testamentLabel}>New Testament</Text>

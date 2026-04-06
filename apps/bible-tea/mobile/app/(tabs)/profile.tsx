@@ -2,31 +2,26 @@ import { View, Text, StyleSheet, ScrollView, Pressable } from "react-native";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { coverUrl } from "@/lib/content";
+import { useAppStore } from "@/stores/app";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 import { LinearGradient } from "expo-linear-gradient";
 
-const CHAT_TOPICS = [
-  {
-    id: "verse",
-    title: "Spill a verse\nfor what I'm feeling",
-    image: coverUrl("the-good-samaritan"),
-  },
-  {
-    id: "advice",
-    title: "What would\nGod say about...",
-    image: coverUrl("solomons-wisdom"),
-  },
-  {
-    id: "explain",
-    title: "Break down\na Bible passage",
-    image: coverUrl("the-ten-commandments"),
-  },
+const CHAT_TOPIC_DEFS = [
+  { id: "verse", title: "Spill a verse\nfor what I'm feeling", storyId: "the-good-samaritan" },
+  { id: "advice", title: "What would\nGod say about...", storyId: "solomons-wisdom" },
+  { id: "explain", title: "Break down\na Bible passage", storyId: "the-ten-commandments" },
 ];
 
 export default function ChatScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
+  const stories = useAppStore((s) => s.stories);
+  const storyMap = Object.fromEntries(stories.map((s) => [s.id, s]));
+
+  const CHAT_TOPICS = CHAT_TOPIC_DEFS.map((t) => ({
+    ...t,
+    image: storyMap[t.storyId]?.cover_image_url ?? null,
+  }));
 
   function handleTopic(topicId: string) {
     router.push({ pathname: "/chat", params: { topic: topicId } });
@@ -50,7 +45,7 @@ export default function ChatScreen() {
       <View style={styles.cards}>
         {CHAT_TOPICS.map((topic) => (
           <Pressable key={topic.id} style={styles.card} onPress={() => handleTopic(topic.id)}>
-            <Image source={{ uri: topic.image }} style={styles.cardImage} contentFit="cover" />
+            <Image source={{ uri: topic.image ?? undefined }} style={styles.cardImage} contentFit="cover" />
             <LinearGradient
               colors={["transparent", "rgba(0,0,0,0.7)"]}
               style={styles.cardGradient}
