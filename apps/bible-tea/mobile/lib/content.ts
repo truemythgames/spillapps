@@ -4,7 +4,14 @@ import characterCatalog from "../../content/character-catalog.json";
 
 const debuggerHost = Constants.expoConfig?.hostUri ?? Constants.manifest2?.extra?.expoGo?.debuggerHost;
 const devHost = debuggerHost?.split(":")[0] ?? "localhost";
-const CONTENT_SERVER = `http://${devHost}:3456`;
+
+const extra = Constants.expoConfig?.extra as { mediaBase?: string; appId?: string } | undefined;
+const MEDIA_BASE = extra?.mediaBase?.replace(/\/$/, "") || "https://media.spillapps.com";
+const APP_ID = extra?.appId || "bible-tea";
+
+const CONTENT_SERVER = __DEV__
+  ? `http://${devHost}:3456`
+  : `${MEDIA_BASE}/${APP_ID}`;
 
 export interface CatalogStory {
   id: string;

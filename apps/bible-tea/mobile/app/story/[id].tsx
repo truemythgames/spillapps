@@ -34,6 +34,7 @@ import {
   speakersForStory,
   type Speaker,
 } from "@/lib/content";
+import { api } from "@/lib/api";
 
 const { width } = Dimensions.get("window");
 const COVER_HEIGHT = 420;
@@ -57,10 +58,35 @@ export default function StoryScreen() {
   const isLiked = likedStoryIds.includes(id);
 
   const story = getStoryById(id);
-  const speakers = story ? speakersForStory(id) : [];
+  const localSpeakers = story ? speakersForStory(id) : [];
+  const [speakers, setSpeakers] = useState<Speaker[]>(localSpeakers);
   const [activeSpeaker, setActiveSpeaker] = useState<Speaker | null>(
-    speakers[0] ?? null
+    localSpeakers[0] ?? null
   );
+  const [apiCoverUrl, setApiCoverUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    api.getStory(id).then((data) => {
+      if (cancelled) return;
+      if (data.story?.cover_image_url) {
+        setApiCoverUrl(data.story.cover_image_url);
+      }
+      if (data.audio_versions?.length) {
+        const apiSpeakers: Speaker[] = data.audio_versions.map((a: any) => ({
+          key: a.speaker_id,
+          name: a.speaker_name,
+          audioUrl: a.audio_url,
+        }));
+        setSpeakers(apiSpeakers);
+        setActiveSpeaker((prev) => {
+          if (prev && apiSpeakers.find((s) => s.key === prev.key)) return prev;
+          return apiSpeakers[0] ?? prev;
+        });
+      }
+    }).catch(() => {});
+    return () => { cancelled = true; };
+  }, [id]);
   const [showSpeakerPicker, setShowSpeakerPicker] = useState(false);
   const sheetTranslateY = useSharedValue(400);
   const backdropOpacity = useSharedValue(0);
@@ -129,7 +155,7 @@ export default function StoryScreen() {
       isPlaying ? await pause() : await resume();
     } else {
       await play(
-        { id: story.id, title: story.title, cover_image_url: coverUrl(id) },
+        { id: story.id, title: story.title, cover_image_url: apiCoverUrl ?? coverUrl(id) },
         { id: activeSpeaker.key, name: activeSpeaker.name },
         activeSpeaker.audioUrl
       );
@@ -143,7 +169,7 @@ export default function StoryScreen() {
       closeSheet();
       if (!story) return;
       await play(
-        { id: story.id, title: story.title, cover_image_url: coverUrl(id) },
+        { id: story.id, title: story.title, cover_image_url: apiCoverUrl ?? coverUrl(id) },
         { id: speaker.key, name: speaker.name },
         speaker.audioUrl
       );
@@ -177,7 +203,7 @@ export default function StoryScreen() {
         {/* Hero cover with overlay content */}
         <View style={styles.coverWrap}>
           <Image
-            source={{ uri: coverUrl(id) }}
+            source={{ uri: apiCoverUrl ?? coverUrl(id) }}
             style={styles.coverImage}
             contentFit="cover"
           />
