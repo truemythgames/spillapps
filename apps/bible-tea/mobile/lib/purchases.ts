@@ -65,13 +65,13 @@ export async function restorePurchases(): Promise<boolean> {
   }
 }
 
-export async function checkSubscription(): Promise<boolean> {
+export async function checkSubscription(): Promise<boolean | null> {
   try {
     const customerInfo = await Purchases.getCustomerInfo();
     return hasActiveEntitlement(customerInfo);
   } catch (e) {
     console.warn("[Purchases] Check failed:", e);
-    return false;
+    return null;
   }
 }
 

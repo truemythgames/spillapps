@@ -125,6 +125,9 @@ export const api = {
   getPlaylistOfTheWeek: () =>
     request<{ playlist: any }>("/v1/featured/playlist-of-the-week"),
 
+  getCharacters: () =>
+    request<{ characters: any[] }>("/v1/characters"),
+
   // Progress
   getProgress: () =>
     request<{ progress: any[] }>("/v1/me/progress"),
@@ -184,40 +187,28 @@ export const api = {
       body: JSON.stringify(data),
     });
 
-    if (!res.ok || !res.body) {
+    if (!res.ok) {
       throw new Error(`API Error: ${res.status}`);
     }
 
-    const reader = res.body.getReader();
-    const decoder = new TextDecoder();
-    let buffer = "";
+    // React Native (Hermes) doesn't support ReadableStream, fall back to text
+    const text = await res.text();
+    const lines = text.split("\n");
 
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-
-      buffer += decoder.decode(value, { stream: true });
-      const lines = buffer.split("\n");
-      buffer = lines.pop() ?? "";
-
-      for (const line of lines) {
-        const trimmed = line.trim();
-        if (!trimmed.startsWith("data: ")) continue;
-        const payload = trimmed.slice(6);
-        if (payload === "[DONE]") {
-          onDone();
-          return;
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed.startsWith("data: ")) continue;
+      const payload = trimmed.slice(6);
+      if (payload === "[DONE]") break;
+      try {
+        const parsed = JSON.parse(payload);
+        if (parsed.conversation_id) {
+          onMeta(parsed);
+        } else if (parsed.delta) {
+          onDelta(parsed.delta);
         }
-        try {
-          const parsed = JSON.parse(payload);
-          if (parsed.conversation_id) {
-            onMeta(parsed);
-          } else if (parsed.delta) {
-            onDelta(parsed.delta);
-          }
-        } catch {
-          // skip
-        }
+      } catch {
+        // skip malformed chunks
       }
     }
     onDone();

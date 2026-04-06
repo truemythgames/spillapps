@@ -1,6 +1,5 @@
 import { View, Text, StyleSheet, ScrollView, Pressable } from "react-native";
 import { Image } from "expo-image";
-import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { coverUrl } from "@/lib/content";
@@ -43,12 +42,7 @@ export default function ChatScreen() {
       contentContainerStyle={{ paddingBottom: 120 }}
       showsVerticalScrollIndicator={false}
     >
-      <View style={styles.headerRow}>
-        <Text style={styles.pageTitle}>Chat</Text>
-        <Pressable style={styles.settingsBtn} onPress={() => router.push("/settings")}>
-          <Ionicons name="settings-outline" size={22} color={colors.text} />
-        </Pressable>
-      </View>
+      <Text style={styles.pageTitle}>Chat</Text>
 
       <Text style={styles.subtitle}>Select a topic or start a new chat</Text>
 
@@ -79,23 +73,12 @@ export default function ChatScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
 
-  headerRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+  pageTitle: {
+    fontFamily: fonts.heading,
+    fontSize: fontSize.hero,
+    color: colors.text,
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.lg,
-  },
-  pageTitle: { fontFamily: fonts.heading, fontSize: fontSize.hero, color: colors.text },
-  settingsBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.surface,
-    alignItems: "center",
-    justifyContent: "center",
-    borderWidth: 1,
-    borderColor: colors.surfaceBorder,
   },
 
   subtitle: {

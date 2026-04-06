@@ -1,12 +1,15 @@
+import { useEffect, useRef, useState } from "react";
 import { View, Text, StyleSheet, Pressable, Dimensions } from "react-native";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   useAnimatedStyle,
-  withTiming,
+  useSharedValue,
+  runOnJS,
 } from "react-native-reanimated";
 import { usePlayerStore } from "@/stores/player";
 import { useAppStore } from "@/stores/app";
@@ -44,8 +47,11 @@ export default function PlayerScreen() {
   const likedStoryIds = useAppStore((s) => s.likedStoryIds);
   const toggleLike = useAppStore((s) => s.toggleLike);
 
+  useEffect(() => {
+    if (!currentStory) router.back();
+  }, [currentStory]);
+
   if (!currentStory) {
-    router.back();
     return null;
   }
 
@@ -53,16 +59,50 @@ export default function PlayerScreen() {
   const progress = duration > 0 ? position / duration : 0;
   const remaining = duration > 0 ? duration - position : 0;
 
+  const [isDragging, setIsDragging] = useState(false);
+  const dragProgress = useSharedValue(0);
+  const barWidth = width - spacing.lg * 2;
+
+  if (!isDragging) {
+    dragProgress.value = progress;
+  }
+
+  const doSeek = (fraction: number) => {
+    seekTo(Math.max(0, Math.min(fraction * duration, duration)));
+  };
+
+  const panGesture = Gesture.Pan()
+    .hitSlop({ top: 20, bottom: 20 })
+    .onBegin((e) => {
+      const frac = Math.max(0, Math.min(e.x / barWidth, 1));
+      dragProgress.value = frac;
+      runOnJS(setIsDragging)(true);
+    })
+    .onUpdate((e) => {
+      const frac = Math.max(0, Math.min(e.x / barWidth, 1));
+      dragProgress.value = frac;
+    })
+    .onEnd((e) => {
+      const frac = Math.max(0, Math.min(e.x / barWidth, 1));
+      runOnJS(doSeek)(frac);
+      runOnJS(setIsDragging)(false);
+    });
+
+  const tapGesture = Gesture.Tap()
+    .onEnd((e) => {
+      const frac = Math.max(0, Math.min(e.x / barWidth, 1));
+      runOnJS(doSeek)(frac);
+    });
+
+  const progressGesture = Gesture.Race(panGesture, tapGesture);
+
   const progressStyle = useAnimatedStyle(() => ({
-    width: withTiming(`${progress * 100}%`, { duration: 500 }),
+    width: `${dragProgress.value * 100}%`,
   }));
 
-  function handleProgressPress(e: any) {
-    const x = e.nativeEvent.locationX;
-    const barWidth = width - spacing.lg * 2;
-    const newPos = (x / barWidth) * duration;
-    seekTo(Math.max(0, Math.min(newPos, duration)));
-  }
+  const thumbStyle = useAnimatedStyle(() => ({
+    left: `${dragProgress.value * 100}%`,
+  }));
 
   function cycleSpeed() {
     const speeds = [0.75, 1.0, 1.25, 1.5, 2.0];
@@ -113,23 +153,18 @@ export default function PlayerScreen() {
       </View>
 
       {/* Progress Bar */}
-      <Pressable style={styles.progressContainer} onPress={handleProgressPress}>
-        <View style={styles.progressTrack}>
-          <Animated.View style={[styles.progressFill, progressStyle]} />
-          <Animated.View
-            style={[
-              styles.progressThumb,
-              useAnimatedStyle(() => ({
-                left: withTiming(`${progress * 100}%`, { duration: 500 }),
-              })),
-            ]}
-          />
+      <GestureDetector gesture={progressGesture}>
+        <View style={styles.progressContainer}>
+          <View style={styles.progressTrack}>
+            <Animated.View style={[styles.progressFill, progressStyle]} />
+            <Animated.View style={[styles.progressThumb, thumbStyle]} />
+          </View>
+          <View style={styles.timeRow}>
+            <Text style={styles.timeText}>{formatTime(position)}</Text>
+            <Text style={styles.timeText}>-{formatTime(remaining)}</Text>
+          </View>
         </View>
-        <View style={styles.timeRow}>
-          <Text style={styles.timeText}>{formatTime(position)}</Text>
-          <Text style={styles.timeText}>-{formatTime(remaining)}</Text>
-        </View>
-      </Pressable>
+      </GestureDetector>
 
       {/* Controls */}
       <View style={styles.controls}>

@@ -97,47 +97,27 @@ export default function ChatConversation() {
     const apiMessage = conversationId ? msg : storyContext + msg;
 
     try {
-      await api.streamChatMessage(
-        {
-          conversation_id: conversationId ?? undefined,
-          topic: topic ?? "free",
-          message: apiMessage,
-        },
-        (meta) => {
-          if (meta.conversation_id) setConversationId(meta.conversation_id);
-        },
-        (delta) => {
-          setMessages((prev) =>
-            prev.map((m) =>
-              m.id === streamingId ? { ...m, text: m.text + delta } : m,
-            ),
-          );
-          scrollToEnd();
-        },
-        () => setLoading(false),
+      const res = await api.sendChatMessage({
+        conversation_id: conversationId ?? undefined,
+        topic: topic ?? "free",
+        message: apiMessage,
+      });
+      setConversationId(res.conversation_id);
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.id === streamingId ? { ...m, text: res.message.content } : m,
+        ),
       );
-    } catch {
-      try {
-        const res = await api.sendChatMessage({
-          conversation_id: conversationId ?? undefined,
-          topic: topic ?? "free",
-          message: apiMessage,
-        });
-        setConversationId(res.conversation_id);
-        setMessages((prev) =>
-          prev.map((m) =>
-            m.id === streamingId ? { ...m, text: res.message.content } : m,
-          ),
-        );
-      } catch {
-        setMessages((prev) =>
-          prev.map((m) =>
-            m.id === streamingId
-              ? { ...m, text: "Sorry, I couldn't connect. Please try again." }
-              : m,
-          ),
-        );
-      }
+    } catch (err) {
+      console.error("Chat error:", err);
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.id === streamingId
+            ? { ...m, text: "Sorry, I couldn't connect. Please try again." }
+            : m,
+        ),
+      );
+    } finally {
       setLoading(false);
     }
 

@@ -1,7 +1,8 @@
 import { create } from "zustand";
 import { Audio } from "expo-av";
-import { storage, StorageKeys, setLocalProgress } from "@/lib/storage";
+import { storage, StorageKeys, setLocalProgress, recordStreakCheckIn } from "@/lib/storage";
 import { api } from "@/lib/api";
+import { useAppStore } from "./app";
 
 let sound: Audio.Sound | null = null;
 
@@ -179,8 +180,22 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
     const { currentStory, currentSpeaker, position, duration } = get();
     if (!currentStory || !currentSpeaker) return;
 
-    const completed = duration > 0 && position / duration >= 0.97;
+    const wasCompleted = useAppStore.getState().completedStoryIds.includes(currentStory.id);
+    const completed = wasCompleted || (duration > 0 && position / duration >= 0.97);
     setLocalProgress(currentStory.id, position, completed, duration);
+    useAppStore.getState().bumpProgress();
+
+    if (completed) {
+      useAppStore.getState().markCompleted(currentStory.id);
+      const localStreak = recordStreakCheckIn();
+      useAppStore.setState({
+        streak: {
+          current_streak: localStreak.currentStreak,
+          max_streak: localStreak.longestStreak,
+          last_listen_date: localStreak.lastCheckIn,
+        },
+      });
+    }
 
     try {
       await api.updateProgress(currentStory.id, {
@@ -188,7 +203,12 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
         position_seconds: position,
         completed,
       });
-      if (completed) await api.streakCheckin();
+      if (completed) {
+        const streakRes = await api.streakCheckin();
+        useAppStore.setState({
+          streak: { ...useAppStore.getState().streak, ...streakRes },
+        });
+      }
     } catch {
       // offline — local progress saved, will sync later
     }

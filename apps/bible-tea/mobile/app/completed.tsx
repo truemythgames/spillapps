@@ -3,18 +3,17 @@ import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useAppStore } from "@/stores/app";
 import { getStoryById, coverUrl } from "@/lib/content";
-import { getLocalProgress } from "@/lib/storage";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
 export default function CompletedScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const completedIds = useAppStore((s) => s.completedStoryIds);
 
-  const progress = getLocalProgress();
-  const completedStories = Object.entries(progress)
-    .filter(([, p]) => p.completed)
-    .map(([id]) => getStoryById(id))
+  const completedStories = completedIds
+    .map((id) => getStoryById(id))
     .filter(Boolean)
     .map((s) => ({ ...s!, cover_image_url: coverUrl(s!.id) }));
 

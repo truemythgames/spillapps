@@ -35,6 +35,10 @@ bucket_name = "spill-media"
 binding = "CACHE"
 id = "9b6560ab38db43c1ab643a569d01184c"
 
+[dev]
+ip = "0.0.0.0"
+port = 8787
+
 [triggers]
 crons = ["0 0 * * *"]
 

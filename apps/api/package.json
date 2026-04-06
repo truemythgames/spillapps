@@ -2,7 +2,7 @@
   "name": "@spillapps/api",
   "private": true,
   "scripts": {
-    "dev": "wrangler dev",
+    "dev": "wrangler dev --ip 0.0.0.0",
     "deploy": "wrangler deploy",
     "tail": "wrangler tail"
   },

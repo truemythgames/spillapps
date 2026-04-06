@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, Pressable } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Pressable, FlatList } from "react-native";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -6,18 +6,35 @@ import { useAppStore } from "@/stores/app";
 import { usePlayerStore } from "@/stores/player";
 import { useGate } from "@/lib/useGate";
 import { coverUrl, getStoryById } from "@/lib/content";
-import { getOverallProgress } from "@/lib/storage";
+import { getLocalProgress } from "@/lib/storage";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
 export default function StoriesScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const { guardedPush } = useGate();
-  const { stories, likedStoryIds, streak } = useAppStore();
+  const { stories, likedStoryIds, completedStoryIds, streak, progressVersion } = useAppStore();
   const currentStory = usePlayerStore((s) => s.currentStory);
 
   const likedCount = likedStoryIds.filter((id) => getStoryById(id)).length;
-  const overall = getOverallProgress(stories.length);
+  const completedCount = completedStoryIds.length;
+  const percent = stories.length > 0 ? Math.round((completedCount / stories.length) * 100) : 0;
+
+  // progressVersion triggers re-render when progress is synced
+  void progressVersion;
+  const progress = getLocalProgress();
+  const continueListening = Object.entries(progress)
+    .filter(([id, p]) => !p.completed && p.position > 0 && getStoryById(id))
+    .sort(([, a], [, b]) => (b.lastPlayedAt ?? "").localeCompare(a.lastPlayedAt ?? ""))
+    .slice(0, 10)
+    .map(([id, p]) => {
+      const story = getStoryById(id)!;
+      return {
+        ...story,
+        cover_image_url: coverUrl(id),
+        progressPercent: p.duration > 0 ? Math.round((p.position / p.duration) * 100) : 0,
+      };
+    });
 
   return (
     <ScrollView
@@ -30,14 +47,14 @@ export default function StoriesScreen() {
       {/* Overall progress */}
       <View style={styles.progressCard}>
         <View style={styles.progressTop}>
-          <Text style={styles.progressPercent}>{overall.percent}%</Text>
+          <Text style={styles.progressPercent}>{percent}%</Text>
           <Text style={styles.progressLabel}>completed</Text>
         </View>
         <View style={styles.progressBar}>
-          <View style={[styles.progressFill, { width: `${overall.percent}%` }]} />
+          <View style={[styles.progressFill, { width: `${percent}%` }]} />
         </View>
         <Text style={styles.progressSub}>
-          {overall.completedCount} of {stories.length} stories
+          {completedCount} of {stories.length} stories
         </Text>
       </View>
 
@@ -50,7 +67,7 @@ export default function StoriesScreen() {
         </View>
         <Pressable style={styles.statCard} onPress={() => router.push("/completed")}>
           <Text style={styles.statEmoji}>✅</Text>
-          <Text style={styles.statNum}>{overall.completedCount}</Text>
+          <Text style={styles.statNum}>{completedCount}</Text>
           <Text style={styles.statLabel}>Completed</Text>
         </Pressable>
         <Pressable style={styles.statCard} onPress={() => router.push("/liked")}>
@@ -74,6 +91,31 @@ export default function StoriesScreen() {
               <Text style={styles.npSub}>Tap to continue</Text>
             </View>
           </Pressable>
+        </View>
+      )}
+
+      {/* Continue Listening */}
+      {continueListening.length > 0 && (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Continue Listening</Text>
+          <FlatList
+            horizontal
+            data={continueListening}
+            keyExtractor={(item) => item.id}
+            showsHorizontalScrollIndicator={false}
+            renderItem={({ item }) => (
+              <Pressable style={styles.clCard} onPress={() => guardedPush(`/story/${item.id}`)}>
+                <View>
+                  <Image source={{ uri: item.cover_image_url }} style={styles.clImg} contentFit="cover" />
+                  <View style={styles.clBarBg}>
+                    <View style={[styles.clBarFill, { width: `${item.progressPercent}%` }]} />
+                  </View>
+                </View>
+                <Text style={styles.clTitle} numberOfLines={1}>{item.title}</Text>
+                <Text style={styles.clSub}>{item.progressPercent}% done</Text>
+              </Pressable>
+            )}
+          />
         </View>
       )}
 
@@ -169,6 +211,20 @@ const styles = StyleSheet.create({
   npInfo: { flex: 1 },
   npTitle: { fontFamily: fonts.bodySemiBold, fontSize: fontSize.md, color: colors.text },
   npSub: { fontFamily: fonts.body, fontSize: fontSize.sm, color: colors.primary, marginTop: 2 },
+
+  clCard: { width: 130, marginRight: spacing.md },
+  clImg: { width: 130, height: 130, borderRadius: radius.md },
+  clBarBg: {
+    height: 3,
+    backgroundColor: colors.surfaceLight,
+    borderBottomLeftRadius: radius.md,
+    borderBottomRightRadius: radius.md,
+    overflow: "hidden",
+    marginTop: -3,
+  },
+  clBarFill: { height: "100%", backgroundColor: colors.primary },
+  clTitle: { fontFamily: fonts.bodySemiBold, fontSize: fontSize.sm, color: colors.text, marginTop: spacing.xs },
+  clSub: { fontFamily: fonts.body, fontSize: fontSize.xs, color: colors.textMuted, marginTop: 2 },
 
   testamentRow: { flexDirection: "row", gap: spacing.md },
   testamentCard: {

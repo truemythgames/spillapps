@@ -12,8 +12,10 @@ export interface CatalogStory {
   description: string;
   section: string;
   bibleRef: string;
-  inSeed: boolean;
-  seedId: string | null;
+  testament?: string;
+  order?: number;
+  inSeed?: boolean;
+  seedId?: string | null;
 }
 
 export interface Speaker {
