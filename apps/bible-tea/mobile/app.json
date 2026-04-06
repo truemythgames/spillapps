@@ -19,6 +19,7 @@
       "bundleIdentifier": "app.bibletea",
       "buildNumber": "2",
       "usesAppleSignIn": true,
+      "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
         "UIBackgroundModes": ["audio"],
         "NSUserTrackingUsageDescription": "This identifier will be used to deliver personalized ads to you."
@@ -29,7 +30,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0A0A0F"
       },
-      "package": "app.bibletea"
+      "package": "app.bibletea",
+      "googleServicesFile": "./google-services.json"
     },
     "plugins": [
       "expo-dev-client",
@@ -58,9 +60,7 @@
           "iosUserTrackingPermission": "This identifier will be used to deliver personalized ads to you."
         }
       ],
-      "@react-native-firebase/app",
-      "@react-native-firebase/analytics",
-      "@react-native-firebase/crashlytics"
+      "@react-native-firebase/app"
     ],
     "experiments": {
       "typedRoutes": true
