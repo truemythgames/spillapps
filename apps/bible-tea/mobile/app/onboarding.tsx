@@ -49,6 +49,8 @@ const LOCAL_COVERS = {
   "birth-of-jesus": require("@/assets/onboarding/birth-of-jesus.webp"),
 } as const;
 
+const HERO_IMAGE = require("@/assets/onboarding/teastories.png");
+
 const SCREENSHOTS = {
   home: require("@/assets/onboarding/screenshot-home.png"),
   discover: require("@/assets/onboarding/screenshot-discover.png"),
@@ -56,7 +58,7 @@ const SCREENSHOTS = {
 } as const;
 
 const BACKGROUNDS = [
-  LOCAL_COVERS["creation"],              // welcome
+  HERO_IMAGE,                            // welcome
   LOCAL_COVERS["creation"],              // q1
   LOCAL_COVERS["noahs-ark"],             // q1comment
   LOCAL_COVERS["noahs-ark"],             // q2
@@ -313,9 +315,8 @@ export default function OnboardingScreen() {
     switch (step) {
       case "welcome":
         return (
-          <View style={styles.centeredContent}>
-            <Text style={styles.logoEmoji}>☕</Text>
-            <Text style={styles.logoTitle}>Bible Tea</Text>
+          <View style={styles.welcomeContent}>
+            <View style={styles.welcomeSpacer} />
             <Text style={styles.welcomeSub}>
               Spill the tea.{"\n"}Read the Bible.
             </Text>
@@ -426,13 +427,12 @@ export default function OnboardingScreen() {
         transition={500}
       />
       <LinearGradient
-        colors={[
-          "transparent",
-          "rgba(0,0,0,0.25)",
-          "rgba(0,0,0,0.6)",
-          "rgba(0,0,0,0.8)",
-        ]}
-        locations={[0, 0.3, 0.6, 1]}
+        colors={
+          currentStep === "welcome"
+            ? ["transparent", "transparent", "rgba(0,0,0,0.5)", "rgba(0,0,0,0.85)"]
+            : ["transparent", "rgba(0,0,0,0.25)", "rgba(0,0,0,0.6)", "rgba(0,0,0,0.8)"]
+        }
+        locations={currentStep === "welcome" ? [0, 0.5, 0.75, 1] : [0, 0.3, 0.6, 1]}
         style={StyleSheet.absoluteFill}
       />
 
@@ -557,27 +557,24 @@ const styles = StyleSheet.create({
   },
 
   // Welcome
-  centeredContent: {
-    alignItems: "center",
+  welcomeContent: {
+    flex: 1,
+    justifyContent: "flex-end",
     paddingHorizontal: spacing.lg,
   },
-  logoEmoji: {
-    fontSize: 80,
-    marginBottom: spacing.md,
-  },
-  logoTitle: {
-    fontFamily: fonts.heading,
-    fontSize: 42,
-    color: colors.accent,
-    textAlign: "center",
+  welcomeSpacer: {
+    flex: 1,
   },
   welcomeSub: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: fontSize.lg,
+    fontFamily: fonts.heading,
+    fontSize: 28,
     color: "#fff",
     textAlign: "center",
-    marginTop: spacing.md,
-    lineHeight: 26,
+    lineHeight: 38,
+    marginBottom: spacing.md,
+    textShadowColor: "rgba(0,0,0,0.6)",
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 6,
   },
 
   // Questions
