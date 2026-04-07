@@ -423,7 +423,8 @@ export default function OnboardingScreen() {
       <Image
         source={bgUri}
         style={StyleSheet.absoluteFill}
-        contentFit="cover"
+        contentFit={currentStep === "welcome" ? "contain" : "cover"}
+        contentPosition={currentStep === "welcome" ? "center" : "center"}
         transition={500}
       />
       <LinearGradient
