@@ -1,12 +1,14 @@
 import { create } from "zustand";
 import { getSeedStories, type CatalogStory } from "@/lib/content";
-import { storage, StorageKeys, getLocalProgress, getStreakData } from "@/lib/storage";
+import { storage, StorageKeys, getLocalProgress, getStreakData, setLocalProgress } from "@/lib/storage";
 import { api } from "@/lib/api";
 import { checkSubscription } from "@/lib/purchases";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const CACHE_KEY = "app_data_cache";
 const CACHE_TTL_MS = 5 * 60 * 1000; // 5 min — background refresh if stale
+
+const DEMO_MODE = false;
 
 export interface StoryWithCover extends CatalogStory {
   cover_image_url: string | null;
@@ -238,6 +240,39 @@ export const useAppStore = create<AppState>((set, get) => ({
 
       set({ ...updates, isLoading: false });
 
+      if (DEMO_MODE) {
+        const allStories = updates.stories ?? get().stories;
+        if (allStories.length > 0) {
+          const ids = allStories.map((s) => s.id);
+          const completedIds = ids.slice(0, Math.min(18, ids.length));
+          const likedIds = ids.slice(0, Math.min(12, ids.length));
+          const inProgressIds = ids.slice(completedIds.length, completedIds.length + 4);
+          const progressEntries: Record<string, ProgressEntry> = {};
+          for (const id of completedIds) {
+            progressEntries[id] = { story_id: id, position_seconds: 300, completed: 1 };
+          }
+          for (const id of inProgressIds) {
+            progressEntries[id] = { story_id: id, position_seconds: 120, completed: 0 };
+          }
+          for (const id of completedIds) {
+            setLocalProgress(id, 300, true, 300);
+          }
+          const percentages = [0.65, 0.40, 0.80, 0.25];
+          inProgressIds.forEach((id, i) => {
+            const dur = 300;
+            const pos = Math.round(dur * percentages[i % percentages.length]);
+            setLocalProgress(id, pos, false, dur);
+          });
+          set({
+            completedStoryIds: completedIds,
+            likedStoryIds: likedIds,
+            progressMap: progressEntries,
+            streak: { current_streak: 12, max_streak: 24, last_listen_date: new Date().toISOString().split("T")[0] },
+            isSubscribed: true,
+          });
+        }
+      }
+
       const state = get();
       saveCache({
         stories: updates.stories ?? state.stories,
@@ -254,6 +289,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   loadUserData: async () => {
+    if (DEMO_MODE) return;
     try {
       const [likesRes, progressRes, streakRes] = await Promise.allSettled([
         api.getLikes(),
