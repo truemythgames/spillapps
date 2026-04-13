@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://bibletea.app/sitemap-index.xml
 Sitemap: https://bibletea.app/sitemap.xml
