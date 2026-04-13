@@ -149,6 +149,12 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
       font-size: 1.25rem;
     }
 
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
     .nav-stories-link {
       color: var(--text-secondary);
       text-decoration: none;
@@ -178,6 +184,60 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
       box-shadow: 0 4px 20px rgba(200, 162, 255, 0.3);
     }
 
+    .menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text);
+      cursor: pointer;
+      padding: 0.25rem;
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 100;
+      background: rgba(10, 10, 15, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+    }
+
+    .mobile-menu.open { display: flex; }
+
+    .mobile-menu a {
+      color: var(--text);
+      text-decoration: none;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .mobile-menu a:hover { color: var(--primary); }
+
+    .mobile-menu .nav-cta {
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      padding: 0.8rem 2.5rem;
+      margin-top: 1rem;
+    }
+
+    .menu-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      color: var(--text);
+      cursor: pointer;
+      padding: 0.5rem;
+    }
+
     footer {
       padding: 3rem 2rem;
       text-align: center;
@@ -198,10 +258,8 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
 
     @media (max-width: 640px) {
       nav { padding: 0.75rem 1rem; }
-      .nav-hide-mobile { display: none; }
-      .nav-stories-link { font-size: 0.8rem; }
-      .nav-cta { padding: 0.5rem 1rem; font-size: 0.8rem; }
-      .nav-brand span { font-size: 1.05rem; }
+      .nav-links .nav-stories-link { display: none; }
+      .menu-btn { display: block; }
     }
   </style>
 </head>
@@ -216,17 +274,43 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
       <img src="/icon.png" alt="Bible Tea" />
       <span class="heading">Bible Tea</span>
     </a>
-    <div style="display:flex;align-items:center;gap:1.5rem;">
+    <div class="nav-links">
       <a href="/stories" class="nav-stories-link">Stories</a>
       <a href="/playlists" class="nav-stories-link">Playlists</a>
-      <a href="/characters" class="nav-stories-link nav-hide-mobile">Characters</a>
-      <a href="/books" class="nav-stories-link nav-hide-mobile">Books</a>
+      <a href="/characters" class="nav-stories-link">Characters</a>
+      <a href="/books" class="nav-stories-link">Books</a>
       <a href={APP_STORE_URL} class="nav-cta">
         <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
         Download
       </a>
+      <button class="menu-btn" aria-label="Open menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
     </div>
   </nav>
+
+  <div id="mobile-menu" class="mobile-menu">
+    <button class="menu-close" aria-label="Close menu">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <a href="/stories">Stories</a>
+    <a href="/playlists">Playlists</a>
+    <a href="/characters">Characters</a>
+    <a href="/books">Books</a>
+    <a href={APP_STORE_URL} class="nav-cta">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+      Download for iOS
+    </a>
+  </div>
+
+  <script is:inline>
+    document.querySelector('.menu-btn')?.addEventListener('click', () => {
+      document.getElementById('mobile-menu')?.classList.add('open');
+    });
+    document.querySelector('.menu-close')?.addEventListener('click', () => {
+      document.getElementById('mobile-menu')?.classList.remove('open');
+    });
+  </script>
 
   <slot />
 
