@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google Tag Manager -->
-  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  <!-- Google Tag Manager (production only) -->
+  <script>if(location.hostname!=='localhost'){(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
   j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','GTM-NN7TLHP2');</script>
+  })(window,document,'script','dataLayer','GTM-NN7TLHP2');}</script>
   <!-- End Google Tag Manager -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -55,6 +55,7 @@
       --gradient-end: #6B5CE7;
     }
 
+    html, body { overflow-x: hidden; width: 100%; }
     html { scroll-behavior: smooth; }
 
     body {
@@ -62,7 +63,6 @@
       background: var(--bg);
       color: var(--text);
       line-height: 1.6;
-      overflow-x: hidden;
     }
 
     .heading { font-family: 'Playfair Display', serif; }
@@ -232,26 +232,33 @@
     .hero h1 {
       font-size: clamp(2.5rem, 6vw, 4.5rem);
       line-height: 1.1;
-      margin-bottom: 1rem;
+      margin-bottom: 1.25rem;
       background: linear-gradient(135deg, var(--text) 0%, var(--primary) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
-    .hero-tagline {
-      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.2rem);
       color: var(--text-secondary);
-      margin-bottom: 0.5rem;
-      font-weight: 500;
+      max-width: 520px;
+      margin: 0 auto 2rem;
+      line-height: 1.7;
     }
 
-    .hero-sub {
-      font-size: 1rem;
-      color: var(--text-muted);
-      max-width: 500px;
-      margin: 0 auto 2.5rem;
+    .hero-proof {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--accent);
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 2rem;
+      letter-spacing: 0.02em;
     }
+
+    .hero-proof svg { width: 16px; height: 16px; flex-shrink: 0; }
 
     .hero-cta {
       display: inline-flex;
@@ -624,21 +631,24 @@
     @media (max-width: 640px) {
       nav { padding: 0.75rem 1rem; }
       .nav-links .nav-link { display: none; }
+      .nav-cta { padding: 0.5rem 1rem; font-size: 0.75rem; }
       .menu-btn { display: block; }
       .hero { padding: 7rem 1.5rem 3rem; }
+      .hero h1 { font-size: 2.25rem; }
       .hero-icon { width: 88px; height: 88px; border-radius: 20px; }
       .features { padding: 4rem 1.5rem; }
+      .feature-grid { grid-template-columns: 1fr; }
       .cta-section { padding: 4rem 1.5rem; }
       .story-card { width: 160px; }
       .story-card img { width: 160px; height: 160px; }
+      .footer-links { flex-wrap: wrap; gap: 1rem 1.5rem; }
     }
   </style>
 </head>
 <body>
-  <!-- Google Tag Manager (noscript) -->
+  <!-- Google Tag Manager (noscript) — only fires in production since JS gate handles script load -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NN7TLHP2"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
 
   <!-- Nav -->
   <nav>
@@ -678,8 +688,16 @@
   <!-- Hero -->
   <section class="hero">
     <img src="/icon.png" alt="Bible Tea App Icon" class="hero-icon" />
-    <h1 class="heading">Bible Tea</h1>
-    <p class="hero-sub">Spill the tea. Read the Bible.<br/>Bible stories reimagined as immersive audio experiences.</p>
+    <h1 class="heading">Spill the tea.<br/>Read the Bible.</h1>
+    <p class="hero-sub">Every Bible story — from Genesis to Revelation — retold as immersive audio you can listen to anywhere.</p>
+    <div class="hero-proof">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/></svg>
+      5 stars on the App Store
+    </div>
     <a href="https://apps.apple.com/app/bible-tea-bible-storycast/id6761665565" class="hero-cta">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
       Download on the App Store

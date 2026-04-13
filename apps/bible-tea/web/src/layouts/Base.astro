@@ -52,12 +52,12 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google Tag Manager -->
-  <script is:inline>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  <!-- Google Tag Manager (production only) -->
+  <script is:inline>if(location.hostname!=='localhost'){(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
   j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','GTM-NN7TLHP2');</script>
+  })(window,document,'script','dataLayer','GTM-NN7TLHP2');}</script>
   <!-- End Google Tag Manager -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -107,6 +107,7 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
       --gradient-end: #6B5CE7;
     }
 
+    html, body { overflow-x: hidden; width: 100%; }
     html { scroll-behavior: smooth; }
 
     body {
@@ -114,7 +115,6 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
       background: var(--bg);
       color: var(--text);
       line-height: 1.6;
-      overflow-x: hidden;
     }
 
     .heading { font-family: 'Playfair Display', serif; }
@@ -259,15 +259,16 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
     @media (max-width: 640px) {
       nav { padding: 0.75rem 1rem; }
       .nav-links .nav-stories-link { display: none; }
+      .nav-cta { padding: 0.5rem 1rem; font-size: 0.75rem; }
       .menu-btn { display: block; }
+      .footer-links { flex-wrap: wrap; gap: 1rem 1.5rem; }
     }
   </style>
 </head>
 <body>
-  <!-- Google Tag Manager (noscript) -->
+  <!-- Google Tag Manager (noscript) — only fires in production since JS gate handles script load -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NN7TLHP2"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
 
   <nav>
     <a href="/" class="nav-brand">
