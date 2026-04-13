@@ -102,6 +102,16 @@
       font-size: 1.25rem;
     }
 
+    .nav-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover { color: var(--primary); }
+
     .nav-cta {
       display: inline-flex;
       align-items: center;
@@ -553,6 +563,10 @@
     /* Responsive */
     @media (max-width: 640px) {
       nav { padding: 0.75rem 1rem; }
+      .nav-link-secondary { display: none; }
+      .nav-link { font-size: 0.8rem; }
+      .nav-cta { padding: 0.5rem 1rem; font-size: 0.8rem; }
+      .nav-brand span { font-size: 1.05rem; }
       .hero { padding: 7rem 1.5rem 3rem; }
       .hero-icon { width: 88px; height: 88px; border-radius: 20px; }
       .features { padding: 4rem 1.5rem; }
@@ -575,10 +589,10 @@
       <span class="heading">Bible Tea</span>
     </a>
     <div style="display:flex;align-items:center;gap:1.5rem;">
-      <a href="/stories" style="color:var(--text-secondary);text-decoration:none;font-size:0.9rem;font-weight:500;transition:color 0.2s;" onmouseover="this.style.color='#C8A2FF'" onmouseout="this.style.color='#A0A0B8'">Stories</a>
-      <a href="/playlists" style="color:var(--text-secondary);text-decoration:none;font-size:0.9rem;font-weight:500;transition:color 0.2s;" onmouseover="this.style.color='#C8A2FF'" onmouseout="this.style.color='#A0A0B8'">Playlists</a>
-      <a href="/characters" style="color:var(--text-secondary);text-decoration:none;font-size:0.9rem;font-weight:500;transition:color 0.2s;" onmouseover="this.style.color='#C8A2FF'" onmouseout="this.style.color='#A0A0B8'">Characters</a>
-      <a href="/books" style="color:var(--text-secondary);text-decoration:none;font-size:0.9rem;font-weight:500;transition:color 0.2s;" onmouseover="this.style.color='#C8A2FF'" onmouseout="this.style.color='#A0A0B8'">Books</a>
+      <a href="/stories" class="nav-link">Stories</a>
+      <a href="/playlists" class="nav-link">Playlists</a>
+      <a href="/characters" class="nav-link nav-link-secondary">Characters</a>
+      <a href="/books" class="nav-link nav-link-secondary">Books</a>
       <a href="https://apps.apple.com/app/bible-tea-bible-storycast/id6761665565" class="nav-cta">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
         Download
