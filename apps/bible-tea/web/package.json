@@ -5,14 +5,16 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "deploy": "wrangler pages deploy dist"
+    "deploy": "astro build && wrangler pages deploy dist"
   },
   "dependencies": {
-    "astro": "^5.5.0"
+    "@astrojs/sitemap": "^3.7.2",
+    "astro": "^5.5.0",
+    "marked": "^18.0.0"
   },
   "devDependencies": {
     "@astrojs/cloudflare": "^12.3.0",
-    "wrangler": "^4.5.0",
-    "typescript": "^5.7.0"
+    "typescript": "^5.7.0",
+    "wrangler": "^4.5.0"
   }
 }

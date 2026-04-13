@@ -1,0 +1,242 @@
+---
+import { APP_STORE_URL } from "../lib/stories";
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  canonicalPath?: string;
+  jsonLd?: object | object[];
+}
+
+const { title, description, ogImage = "https://bibletea.app/icon.png", canonicalPath, jsonLd } = Astro.props;
+const canonical = canonicalPath ? `https://bibletea.app${canonicalPath}` : undefined;
+const pageJsonLd = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+
+const siteLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Bible Tea",
+  url: "https://bibletea.app",
+  description: "Listen to every Bible story as immersive audio. Professional narration from Genesis to Revelation.",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: { "@type": "EntryPoint", urlTemplate: "https://bibletea.app/stories?q={search_term_string}" },
+    "query-input": "required name=search_term_string",
+  },
+};
+
+const orgLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Bible Tea",
+  url: "https://bibletea.app",
+  logo: "https://bibletea.app/icon.png",
+  sameAs: ["https://apps.apple.com/app/bible-tea-bible-storycast/id6761665565"],
+};
+
+const podcastLd = {
+  "@context": "https://schema.org",
+  "@type": "PodcastSeries",
+  name: "Bible Tea — Bible Storycast",
+  description: "Every Bible story retold as immersive audio. From Genesis to Revelation.",
+  url: "https://bibletea.app",
+  image: "https://bibletea.app/icon.png",
+  author: { "@type": "Organization", name: "Bible Tea" },
+  inLanguage: "en-US",
+};
+
+const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google Tag Manager -->
+  <script is:inline>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-NN7TLHP2');</script>
+  <!-- End Google Tag Manager -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta name="theme-color" content="#0A0A0F" />
+  {canonical && <link rel="canonical" href={canonical} />}
+
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:url" content={canonical || "https://bibletea.app"} />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Bible Tea" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage} />
+
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/icon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  {jsonLdItems.map((ld) => (
+    <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+  ))}
+
+  <style is:global>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0A0A0F;
+      --surface: #141420;
+      --surface-light: #1E1E2E;
+      --surface-border: #2A2A3E;
+      --primary: #C8A2FF;
+      --primary-dark: #9B6FDB;
+      --accent: #FFD166;
+      --text: #FFFFFF;
+      --text-secondary: #A0A0B8;
+      --text-muted: #6B6B80;
+      --gradient-start: #C8A2FF;
+      --gradient-end: #6B5CE7;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .heading { font-family: 'Playfair Display', serif; }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(10, 10, 15, 0.8);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .nav-brand img { width: 36px; height: 36px; border-radius: 8px; }
+
+    .nav-brand span {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 1.25rem;
+    }
+
+    .nav-stories-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-stories-link:hover { color: var(--primary); }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--primary);
+      color: #000;
+      padding: 0.6rem 1.5rem;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.875rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .nav-cta:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px rgba(200, 162, 255, 0.3);
+    }
+
+    footer {
+      padding: 3rem 2rem;
+      text-align: center;
+      border-top: 1px solid var(--surface-border);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    footer a { color: var(--primary); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 640px) {
+      nav { padding: 0.75rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NN7TLHP2"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <nav>
+    <a href="/" class="nav-brand">
+      <img src="/icon.png" alt="Bible Tea" />
+      <span class="heading">Bible Tea</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:1.5rem;">
+      <a href="/stories" class="nav-stories-link">Stories</a>
+      <a href="/playlists" class="nav-stories-link">Playlists</a>
+      <a href="/characters" class="nav-stories-link">Characters</a>
+      <a href="/books" class="nav-stories-link">Books</a>
+      <a href={APP_STORE_URL} class="nav-cta">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        Download
+      </a>
+    </div>
+  </nav>
+
+  <slot />
+
+  <footer>
+    <div class="footer-links">
+      <a href="/stories">Stories</a>
+      <a href="/playlists">Playlists</a>
+      <a href="/characters">Characters</a>
+      <a href="/books">Books</a>
+      <a href="/privacy">Privacy</a>
+      <a href="/terms">Terms</a>
+      <a href="mailto:contact@bibletea.app">Contact</a>
+    </div>
+    <p>&copy; 2026 Bible Tea. All rights reserved.</p>
+  </footer>
+</body>
+</html>

@@ -20,15 +20,15 @@ export const SPEAKERS = {
     label: "Grace — warm & casual (Jessica)",
     voiceSettings: { stability: 0.45, similarity_boost: 0.75, style: 0.35 },
   },
+  elijah: {
+    voiceId: "TxGEqnHWrfWFTfGW9XjX",
+    label: "Elijah — deep & steady (Josh)",
+    voiceSettings: { stability: 0.45, similarity_boost: 0.75, style: 0.3 },
+  },
   maya: {
     voiceId: "pFZP5JQG7iQjIQuC4Bku",
     label: "Maya — dramatic & expressive (Lily)",
     voiceSettings: { stability: 0.3, similarity_boost: 0.7, style: 0.65 },
-  },
-  jordan: {
-    voiceId: "SAz9YHcvj6GT2YYXdXww",
-    label: "Jordan — calm & reflective (River)",
-    voiceSettings: { stability: 0.55, similarity_boost: 0.8, style: 0.2 },
   },
 } as const;
 
@@ -142,15 +142,20 @@ export function prepareForSpeech(md: string): string {
   for (const line of lines) {
     const trimmed = line.trim();
 
-    // Skip the H1 title — the narration doesn't read the title aloud
-    if (/^#\s+/.test(trimmed)) continue;
-
-    // Skip the italic subtitle line (e.g. *Genesis 1-2*)
-    if (/^\*[^*]+\*$/.test(trimmed) && out.length < 3) continue;
-
-    // Section headings → long pause instead of reading "The Setup" etc.
+    if (/^#\s+/.test(trimmed)) {
+      out.push(trimmed.replace(/^#\s+/, ""));
+      out.push('<break time="1.0s"/>');
+      continue;
+    }
+    if (/^\*[^*]+\*$/.test(trimmed) && out.length < 3) {
+      out.push(trimmed.replace(/\*/g, ""));
+      out.push('<break time="0.8s"/>');
+      continue;
+    }
     if (/^##\s+/.test(trimmed)) {
       out.push('<break time="1.2s"/>');
+      out.push(trimmed.replace(/^##\s+/, ""));
+      out.push('<break time="0.8s"/>');
       continue;
     }
 

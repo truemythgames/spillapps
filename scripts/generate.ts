@@ -25,10 +25,20 @@ function prepareForSpeech(md: string): string {
 
   for (const line of lines) {
     const trimmed = line.trim();
-    if (/^#\s+/.test(trimmed)) continue;
-    if (/^\*[^*]+\*$/.test(trimmed) && out.length < 3) continue;
+    if (/^#\s+/.test(trimmed)) {
+      out.push(trimmed.replace(/^#\s+/, ""));
+      out.push('<break time="1.0s"/>');
+      continue;
+    }
+    if (/^\*[^*]+\*$/.test(trimmed) && out.length < 3) {
+      out.push(trimmed.replace(/\*/g, ""));
+      out.push('<break time="0.8s"/>');
+      continue;
+    }
     if (/^##\s+/.test(trimmed)) {
       out.push('<break time="1.2s"/>');
+      out.push(trimmed.replace(/^##\s+/, ""));
+      out.push('<break time="0.8s"/>');
       continue;
     }
     if (/^>\s?/.test(trimmed)) {
@@ -81,15 +91,15 @@ const SPEAKERS = {
     label: "Grace — warm & casual (Jessica)",
     voiceSettings: { stability: 0.45, similarity_boost: 0.75, style: 0.35 },
   },
+  elijah: {
+    voiceId: "TxGEqnHWrfWFTfGW9XjX",
+    label: "Elijah — deep & steady (Josh)",
+    voiceSettings: { stability: 0.45, similarity_boost: 0.75, style: 0.3 },
+  },
   maya: {
     voiceId: "pFZP5JQG7iQjIQuC4Bku",
     label: "Maya — dramatic & expressive (Lily)",
     voiceSettings: { stability: 0.3, similarity_boost: 0.7, style: 0.65 },
-  },
-  jordan: {
-    voiceId: "SAz9YHcvj6GT2YYXdXww",
-    label: "Jordan — calm & reflective (River)",
-    voiceSettings: { stability: 0.55, similarity_boost: 0.8, style: 0.2 },
   },
 } as const;
 
@@ -368,27 +378,29 @@ async function processStory(story: Story, step?: string) {
     }
   }
 
-  // Step 3: Narration (default voice only — use CMS to add more voices)
+  // Step 3: Narration (grace + elijah by default)
   if (shouldRun("narration")) {
     const transcriptPath = join(storyDir, "transcript.md");
     if (!existsSync(transcriptPath)) {
       console.log(`  [narration] No transcript found — generate transcript first`);
     } else {
       const rawTranscript = readFileSync(transcriptPath, "utf8");
-      const key = DEFAULT_SPEAKER;
-      const speaker = SPEAKERS[key];
-      const narrationPath = join(storyDir, `narration-${key}.mp3`);
-      if (existsSync(narrationPath) && !step) {
-        console.log(`  [narration] ${key} already exists, skipping`);
-      } else {
-        const buffer = await generateNarration(rawTranscript, key);
-        writeFileSync(narrationPath, buffer);
-        metadata[`narration_${key}`] = {
-          model: "eleven_multilingual_v2",
-          voiceId: speaker.voiceId,
-          generatedAt: new Date().toISOString(),
-          sizeKB: Math.round(buffer.length / 1024),
-        };
+      const voiceKeys: (keyof typeof SPEAKERS)[] = ["grace", "elijah"];
+      for (const key of voiceKeys) {
+        const speaker = SPEAKERS[key];
+        const narrationPath = join(storyDir, `narration-${key}.mp3`);
+        if (existsSync(narrationPath) && !step) {
+          console.log(`  [narration] ${key} already exists, skipping`);
+        } else {
+          const buffer = await generateNarration(rawTranscript, key);
+          writeFileSync(narrationPath, buffer);
+          metadata[`narration_${key}`] = {
+            model: "eleven_multilingual_v2",
+            voiceId: speaker.voiceId,
+            generatedAt: new Date().toISOString(),
+            sizeKB: Math.round(buffer.length / 1024),
+          };
+        }
       }
     }
   }

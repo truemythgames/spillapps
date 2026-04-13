@@ -1,0 +1,368 @@
+---
+import Base from "../../layouts/Base.astro";
+import {
+  getCatalog,
+  hasCover,
+  coverUrl,
+  APP_STORE_URL,
+} from "../../lib/stories";
+
+const catalog = getCatalog();
+
+const title = "All Bible Stories — Bible Tea";
+const description =
+  "Explore 200+ Bible stories from Genesis to Revelation. Immersive audio retellings you can listen to anywhere.";
+
+const collectionLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "Bible Stories",
+  description,
+  url: "https://bibletea.app/stories",
+  publisher: {
+    "@type": "Organization",
+    name: "Bible Tea",
+    logo: { "@type": "ImageObject", url: "https://bibletea.app/icon.png" },
+  },
+};
+
+const itemListLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "Bible Stories Collection",
+  description: `${catalog.length} Bible stories from Genesis to Revelation, available as immersive audio.`,
+  numberOfItems: catalog.length,
+  itemListElement: catalog.slice(0, 50).map((s, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: s.title,
+    url: `https://bibletea.app/stories/${s.id}`,
+    description: s.description,
+  })),
+};
+
+const appLd = {
+  "@context": "https://schema.org",
+  "@type": "MobileApplication",
+  name: "Bible Tea — Bible Storycast",
+  operatingSystem: "iOS",
+  applicationCategory: "ReligionApplication",
+  description: "Listen to every Bible story as immersive audio. Professional narration from Genesis to Revelation.",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  installUrl: "https://apps.apple.com/app/bible-tea-bible-storycast/id6761665565",
+  screenshot: "https://bibletea.app/icon.png",
+  author: { "@type": "Organization", name: "Bible Tea", url: "https://bibletea.app" },
+};
+
+const listingFaqs = [
+  {
+    q: "What is Bible Tea?",
+    a: `Bible Tea is a free iOS app that retells every Bible story as immersive audio. With ${catalog.length}+ stories from Genesis to Revelation and professional narration, you can listen to the Bible like a podcast — anywhere, anytime.`,
+  },
+  {
+    q: "How many Bible stories does Bible Tea have?",
+    a: `Bible Tea currently has ${catalog.length} stories covering every major narrative from Genesis to Revelation, including the full stories of Creation, the Exodus, David, Jesus' ministry, the Crucifixion, and the early Church.`,
+  },
+  {
+    q: "Is Bible Tea free?",
+    a: "Yes! Bible Tea is completely free to download and listen to. All stories and audio narrations are available at no cost on iOS.",
+  },
+  {
+    q: "Can I read Bible stories on the website?",
+    a: "You can preview each story's setup and key takeaways on our website. For the full story text and immersive audio narration, download the free Bible Tea app on iOS.",
+  },
+  {
+    q: "What Bible translation does Bible Tea use?",
+    a: "Bible Tea doesn't use a specific translation — each story is a fresh, modern retelling of the original biblical narrative, written to be engaging and accessible while staying faithful to Scripture.",
+  },
+  {
+    q: "Does Bible Tea cover the Old and New Testament?",
+    a: `Yes. Bible Tea covers both Testaments with ${catalog.length} stories, from Genesis through the book of Acts and beyond — including all the major characters, events, and teachings.`,
+  },
+];
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: listingFaqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://bibletea.app" },
+    { "@type": "ListItem", position: 2, name: "Bible Stories", item: "https://bibletea.app/stories" },
+  ],
+};
+
+const jsonLdArray = [collectionLd, itemListLd, appLd, faqLd, breadcrumbLd];
+---
+
+<Base
+  title={title}
+  description={description}
+  canonicalPath="/stories"
+  jsonLd={jsonLdArray}
+>
+  <style>
+    .stories-hero {
+      padding: 7rem 2rem 2rem;
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .stories-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin-bottom: 0.75rem;
+      background: linear-gradient(135deg, var(--text) 0%, var(--primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stories-hero p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      color: #fff;
+      padding: 0.8rem 2rem;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 24px rgba(200, 162, 255, 0.2);
+    }
+
+    .hero-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(200, 162, 255, 0.35);
+    }
+
+    .hero-cta svg { width: 18px; height: 18px; }
+
+    .all-stories {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 2rem 3rem;
+    }
+
+    .all-stories h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .all-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .mini-card {
+      text-decoration: none;
+      transition: transform 0.2s;
+    }
+
+    .mini-card:hover { transform: translateY(-4px); }
+
+    .mini-cover {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 0.35rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    .mini-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .mini-cover-ph {
+      width: 100%;
+      height: 100%;
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .mini-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.8rem;
+      color: var(--text);
+      line-height: 1.2;
+    }
+
+    .mini-ref {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+    }
+
+    .faq-section {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--surface-border);
+    }
+
+    .faq-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .faq-item {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 12px;
+      margin-bottom: 0.6rem;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .faq-item:hover { border-color: var(--primary); }
+    .faq-item[open] { border-color: rgba(200, 162, 255, 0.3); }
+
+    .faq-item summary {
+      padding: 1rem 1.25rem;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text);
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .faq-item summary::-webkit-details-marker { display: none; }
+
+    .faq-item summary::after {
+      content: '+';
+      font-size: 1.25rem;
+      color: var(--primary);
+      flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+
+    .faq-item[open] summary::after { content: '−'; }
+
+    .faq-item p {
+      padding: 0 1.25rem 1rem;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    .bottom-cta {
+      text-align: center;
+      padding: 5rem 2rem 4rem;
+      position: relative;
+    }
+
+    .bottom-cta::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(107, 92, 231, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .bottom-cta h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.5rem, 3vw, 2.25rem);
+      margin-bottom: 0.75rem;
+    }
+
+    .bottom-cta p {
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+      max-width: 450px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @media (max-width: 640px) {
+      .stories-hero { padding: 6rem 1.5rem 1.5rem; }
+      .all-stories { padding: 2rem 1rem; }
+      .all-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+    }
+  </style>
+
+  <main>
+    <div class="stories-hero">
+      <h1>Bible Stories</h1>
+      <p>
+        Every story from Genesis to Revelation — retold as immersive audio you can listen to anywhere.
+      </p>
+      <a href={APP_STORE_URL} class="hero-cta">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        Start Listening Free
+      </a>
+    </div>
+
+    <section class="all-stories">
+      <h2>All Stories</h2>
+      <div class="all-grid">
+        {catalog.map((s) => (
+          <a href={`/stories/${s.id}`} class="mini-card">
+            <div class="mini-cover">
+              {hasCover(s.id) ? (
+                <img src={coverUrl(s.id)} alt={s.title} loading="lazy" />
+              ) : (
+                <div class="mini-cover-ph">📖</div>
+              )}
+            </div>
+            <div class="mini-title">{s.title}</div>
+            <div class="mini-ref">{s.bibleRef}</div>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="faq-section">
+      <h2>Frequently Asked Questions</h2>
+      {listingFaqs.map((f) => (
+        <details class="faq-item">
+          <summary>{f.q}</summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </section>
+
+    <section class="bottom-cta">
+      <h2 class="heading">Ready to Listen?</h2>
+      <p>Download Bible Tea and experience every story as immersive audio with multiple narrators.</p>
+      <a href={APP_STORE_URL} class="hero-cta">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        Download for iOS
+      </a>
+    </section>
+  </main>
+</Base>
