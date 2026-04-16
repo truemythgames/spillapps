@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAppStore } from "@/stores/app";
 import { usePlayerStore } from "@/stores/player";
 import { useGate } from "@/lib/useGate";
+import { coverUrl } from "@/lib/content";
 
 import { getLocalProgress } from "@/lib/storage";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
@@ -124,14 +125,14 @@ export default function StoriesScreen() {
         <Text style={styles.sectionTitle}>Browse</Text>
         <View style={styles.testamentRow}>
           <Pressable style={styles.testamentCard} onPress={() => router.push("/testament/old")}>
-            <Image source={{ uri: storyMap["crossing-the-red-sea"]?.cover_image_url ?? undefined }} style={styles.testamentImg} contentFit="cover" transition={300} />
+            <Image source={{ uri: storyMap["crossing-the-red-sea"]?.cover_image_url ?? coverUrl("crossing-the-red-sea") }} style={styles.testamentImg} contentFit="cover" transition={300} />
             <View style={styles.testamentOverlay} />
             <View style={styles.testamentContent}>
               <Text style={styles.testamentLabel}>Old Testament</Text>
             </View>
           </Pressable>
           <Pressable style={styles.testamentCard} onPress={() => router.push("/testament/new")}>
-            <Image source={{ uri: storyMap["the-resurrection"]?.cover_image_url ?? undefined }} style={styles.testamentImg} contentFit="cover" transition={300} />
+            <Image source={{ uri: storyMap["the-resurrection"]?.cover_image_url ?? coverUrl("the-resurrection") }} style={styles.testamentImg} contentFit="cover" transition={300} />
             <View style={styles.testamentOverlay} />
             <View style={styles.testamentContent}>
               <Text style={styles.testamentLabel}>New Testament</Text>

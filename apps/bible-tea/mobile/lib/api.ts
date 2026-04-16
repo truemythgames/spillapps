@@ -92,9 +92,10 @@ export const api = {
   getSeason: (id: string) =>
     request<{ season: any; stories: any[] }>(`/v1/seasons/${id}`),
 
-  getStories: (params?: { season_id?: string; testament?: string }) => {
-    const q = new URLSearchParams(params as Record<string, string>).toString();
-    return request<{ stories: any[] }>(`/v1/stories${q ? `?${q}` : ""}`);
+  getStories: (params?: { season_id?: string; testament?: string; limit?: number }) => {
+    const merged = { limit: "500", ...(params ?? {}) } as Record<string, string>;
+    const q = new URLSearchParams(merged).toString();
+    return request<{ stories: any[] }>(`/v1/stories?${q}`);
   },
 
   getStory: (id: string) =>

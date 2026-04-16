@@ -27,6 +27,7 @@
     "generate": "npx tsx scripts/generate.ts",
     "generate:one": "npx tsx scripts/generate.ts --story",
     "generate:all": "npx tsx scripts/generate.ts --all --seed-only",
+    "sync:r2": "npx tsx scripts/sync-to-r2.ts",
     "serve:content": "npx tsx scripts/content-server.ts"
   },
   "devDependencies": {

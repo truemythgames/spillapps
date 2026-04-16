@@ -15,7 +15,7 @@ export type PurchasesPackage = any;
 type CustomerInfo = any;
 
 const REVENUECAT_IOS_KEY = "appl_wkihlIqfRBLXmhtmZBUiijkxsxN";
-const REVENUECAT_ANDROID_KEY = "goog_REPLACE_WITH_YOUR_ANDROID_KEY";
+const REVENUECAT_ANDROID_KEY = "goog_OrYzAxZViXKjAqteWSEQolNVWNU";
 
 const ENTITLEMENT_ID = "premium";
 

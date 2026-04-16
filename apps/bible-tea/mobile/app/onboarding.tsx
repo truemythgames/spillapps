@@ -49,12 +49,12 @@ const LOCAL_COVERS = {
   "birth-of-jesus": require("@/assets/onboarding/birth-of-jesus.webp"),
 } as const;
 
-const HERO_IMAGE = require("@/assets/onboarding/teastories.png");
+const HERO_IMAGE = require("@/assets/onboarding/teastories.webp");
 
 const SCREENSHOTS = {
-  home: require("@/assets/onboarding/screenshot-home.png"),
-  discover: require("@/assets/onboarding/screenshot-discover.png"),
-  chat: require("@/assets/onboarding/screenshot-chat.png"),
+  home: require("@/assets/onboarding/screenshot-home.webp"),
+  discover: require("@/assets/onboarding/screenshot-discover.webp"),
+  chat: require("@/assets/onboarding/screenshot-chat.webp"),
 } as const;
 
 const BACKGROUNDS = [
@@ -198,10 +198,7 @@ export default function OnboardingScreen() {
   }
 
   function animateTransition(next: () => void) {
-    fadeAnim.value = withTiming(0, { duration: 150 }, () => {
-      fadeAnim.value = withTiming(1, { duration: 250 });
-    });
-    setTimeout(next, 160);
+    next();
   }
 
   function goNext() {
@@ -425,7 +422,7 @@ export default function OnboardingScreen() {
         style={StyleSheet.absoluteFill}
         contentFit={currentStep === "welcome" ? "contain" : "cover"}
         contentPosition={currentStep === "welcome" ? "center" : "center"}
-        transition={500}
+        transition={0}
       />
       <LinearGradient
         colors={

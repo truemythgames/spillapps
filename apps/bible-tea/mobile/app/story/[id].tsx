@@ -33,6 +33,7 @@ import {
   type Speaker,
 } from "@/lib/content";
 import { api } from "@/lib/api";
+import { storage } from "@/lib/storage";
 
 const { width } = Dimensions.get("window");
 const COVER_HEIGHT = 420;
@@ -44,11 +45,13 @@ export default function StoryScreen() {
 
   const {
     currentStory,
+    currentSpeaker: playerSpeaker,
     isPlaying,
     isBuffering,
     play,
     pause,
     resume,
+    setHideMini,
   } = usePlayerStore();
 
   const likedStoryIds = useAppStore((s) => s.likedStoryIds);
@@ -80,6 +83,16 @@ export default function StoryScreen() {
         setSpeakers(apiSpeakers);
         setActiveSpeaker((prev) => {
           if (prev && apiSpeakers.find((s) => s.key === prev.key)) return prev;
+          const { currentStory: ps, currentSpeaker: psp } = usePlayerStore.getState();
+          if (ps?.id === id && psp) {
+            const match = apiSpeakers.find((s) => s.key === psp.id);
+            if (match) return match;
+          }
+          const savedKey = storage.getString(`speaker_${id}`);
+          if (savedKey) {
+            const saved = apiSpeakers.find((s) => s.key === savedKey);
+            if (saved) return saved;
+          }
           return apiSpeakers[0] ?? prev;
         });
       }
@@ -90,13 +103,19 @@ export default function StoryScreen() {
   const sheetTranslateY = useSharedValue(400);
   const backdropOpacity = useSharedValue(0);
 
+  useEffect(() => {
+    return () => setHideMini(false);
+  }, []);
+
   const openSheet = useCallback(() => {
     setShowSpeakerPicker(true);
+    setHideMini(true);
     backdropOpacity.value = withTiming(1, { duration: 200 });
     sheetTranslateY.value = withSpring(0, { damping: 25, stiffness: 300 });
   }, []);
 
   const closeSheet = useCallback(() => {
+    setHideMini(false);
     backdropOpacity.value = withTiming(0, { duration: 200 });
     sheetTranslateY.value = withTiming(400, { duration: 250 }, () => {
       runOnJS(setShowSpeakerPicker)(false);
@@ -135,25 +154,46 @@ export default function StoryScreen() {
   const playerDuration = usePlayerStore((s) => s.duration);
   const isThisPlaying = currentStory?.id === id && isPlaying;
   const isThisLoaded = currentStory?.id === id;
+  const hasAudio = speakers.length > 0;
 
   useEffect(() => {
     if (!story) return;
-    fetch(transcriptUrl(id))
-      .then((r) => (r.ok ? r.text() : Promise.reject(r.status)))
-      .then((text) => {
-        const stripped = text.replace(/^#\s+.*\n+\*.*\*\n*/m, "");
-        setTranscript(stripped);
-      })
-      .catch(() => setTranscript(null))
-      .finally(() => setLoadingTranscript(false));
-  }, [id]);
+    const urlsToTry: string[] = [];
+    if (coverImageUrl) {
+      const derived = coverImageUrl.replace(/\/cover\.webp(\?.*)?$/, "/transcript.md");
+      if (derived !== coverImageUrl) urlsToTry.push(derived);
+    }
+    urlsToTry.push(transcriptUrl(id));
+
+    let cancelled = false;
+    (async () => {
+      for (const url of urlsToTry) {
+        try {
+          const r = await fetch(url);
+          if (r.ok) {
+            const text = await r.text();
+            if (cancelled) return;
+            const stripped = text.replace(/^#\s+.*\n+\*.*\*\n*/m, "");
+            setTranscript(stripped);
+            setLoadingTranscript(false);
+            return;
+          }
+        } catch {}
+      }
+      if (!cancelled) {
+        setTranscript(null);
+        setLoadingTranscript(false);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [id, coverImageUrl]);
 
   const handlePlayPause = useCallback(async () => {
     if (!story || !activeSpeaker) return;
     if (isThisLoaded) {
       isPlaying ? await pause() : await resume();
     } else {
-      await play(
+      play(
         { id: story.id, title: story.title, cover_image_url: coverImageUrl },
         { id: activeSpeaker.key, name: activeSpeaker.name },
         activeSpeaker.audioUrl
@@ -165,6 +205,7 @@ export default function StoryScreen() {
   const handleSpeakerSelect = useCallback(
     async (speaker: Speaker) => {
       setActiveSpeaker(speaker);
+      storage.set(`speaker_${id}`, speaker.key);
       closeSheet();
       if (!story) return;
       await play(
@@ -235,42 +276,46 @@ export default function StoryScreen() {
             <Text style={styles.heroRef}>{story.bibleRef}</Text>
 
             {/* Speaker + Length row */}
-            <View style={styles.metaRow}>
-              <Pressable
-                style={styles.metaItem}
-                onPress={openSheet}
-              >
-                <Text style={styles.metaLabel}>Speaker</Text>
-                <View style={styles.metaValueRow}>
+            {hasAudio && (
+              <View style={styles.metaRow}>
+                <Pressable
+                  style={styles.metaItem}
+                  onPress={openSheet}
+                >
+                  <Text style={styles.metaLabel}>Speaker</Text>
+                  <View style={styles.metaValueRow}>
+                    <Text style={styles.metaValue}>
+                      {isBuffering && isThisLoaded ? "Loading..." : activeSpeaker?.name ?? "—"}
+                    </Text>
+                    <Ionicons name="chevron-down" size={14} color="#fff" />
+                  </View>
+                </Pressable>
+                <View style={styles.metaDivider} />
+                <View style={styles.metaItem}>
+                  <Text style={styles.metaLabel}>Length</Text>
                   <Text style={styles.metaValue}>
-                    {isBuffering && isThisLoaded ? "Loading..." : activeSpeaker?.name ?? "—"}
+                    {estimatedMinutes ? `${estimatedMinutes} min` : "—"}
                   </Text>
-                  <Ionicons name="chevron-down" size={14} color="#fff" />
                 </View>
-              </Pressable>
-              <View style={styles.metaDivider} />
-              <View style={styles.metaItem}>
-                <Text style={styles.metaLabel}>Length</Text>
-                <Text style={styles.metaValue}>
-                  {estimatedMinutes ? `${estimatedMinutes} min` : "—"}
-                </Text>
               </View>
-            </View>
+            )}
           </View>
         </View>
 
         {/* Action buttons */}
         <View style={styles.actionRow}>
-          <Pressable style={styles.playSessionBtn} onPress={handlePlayPause}>
-            <Ionicons
-              name={isThisPlaying ? "pause" : "play"}
-              size={18}
-              color={colors.background}
-            />
-            <Text style={styles.playSessionText}>
-              {isThisPlaying ? "Pause" : "Play Session"}
-            </Text>
-          </Pressable>
+          {hasAudio && (
+            <Pressable style={styles.playSessionBtn} onPress={handlePlayPause}>
+              <Ionicons
+                name={isThisPlaying ? "pause" : "play"}
+                size={18}
+                color={colors.background}
+              />
+              <Text style={styles.playSessionText}>
+                {isThisPlaying ? "Pause" : "Play Session"}
+              </Text>
+            </Pressable>
+          )}
           <Pressable
             style={styles.askBtn}
             onPress={() => router.push(`/chat?topic=story&storyId=${id}&storyTitle=${encodeURIComponent(story.title)}&storyRef=${encodeURIComponent(story.bibleRef)}` as any)}

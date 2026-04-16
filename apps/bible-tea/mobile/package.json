@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "main": "expo-router/entry",
+  "expo": {
+    "autolinking": {
+      "nativeModulesDir": "./modules"
+    }
+  },
   "scripts": {
     "start": "expo start --dev-client",
     "start:clear": "expo start --clear --localhost --go",
@@ -21,6 +26,7 @@
     "@expo-google-fonts/inter": "^0.2.3",
     "@expo-google-fonts/playfair-display": "^0.2.3",
     "@react-native-async-storage/async-storage": "~2.1.0",
+    "@react-native-community/netinfo": "11.4.1",
     "@react-native-firebase/analytics": "^24.0.0",
     "@react-native-firebase/app": "^24.0.0",
     "@react-native-firebase/crashlytics": "^24.0.0",

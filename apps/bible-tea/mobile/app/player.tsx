@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { View, Text, StyleSheet, Pressable, Dimensions } from "react-native";
+import { View, Text, StyleSheet, Pressable, Dimensions, ActivityIndicator, Platform } from "react-native";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
@@ -10,13 +10,16 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
   runOnJS,
+  withTiming,
 } from "react-native-reanimated";
 import { usePlayerStore } from "@/stores/player";
 import { useAppStore } from "@/stores/app";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
-const { width } = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
 const COVER_SIZE = width - 80;
+const DISMISS_THRESHOLD = 120;
+const VELOCITY_THRESHOLD = 800;
 
 function formatTime(seconds: number) {
   const mins = Math.floor(seconds / 60);
@@ -48,11 +51,18 @@ export default function PlayerScreen() {
   const toggleLike = useAppStore((s) => s.toggleLike);
 
   useEffect(() => {
-    if (!currentStory) router.back();
-  }, [currentStory]);
+    if (!currentStory && !isBuffering) router.back();
+  }, [currentStory, isBuffering]);
 
   if (!currentStory) {
-    return null;
+    return (
+      <LinearGradient
+        colors={["#2A1F3D", "#1A1528", "#0A0A0F"]}
+        style={[styles.container, { paddingBottom: insets.bottom, justifyContent: "center", alignItems: "center" }]}
+      >
+        <ActivityIndicator size="large" color={colors.text} />
+      </LinearGradient>
+    );
   }
 
   const isLiked = likedStoryIds.includes(currentStory.id);
@@ -63,9 +73,11 @@ export default function PlayerScreen() {
   const dragProgress = useSharedValue(0);
   const barWidth = width - spacing.lg * 2;
 
-  if (!isDragging) {
-    dragProgress.value = progress;
-  }
+  useEffect(() => {
+    if (!isDragging) {
+      dragProgress.value = progress;
+    }
+  }, [progress, isDragging]);
 
   const doSeek = (fraction: number) => {
     seekTo(Math.max(0, Math.min(fraction * duration, duration)));
@@ -104,6 +116,30 @@ export default function PlayerScreen() {
     left: `${dragProgress.value * 100}%`,
   }));
 
+  const translateY = useSharedValue(0);
+  const closePlayer = () => router.back();
+
+  const dismissGesture = Gesture.Pan()
+    .enabled(Platform.OS === "android")
+    .activeOffsetY(15)
+    .failOffsetY(-15)
+    .failOffsetX([-20, 20])
+    .onUpdate((e) => {
+      translateY.value = Math.max(0, e.translationY);
+    })
+    .onEnd((e) => {
+      if (e.translationY > DISMISS_THRESHOLD || e.velocityY > VELOCITY_THRESHOLD) {
+        translateY.value = withTiming(height, { duration: 200 });
+        runOnJS(closePlayer)();
+      } else {
+        translateY.value = withTiming(0, { duration: 200 });
+      }
+    });
+
+  const containerStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: translateY.value }],
+  }));
+
   function cycleSpeed() {
     const speeds = [0.75, 1.0, 1.25, 1.5, 2.0];
     const idx = speeds.indexOf(playbackSpeed);
@@ -112,15 +148,22 @@ export default function PlayerScreen() {
   }
 
   return (
+    <GestureDetector gesture={dismissGesture}>
+    <Animated.View style={[{ flex: 1 }, containerStyle]}>
     <LinearGradient
       colors={["#2A1F3D", "#1A1528", "#0A0A0F"]}
-      style={[styles.container, { paddingBottom: insets.bottom }]}
+      style={[
+        styles.container,
+        {
+          paddingBottom: insets.bottom,
+          paddingTop: Platform.OS === "android" ? insets.top + 4 : 0,
+        },
+      ]}
     >
-      {/* Handle */}
       <View style={styles.handleRow}>
         <View style={styles.handle} />
       </View>
-      <Pressable style={styles.closeBtn} onPress={() => router.back()}>
+      <Pressable style={[styles.closeBtn, { top: (Platform.OS === "android" ? insets.top : 0) + 8 }]} onPress={() => router.back()}>
         <Ionicons name="close" size={22} color={colors.textSecondary} />
       </Pressable>
 
@@ -178,9 +221,10 @@ export default function PlayerScreen() {
         <Pressable
           onPress={isPlaying ? pause : resume}
           style={styles.playPauseBtn}
+          disabled={isBuffering}
         >
           {isBuffering ? (
-            <Ionicons name="hourglass" size={32} color={colors.text} />
+            <ActivityIndicator size="small" color={colors.text} />
           ) : (
             <Ionicons name={isPlaying ? "pause" : "play"} size={32} color={colors.text} />
           )}
@@ -199,6 +243,8 @@ export default function PlayerScreen() {
         <Text style={styles.speedText}>{playbackSpeed.toFixed(2)}x</Text>
       </Pressable>
     </LinearGradient>
+    </Animated.View>
+    </GestureDetector>
   );
 }
 
@@ -210,7 +256,8 @@ const styles = StyleSheet.create({
 
   handleRow: {
     alignItems: "center",
-    paddingTop: 8,
+    paddingTop: 10,
+    paddingBottom: 14,
   },
   handle: {
     width: 36,

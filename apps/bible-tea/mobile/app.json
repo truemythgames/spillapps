@@ -2,7 +2,7 @@
   "expo": {
     "name": "Bible Tea",
     "slug": "bibletea",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
@@ -17,7 +17,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "app.bibletea",
-      "buildNumber": "9",
+      "buildNumber": "13",
       "usesAppleSignIn": true,
       "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
@@ -61,8 +61,10 @@
         }
       ],
       "@react-native-firebase/app",
+      "@react-native-firebase/crashlytics",
       "./plugins/firebase-modular-headers",
-      "./plugins/hermes-dsym-plugin"
+      "./plugins/hermes-dsym-plugin",
+      "./plugins/now-playing-plugin"
     ],
     "experiments": {
       "typedRoutes": true

@@ -3,6 +3,7 @@ import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAppStore } from "@/stores/app";
+import { coverUrl } from "@/lib/content";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -20,7 +21,7 @@ export default function ChatScreen() {
 
   const CHAT_TOPICS = CHAT_TOPIC_DEFS.map((t) => ({
     ...t,
-    image: storyMap[t.storyId]?.cover_image_url ?? null,
+    image: storyMap[t.storyId]?.cover_image_url ?? coverUrl(t.storyId),
   }));
 
   function handleTopic(topicId: string) {

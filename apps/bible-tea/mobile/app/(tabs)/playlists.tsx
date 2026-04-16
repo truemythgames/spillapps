@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useAppStore } from "@/stores/app";
 import { Skeleton, SkeletonText } from "@/components/Skeleton";
+import { characterImageUrl, getAllCharacters } from "@/lib/content";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
 function SkeletonDiscover({ paddingTop }: { paddingTop: number }) {
@@ -70,6 +71,17 @@ export default function DiscoverScreen() {
       )
     : null;
 
+  const characterList = useMemo(() => {
+    if (characters && characters.length > 0) return characters;
+    return getAllCharacters().map((c) => ({
+      id: c.id,
+      name: c.name,
+      subtitle: c.subtitle,
+      image_url: characterImageUrl(c.id),
+      stories: [],
+    }));
+  }, [characters]);
+
   const seasonList = useMemo(() => {
     const grouped: Record<string, { name: string; testament: string; count: number; cover: string | null }> = {};
     for (const s of stories) {
@@ -128,7 +140,7 @@ export default function DiscoverScreen() {
       ) : (
         <>
           {/* Bible Characters */}
-          {characters.length > 0 && (
+          {characterList.length > 0 && (
             <View style={styles.section}>
               <View style={styles.sectionRow}>
                 <Text style={styles.sectionTitle}>Bible Characters</Text>
@@ -138,11 +150,18 @@ export default function DiscoverScreen() {
               </View>
               <FlatList
                 horizontal
-                data={characters}
+                data={characterList}
                 keyExtractor={(item) => item.id}
                 showsHorizontalScrollIndicator={false}
                 renderItem={({ item }) => {
-                  const charCover = item.image_url ?? item.stories?.[0]?.cover_image_url ?? null;
+                  const localChar = getAllCharacters().find(
+                    (c) => c.name.toLowerCase() === String(item.name ?? "").toLowerCase(),
+                  );
+                  const charCover =
+                    item.image_url ??
+                    (localChar ? characterImageUrl(localChar.id) : null) ??
+                    item.stories?.[0]?.cover_image_url ??
+                    null;
                   return (
                     <Pressable style={styles.charCard} onPress={() => router.push(`/character/${item.name}` as any)}>
                       <Image
@@ -151,6 +170,7 @@ export default function DiscoverScreen() {
                         contentFit="cover"
                         transition={300}
                       />
+                      
                       <Text style={styles.charName}>{item.name}</Text>
                       <Text style={styles.charSub} numberOfLines={1}>{item.subtitle ?? item.title ?? ""}</Text>
                     </Pressable>

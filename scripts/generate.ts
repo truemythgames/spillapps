@@ -2,9 +2,27 @@ import "dotenv/config";
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { execSync } from "node:child_process";
 import OpenAI from "openai";
 import Replicate from "replicate";
 import { contentAppDir } from "./lib/content-dir.js";
+
+const R2_BUCKET = "spill-media";
+const R2_APP_PREFIX = "bible-tea";
+let UPLOAD_ENABLED = true;
+
+function uploadToR2(localPath: string, r2Key: string, contentType: string): void {
+  if (!UPLOAD_ENABLED) return;
+  try {
+    execSync(
+      `npx wrangler r2 object put "${R2_BUCKET}/${R2_APP_PREFIX}/${r2Key}" --file="${localPath}" --content-type="${contentType}" --remote`,
+      { stdio: ["ignore", "ignore", "pipe"] },
+    );
+    console.log(`  [r2] Uploaded ${r2Key}`);
+  } catch (err: any) {
+    console.warn(`  [r2] Upload FAILED for ${r2Key}: ${err?.message?.slice(0, 200) ?? err}`);
+  }
+}
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -359,6 +377,7 @@ async function processStory(story: Story, step?: string) {
         generatedAt: new Date().toISOString(),
         wordCount: transcript.split(/\s+/).length,
       };
+      uploadToR2(transcriptPath, `stories/${story.id}/transcript.md`, "text/markdown");
     }
   }
 
@@ -375,6 +394,7 @@ async function processStory(story: Story, step?: string) {
         generatedAt: new Date().toISOString(),
         sizeKB: Math.round(imageBuffer.length / 1024),
       };
+      uploadToR2(imagePath, `stories/${story.id}/cover.webp`, "image/webp");
     }
   }
 
@@ -400,6 +420,7 @@ async function processStory(story: Story, step?: string) {
             generatedAt: new Date().toISOString(),
             sizeKB: Math.round(buffer.length / 1024),
           };
+          uploadToR2(narrationPath, `stories/${story.id}/narration-${key}.mp3`, "audio/mpeg");
         }
       }
     }
@@ -411,6 +432,7 @@ async function processStory(story: Story, step?: string) {
 
 async function main() {
   const flags = parseArgs();
+  if (flags["no-upload"]) UPLOAD_ENABLED = false;
   const catalog: Story[] = JSON.parse(readFileSync(CATALOG_PATH, "utf8"));
 
   let stories: Story[];

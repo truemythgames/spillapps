@@ -1,7 +1,7 @@
 import { Tabs, useRouter } from "expo-router";
 import { View, StyleSheet, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { colors, fonts, fontSize } from "@/lib/theme";
+import { colors, fonts, fontSize, TAB_BAR_HEIGHT } from "@/lib/theme";
 import { useAppStore } from "@/stores/app";
 
 const TAB_ITEMS = [
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderTopColor: colors.surfaceBorder,
     borderTopWidth: 1,
-    height: 85,
+    height: TAB_BAR_HEIGHT,
     paddingTop: 8,
     paddingBottom: 28,
   },

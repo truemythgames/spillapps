@@ -6,7 +6,36 @@ import { useAppStore } from "./app";
 let Audio: any = null;
 try { Audio = require("expo-av").Audio; } catch {}
 
+let NowPlaying: any = null;
+try {
+  NowPlaying = require("@/modules/now-playing");
+  const { NativeModules } = require("react-native");
+  console.log("[NP] Bridge:", NativeModules.NowPlayingBridge ? "OK" : "NULL");
+} catch (e: any) {
+  console.log("[NP] require failed:", e?.message);
+}
+
 let sound: any = null;
+let lastSavedPosition = 0;
+let nowPlayingThrottle = 0;
+const SAVE_INTERVAL_SEC = 5;
+
+function syncNowPlaying(state: { currentStory: any; currentSpeaker: any; position: number; duration: number; isPlaying: boolean; playbackSpeed: number }) {
+  if (!NowPlaying || !state.currentStory) return;
+  const now = Date.now();
+  if (now - nowPlayingThrottle < 1000) return;
+  nowPlayingThrottle = now;
+  const info = {
+    title: state.currentStory.title ?? "Bible Tea",
+    artist: state.currentSpeaker?.name ?? "Bible Tea",
+    duration: state.duration,
+    position: state.position,
+    rate: state.isPlaying ? state.playbackSpeed : 0,
+    artworkUrl: state.currentStory.cover_image_url ?? undefined,
+  };
+  console.log("[NP] updateNowPlaying:", info.title, "rate:", info.rate);
+  NowPlaying.updateNowPlaying(info);
+}
 
 interface PlayerState {
   currentStory: any | null;
@@ -34,6 +63,8 @@ interface PlayerState {
   updatePosition: (position: number, duration: number) => void;
   setBuffering: (buffering: boolean) => void;
   setPlaying: (playing: boolean) => void;
+  hideMini: boolean;
+  setHideMini: (hide: boolean) => void;
   syncProgress: () => Promise<void>;
 }
 
@@ -50,26 +81,52 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
   queueIndex: 0,
 
   play: async (story, speaker, audioUrl) => {
+    console.log("[NP] play() called:", story?.title, "audio:", !!Audio);
     if (!Audio) return;
     try {
-      if (sound) {
-        await sound.unloadAsync();
-        sound = null;
+      const prev = get();
+      if (prev.currentStory && prev.position > 0) {
+        const wasCompleted = useAppStore.getState().completedStoryIds.includes(prev.currentStory.id);
+        const done = wasCompleted || (prev.duration > 0 && prev.position / prev.duration >= 0.97);
+        setLocalProgress(prev.currentStory.id, prev.position, done, prev.duration);
       }
-
-      await Audio.setAudioModeAsync({
-        playsInSilentModeIOS: true,
-        staysActiveInBackground: true,
-      });
 
       const savedProgress = getLocalProgress()[story.id];
       const startPos = savedProgress && !savedProgress.completed && savedProgress.position > 0
         ? savedProgress.position * 1000
         : 0;
 
+      set({
+        currentStory: story,
+        currentSpeaker: speaker,
+        audioUrl,
+        isPlaying: false,
+        isBuffering: true,
+        position: startPos / 1000,
+        duration: 0,
+      });
+
+      storage.set(
+        StorageKeys.LAST_PLAYED_STORY,
+        JSON.stringify({ storyId: story.id, speakerId: speaker.id })
+      );
+
+      if (sound) {
+        try { await sound.stopAsync(); } catch {}
+        try { await sound.unloadAsync(); } catch {}
+        sound = null;
+      }
+
+      await Audio.setAudioModeAsync({
+        playsInSilentModeIOS: true,
+        staysActiveInBackground: true,
+        interruptionModeIOS: 1,
+      });
+
+      lastSavedPosition = startPos / 1000;
       const { sound: newSound } = await Audio.Sound.createAsync(
         { uri: audioUrl },
-        { shouldPlay: true, rate: get().playbackSpeed, positionMillis: startPos },
+        { shouldPlay: true, rate: get().playbackSpeed, shouldCorrectPitch: true, pitchCorrectionQuality: Audio.PitchCorrectionQuality?.High, positionMillis: startPos },
         (status: any) => {
           if (!status.isLoaded) return;
           get().updatePosition(
@@ -87,30 +144,43 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
       );
 
       sound = newSound;
+      console.log("[NP] audio loaded, setting playing");
+      set({ isPlaying: true, isBuffering: false });
 
-      set({
-        currentStory: story,
-        currentSpeaker: speaker,
-        audioUrl,
-        isPlaying: true,
-      });
-
-      storage.set(
-        StorageKeys.LAST_PLAYED_STORY,
-        JSON.stringify({ storyId: story.id, speakerId: speaker.id })
-      );
+      nowPlayingThrottle = 0;
+      syncNowPlaying({ currentStory: story, currentSpeaker: speaker, position: startPos / 1000, duration: 0, isPlaying: true, playbackSpeed: get().playbackSpeed });
     } catch (err) {
-      console.warn("Audio playback error:", err);
+      console.warn("[NP] Audio playback error:", err);
+      if (!sound) {
+        set({ isBuffering: false, isPlaying: false });
+      }
     }
   },
 
   stop: async () => {
-    get().syncProgress();
+    const { currentStory: s, currentSpeaker: sp, position: pos, duration: dur } = get();
+    if (s && pos > 0) {
+      const wasCompleted = useAppStore.getState().completedStoryIds.includes(s.id);
+      const done = wasCompleted || (dur > 0 && pos / dur >= 0.97);
+      setLocalProgress(s.id, pos, done, dur);
+      useAppStore.getState().bumpProgress();
+      if (done) {
+        useAppStore.getState().markCompleted(s.id);
+        const localStreak = recordStreakCheckIn();
+        useAppStore.setState({
+          streak: { current_streak: localStreak.currentStreak, max_streak: localStreak.longestStreak, last_listen_date: localStreak.lastCheckIn },
+        });
+      }
+      if (sp) {
+        api.updateProgress(s.id, { speaker_id: sp.id, position_seconds: pos, completed: done }).catch(() => {});
+      }
+    }
     if (sound) {
-      await sound.stopAsync();
-      await sound.unloadAsync();
+      try { await sound.stopAsync(); } catch {}
+      try { await sound.unloadAsync(); } catch {}
       sound = null;
     }
+    if (NowPlaying) NowPlaying.clearNowPlaying();
     set({
       currentStory: null,
       currentSpeaker: null,
@@ -124,12 +194,16 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
   pause: async () => {
     if (sound) await sound.pauseAsync();
     set({ isPlaying: false });
+    nowPlayingThrottle = 0;
+    syncNowPlaying({ ...get(), isPlaying: false });
     get().syncProgress();
   },
 
   resume: async () => {
     if (sound) await sound.playAsync();
     set({ isPlaying: true });
+    nowPlayingThrottle = 0;
+    syncNowPlaying({ ...get(), isPlaying: true });
   },
 
   seekTo: async (position) => {
@@ -179,10 +253,21 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
 
   updatePosition: (position, duration) => {
     set({ position, duration });
+    const state = get();
+    if (state.currentStory && state.isPlaying && duration > 0 && position > 0) {
+      syncNowPlaying(state);
+      if (Math.abs(position - lastSavedPosition) >= SAVE_INTERVAL_SEC) {
+        lastSavedPosition = position;
+        const completed = position / duration >= 0.97;
+        setLocalProgress(state.currentStory.id, position, completed, duration);
+      }
+    }
   },
 
   setBuffering: (buffering) => set({ isBuffering: buffering }),
   setPlaying: (playing) => set({ isPlaying: playing }),
+  hideMini: false,
+  setHideMini: (hide) => set({ hideMini: hide }),
 
   syncProgress: async () => {
     const { currentStory, currentSpeaker, position, duration } = get();
@@ -229,6 +314,25 @@ export async function setupPlayer() {
     await Audio.setAudioModeAsync({
       playsInSilentModeIOS: true,
       staysActiveInBackground: true,
+      interruptionModeIOS: 1,
     });
   } catch {}
+
+  if (NowPlaying) {
+    console.log("[NP] setupPlayer: registering remote listeners");
+    try {
+      const pong = await NowPlaying.ping();
+      console.log("[NP] ping result:", pong);
+    } catch (e: any) {
+      console.log("[NP] ping FAILED:", e?.message);
+    }
+    NowPlaying.onRemotePlay(() => { console.log("[NP] remote: play"); usePlayerStore.getState().resume(); });
+    NowPlaying.onRemotePause(() => { console.log("[NP] remote: pause"); usePlayerStore.getState().pause(); });
+    NowPlaying.onRemoteSkipForward(() => { console.log("[NP] remote: fwd"); usePlayerStore.getState().skipForward(15); });
+    NowPlaying.onRemoteSkipBackward(() => { console.log("[NP] remote: back"); usePlayerStore.getState().skipBackward(15); });
+    NowPlaying.onRemoteSeek((e: { position: number }) => { console.log("[NP] remote: seek", e.position); usePlayerStore.getState().seekTo(e.position); });
+    console.log("[NP] setupPlayer: done");
+  } else {
+    console.log("[NP] setupPlayer: NowPlaying is NULL, skipping");
+  }
 }

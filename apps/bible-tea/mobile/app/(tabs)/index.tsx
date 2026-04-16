@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -7,8 +7,10 @@ import {
   Pressable,
   FlatList,
   Animated,
+  ActivityIndicator,
 } from "react-native";
 import { Image } from "expo-image";
+import { useNetInfo } from "@react-native-community/netinfo";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAppStore } from "@/stores/app";
 import { useGate } from "@/lib/useGate";
@@ -29,7 +31,7 @@ function SectionHeader({ title }: { title: string }) {
 function StoryCard({ story, onPress }: { story: any; onPress: () => void }) {
   return (
     <Pressable style={styles.storyCard} onPress={onPress}>
-      <View style={styles.cardImageWrap}>
+      <View style={[styles.cardImageWrap, { backgroundColor: colors.surfaceLight, borderRadius: radius.md }]}>
         {story.cover_image_url ? (
           <Image
             source={{ uri: story.cover_image_url }}
@@ -37,11 +39,7 @@ function StoryCard({ story, onPress }: { story: any; onPress: () => void }) {
             contentFit="cover"
             transition={300}
           />
-        ) : (
-          <View
-            style={[styles.cardImage, { backgroundColor: colors.surfaceLight }]}
-          />
-        )}
+        ) : null}
       </View>
       <Text style={styles.cardTitle} numberOfLines={2}>
         {story.title}
@@ -63,6 +61,42 @@ function SkeletonCard() {
   );
 }
 
+function OfflineScreen({ paddingTop, onRetry }: { paddingTop: number; onRetry: () => void }) {
+  const [retrying, setRetrying] = useState(false);
+
+  const handleRetry = useCallback(async () => {
+    setRetrying(true);
+    try {
+      await onRetry();
+    } finally {
+      setRetrying(false);
+    }
+  }, [onRetry]);
+
+  return (
+    <View style={[styles.container, { paddingTop, justifyContent: "center", alignItems: "center" }]}>
+      <Text style={{ fontSize: 48, marginBottom: spacing.md }}>{'📡'}</Text>
+      <Text style={[styles.headerTitle, { textAlign: "center", marginBottom: spacing.sm }]}>
+        No connection
+      </Text>
+      <Text style={{ fontFamily: fonts.body, fontSize: fontSize.md, color: colors.textSecondary, textAlign: "center", paddingHorizontal: spacing.xl, marginBottom: spacing.xl }}>
+        Check your internet and try again
+      </Text>
+      <Pressable
+        style={{ backgroundColor: colors.accent, paddingHorizontal: 32, paddingVertical: 14, borderRadius: radius.lg, opacity: retrying ? 0.7 : 1 }}
+        onPress={handleRetry}
+        disabled={retrying}
+      >
+        {retrying ? (
+          <ActivityIndicator color={colors.background} />
+        ) : (
+          <Text style={{ fontFamily: fonts.bodySemiBold, fontSize: fontSize.md, color: colors.background }}>Retry</Text>
+        )}
+      </Pressable>
+    </View>
+  );
+}
+
 function SkeletonHome({ paddingTop }: { paddingTop: number }) {
   return (
     <ScrollView
@@ -75,12 +109,10 @@ function SkeletonHome({ paddingTop }: { paddingTop: number }) {
         <Text style={styles.headerTeaIcon}>🍵</Text>
       </View>
 
-      {/* SOTD skeleton */}
       <View style={[styles.sotdCard, { backgroundColor: colors.surface }]}>
         <Skeleton width="100%" height={220} borderRadius={0} />
       </View>
 
-      {/* Section 1 skeleton */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <SkeletonText width={180} height={20} />
@@ -92,7 +124,6 @@ function SkeletonHome({ paddingTop }: { paddingTop: number }) {
         </ScrollView>
       </View>
 
-      {/* Section 2 skeleton */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <SkeletonText width={140} height={20} />
@@ -140,51 +171,57 @@ export default function HomeScreen() {
     }
   }, [hasData]);
 
+  const { isConnected } = useNetInfo();
+
   if (!hasData) {
+    if (isConnected === false || !isLoading) {
+      return <OfflineScreen paddingTop={insets.top} onRetry={loadInitialData} />;
+    }
     return <SkeletonHome paddingTop={insets.top} />;
   }
 
   return (
     <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={{
-          paddingBottom: 120,
-          paddingTop: insets.top,
-        }}
-        showsVerticalScrollIndicator={false}
-      >
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={{
+        paddingBottom: 120,
+        paddingTop: insets.top,
+      }}
+      showsVerticalScrollIndicator={false}
+    >
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Bible Tea</Text>
         <Text style={styles.headerTeaIcon}>🍵</Text>
       </View>
 
-        {/* Story of the Day */}
-        {storyOfTheDay && (
-          <Pressable
-            style={styles.sotdCard}
-            onPress={() => guardedPush(`/story/${storyOfTheDay.id}`)}
-          >
-            {storyOfTheDay.cover_image_url && (
-              <Image
-                source={{ uri: storyOfTheDay.cover_image_url }}
-                style={styles.sotdImage}
-                contentFit="cover"
-                transition={400}
-              />
-            )}
-            <View style={styles.sotdOverlay} />
-            <View style={styles.sotdContent}>
-              <Text style={styles.sotdLabel}>STORY OF THE DAY</Text>
-              <Text style={styles.sotdTitle}>{storyOfTheDay.title}</Text>
-              <Text style={styles.sotdRef}>{storyOfTheDay.bibleRef}</Text>
-            </View>
-          </Pressable>
-        )}
+      {/* Story of the Day */}
+      {storyOfTheDay && (
+        <Pressable
+          style={styles.sotdCard}
+          onPress={() => guardedPush(`/story/${storyOfTheDay.id}`)}
+        >
+          {storyOfTheDay.cover_image_url && (
+            <Image
+              source={{ uri: storyOfTheDay.cover_image_url }}
+              style={styles.sotdImage}
+              contentFit="cover"
+              transition={400}
+            />
+          )}
+          <View style={styles.sotdOverlay} />
+          <View style={styles.sotdContent}>
+            <Text style={styles.sotdLabel}>STORY OF THE DAY</Text>
+            <Text style={styles.sotdTitle}>{storyOfTheDay.title}</Text>
+            <Text style={styles.sotdRef}>{storyOfTheDay.bibleRef}</Text>
+          </View>
+        </Pressable>
+      )}
 
-        {/* Playlist sections */}
-        {sortedPlaylists.map((playlist) => (
+      {/* Playlist sections or skeleton placeholders */}
+      {sortedPlaylists.length > 0 ? (
+        sortedPlaylists.map((playlist) => (
           <View key={playlist.id} style={styles.section}>
             <SectionHeader title={playlist.name} />
             <FlatList
@@ -201,8 +238,24 @@ export default function HomeScreen() {
               )}
             />
           </View>
-        ))}
-      </ScrollView>
+        ))
+      ) : (
+        <>
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}><SkeletonText width={180} height={20} /></View>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.horizontalList}>
+              <SkeletonCard /><SkeletonCard /><SkeletonCard />
+            </ScrollView>
+          </View>
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}><SkeletonText width={140} height={20} /></View>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.horizontalList}>
+              <SkeletonCard /><SkeletonCard /><SkeletonCard />
+            </ScrollView>
+          </View>
+        </>
+      )}
+    </ScrollView>
     </Animated.View>
   );
 }
@@ -234,6 +287,7 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xl,
     overflow: "hidden",
     height: 220,
+    backgroundColor: colors.surfaceLight,
   },
   sotdImage: {
     ...StyleSheet.absoluteFillObject,
@@ -292,6 +346,9 @@ const styles = StyleSheet.create({
   },
   cardImageWrap: {
     position: "relative",
+    width: CARD_WIDTH,
+    height: CARD_IMAGE_HEIGHT,
+    overflow: "hidden",
   },
   cardImage: {
     width: CARD_WIDTH,

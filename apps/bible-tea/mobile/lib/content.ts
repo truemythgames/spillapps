@@ -31,11 +31,6 @@ export interface Speaker {
   audioUrl: string;
 }
 
-const SPEAKER_META: Record<string, string> = {
-  grace: "Grace",
-  maya: "Maya",
-  jordan: "Jordan",
-};
 
 export function getAllStories(): CatalogStory[] {
   return catalog as CatalogStory[];
@@ -81,10 +76,3 @@ export function characterImageUrl(charId: string): string {
   return `${CONTENT_SERVER}/characters/${charId}.webp`;
 }
 
-export function speakersForStory(storyId: string): Speaker[] {
-  return Object.entries(SPEAKER_META).map(([key, name]) => ({
-    key,
-    name,
-    audioUrl: storyContentUrl(storyId, `narration-${key}.mp3`),
-  }));
-}

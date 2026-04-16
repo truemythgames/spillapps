@@ -36,6 +36,14 @@ export default function RootLayout() {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const pathname = usePathname();
   const currentStory = usePlayerStore((s) => s.currentStory);
+  const hideMiniPlayer = usePlayerStore((s) => s.hideMini);
+  const setHideMini = usePlayerStore((s) => s.setHideMini);
+
+  useEffect(() => {
+    if (hideMiniPlayer && !pathname.startsWith("/story")) {
+      setHideMini(false);
+    }
+  }, [pathname]);
 
   const [fontsLoaded] = useFonts({
     Inter_400Regular,
@@ -48,11 +56,13 @@ export default function RootLayout() {
 
   useEffect(() => {
     async function init() {
-      await setupPlayer();
-      await hydrateAuth();
-      await initPurchases();
-      await initAnalytics();
-      await loadInitialData();
+      loadInitialData();
+      await Promise.all([
+        setupPlayer(),
+        hydrateAuth(),
+        initPurchases(),
+        initAnalytics(),
+      ]);
       setAppReady(true);
     }
     init();
@@ -158,7 +168,7 @@ export default function RootLayout() {
           options={{ animation: "slide_from_bottom" }}
         />
       </Stack>
-      {currentStory && !hideMini && <MiniPlayer />}
+      {currentStory && !hideMini && !hideMiniPlayer && <MiniPlayer />}
     </GestureHandlerRootView>
   );
 }

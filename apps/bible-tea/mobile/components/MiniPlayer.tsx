@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import { View, Text, StyleSheet, Pressable, ActivityIndicator } from "react-native";
 import { Image } from "expo-image";
 import { useRouter, usePathname } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -8,7 +8,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { usePlayerStore } from "@/stores/player";
-import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
+import { colors, fonts, fontSize, spacing, radius, TAB_BAR_HEIGHT } from "@/lib/theme";
 
 const TAB_ROUTES = ["/", "/explore", "/playlists", "/profile"];
 
@@ -16,14 +16,14 @@ export function MiniPlayer() {
   const router = useRouter();
   const pathname = usePathname();
   const insets = useSafeAreaInsets();
-  const { currentStory, isPlaying, position, duration, pause, resume } =
+  const { currentStory, isPlaying, isBuffering, position, duration, pause, resume } =
     usePlayerStore();
   const stop = usePlayerStore((s) => s.stop);
 
   if (!currentStory) return null;
 
   const isOnTabs = TAB_ROUTES.includes(pathname);
-  const bottomOffset = isOnTabs ? insets.bottom + 56 : insets.bottom + spacing.sm;
+  const bottomOffset = isOnTabs ? TAB_BAR_HEIGHT + 4 : insets.bottom + spacing.sm;
 
   const progress = duration > 0 ? position / duration : 0;
 
@@ -60,14 +60,18 @@ export function MiniPlayer() {
           style={styles.controlBtn}
           onPress={(e) => {
             e.stopPropagation();
-            isPlaying ? pause() : resume();
+            if (!isBuffering) isPlaying ? pause() : resume();
           }}
         >
-          <Ionicons
-            name={isPlaying ? "pause" : "play"}
-            size={18}
-            color={colors.text}
-          />
+          {isBuffering ? (
+            <ActivityIndicator size="small" color={colors.background} />
+          ) : (
+            <Ionicons
+              name={isPlaying ? "pause" : "play"}
+              size={18}
+              color={colors.background}
+            />
+          )}
         </Pressable>
 
         <Pressable
@@ -77,7 +81,7 @@ export function MiniPlayer() {
             stop?.();
           }}
         >
-          <Ionicons name="close" size={18} color={colors.textMuted} />
+          <Ionicons name="close" size={18} color="rgba(10,10,15,0.5)" />
         </Pressable>
       </View>
     </Pressable>
@@ -89,24 +93,23 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: spacing.sm,
     right: spacing.sm,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.accent,
     borderRadius: radius.md,
     overflow: "hidden",
-    borderWidth: 1,
-    borderColor: colors.surfaceBorder,
+    borderWidth: 0,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
+    shadowOpacity: 0.35,
+    shadowRadius: 10,
     elevation: 8,
   },
   progressBar: {
-    height: 2,
-    backgroundColor: colors.surfaceBorder,
+    height: 3,
+    backgroundColor: "rgba(0,0,0,0.2)",
   },
   progressFill: {
     height: "100%",
-    backgroundColor: colors.primary,
+    backgroundColor: "#FFFFFF",
   },
   content: {
     flexDirection: "row",
@@ -124,7 +127,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: fonts.bodySemiBold,
     fontSize: fontSize.sm,
-    color: colors.text,
+    color: colors.background,
   },
   controlBtn: {
     width: 36,

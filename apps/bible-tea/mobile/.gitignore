@@ -4,3 +4,9 @@
 
 expo-env.d.ts
 # @end expo-cli
+
+# Service account keys
+play-store-service-account.json
+
+# Release keystore
+android/app/release.keystore

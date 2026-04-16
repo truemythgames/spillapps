@@ -63,7 +63,7 @@ interface AppState {
   streak: StreakInfo;
   progressVersion: number;
 
-  loadInitialData: () => void;
+  loadInitialData: () => Promise<void>;
   loadRemoteData: () => Promise<void>;
   loadUserData: () => Promise<void>;
   toggleLike: (storyId: string) => Promise<void>;
@@ -129,7 +129,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   streak: { current_streak: 0, max_streak: 0, last_listen_date: null },
   progressVersion: 0,
 
-  loadInitialData: () => {
+  loadInitialData: async () => {
     const subscribed = storage.getBoolean(StorageKeys.IS_SUBSCRIBED) ?? false;
 
     let localLikes: string[] = [];
@@ -157,7 +157,8 @@ export const useAppStore = create<AppState>((set, get) => ({
       isLoading: true,
     });
 
-    loadCache().then((cached) => {
+    try {
+      const cached = await loadCache();
       if (cached && cached.stories?.length) {
         set({
           stories: cached.stories,
@@ -170,40 +171,35 @@ export const useAppStore = create<AppState>((set, get) => ({
           isLoading: false,
         });
       }
-      // Always refresh from API in background
-      get().loadRemoteData();
-    }).catch(() => {
-      get().loadRemoteData();
-    });
+    } catch {}
+
+    await get().loadRemoteData();
   },
 
   loadRemoteData: async () => {
     try {
-      const results = await Promise.allSettled([
-        api.getStories(),
-        api.getStoryOfTheDay(),
-        api.getPlaylists(),
-        api.getSeasons(),
-        api.getSpeakers(),
-        api.getCharacters(),
-        api.getRecentStories(),
-      ]);
+      const storiesP = api.getStories().then((res) => {
+        if (res.stories?.length) {
+          const mapped = res.stories.map(apiStoryToCover);
+          set({ stories: mapped, isLoading: false });
+          return mapped;
+        }
+        return null;
+      }).catch(() => null);
 
-      const updates: Partial<AppState> = {};
+      const sotdP = api.getStoryOfTheDay().then((res) => {
+        if (res.story) {
+          const mapped = apiStoryToCover(res.story);
+          set({ storyOfTheDay: mapped });
+          return mapped;
+        }
+        return null;
+      }).catch(() => null);
 
-      const [storiesRes, sotdRes, playlistsRes, seasonsRes, speakersRes, charsRes, recentRes] = results;
-
-      if (storiesRes.status === "fulfilled" && storiesRes.value.stories?.length) {
-        updates.stories = storiesRes.value.stories.map(apiStoryToCover);
-      }
-
-      if (sotdRes.status === "fulfilled" && sotdRes.value.story) {
-        updates.storyOfTheDay = apiStoryToCover(sotdRes.value.story);
-      }
-
-      if (playlistsRes.status === "fulfilled" && playlistsRes.value.playlists?.length) {
+      const playlistsP = api.getPlaylists().then(async (res) => {
+        if (!res.playlists?.length) return null;
         const plResults = await Promise.allSettled(
-          playlistsRes.value.playlists.map(async (pl: any) => {
+          res.playlists.map(async (pl: any) => {
             const detail = await api.getPlaylist(pl.id);
             return {
               id: pl.id,
@@ -218,32 +214,45 @@ export const useAppStore = create<AppState>((set, get) => ({
           .map((r) => r.value)
           .filter((p) => p.stories.length > 0);
         if (apiPlaylists.length) {
-          updates.playlists = apiPlaylists;
+          set({ playlists: apiPlaylists });
+          return apiPlaylists;
         }
-      }
+        return null;
+      }).catch(() => null);
 
-      if (seasonsRes.status === "fulfilled" && seasonsRes.value.seasons?.length) {
-        updates.seasons = seasonsRes.value.seasons;
-      }
+      const seasonsP = api.getSeasons().then((res) => {
+        if (res.seasons?.length) { set({ seasons: res.seasons }); return res.seasons; }
+        return null;
+      }).catch(() => null);
 
-      if (speakersRes.status === "fulfilled" && speakersRes.value.speakers?.length) {
-        updates.speakers = speakersRes.value.speakers;
-      }
+      const speakersP = api.getSpeakers().then((res) => {
+        if (res.speakers?.length) { set({ speakers: res.speakers }); return res.speakers; }
+        return null;
+      }).catch(() => null);
 
-      if (charsRes.status === "fulfilled" && charsRes.value.characters?.length) {
-        updates.characters = charsRes.value.characters;
-      }
+      const charsP = api.getCharacters().then((res) => {
+        if (res.characters?.length) { set({ characters: res.characters }); return res.characters; }
+        return null;
+      }).catch(() => null);
 
-      if (recentRes.status === "fulfilled" && recentRes.value.stories?.length) {
-        updates.recentStories = recentRes.value.stories.map(apiStoryToCover);
-      }
+      const recentP = api.getRecentStories().then((res) => {
+        if (res.stories?.length) {
+          const mapped = res.stories.map(apiStoryToCover);
+          set({ recentStories: mapped });
+          return mapped;
+        }
+        return null;
+      }).catch(() => null);
 
-      set({ ...updates, isLoading: false });
+      const [stories, sotd, playlists, seasons, speakers, chars, recent] =
+        await Promise.all([storiesP, sotdP, playlistsP, seasonsP, speakersP, charsP, recentP]);
+
+      set({ isLoading: false });
 
       if (DEMO_MODE) {
-        const allStories = updates.stories ?? get().stories;
+        const allStories = stories ?? get().stories;
         if (allStories.length > 0) {
-          const ids = allStories.map((s) => s.id);
+          const ids = allStories.map((s: StoryWithCover) => s.id);
           const completedIds = ids.slice(0, Math.min(18, ids.length));
           const likedIds = ids.slice(0, Math.min(12, ids.length));
           const inProgressIds = ids.slice(completedIds.length, completedIds.length + 4);
@@ -258,7 +267,7 @@ export const useAppStore = create<AppState>((set, get) => ({
             setLocalProgress(id, 300, true, 300);
           }
           const percentages = [0.65, 0.40, 0.80, 0.25];
-          inProgressIds.forEach((id, i) => {
+          inProgressIds.forEach((id: string, i: number) => {
             const dur = 300;
             const pos = Math.round(dur * percentages[i % percentages.length]);
             setLocalProgress(id, pos, false, dur);
@@ -275,13 +284,13 @@ export const useAppStore = create<AppState>((set, get) => ({
 
       const state = get();
       saveCache({
-        stories: updates.stories ?? state.stories,
-        storyOfTheDay: updates.storyOfTheDay ?? state.storyOfTheDay,
-        playlists: updates.playlists ?? state.playlists,
-        characters: updates.characters ?? state.characters,
-        recentStories: updates.recentStories ?? state.recentStories,
-        seasons: updates.seasons ?? state.seasons,
-        speakers: updates.speakers ?? state.speakers,
+        stories: stories ?? state.stories,
+        storyOfTheDay: sotd ?? state.storyOfTheDay,
+        playlists: playlists ?? state.playlists,
+        characters: chars ?? state.characters,
+        recentStories: recent ?? state.recentStories,
+        seasons: seasons ?? state.seasons,
+        speakers: speakers ?? state.speakers,
       });
     } catch {
       set({ isLoading: false });
