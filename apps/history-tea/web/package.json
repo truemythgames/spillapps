@@ -1,0 +1,20 @@
+{
+  "name": "@spillapps/history-tea-web",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "deploy": "astro build && wrangler pages deploy dist"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.2",
+    "astro": "^5.5.0",
+    "marked": "^18.0.0"
+  },
+  "devDependencies": {
+    "@astrojs/cloudflare": "^12.3.0",
+    "typescript": "^5.7.0",
+    "wrangler": "^4.5.0"
+  }
+}

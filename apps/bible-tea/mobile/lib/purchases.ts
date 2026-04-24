@@ -1,4 +1,6 @@
 import { Platform } from "react-native";
+import * as SecureStore from "expo-secure-store";
+import * as Crypto from "expo-crypto";
 import { trackSubscription, trackEvent } from "@/lib/analytics";
 
 let Purchases: any = null;
@@ -19,15 +21,50 @@ const REVENUECAT_ANDROID_KEY = "goog_OrYzAxZViXKjAqteWSEQolNVWNU";
 
 const ENTITLEMENT_ID = "premium";
 
+// Stable per-install identifier used as the RevenueCat appUserID.
+// Persisted in the OS keychain via expo-secure-store so it survives app
+// restarts and (on iOS) reinstalls. We prefix it so it's recognisable in
+// the RevenueCat dashboard versus auto-generated `$RCAnonymousID:` ids.
+const APP_USER_ID_KEY = "rc_app_user_id";
+const APP_USER_ID_PREFIX = "bt_";
+
 export const PRODUCT_IDS = {
   quarterlyOnboarding3DayTrial: "bibletea_quarterly_onboarding_3day_freetrial",
   quarterly30DayTrial: "bibletea_quarterly_30day_trial",
   quarterly3DayTrial: "bibletea_quarterly_3day_freetrial",
   weeklyOffer: "bibletea_weekly_offer",
   weeklyFreeTrial: "bibletea_weekly_freetrial",
+  yearlyOffer: "bibletea_yearly_offer",
 } as const;
 
 let initialized = false;
+let cachedAppUserId: string | null = null;
+
+async function getOrCreateAppUserId(): Promise<string> {
+  if (cachedAppUserId) return cachedAppUserId;
+  try {
+    const existing = await SecureStore.getItemAsync(APP_USER_ID_KEY);
+    if (existing) {
+      cachedAppUserId = existing;
+      return existing;
+    }
+  } catch (e) {
+    console.warn("[Purchases] Failed to read stored appUserID:", e);
+  }
+
+  const fresh = `${APP_USER_ID_PREFIX}${Crypto.randomUUID()}`;
+  try {
+    await SecureStore.setItemAsync(APP_USER_ID_KEY, fresh);
+  } catch (e) {
+    console.warn("[Purchases] Failed to persist appUserID:", e);
+  }
+  cachedAppUserId = fresh;
+  return fresh;
+}
+
+export async function getAppUserId(): Promise<string> {
+  return getOrCreateAppUserId();
+}
 
 export async function initPurchases(userId?: string): Promise<void> {
   if (initialized || !Purchases) return;
@@ -38,8 +75,19 @@ export async function initPurchases(userId?: string): Promise<void> {
     Purchases.setLogLevel(LOG_LEVEL.DEBUG);
   }
 
-  Purchases.configure({ apiKey, appUserID: userId ?? undefined });
+  // Configure anonymously first, then logIn with our stable id. This makes
+  // RevenueCat alias any pre-existing anonymous customer (e.g. an install
+  // that already purchased before this fix shipped) onto the stable id,
+  // preserving entitlements instead of orphaning them.
+  Purchases.configure({ apiKey });
   initialized = true;
+
+  try {
+    const stableId = userId?.trim() || (await getOrCreateAppUserId());
+    await Purchases.logIn(stableId);
+  } catch (e) {
+    console.warn("[Purchases] logIn with stable id failed:", e);
+  }
 }
 
 export async function getOfferings(): Promise<PurchasesOffering | null> {
@@ -91,24 +139,6 @@ export async function checkSubscription(): Promise<boolean | null> {
   } catch (e) {
     console.warn("[Purchases] Check failed:", e);
     return null;
-  }
-}
-
-export async function loginUser(appUserId: string): Promise<void> {
-  if (!Purchases) return;
-  try {
-    await Purchases.logIn(appUserId);
-  } catch (e) {
-    console.warn("[Purchases] Login failed:", e);
-  }
-}
-
-export async function logoutUser(): Promise<void> {
-  if (!Purchases) return;
-  try {
-    await Purchases.logOut();
-  } catch (e) {
-    console.warn("[Purchases] Logout failed:", e);
   }
 }
 

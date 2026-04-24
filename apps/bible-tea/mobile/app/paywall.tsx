@@ -20,6 +20,10 @@ const { height: SCREEN_H } = Dimensions.get("window");
 
 type Plan = "weekly" | "quarterly";
 
+// Per-cold-start flag: the special-offer screen shows at most once per app
+// launch when dismissing the *normal* sales page (not the onboarding paywall).
+let SPECIAL_OFFER_SHOWN_THIS_SESSION = false;
+
 export default function PaywallScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -82,9 +86,21 @@ export default function PaywallScreen() {
     if (busy) return;
     if (step === 1 && !returning) {
       showOffer();
-    } else {
-      goBack();
+      return;
     }
+    // Normal sales page (post-onboarding): show the special offer once per
+    // session when dismissing. Onboarding entry uses router.replace() so
+    // canGoBack() === false there, which we use to skip this branch.
+    if (
+      !SPECIAL_OFFER_SHOWN_THIS_SESSION &&
+      router.canGoBack() &&
+      step === 1
+    ) {
+      SPECIAL_OFFER_SHOWN_THIS_SESSION = true;
+      router.replace("/special-offer" as any);
+      return;
+    }
+    goBack();
   }
 
   function findPackage(identifier: string): PurchasesPackage | undefined {

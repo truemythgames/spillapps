@@ -6,14 +6,23 @@ Platform (shared infrastructure)
   apps/api     — spill-api Worker (all Tea products)
   apps/cms     — Spill CMS (set VITE_APP_ID for which product you edit)
 
-Per Tea product (clone for a new app, e.g. history-tea)
--------------------------------------------------------
-  apps/bible-tea/mobile   — Expo (@spillapps/bible-tea-mobile)
-  apps/bible-tea/web      — Marketing (@spillapps/bible-tea-web)
+Per Tea product
+---------------
+  apps/bible-tea/mobile     — Expo (@spillapps/bible-tea-mobile)
+  apps/bible-tea/web        — Marketing (@spillapps/bible-tea-web)
+  apps/bible-tea/content    — Authoring (catalogs, characters/, stories/)
 
-New product: copy `apps/bible-tea` → `apps/history-tea`, rename packages to
-`@spillapps/history-tea-*`, add workspaces in root `package.json`, new bundle IDs,
-same spill-api with `app_id` in the client.
+  apps/history-tea/mobile   — Expo (@spillapps/history-tea-mobile)
+  apps/history-tea/web      — Marketing (@spillapps/history-tea-web)
+  apps/history-tea/content  — Authoring (catalogs, characters/, stories/)
 
-Local: `npm run dev:mobile` or `cd apps/bible-tea/mobile && npx expo …`
-EAS builds run from `apps/bible-tea/mobile`.
+New product: copy `apps/bible-tea` → `apps/<new-tea>`, rename packages to
+`@spillapps/<new-tea>-*`, add to root `package.json` workspaces, new bundle IDs,
+same spill-api with `app_id` in the client. Strip Firebase/FB plugins from
+app.json + delete native ios/android dirs; user runs `expo prebuild` to
+regenerate native projects from app.json. Custom native code lives under
+`mobile/plugins/` (config plugins) so it survives prebuild.
+
+Local: `npm run dev:mobile` (bible) or `npm run dev:mobile:history` (history)
+Generation: `npm run generate` (bible) or `npm run generate:history` (history)
+EAS builds run from `apps/<product>/mobile`.

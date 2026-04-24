@@ -8,7 +8,7 @@ import Replicate from "replicate";
 import { contentAppDir } from "./lib/content-dir.js";
 
 const R2_BUCKET = "spill-media";
-const R2_APP_PREFIX = "bible-tea";
+const R2_APP_PREFIX = process.env.R2_APP_PREFIX?.trim() || "bible-tea";
 let UPLOAD_ENABLED = true;
 
 function uploadToR2(localPath: string, r2Key: string, contentType: string): void {
@@ -127,6 +127,61 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const replicate = new Replicate({ auth: process.env.REPLICATE_API_TOKEN });
 
 // ---------------------------------------------------------------------------
+// Prompt kits — keyed by CONTENT_APP_ID so each Tea product can have its own
+// storytelling voice without forking generate.ts.
+// ---------------------------------------------------------------------------
+
+const APP_ID = (process.env.CONTENT_APP_ID?.trim() || "bible-tea").toLowerCase();
+
+interface PromptKit {
+  appLabel: string;        // human label for the app (e.g. "Bible Tea")
+  domainLabel: string;     // singular domain noun ("Bible story", "history story")
+  refLabel: string;        // label for the bibleRef field ("Bible Reference", "Date / Period")
+  audienceContext: string; // sentence describing audience priors
+  accuracyRule: string;    // bullet about source-material accuracy
+  quoteRule: string;       // bullet describing what blockquotes contain
+  quoteExample: string;    // an in-system example of a good blockquote
+  subtitleRule: string;    // rule describing the subtitle line under the title
+  imageContext: string;    // domain hint for the image-prompt model
+}
+
+const PROMPT_KITS: Record<string, PromptKit> = {
+  "bible-tea": {
+    appLabel: "Bible Tea",
+    domainLabel: "Bible story",
+    refLabel: "Bible Reference",
+    audienceContext: "someone with zero Bible knowledge",
+    accuracyRule:
+      "Accurate to Scripture (cite the actual biblical text and events faithfully)",
+    quoteRule:
+      "Use markdown blockquotes (> ) for all direct speech and Scripture quotes. These render as styled quote cards in the app.",
+    quoteExample: `> *"Is it because there's no God in Israel that you are going off to consult Baal-Zebub, the god of Ekron?*
+>
+> *You won't leave the bed you're lying on. You'll certainly die."*`,
+    subtitleRule: "Add a subtitle line in italics with the Bible reference: *2 Kings 1*",
+    imageContext: "Bible story",
+  },
+  "history-tea": {
+    appLabel: "History Tea",
+    domainLabel: "history story",
+    refLabel: "Date / Period",
+    audienceContext: "someone with zero history background",
+    accuracyRule:
+      "Historically accurate — names, dates, places, and quotes must match the historical record",
+    quoteRule:
+      "Use markdown blockquotes (> ) for direct speech, famous lines, primary-source quotes, or vivid attributed sayings. These render as styled quote cards in the app.",
+    quoteExample: `> *"I came, I saw, I conquered."*
+>
+> *— Julius Caesar, on his lightning victory at Zela, 47 BCE*`,
+    subtitleRule:
+      "Add a subtitle line in italics with the date or period: *44 BCE — Rome* or *June 6, 1944 — Normandy*",
+    imageContext: "history story",
+  },
+};
+
+const KIT: PromptKit = PROMPT_KITS[APP_ID] ?? PROMPT_KITS["bible-tea"];
+
+// ---------------------------------------------------------------------------
 // CLI parsing
 // ---------------------------------------------------------------------------
 
@@ -154,9 +209,9 @@ function parseArgs() {
 // ---------------------------------------------------------------------------
 
 async function generateTranscript(story: Story): Promise<string> {
-  const systemPrompt = `You are a world-class Bible storyteller for the app "Bible Tea." Your audience is Gen-Z and young millennials. Your job is to write narration scripts that are:
+  const systemPrompt = `You are a world-class storyteller for the app "${KIT.appLabel}." Your audience is Gen-Z and young millennials. Your job is to write narration scripts that are:
 
-- Accurate to Scripture (cite the actual biblical text and events faithfully)
+- ${KIT.accuracyRule}
 - Conversational and engaging — like a best friend telling you the story over coffee
 - Use modern language, casual tone, occasional humor, but NEVER disrespectful to the source material
 - Include vivid scene-setting and emotional beats
@@ -165,17 +220,15 @@ async function generateTranscript(story: Story): Promise<string> {
 The script MUST have three clearly separated sections:
 
 ## The Setup
-A BRIEF historical/background setup — 2-3 SHORT paragraphs, each 1-2 sentences max (same punchy style as The Story). Just enough context so someone with zero Bible knowledge can follow. Who are we dealing with, what's the situation. Keep it tight — this is a quick "previously on..." not an essay.
+A BRIEF historical/background setup — 2-3 SHORT paragraphs, each 1-2 sentences max (same punchy style as The Story). Just enough context so ${KIT.audienceContext} can follow. Who are we dealing with, what's the situation. Keep it tight — this is a quick "previously on..." not an essay.
 
 ## The Story
 The main narrative — this is 70-80% of the entire script. Rules:
 - Keep narration paragraphs SHORT — 1-2 sentences max. Punchy, fast-paced.
-- Use markdown blockquotes (> ) for all direct speech and Scripture quotes. These render as styled quote cards in the app.
-- CRITICAL: Quotes must be FULL, DRAMATIC, MULTI-SENTENCE Scripture passages — not tiny one-liners. Pull actual dialogue from the biblical text and render it in full. Include the emotional weight. Example of a GOOD quote:
+- ${KIT.quoteRule}
+- CRITICAL: Quotes must be FULL, DRAMATIC, MULTI-SENTENCE passages — not tiny one-liners. Render them with their full emotional weight. Example of a GOOD quote:
 
-> *"Is it because there's no God in Israel that you are going off to consult Baal-Zebub, the god of Ekron?*
->
-> *You won't leave the bed you're lying on. You'll certainly die."*
+${KIT.quoteExample}
 
 - Use italics (*text*) inside blockquotes for the spoken words.
 - A story should have 4-8 substantial blockquoted passages. They are the dramatic heartbeat of the script.
@@ -183,20 +236,18 @@ The main narrative — this is 70-80% of the entire script. Rules:
 - Build tension. Use cliffhanger-style pacing between paragraphs.
 
 ## The Takeaway
-3-5 bullet points (using - ). Each bullet is ONE short punchy sentence — a clear, practical takeaway a Gen-Z reader can instantly get. No fluff, no elaboration, no mini-paragraphs. Think tweet-length per bullet. Example:
-- Your words have power — God literally spoke the world into existence.
-- Rest isn't lazy, it's sacred. Even God took a day off.
+3-5 bullet points (using - ). Each bullet is ONE short punchy sentence — a clear, practical takeaway a Gen-Z reader can instantly get. No fluff, no elaboration, no mini-paragraphs. Think tweet-length per bullet.
 
 Additional formatting rules:
 - Start with a level-1 heading: # Title
-- Add a subtitle line in italics with the Bible reference: *2 Kings 1*
+- ${KIT.subtitleRule}
 - Use ## for section headings (The Setup, The Story, The Takeaway)
 - Do NOT use bullet points or numbered lists inside The Setup or The Story — only The Takeaway uses bullets`;
 
-  const userPrompt = `Write a narration script for this Bible story:
+  const userPrompt = `Write a narration script for this ${KIT.domainLabel}:
 
 Title: ${story.title}
-Bible Reference: ${story.bibleRef}
+${KIT.refLabel}: ${story.bibleRef}
 Brief Description: ${story.description}
 Section: ${story.section}
 
@@ -246,19 +297,19 @@ async function generateCoverImage(story: Story): Promise<Buffer> {
     messages: [
       {
         role: "system",
-        content: `You write image prompts for a Bible story app. Output ONLY the prompt, nothing else.
+        content: `You write image prompts for a ${KIT.imageContext} app. Output ONLY the prompt, nothing else.
 
 Rules:
 - Style: classical oil painting, rich warm tones, dramatic lighting, Renaissance master quality, painterly brushstrokes
 - Focus on the single most VISUALLY ICONIC moment of the story
 - Describe the scene in vivid detail: environment, lighting, colors, atmosphere, scale
-- Only include human figures if they are absolutely central to the iconic moment (e.g. David vs Goliath needs David). For cosmic/nature events like Creation, the Flood, the Burning Bush — NO people, focus on the spectacle
+- Only include human figures if they are central to the iconic moment. For cosmic/nature events or wide-shot disasters (eruptions, floods, battles seen from afar) — favor the spectacle over close-up portraits
 - NEVER include text, letters, words, borders, or watermarks
 - Keep it under 80 words`,
       },
       {
         role: "user",
-        content: `Bible story: "${story.title}" (${story.bibleRef})\nDescription: ${story.description}\n\nWrite the image prompt:`,
+        content: `${KIT.domainLabel.replace(/^./, (c) => c.toUpperCase())}: "${story.title}" (${story.bibleRef})\nDescription: ${story.description}\n\nWrite the image prompt:`,
       },
     ],
     temperature: 0.7,

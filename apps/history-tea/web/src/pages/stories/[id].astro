@@ -1,0 +1,840 @@
+---
+import { marked } from "marked";
+import Base from "../../layouts/Base.astro";
+import {
+  getCatalog,
+  getPlaylists,
+  buildStoryPlaylistMap,
+  getSeasons,
+  getCharacters,
+  getTranscript,
+  hasCover,
+  coverUrl,
+  APP_STORE_URL,
+  type CatalogStory,
+  type Season,
+  type Character,
+} from "../../lib/stories";
+
+export async function getStaticPaths() {
+  const catalog = getCatalog();
+  const [playlists, seasons, characters] = await Promise.all([
+    getPlaylists(catalog),
+    getSeasons(),
+    getCharacters(),
+  ]);
+  const playlistMap = buildStoryPlaylistMap(playlists);
+
+  const playlistStoriesMap = new Map<string, CatalogStory[]>();
+  for (const pl of playlists) {
+    for (const s of pl.stories) {
+      if (!playlistStoriesMap.has(s.id)) {
+        playlistStoriesMap.set(s.id, pl.stories);
+      }
+    }
+  }
+
+  // Map story slug → season
+  const storySeasonMap = new Map<string, { slug: string; name: string }>();
+  for (const season of seasons) {
+    for (const s of season.stories) {
+      storySeasonMap.set(s.slug, { slug: season.slug, name: season.name });
+    }
+  }
+
+  // Map story slug → characters
+  const storyCharMap = new Map<string, { id: string; name: string; image_url: string | null }[]>();
+  for (const ch of characters) {
+    for (const s of ch.stories) {
+      const arr = storyCharMap.get(s.slug) || [];
+      arr.push({ id: ch.id, name: ch.name, image_url: ch.image_url });
+      storyCharMap.set(s.slug, arr);
+    }
+  }
+
+  return catalog.map((story) => ({
+    params: { id: story.id },
+    props: {
+      story,
+      catalog,
+      storyPlaylist: playlistMap.get(story.id) || null,
+      playlistSiblings: playlistStoriesMap.get(story.id) || [],
+      storySeason: storySeasonMap.get(story.id) || null,
+      storyCharacters: storyCharMap.get(story.id) || [],
+    },
+  }));
+}
+
+interface Props {
+  story: CatalogStory;
+  catalog: CatalogStory[];
+  storyPlaylist: { id: string; name: string } | null;
+  playlistSiblings: CatalogStory[];
+  storySeason: { slug: string; name: string } | null;
+  storyCharacters: { id: string; name: string; image_url: string | null }[];
+}
+
+const { story, catalog, storyPlaylist, playlistSiblings, storySeason, storyCharacters } = Astro.props;
+
+const transcript = getTranscript(story.id);
+const hasImage = hasCover(story.id);
+const cover = coverUrl(story.id);
+
+// Extract just "The Setup" section for the teaser
+let setupHtml = "";
+if (transcript) {
+  const setupMatch = transcript.match(
+    /## The Setup\s*\n([\s\S]*?)(?=\n## (?:The Story|The Takeaway)|$)/
+  );
+  if (setupMatch) {
+    setupHtml = await marked.parse(setupMatch[1].trim());
+  }
+}
+
+// Extract takeaway bullets for SEO (short, keyword-rich)
+let takeawayItems: string[] = [];
+if (transcript) {
+  const takeawayMatch = transcript.match(/## The Takeaway\s*\n([\s\S]*?)$/);
+  if (takeawayMatch) {
+    takeawayItems = takeawayMatch[1]
+      .split("\n")
+      .filter((l) => l.trim().startsWith("-"))
+      .map((l) => l.replace(/^-\s*/, "").trim())
+      .slice(0, 5);
+  }
+}
+
+// Word count and reading/listening time
+let storyWordCount = 0;
+let readingMinutes = 0;
+let listeningMinutes = 0;
+if (transcript) {
+  storyWordCount = transcript.split(/\s+/).length;
+  readingMinutes = Math.max(1, Math.round(storyWordCount / 238));
+  listeningMinutes = Math.max(1, Math.round(storyWordCount / 150));
+}
+
+// Related stories: same playlist first, fall back to same section
+const playlistRelated = playlistSiblings.filter((s) => s.id !== story.id);
+const related = playlistRelated.length > 0
+  ? playlistRelated.slice(0, 8)
+  : catalog.filter((s) => s.section === story.section && s.id !== story.id).slice(0, 8);
+
+// Prev / next
+const idx = catalog.findIndex((s) => s.id === story.id);
+const prev = idx > 0 ? catalog[idx - 1] : null;
+const next = idx < catalog.length - 1 ? catalog[idx + 1] : null;
+
+const pageTitle = `${story.title} — ${story.bibleRef} | History Tea`;
+const pageDesc = `${story.description} Listen to ${story.title} (${story.bibleRef}) as immersive audio on History Tea.`;
+const pageUrl = `https://historytea.app/stories/${story.id}`;
+
+// Generate contextual FAQs for "People Also Ask" rich results
+const faqs = [
+  {
+    q: `What is the story of ${story.title} in the Bible?`,
+    a: `${story.description} This story is found in ${story.bibleRef}. History Tea retells it as an immersive audio experience with modern narration so you can listen anywhere.`,
+  },
+  {
+    q: `What is ${story.bibleRef} about?`,
+    a: `${story.bibleRef} tells the story of ${story.title}. ${story.description} You can listen to the full retelling with immersive narration on the History Tea app.`,
+  },
+  {
+    q: `What is the lesson of ${story.title}?`,
+    a: takeawayItems.length > 0
+      ? `Key takeaways from ${story.title}: ${takeawayItems.slice(0, 3).join(". ")}. Listen to the full breakdown on History Tea.`
+      : `${story.title} (${story.bibleRef}) carries timeless lessons about faith, obedience, and God's character. Download History Tea to hear the full story and its takeaways.`,
+  },
+  {
+    q: `Can I listen to ${story.title} as audio?`,
+    a: `Yes! History Tea offers ${story.title} as an immersive audio story with professional narration. Download the free app on iOS to listen to this and ${catalog.length - 1}+ other Bible stories.`,
+  },
+];
+
+// Structured data: Article + FAQPage + BreadcrumbList + AudioObject
+const articleLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: story.title,
+  description: story.description,
+  image: hasImage ? cover : "https://historytea.app/icon.png",
+  datePublished: "2026-04-01",
+  dateModified: "2026-04-13",
+  wordCount: storyWordCount,
+  author: { "@type": "Organization", name: "History Tea", url: "https://historytea.app" },
+  publisher: {
+    "@type": "Organization",
+    name: "History Tea",
+    logo: { "@type": "ImageObject", url: "https://historytea.app/icon.png" },
+  },
+  mainEntityOfPage: { "@type": "WebPage", "@id": pageUrl },
+  about: { "@type": "Thing", name: story.bibleRef },
+  isPartOf: { "@type": "WebSite", name: "History Tea", url: "https://historytea.app" },
+  inLanguage: "en-US",
+};
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const breadcrumbItems = [
+  { "@type": "ListItem" as const, position: 1, name: "Home", item: "https://historytea.app" },
+  { "@type": "ListItem" as const, position: 2, name: "Bible Stories", item: "https://historytea.app/stories" },
+];
+if (storyPlaylist) {
+  breadcrumbItems.push({
+    "@type": "ListItem",
+    position: 3,
+    name: storyPlaylist.name,
+    item: `https://historytea.app/playlists/${storyPlaylist.id}`,
+  });
+  breadcrumbItems.push({ "@type": "ListItem", position: 4, name: story.title, item: pageUrl });
+} else {
+  breadcrumbItems.push({ "@type": "ListItem", position: 3, name: story.title, item: pageUrl });
+}
+
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: breadcrumbItems,
+};
+
+const audioLd = {
+  "@context": "https://schema.org",
+  "@type": "AudioObject",
+  name: `${story.title} — Bible Story Audio`,
+  description: `Listen to ${story.title} (${story.bibleRef}) as immersive audio narration on History Tea.`,
+  encodingFormat: "audio/mpeg",
+  isAccessibleForFree: true,
+  requiresSubscription: false,
+};
+
+const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
+---
+
+<Base
+  title={pageTitle}
+  description={pageDesc}
+  ogImage={hasImage ? cover : undefined}
+  canonicalPath={`/stories/${story.id}`}
+  jsonLd={jsonLdArray}
+>
+  <style>
+    .story-page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 7rem 2rem 0;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .breadcrumbs a:hover { color: var(--primary); }
+    .breadcrumbs .sep { opacity: 0.4; }
+
+    /* Hero card */
+    .story-hero-card {
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 24px;
+      padding: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .hero-cover {
+      width: 240px;
+      height: 240px;
+      border-radius: 18px;
+      object-fit: cover;
+      flex-shrink: 0;
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-cover-placeholder {
+      width: 240px;
+      height: 240px;
+      border-radius: 18px;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, var(--surface-light) 0%, var(--surface) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+    }
+
+    .hero-info { flex: 1; min-width: 0; }
+
+    .hero-section {
+      font-size: 0.75rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      text-decoration: none;
+      display: block;
+      transition: opacity 0.2s;
+    }
+
+    a.hero-section:hover { opacity: 0.7; }
+
+    .hero-info h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      line-height: 1.15;
+      margin-bottom: 0.6rem;
+    }
+
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.75rem;
+    }
+
+    .hero-ref {
+      display: inline-block;
+      background: rgba(200, 162, 255, 0.12);
+      color: var(--primary);
+      padding: 0.3rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .hero-time {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .hero-tags {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: opacity 0.2s;
+      background: rgba(255, 209, 102, 0.12);
+      color: var(--accent);
+    }
+
+    .hero-tag:hover { opacity: 0.7; }
+
+    .hero-tag-char {
+      background: rgba(107, 92, 231, 0.12);
+      color: #A78BFA;
+    }
+
+    .hero-desc {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .listen-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      color: #fff;
+      padding: 0.85rem 2rem;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 24px rgba(200, 162, 255, 0.25);
+    }
+
+    .listen-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(200, 162, 255, 0.4);
+    }
+
+    .listen-btn svg { width: 20px; height: 20px; }
+
+    /* Setup teaser */
+    .setup-teaser {
+      max-width: 700px;
+      margin: 0 auto 1.5rem;
+    }
+
+    .setup-teaser h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+
+    .setup-teaser p {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      line-height: 1.85;
+      margin-bottom: 0.75rem;
+    }
+
+    /* Locked content gate */
+    .content-gate {
+      max-width: 700px;
+      margin: 0 auto 3rem;
+      position: relative;
+    }
+
+    .gate-fade {
+      height: 80px;
+      background: linear-gradient(transparent, var(--bg));
+      position: relative;
+      z-index: 1;
+    }
+
+    .gate-card {
+      text-align: center;
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      position: relative;
+      z-index: 2;
+      margin-top: -20px;
+    }
+
+    .gate-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+
+    .gate-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .gate-card p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      max-width: 400px;
+      margin: 0 auto 1.5rem;
+      line-height: 1.6;
+    }
+
+    .gate-features {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.75rem;
+    }
+
+    .gate-feature {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .gate-feature .check {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    /* Takeaway pills */
+    .takeaways {
+      max-width: 700px;
+      margin: 0 auto 3rem;
+    }
+
+    .takeaways h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .takeaway-list {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .takeaway-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 12px;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .takeaway-bullet {
+      width: 8px;
+      height: 8px;
+      background: var(--primary);
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 0.4rem;
+    }
+
+    /* FAQ section */
+    .faq-section {
+      max-width: 700px;
+      margin: 0 auto 3rem;
+    }
+
+    .faq-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .faq-item {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 12px;
+      margin-bottom: 0.6rem;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .faq-item:hover { border-color: var(--primary); }
+
+    .faq-item[open] { border-color: rgba(200, 162, 255, 0.3); }
+
+    .faq-item summary {
+      padding: 1rem 1.25rem;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text);
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .faq-item summary::-webkit-details-marker { display: none; }
+
+    .faq-item summary::after {
+      content: '+';
+      font-size: 1.25rem;
+      color: var(--primary);
+      flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+
+    .faq-item[open] summary::after {
+      content: '−';
+    }
+
+    .faq-item p {
+      padding: 0 1.25rem 1rem;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    /* Related row */
+    .related {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 2rem 1rem;
+      border-top: 1px solid var(--surface-border);
+    }
+
+    .related h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .related-row {
+      display: flex;
+      gap: 1rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 1rem;
+      scrollbar-width: none;
+    }
+
+    .related-row::-webkit-scrollbar { display: none; }
+
+    .related-card {
+      flex-shrink: 0;
+      width: 150px;
+      scroll-snap-align: start;
+      text-decoration: none;
+      transition: transform 0.25s;
+    }
+
+    .related-card:hover { transform: translateY(-4px) scale(1.03); }
+
+    .related-cover {
+      width: 150px;
+      height: 150px;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 0.5rem;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .related-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .related-cover-ph {
+      width: 100%;
+      height: 100%;
+      background: var(--surface-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+    }
+
+    .rc-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.85rem;
+      color: var(--text);
+      line-height: 1.25;
+    }
+
+    .rc-ref {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 0.15rem;
+    }
+
+    /* Prev / Next */
+    .story-nav {
+      display: flex;
+      gap: 1rem;
+      max-width: 700px;
+      margin: 1rem auto 3rem;
+      padding: 0;
+    }
+
+    .story-nav a {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      padding: 1rem 1.25rem;
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 12px;
+      text-decoration: none;
+      transition: border-color 0.2s;
+    }
+
+    .story-nav a:hover { border-color: var(--primary); }
+
+    .story-nav .label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .story-nav .name {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    .story-nav .next-link { text-align: right; }
+
+    @media (max-width: 640px) {
+      .story-page { padding: 6rem 1.5rem 0; }
+      .story-hero-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.5rem;
+        gap: 1.5rem;
+      }
+      .hero-cover, .hero-cover-placeholder { width: 180px; height: 180px; }
+      .gate-features { flex-direction: column; align-items: center; gap: 0.6rem; }
+      .related { padding: 1.5rem 1.5rem 1rem; }
+      .related-card { width: 130px; }
+      .related-cover { width: 130px; height: 130px; }
+      .story-nav { flex-direction: column; }
+    }
+  </style>
+
+  <main>
+    <div class="story-page">
+      <div class="breadcrumbs">
+        <a href="/">Home</a>
+        <span class="sep">/</span>
+        <a href="/stories">Stories</a>
+        {storyPlaylist && (
+          <>
+            <span class="sep">/</span>
+            <a href={`/playlists/${storyPlaylist.id}`}>{storyPlaylist.name}</a>
+          </>
+        )}
+        <span class="sep">/</span>
+        <span>{story.title}</span>
+      </div>
+
+      <div class="story-hero-card">
+        {hasImage ? (
+          <img src={cover} alt={story.title} class="hero-cover" loading="eager" />
+        ) : (
+          <div class="hero-cover-placeholder">📖</div>
+        )}
+        <div class="hero-info">
+          {storyPlaylist ? (
+            <a href={`/playlists/${storyPlaylist.id}`} class="hero-section">{storyPlaylist.name}</a>
+          ) : (
+            <div class="hero-section">{story.section}</div>
+          )}
+          <h1>{story.title}</h1>
+          <div class="hero-meta">
+            <span class="hero-ref">{story.bibleRef}</span>
+            {readingMinutes > 0 && <span class="hero-time">{readingMinutes} min read · {listeningMinutes} min listen</span>}
+          </div>
+          <p class="hero-desc">{story.description}</p>
+          {(storySeason || storyCharacters.length > 0) && (
+            <div class="hero-tags">
+              {storySeason && (
+                <a href={`/books/${storySeason.slug}`} class="hero-tag">{storySeason.name}</a>
+              )}
+              {storyCharacters.map((ch) => (
+                <a href={`/characters/${ch.id}`} class="hero-tag hero-tag-char">{ch.name}</a>
+              ))}
+            </div>
+          )}
+          <a href={APP_STORE_URL} class="listen-btn">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            Listen Free on History Tea
+          </a>
+        </div>
+      </div>
+    </div>
+
+    {setupHtml && (
+      <div class="setup-teaser">
+        <h2>The Setup</h2>
+        <Fragment set:html={setupHtml} />
+      </div>
+    )}
+
+    <div class="content-gate">
+      {setupHtml && <div class="gate-fade" />}
+      <div class="gate-card">
+        <div class="gate-icon">🎧</div>
+        <h3>Hear the Full Story</h3>
+        <p>Listen to {story.title} with immersive narration, or read the full transcript in the app.</p>
+        <div class="gate-features">
+          <span class="gate-feature"><span class="check">✓</span> Full audio narration</span>
+          <span class="gate-feature"><span class="check">✓</span> Choose your narrator</span>
+          <span class="gate-feature"><span class="check">✓</span> Read the transcript</span>
+        </div>
+        <a href={APP_STORE_URL} class="listen-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          Download History Tea — It's Free
+        </a>
+      </div>
+    </div>
+
+    {takeawayItems.length > 0 && (
+      <div class="takeaways">
+        <h2>Key Takeaways</h2>
+        <ul class="takeaway-list">
+          {takeawayItems.map((item) => (
+            <li>
+              <span class="takeaway-bullet" />
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    <section class="faq-section">
+      <h2>Frequently Asked Questions</h2>
+      {faqs.map((f) => (
+        <details class="faq-item">
+          <summary>{f.q}</summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </section>
+
+    {(prev || next) && (
+      <div class="story-nav">
+        {prev ? (
+          <a href={`/stories/${prev.id}`}>
+            <span class="label">Previous</span>
+            <span class="name">{prev.title}</span>
+          </a>
+        ) : <div />}
+        {next ? (
+          <a href={`/stories/${next.id}`} class="next-link">
+            <span class="label">Next</span>
+            <span class="name">{next.title}</span>
+          </a>
+        ) : <div />}
+      </div>
+    )}
+
+    {related.length > 0 && (
+      <section class="related">
+        <h2>More from {storyPlaylist ? storyPlaylist.name : story.section}</h2>
+        <div class="related-row">
+          {related.map((r) => (
+            <a href={`/stories/${r.id}`} class="related-card">
+              <div class="related-cover">
+                {hasCover(r.id) ? (
+                  <img src={coverUrl(r.id)} alt={r.title} loading="lazy" />
+                ) : (
+                  <div class="related-cover-ph">📖</div>
+                )}
+              </div>
+              <div class="rc-title">{r.title}</div>
+              <div class="rc-ref">{r.bibleRef}</div>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+  </main>
+</Base>

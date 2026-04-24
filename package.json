@@ -6,6 +6,7 @@
     "apps/api",
     "apps/cms",
     "apps/bible-tea/*",
+    "apps/history-tea/*",
     "packages/*"
   ],
   "scripts": {
@@ -18,8 +19,15 @@
     "dev:mobile:ios": "npm run start:ios --workspace=@spillapps/bible-tea-mobile",
     "dev:mobile:native": "npm run ios --workspace=@spillapps/bible-tea-mobile",
     "dev:mobile:native:sim": "npm run ios:sim --workspace=@spillapps/bible-tea-mobile",
+    "dev:web:history": "npm run dev --workspace=@spillapps/history-tea-web",
+    "dev:mobile:history": "CONTENT_APP_ID=history-tea npx tsx scripts/content-server.ts & npm run start --workspace=@spillapps/history-tea-mobile",
+    "dev:mobile:history:clear": "npm run start:clear --workspace=@spillapps/history-tea-mobile",
+    "dev:mobile:history:ios": "npm run start:ios --workspace=@spillapps/history-tea-mobile",
+    "dev:mobile:history:native": "npm run ios --workspace=@spillapps/history-tea-mobile",
+    "dev:mobile:history:native:sim": "npm run ios:sim --workspace=@spillapps/history-tea-mobile",
     "deploy:api": "npm run deploy --workspace=@spillapps/api",
     "deploy:web": "npm run deploy --workspace=@spillapps/bible-tea-web",
+    "deploy:web:history": "npm run deploy --workspace=@spillapps/history-tea-web",
     "deploy:cms": "npm run deploy --workspace=@spillapps/cms",
     "db:generate": "npm run generate --workspace=@spillapps/db",
     "db:migrate": "npm run migrate --workspace=@spillapps/db",
@@ -27,7 +35,9 @@
     "generate": "npx tsx scripts/generate.ts",
     "generate:one": "npx tsx scripts/generate.ts --story",
     "generate:all": "npx tsx scripts/generate.ts --all --seed-only",
+    "generate:history": "CONTENT_APP_ID=history-tea R2_APP_PREFIX=history-tea npx tsx scripts/generate.ts",
     "sync:r2": "npx tsx scripts/sync-to-r2.ts",
+    "sync:r2:history": "CONTENT_APP_ID=history-tea R2_APP_PREFIX=history-tea npx tsx scripts/sync-to-r2.ts",
     "serve:content": "npx tsx scripts/content-server.ts"
   },
   "devDependencies": {

@@ -12,6 +12,7 @@ import {
 import { Image } from "expo-image";
 import { useNetInfo } from "@react-native-community/netinfo";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useRouter } from "expo-router";
 import { useAppStore } from "@/stores/app";
 import { useGate } from "@/lib/useGate";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
@@ -138,14 +139,34 @@ function SkeletonHome({ paddingTop }: { paddingTop: number }) {
   );
 }
 
+// Hidden gesture: 7 quick taps on the tea icon opens the reviewer unlock screen.
+const UNLOCK_TAP_COUNT = 7;
+const UNLOCK_TAP_WINDOW_MS = 3000;
+
 export default function HomeScreen() {
   const { guardedPush } = useGate();
   const insets = useSafeAreaInsets();
+  const router = useRouter();
   const { storyOfTheDay, playlists, stories, loadInitialData, isLoading } =
     useAppStore();
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const hasData = stories.length > 0;
+
+  const tapTimestamps = useRef<number[]>([]);
+  const handleTeaTap = useCallback(() => {
+    const now = Date.now();
+    const recent = tapTimestamps.current.filter(
+      (t) => now - t < UNLOCK_TAP_WINDOW_MS
+    );
+    recent.push(now);
+    tapTimestamps.current = recent;
+
+    if (recent.length >= UNLOCK_TAP_COUNT) {
+      tapTimestamps.current = [];
+      router.push("/unlock" as any);
+    }
+  }, [router]);
 
   const sortedPlaylists = useMemo(() => {
     const copy = [...playlists];
@@ -193,7 +214,9 @@ export default function HomeScreen() {
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Bible Tea</Text>
-        <Text style={styles.headerTeaIcon}>🍵</Text>
+        <Pressable onPress={handleTeaTap} hitSlop={10}>
+          <Text style={styles.headerTeaIcon}>🍵</Text>
+        </Pressable>
       </View>
 
       {/* Story of the Day */}

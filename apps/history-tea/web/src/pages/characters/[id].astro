@@ -1,0 +1,356 @@
+---
+import Base from "../../layouts/Base.astro";
+import {
+  getCharacters,
+  APP_STORE_URL,
+  type Character,
+} from "../../lib/stories";
+
+export async function getStaticPaths() {
+  const characters = await getCharacters();
+  return characters.map((ch) => ({
+    params: { id: ch.id },
+    props: { character: ch, allCharacters: characters },
+  }));
+}
+
+interface Props {
+  character: Character;
+  allCharacters: Character[];
+}
+
+const { character, allCharacters } = Astro.props;
+const stories = character.stories;
+
+const pageTitle = `${character.name} — Bible Character Stories | History Tea`;
+const pageDesc = `${character.description}. Listen to ${stories.length > 0 ? stories.length : "all"} ${character.name} stories as immersive audio on History Tea.`;
+const pageUrl = `https://historytea.app/characters/${character.id}`;
+const ogImage = character.image_url || "https://historytea.app/icon.png";
+
+const personLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: character.name,
+  description: character.description,
+  image: character.image_url,
+  url: pageUrl,
+};
+
+const collectionLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: `${character.name} — Bible Stories`,
+  description: pageDesc,
+  url: pageUrl,
+  about: personLd,
+  publisher: {
+    "@type": "Organization",
+    name: "History Tea",
+    logo: { "@type": "ImageObject", url: "https://historytea.app/icon.png" },
+  },
+};
+
+const itemListLd = stories.length > 0 ? {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: `${character.name} Stories`,
+  numberOfItems: stories.length,
+  itemListElement: stories.map((s, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: s.title,
+    url: `https://historytea.app/stories/${s.slug}`,
+    description: s.description,
+  })),
+} : null;
+
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://historytea.app" },
+    { "@type": "ListItem", position: 2, name: "Bible Stories", item: "https://historytea.app/stories" },
+    { "@type": "ListItem", position: 3, name: character.name, item: pageUrl },
+  ],
+};
+
+const faqs = [
+  {
+    q: `Who is ${character.name} in the Bible?`,
+    a: `${character.description}. ${character.name} is one of the most significant figures in the Bible${stories.length > 0 ? `. History Tea tells ${stories.length} stories featuring ${character.name}` : ""}. Download the app to listen to the full audio retellings.`,
+  },
+  {
+    q: `What Bible stories feature ${character.name}?`,
+    a: stories.length > 0
+      ? `${character.name} appears in ${stories.length} stories on History Tea: ${stories.map((s) => s.title).join(", ")}. All are available as free immersive audio.`
+      : `History Tea features ${character.name} across multiple stories. Download the free app to explore all of them with immersive audio narration.`,
+  },
+  {
+    q: `Can I listen to ${character.name}'s story for free?`,
+    a: `Yes! Every ${character.name} story on History Tea is completely free to listen to. Download the app on iOS and start listening today.`,
+  },
+];
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const jsonLdArray = [collectionLd, itemListLd, breadcrumbLd, faqLd].filter(Boolean);
+
+const otherCharacters = allCharacters.filter((c) => c.id !== character.id).slice(0, 10);
+---
+
+<Base
+  title={pageTitle}
+  description={pageDesc}
+  ogImage={ogImage}
+  canonicalPath={`/characters/${character.id}`}
+  jsonLd={jsonLdArray}
+>
+  <style>
+    .character-page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 7rem 2rem 0;
+    }
+
+    .breadcrumbs {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 0.8rem; color: var(--text-muted); margin-bottom: 2rem;
+    }
+    .breadcrumbs a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .breadcrumbs a:hover { color: var(--primary); }
+    .breadcrumbs .sep { opacity: 0.4; }
+
+    .character-hero {
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+      max-width: 800px;
+      margin: 0 auto 3rem;
+    }
+
+    .character-avatar {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+      border: 3px solid var(--surface-border);
+    }
+
+    .character-avatar-ph {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, var(--surface-light) 0%, var(--surface) 100%);
+      display: flex; align-items: center; justify-content: center; font-size: 4rem;
+      border: 3px solid var(--surface-border);
+    }
+
+    .character-info { flex: 1; min-width: 0; }
+
+    .character-label {
+      font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px;
+      font-weight: 600; color: var(--accent); margin-bottom: 0.4rem;
+    }
+
+    .character-info h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      line-height: 1.15; margin-bottom: 0.5rem;
+    }
+
+    .character-desc {
+      color: var(--text-secondary); font-size: 1.05rem; line-height: 1.7; margin-bottom: 0.5rem;
+    }
+
+    .character-meta { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+
+    .hero-cta {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      color: #fff; padding: 0.8rem 2rem; border-radius: 999px; text-decoration: none;
+      font-weight: 600; font-size: 1rem; transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 24px rgba(200, 162, 255, 0.2);
+    }
+    .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(200, 162, 255, 0.35); }
+    .hero-cta svg { width: 18px; height: 18px; }
+
+    .stories-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1.5rem; margin-bottom: 3rem;
+    }
+
+    .story-card { text-decoration: none; transition: transform 0.25s; }
+    .story-card:hover { transform: translateY(-6px) scale(1.02); }
+
+    .card-cover {
+      width: 100%; aspect-ratio: 1; border-radius: 14px; overflow: hidden;
+      position: relative; margin-bottom: 0.6rem; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+    .card-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .card-cover-placeholder {
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, var(--surface) 0%, var(--surface-light) 100%);
+      display: flex; align-items: center; justify-content: center; font-size: 2.5rem;
+    }
+    .card-title { font-family: 'Playfair Display', serif; font-size: 0.9rem; font-weight: 700; color: var(--text); line-height: 1.25; margin-top: 0.2rem; }
+    .card-desc { font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-top: 0.2rem; }
+
+    .no-stories { text-align: center; padding: 3rem 2rem; color: var(--text-secondary); }
+    .no-stories p { margin-bottom: 1.5rem; }
+
+    .faq-section { max-width: 700px; margin: 0 auto; padding: 3rem 2rem; border-top: 1px solid var(--surface-border); }
+    .faq-section h2 { font-family: 'Playfair Display', serif; font-size: 1.35rem; margin-bottom: 1rem; }
+    .faq-item { background: var(--surface); border: 1px solid var(--surface-border); border-radius: 12px; margin-bottom: 0.6rem; overflow: hidden; transition: border-color 0.2s; }
+    .faq-item:hover { border-color: var(--primary); }
+    .faq-item[open] { border-color: rgba(200, 162, 255, 0.3); }
+    .faq-item summary { padding: 1rem 1.25rem; cursor: pointer; font-weight: 600; font-size: 0.95rem; color: var(--text); list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after { content: '+'; font-size: 1.25rem; color: var(--primary); flex-shrink: 0; }
+    .faq-item[open] summary::after { content: '−'; }
+    .faq-item p { padding: 0 1.25rem 1rem; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+
+    .other-characters { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem; border-top: 1px solid var(--surface-border); }
+    .other-characters h2 { font-family: 'Playfair Display', serif; font-size: 1.35rem; margin-bottom: 1.25rem; }
+
+    .characters-row {
+      display: flex; gap: 1.25rem; overflow-x: auto; scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch; padding-bottom: 0.75rem; scrollbar-width: none;
+    }
+    .characters-row::-webkit-scrollbar { display: none; }
+
+    .char-card {
+      flex-shrink: 0; width: 140px; scroll-snap-align: start;
+      text-decoration: none; text-align: center; transition: transform 0.2s;
+    }
+    .char-card:hover { transform: translateY(-4px); }
+    .char-card-avatar {
+      width: 100px; height: 100px; border-radius: 50%; object-fit: cover;
+      margin: 0 auto 0.5rem; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      border: 2px solid var(--surface-border);
+    }
+    .char-card-ph {
+      width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 0.5rem;
+      background: var(--surface-light); display: flex; align-items: center;
+      justify-content: center; font-size: 2rem; border: 2px solid var(--surface-border);
+    }
+    .char-card-name { font-family: 'Playfair Display', serif; font-size: 0.85rem; color: var(--text); }
+    .char-card-desc { font-size: 0.7rem; color: var(--text-muted); }
+
+    .bottom-cta { text-align: center; padding: 4rem 2rem 3rem; }
+    .bottom-cta h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.5rem, 3vw, 2rem); margin-bottom: 0.75rem; }
+    .bottom-cta p { color: var(--text-secondary); margin-bottom: 1.5rem; max-width: 450px; margin-left: auto; margin-right: auto; }
+
+    @media (max-width: 640px) {
+      .character-page { padding: 6rem 1.5rem 0; }
+      .character-hero { flex-direction: column; text-align: center; gap: 1.5rem; }
+      .character-avatar, .character-avatar-ph { width: 160px; height: 160px; }
+      .stories-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; }
+      .other-characters { padding: 2rem 1.5rem; }
+    }
+  </style>
+
+  <main>
+    <div class="character-page">
+      <div class="breadcrumbs">
+        <a href="/">Home</a>
+        <span class="sep">/</span>
+        <a href="/stories">Stories</a>
+        <span class="sep">/</span>
+        <span>{character.name}</span>
+      </div>
+
+      <div class="character-hero">
+        {character.image_url ? (
+          <img src={character.image_url} alt={character.name} class="character-avatar" loading="eager" />
+        ) : (
+          <div class="character-avatar-ph">👤</div>
+        )}
+        <div class="character-info">
+          <div class="character-label">Bible Character</div>
+          <h1>{character.name}</h1>
+          <p class="character-desc">{character.description}</p>
+          {stories.length > 0 && <p class="character-meta">{stories.length} stories</p>}
+          <a href={APP_STORE_URL} class="hero-cta">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            Listen to {character.name}'s Story
+          </a>
+        </div>
+      </div>
+
+      {stories.length > 0 ? (
+        <div class="stories-grid">
+          {stories.map((s) => (
+            <a href={`/stories/${s.slug}`} class="story-card">
+              <div class="card-cover">
+                {s.cover_image_url ? (
+                  <img src={s.cover_image_url} alt={s.title} loading="lazy" />
+                ) : (
+                  <div class="card-cover-placeholder">📖</div>
+                )}
+              </div>
+              <div class="card-title">{s.title}</div>
+              <div class="card-desc">{s.description}</div>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <div class="no-stories">
+          <p>{character.name}'s stories are available as immersive audio in the History Tea app.</p>
+          <a href={APP_STORE_URL} class="hero-cta">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            Download History Tea
+          </a>
+        </div>
+      )}
+    </div>
+
+    <section class="faq-section">
+      <h2>Frequently Asked Questions</h2>
+      {faqs.map((f) => (
+        <details class="faq-item">
+          <summary>{f.q}</summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </section>
+
+    {otherCharacters.length > 0 && (
+      <section class="other-characters">
+        <h2>More Bible Characters</h2>
+        <div class="characters-row">
+          {otherCharacters.map((c) => (
+            <a href={`/characters/${c.id}`} class="char-card">
+              {c.image_url ? (
+                <img src={c.image_url} alt={c.name} class="char-card-avatar" loading="lazy" />
+              ) : (
+                <div class="char-card-ph">👤</div>
+              )}
+              <div class="char-card-name">{c.name}</div>
+              <div class="char-card-desc">{c.description}</div>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <section class="bottom-cta">
+      <h2>Explore Every Story</h2>
+      <p>Download History Tea and listen to {character.name}'s complete story with immersive audio narration.</p>
+      <a href={APP_STORE_URL} class="hero-cta">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        Download for iOS
+      </a>
+    </section>
+  </main>
+</Base>

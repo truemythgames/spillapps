@@ -20,7 +20,7 @@ const CONTENT_DIR = contentAppDir(ROOT);
 const STORIES_DIR = join(CONTENT_DIR, "stories");
 
 const R2_BUCKET = "spill-media";
-const R2_APP_PREFIX = "bible-tea";
+const R2_APP_PREFIX = process.env.R2_APP_PREFIX?.trim() || "bible-tea";
 const CDN_BASE = `https://media.spillapps.com/${R2_APP_PREFIX}`;
 
 function parseArgs() {
