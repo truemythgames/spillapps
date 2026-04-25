@@ -19,6 +19,7 @@
       "bundleIdentifier": "app.historytea",
       "buildNumber": "1",
       "usesAppleSignIn": true,
+      "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
         "UIBackgroundModes": ["audio"],
         "NSUserTrackingUsageDescription": "This identifier will be used to deliver personalized ads to you."
@@ -29,7 +30,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#06080F"
       },
-      "package": "app.historytea"
+      "package": "app.historytea",
+      "googleServicesFile": "./google-services.json"
     },
     "plugins": [
       "expo-dev-client",
@@ -45,6 +47,9 @@
           "imageWidth": 200
         }
       ],
+      "@react-native-firebase/app",
+      "@react-native-firebase/crashlytics",
+      "./plugins/firebase-modular-headers",
       "./plugins/hermes-dsym-plugin",
       "./plugins/now-playing-plugin"
     ],

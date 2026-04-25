@@ -24,19 +24,19 @@ interface Message {
 
 const TOPIC_CONFIG: Record<string, { title: string; placeholder: string; greeting: string }> = {
   verse: {
-    title: "Spill a Verse",
-    placeholder: "Tell me what's going on...",
-    greeting: "What's going on in your life right now? I'll find the perfect verse for you.",
+    title: "Find a Story",
+    placeholder: "Tell me what's on your mind...",
+    greeting: "What are you in the mood for? Tell me what you're going through or curious about, and I'll point you to a slice of history that fits.",
   },
   advice: {
-    title: "God's Take",
-    placeholder: "What's on your mind?",
-    greeting: "Spill the tea — what's the situation? I'll share what Scripture says about it.",
+    title: "Lessons from History",
+    placeholder: "What's the situation?",
+    greeting: "Spill the tea — what's going on? I'll show you how figures from history navigated something similar, and what we can learn from them.",
   },
   explain: {
     title: "Break It Down",
-    placeholder: "Which passage or topic?",
-    greeting: "Drop a passage, verse, or topic and I'll break it down so it actually makes sense.",
+    placeholder: "Which event, era, or person?",
+    greeting: "Drop an event, era, person, or even a confusing thing you read — I'll break it down so it actually makes sense.",
   },
   story: {
     title: "Story Chat",
@@ -44,9 +44,9 @@ const TOPIC_CONFIG: Record<string, { title: string; placeholder: string; greetin
     greeting: "",
   },
   free: {
-    title: "Open Chat",
+    title: "Ask a Historian",
     placeholder: "Ask me anything...",
-    greeting: "Hey! Ask me literally anything about the Bible — I'm here for all of it.",
+    greeting: "Hey! Ask me literally anything about world history — wars, empires, mysteries, weird people, lost civilizations. I'm here for all of it.",
   },
 };
 
@@ -62,11 +62,11 @@ export default function ChatConversation() {
   const config = TOPIC_CONFIG[topic ?? "free"] ?? TOPIC_CONFIG.free;
 
   const storyContext = topic === "story" && storyTitle
-    ? `I'm reading "${storyTitle}" (${storyRef || ""}). `
+    ? `I'm listening to "${storyTitle}" (${storyRef || ""}). `
     : "";
 
   const greeting = topic === "story" && storyTitle
-    ? `You're reading "${storyTitle}" (${storyRef}). Ask me anything — what it means, historical context, how it applies to your life, or anything else!`
+    ? `You're on "${storyTitle}" (${storyRef}). Ask me anything — what really happened, the context behind it, the people involved, or how it shaped what came next.`
     : config.greeting;
 
   const [conversationId, setConversationId] = useState<string | null>(null);

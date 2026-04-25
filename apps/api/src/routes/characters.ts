@@ -25,10 +25,10 @@ charactersRoutes.get("/", async (c) => {
         .all();
       return {
         ...ch,
-        image_url: mediaUrl(c.env, ch.cover_image_key),
+        image_url: mediaUrl(c.env, ch.cover_image_key, appId),
         stories: stories.map((s: any) => ({
           ...s,
-          cover_image_url: mediaUrl(c.env, s.cover_image_key),
+          cover_image_url: mediaUrl(c.env, s.cover_image_key, appId),
         })),
       };
     })
@@ -61,11 +61,11 @@ charactersRoutes.get("/:id", async (c) => {
   return c.json({
     character: {
       ...(character as any),
-      image_url: mediaUrl(c.env, (character as any).cover_image_key),
+      image_url: mediaUrl(c.env, (character as any).cover_image_key, appId),
     },
     stories: stories.map((s: any) => ({
       ...s,
-      cover_image_url: mediaUrl(c.env, s.cover_image_key),
+      cover_image_url: mediaUrl(c.env, s.cover_image_key, appId),
     })),
   });
 });

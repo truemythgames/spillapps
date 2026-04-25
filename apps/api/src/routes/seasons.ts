@@ -25,7 +25,7 @@ seasonsRoutes.get("/", async (c) => {
 
   const seasons = result.results.map((s: any) => ({
     ...s,
-    cover_image_url: mediaUrl(c.env, s.cover_image_key),
+    cover_image_url: mediaUrl(c.env, s.cover_image_key, appId),
   }));
 
   return c.json({ seasons });
@@ -54,11 +54,11 @@ seasonsRoutes.get("/:id", async (c) => {
   return c.json({
     season: {
       ...season,
-      cover_image_url: mediaUrl(c.env, (season as any).cover_image_key),
+      cover_image_url: mediaUrl(c.env, (season as any).cover_image_key, appId),
     },
     stories: stories.results.map((s: any) => ({
       ...s,
-      cover_image_url: mediaUrl(c.env, s.cover_image_key),
+      cover_image_url: mediaUrl(c.env, s.cover_image_key, appId),
     })),
   });
 });

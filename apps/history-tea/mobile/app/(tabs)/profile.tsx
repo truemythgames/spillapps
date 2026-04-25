@@ -8,9 +8,9 @@ import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 import { LinearGradient } from "expo-linear-gradient";
 
 const CHAT_TOPIC_DEFS = [
-  { id: "verse", title: "Spill a verse\nfor what I'm feeling", storyId: "the-good-samaritan" },
-  { id: "advice", title: "What would\nGod say about...", storyId: "solomons-wisdom" },
-  { id: "explain", title: "Break down\na Bible passage", storyId: "the-ten-commandments" },
+  { id: "verse", title: "Find a story\nfor what I'm feeling", storyId: "moon-landing" },
+  { id: "advice", title: "What does\nhistory teach...", storyId: "machiavelli-writes-the-prince" },
+  { id: "explain", title: "Break down\na historical event", storyId: "ides-of-march" },
 ];
 
 export default function ChatScreen() {

@@ -16,7 +16,7 @@ playlistsRoutes.get("/", async (c) => {
   return c.json({
     playlists: result.results.map((p: any) => ({
       ...p,
-      cover_image_url: mediaUrl(c.env, p.cover_image_key),
+      cover_image_url: mediaUrl(c.env, p.cover_image_key, appId),
     })),
   });
 });
@@ -49,11 +49,11 @@ playlistsRoutes.get("/:id", async (c) => {
   return c.json({
     playlist: {
       ...(playlist as any),
-      cover_image_url: mediaUrl(c.env, (playlist as any).cover_image_key),
+      cover_image_url: mediaUrl(c.env, (playlist as any).cover_image_key, appId),
     },
     stories: stories.results.map((s: any) => ({
       ...s,
-      cover_image_url: mediaUrl(c.env, s.cover_image_key),
+      cover_image_url: mediaUrl(c.env, s.cover_image_key, appId),
     })),
   });
 });

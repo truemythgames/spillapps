@@ -40,7 +40,7 @@ storiesRoutes.get("/", async (c) => {
   return c.json({
     stories: result.results.map((s: any) => ({
       ...s,
-      cover_image_url: mediaUrl(c.env, s.cover_image_key),
+      cover_image_url: mediaUrl(c.env, s.cover_image_key, appId),
     })),
   });
 });
@@ -63,7 +63,7 @@ storiesRoutes.get("/recently-added", async (c) => {
   return c.json({
     stories: result.results.map((s: any) => ({
       ...s,
-      cover_image_url: mediaUrl(c.env, s.cover_image_key),
+      cover_image_url: mediaUrl(c.env, s.cover_image_key, appId),
     })),
   });
 });
@@ -93,7 +93,7 @@ storiesRoutes.get("/popular", async (c) => {
   const data = {
     stories: result.results.map((s: any) => ({
       ...s,
-      cover_image_url: mediaUrl(c.env, s.cover_image_key),
+      cover_image_url: mediaUrl(c.env, s.cover_image_key, appId),
     })),
   };
 
@@ -154,16 +154,16 @@ storiesRoutes.get("/:id", async (c) => {
   return c.json({
     story: {
       ...(story as any),
-      cover_image_url: mediaUrl(c.env, (story as any).cover_image_key),
+      cover_image_url: mediaUrl(c.env, (story as any).cover_image_key, appId),
     },
     audio_versions: audioVersions.results.map((a: any) => ({
       ...a,
-      audio_url: mediaUrl(c.env, a.audio_key) ?? "",
-      speaker_avatar_url: mediaUrl(c.env, a.speaker_avatar),
+      audio_url: mediaUrl(c.env, a.audio_key, appId) ?? "",
+      speaker_avatar_url: mediaUrl(c.env, a.speaker_avatar, appId),
     })),
     characters: characters.results.map((ch: any) => ({
       ...ch,
-      cover_image_url: mediaUrl(c.env, ch.cover_image_key),
+      cover_image_url: mediaUrl(c.env, ch.cover_image_key, appId),
     })),
   });
 });

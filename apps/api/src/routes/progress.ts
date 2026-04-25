@@ -25,7 +25,7 @@ progressRoutes.get("/", async (c) => {
   return c.json({
     progress: progress.results.map((p: any) => ({
       ...p,
-      cover_image_url: mediaUrl(c.env, p.cover_image_key),
+      cover_image_url: mediaUrl(c.env, p.cover_image_key, user.appId),
     })),
   });
 });

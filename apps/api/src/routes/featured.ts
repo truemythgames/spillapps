@@ -62,7 +62,7 @@ featuredRoutes.get("/story-of-the-day", async (c) => {
     story: storyRow
       ? {
           ...(storyRow as any),
-          cover_image_url: mediaUrl(c.env, (storyRow as any).cover_image_key),
+          cover_image_url: mediaUrl(c.env, (storyRow as any).cover_image_key, appId),
         }
       : null,
     ...(quote ? { quote, attribution } : {}),
@@ -101,7 +101,7 @@ featuredRoutes.get("/playlist-of-the-week", async (c) => {
     playlist: playlist
       ? {
           ...(playlist as any),
-          cover_image_url: mediaUrl(c.env, (playlist as any).cover_image_key),
+          cover_image_url: mediaUrl(c.env, (playlist as any).cover_image_key, appId),
         }
       : null,
   });

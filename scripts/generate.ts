@@ -290,14 +290,8 @@ CRITICAL: The script MUST be 800-1200 words. MUST include all three sections: ##
 // Cover image generation (Replicate Flux)
 // ---------------------------------------------------------------------------
 
-async function generateCoverImage(story: Story): Promise<Buffer> {
-  console.log(`  [image] Generating scene-specific prompt via GPT...`);
-  const promptResponse = await openai.chat.completions.create({
-    model: "gpt-4o",
-    messages: [
-      {
-        role: "system",
-        content: `You write image prompts for a ${KIT.imageContext} app. Output ONLY the prompt, nothing else.
+async function buildImagePrompt(story: Story, mode: "default" | "safe"): Promise<string> {
+  const systemDefault = `You write image prompts for a ${KIT.imageContext} app. Output ONLY the prompt, nothing else.
 
 Rules:
 - Style: classical oil painting, rich warm tones, dramatic lighting, Renaissance master quality, painterly brushstrokes
@@ -305,20 +299,58 @@ Rules:
 - Describe the scene in vivid detail: environment, lighting, colors, atmosphere, scale
 - Only include human figures if they are central to the iconic moment. For cosmic/nature events or wide-shot disasters (eruptions, floods, battles seen from afar) — favor the spectacle over close-up portraits
 - NEVER include text, letters, words, borders, or watermarks
-- Keep it under 80 words`,
-      },
+- Keep it under 80 words`;
+
+  // Safe mode is used when the default prompt gets refused (modern wars, atrocities,
+  // assassinations, political figures). It steers Flux toward symbolic / architectural /
+  // landscape compositions with no recognizable real people, no violence, no blood,
+  // no weapons in use, no overt political or religious symbols depicted with hostility.
+  const systemSafe = `You write image prompts for a ${KIT.imageContext} app. Output ONLY the prompt, nothing else.
+
+The story may involve sensitive modern subject matter (war, conflict, political crises, assassinations, atrocities). You MUST avoid graphic, violent, or named-person depictions. Instead pick a SYMBOLIC, ARCHITECTURAL, or LANDSCAPE composition that evokes the era and mood without showing any of the following:
+- No recognizable real living or modern political figures
+- No blood, corpses, wounds, or active violence
+- No weapons being fired or used in attack
+- No swastikas, terror imagery, or burning buildings
+- No graphic suffering or distress
+
+Good visual choices:
+- Empty iconic locations (Berlin Wall section at sunset, abandoned Cuban beach with a single flag, empty Dallas plaza, empty Capitol steps)
+- Period objects and machinery (vintage radios, missiles in a museum-style setup, tanks silhouetted on a hill at dawn, oil rigs on horizon)
+- Memorials, monuments, or museum-style still lifes
+- Wide-angle landscapes, skies, ruins, or atmospheric weather
+- Symbolic compositions: a single chair, a flag at half-mast, a candle, footprints in snow
+
+Style: classical oil painting, rich tones, dramatic but tasteful lighting, painterly brushstrokes, somber dignity. NEVER include text, letters, words, borders, or watermarks. Keep it under 80 words.`;
+
+  const promptResponse = await openai.chat.completions.create({
+    model: "gpt-4o",
+    messages: [
+      { role: "system", content: mode === "safe" ? systemSafe : systemDefault },
       {
         role: "user",
         content: `${KIT.domainLabel.replace(/^./, (c) => c.toUpperCase())}: "${story.title}" (${story.bibleRef})\nDescription: ${story.description}\n\nWrite the image prompt:`,
       },
     ],
-    temperature: 0.7,
-    max_tokens: 150,
+    temperature: mode === "safe" ? 0.6 : 0.7,
+    max_tokens: 180,
   });
-  const prompt = promptResponse.choices[0]?.message?.content?.trim() ?? "";
-  console.log(`  [image] Prompt: ${prompt}`);
+  return promptResponse.choices[0]?.message?.content?.trim() ?? "";
+}
 
-  console.log(`  [image] Calling Flux via Replicate...`);
+function isContentSafetyError(err: any): boolean {
+  const msg = (err?.message || "").toLowerCase();
+  return (
+    msg.includes("nsfw") ||
+    msg.includes("content policy") ||
+    msg.includes("flagged") ||
+    msg.includes("e005") ||
+    msg.includes("safety") ||
+    msg.includes("sensitive")
+  );
+}
+
+async function tryFluxOnce(prompt: string): Promise<string> {
   let output: unknown;
   for (let attempt = 0; attempt < 5; attempt++) {
     try {
@@ -343,14 +375,46 @@ Rules:
       throw err;
     }
   }
-
   const imageUrl = String(output);
   if (!imageUrl.startsWith("http")) {
     throw new Error(`Unexpected Flux output: ${imageUrl.substring(0, 100)}`);
   }
+  return imageUrl;
+}
+
+async function generateCoverImage(story: Story): Promise<Buffer> {
+  let imageUrl: string | null = null;
+
+  console.log(`  [image] Generating scene-specific prompt via GPT...`);
+  const defaultPrompt = await buildImagePrompt(story, "default");
+  console.log(`  [image] Prompt: ${defaultPrompt}`);
+
+  console.log(`  [image] Calling Flux via Replicate...`);
+  try {
+    imageUrl = await tryFluxOnce(defaultPrompt);
+  } catch (err: any) {
+    if (isContentSafetyError(err)) {
+      console.log(`  [image] Flux refused (safety) — retrying with SAFE symbolic prompt...`);
+      const safePrompt = await buildImagePrompt(story, "safe");
+      console.log(`  [image] Safe prompt: ${safePrompt}`);
+      try {
+        imageUrl = await tryFluxOnce(safePrompt);
+      } catch (err2: any) {
+        if (isContentSafetyError(err2)) {
+          console.log(`  [image] Flux refused safe prompt — retrying with ULTRA-SAFE landscape...`);
+          const ultraSafe = `Classical oil painting, wide atmospheric landscape evoking the period of "${story.title}" (${story.bibleRef}). A symbolic, peaceful scene: distant horizon, dramatic sky, soft golden or cool dusk lighting, painterly brushstrokes, muted dignified palette. No people, no text, no flags, no weapons, no buildings on fire. Renaissance master quality, contemplative mood.`;
+          imageUrl = await tryFluxOnce(ultraSafe);
+        } else {
+          throw err2;
+        }
+      }
+    } else {
+      throw err;
+    }
+  }
 
   console.log(`  [image] Downloading...`);
-  const response = await fetch(imageUrl);
+  const response = await fetch(imageUrl!);
   if (!response.ok) throw new Error(`Failed to download image: ${response.status}`);
   const buffer = Buffer.from(await response.arrayBuffer());
   console.log(`  [image] Done — ${(buffer.length / 1024).toFixed(0)} KB`);

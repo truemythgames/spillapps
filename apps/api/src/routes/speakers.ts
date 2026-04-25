@@ -16,7 +16,7 @@ speakersRoutes.get("/", async (c) => {
   return c.json({
     speakers: result.results.map((s: any) => ({
       ...s,
-      avatar_url: mediaUrl(c.env, s.avatar_key),
+      avatar_url: mediaUrl(c.env, s.avatar_key, appId),
     })),
   });
 });
@@ -38,7 +38,7 @@ speakersRoutes.get("/:id", async (c) => {
   return c.json({
     speaker: {
       ...(speaker as any),
-      avatar_url: mediaUrl(c.env, (speaker as any).avatar_key),
+      avatar_url: mediaUrl(c.env, (speaker as any).avatar_key, appId),
     },
   });
 });
