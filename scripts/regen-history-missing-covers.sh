@@ -14,14 +14,22 @@ LOG_DIR="logs"
 mkdir -p "$LOG_DIR"
 LOG_FILE="$LOG_DIR/regen-covers-$(date +%Y%m%d-%H%M%S).log"
 
+# Pick stories where cover.webp is either missing OR was generated very recently
+# (last 24h) — the recent ones may have failed to upload to R2 last time.
+# generate.ts will skip Flux when a local cover exists and just (re)upload to R2.
 missing=()
 for d in "$STORIES_DIR"/*/; do
   id="$(basename "$d")"
-  [ ! -f "$d/cover.webp" ] && missing+=("$id")
+  cover="$d/cover.webp"
+  if [ ! -f "$cover" ]; then
+    missing+=("$id")
+  elif find "$cover" -mmin -120 -print -quit 2>/dev/null | grep -q .; then
+    missing+=("$id")
+  fi
 done
 
 count=${#missing[@]}
-echo "[$(date '+%H:%M:%S')] Regenerating $count missing covers" | tee "$LOG_FILE"
+echo "[$(date '+%H:%M:%S')] Processing $count covers (missing locally OR recently generated)" | tee "$LOG_FILE"
 echo "Log: $LOG_FILE"
 echo ""
 

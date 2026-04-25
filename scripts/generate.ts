@@ -499,8 +499,11 @@ async function processStory(story: Story, step?: string) {
   // Step 2: Cover image
   if (shouldRun("image")) {
     const imagePath = join(storyDir, "cover.webp");
-    if (existsSync(imagePath) && !step) {
-      console.log(`  [image] Already exists, skipping (use --step image to regenerate)`);
+    if (existsSync(imagePath)) {
+      // Cover already on disk: don't burn another Flux call, but still
+      // (re)upload so R2 ends up in sync.
+      console.log(`  [image] Local cover.webp exists — uploading to R2 only.`);
+      uploadToR2(imagePath, `stories/${story.id}/cover.webp`, "image/webp");
     } else {
       const imageBuffer = await generateCoverImage(story);
       writeFileSync(imagePath, imageBuffer);
