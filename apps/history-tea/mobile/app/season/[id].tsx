@@ -66,8 +66,8 @@ export default function SeasonScreen() {
           <View style={styles.header}>
             <Text style={styles.testament}>
               {season?.testament === "old"
-                ? "OLD TESTAMENT"
-                : "NEW TESTAMENT"}
+                ? "ANCIENT & MEDIEVAL · PRE-1500"
+                : "MODERN ERA · POST-1500"}
             </Text>
             <Text style={styles.seasonTitle}>{season?.name}</Text>
             <Text style={styles.seasonDesc}>{season?.description}</Text>

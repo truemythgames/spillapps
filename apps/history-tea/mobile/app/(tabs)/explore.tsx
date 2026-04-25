@@ -120,22 +120,24 @@ export default function StoriesScreen() {
         </View>
       )}
 
-      {/* OT / NT cards */}
+      {/* Era cards (pre-1500 vs post-1500) */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Browse</Text>
         <View style={styles.testamentRow}>
           <Pressable style={styles.testamentCard} onPress={() => router.push("/testament/old")}>
-            <Image source={{ uri: storyMap["crossing-the-red-sea"]?.cover_image_url ?? coverUrl("crossing-the-red-sea") }} style={styles.testamentImg} contentFit="cover" transition={300} />
+            <Image source={{ uri: storyMap["building-the-pyramids"]?.cover_image_url ?? coverUrl("building-the-pyramids") }} style={styles.testamentImg} contentFit="cover" transition={300} />
             <View style={styles.testamentOverlay} />
             <View style={styles.testamentContent}>
-              <Text style={styles.testamentLabel}>Old Testament</Text>
+              <Text style={styles.testamentLabel}>Ancient & Medieval</Text>
+              <Text style={styles.testamentSub}>pre-1500</Text>
             </View>
           </Pressable>
           <Pressable style={styles.testamentCard} onPress={() => router.push("/testament/new")}>
-            <Image source={{ uri: storyMap["the-resurrection"]?.cover_image_url ?? coverUrl("the-resurrection") }} style={styles.testamentImg} contentFit="cover" transition={300} />
+            <Image source={{ uri: storyMap["moon-landing"]?.cover_image_url ?? coverUrl("moon-landing") }} style={styles.testamentImg} contentFit="cover" transition={300} />
             <View style={styles.testamentOverlay} />
             <View style={styles.testamentContent}>
-              <Text style={styles.testamentLabel}>New Testament</Text>
+              <Text style={styles.testamentLabel}>Modern Era</Text>
+              <Text style={styles.testamentSub}>post-1500</Text>
             </View>
           </Pressable>
         </View>
@@ -243,12 +245,20 @@ const styles = StyleSheet.create({
   },
   testamentLabel: {
     fontFamily: fonts.heading,
-    fontSize: fontSize.xl,
+    fontSize: fontSize.lg,
     color: "#fff",
     textAlign: "center",
     textShadowColor: "rgba(0,0,0,0.5)",
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 3,
+  },
+  testamentSub: {
+    fontFamily: fonts.body,
+    fontSize: fontSize.xs,
+    color: "rgba(255,255,255,0.85)",
+    textAlign: "center",
+    marginTop: 2,
+    letterSpacing: 0.5,
   },
 
 });

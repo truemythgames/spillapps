@@ -17,7 +17,8 @@ export default function TestamentScreen() {
   const progress = getLocalProgress();
 
   const isOT = id === "old";
-  const title = isOT ? "Old Testament" : "New Testament";
+  const title = isOT ? "Ancient & Medieval" : "Modern Era";
+  const eraSubtitle = isOT ? "pre-1500" : "post-1500";
 
   const testamentStories = stories.filter((s) =>
     isOT ? s.testament === "old" : s.testament === "new",
@@ -44,7 +45,7 @@ export default function TestamentScreen() {
         <View style={{ width: 40 }} />
       </View>
 
-      <Text style={styles.subtitle}>{totalStories} stories</Text>
+      <Text style={styles.subtitle}>{eraSubtitle} · {totalStories} stories</Text>
 
       <ScrollView
         contentContainerStyle={{ paddingBottom: 100 }}
