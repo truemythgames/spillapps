@@ -11,7 +11,7 @@ compatibility_flags = ["nodejs_compat"]
 ENVIRONMENT = "production"
 APP_NAME = "spillapps"
 APP_ID = "bible-tea"
-ALLOWED_APP_IDS = "bible-tea"
+ALLOWED_APP_IDS = "bible-tea,history-tea"
 PUBLIC_API_BASE = "https://api.spillapps.com"
 PUBLIC_MEDIA_BASE = "https://media.spillapps.com"
 # Public OAuth Web client ID (same as CMS VITE_GOOGLE_CLIENT_ID).

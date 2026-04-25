@@ -37,6 +37,7 @@ async function request<T>(
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
+    "X-App-Id": APP_ID,
     ...(options.headers as Record<string, string>),
   };
 
@@ -179,7 +180,10 @@ export const api = {
     onDone: () => void,
   ) => {
     const token = await getToken();
-    const headers: Record<string, string> = { "Content-Type": "application/json" };
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+      "X-App-Id": APP_ID,
+    };
     if (token) headers["Authorization"] = `Bearer ${token}`;
 
     const res = await fetch(`${API_BASE}/v1/chat/stream`, {

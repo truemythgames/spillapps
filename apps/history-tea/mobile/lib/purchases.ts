@@ -16,7 +16,7 @@ export type PurchasesOffering = any;
 export type PurchasesPackage = any;
 type CustomerInfo = any;
 
-const REVENUECAT_IOS_KEY = "appl_wkihlIqfRBLXmhtmZBUiijkxsxN";
+const REVENUECAT_IOS_KEY = "appl_OZqvmrFIGBQHbeqHrqnlEgRQUeB";
 const REVENUECAT_ANDROID_KEY = "goog_OrYzAxZViXKjAqteWSEQolNVWNU";
 
 const ENTITLEMENT_ID = "premium";
@@ -29,11 +29,11 @@ const APP_USER_ID_KEY = "rc_app_user_id";
 const APP_USER_ID_PREFIX = "ht_";
 
 export const PRODUCT_IDS = {
-  quarterlyOnboarding3DayTrial: "bibletea_quarterly_onboarding_3day_freetrial",
-  quarterly30DayTrial: "bibletea_quarterly_30day_trial",
-  quarterly3DayTrial: "bibletea_quarterly_3day_freetrial",
-  weeklyOffer: "bibletea_weekly_offer",
-  weeklyFreeTrial: "bibletea_weekly_freetrial",
+  quarterlyOnboarding3DayTrial: "historytea_quarterly_onboarding_3day_freetrial",
+  quarterly30DayTrial: "historytea_quarterly_30day_trial",
+  quarterly3DayTrial: "historytea_quarterly_3day_freetrial",
+  weeklyOffer: "historytea_weekly_offer",
+  weeklyFreeTrial: "historytea_weekly_freetrial",
   yearlyOffer: "historytea_yearly_offer",
 } as const;
 
