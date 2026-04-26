@@ -16,7 +16,7 @@ const CATALOG_PATH = join(CONTENT_DIR, "story-catalog.json");
 
 export const MEDIA_BASE = "https://media.spillapps.com/history-tea";
 export const APP_STORE_URL =
-  "https://apps.apple.com/app/history-tea-bible-storycast/id6761665565";
+  "https://apps.apple.com/app/history-tea/id0000000000";
 
 export function getCatalog(): CatalogStory[] {
   return JSON.parse(readFileSync(CATALOG_PATH, "utf8"));

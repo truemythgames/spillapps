@@ -18,7 +18,7 @@ const siteLd = {
   "@type": "WebSite",
   name: "History Tea",
   url: "https://historytea.app",
-  description: "Listen to every Bible story as immersive audio. Professional narration from Genesis to Revelation.",
+  description: "Listen to world history as immersive audio. The stories that shaped humanity — from ancient civilizations to the modern era.",
   potentialAction: {
     "@type": "SearchAction",
     target: { "@type": "EntryPoint", urlTemplate: "https://historytea.app/stories?q={search_term_string}" },
@@ -32,14 +32,14 @@ const orgLd = {
   name: "History Tea",
   url: "https://historytea.app",
   logo: "https://historytea.app/icon.png",
-  sameAs: ["https://apps.apple.com/app/history-tea-bible-storycast/id6761665565"],
+  sameAs: [APP_STORE_URL],
 };
 
 const podcastLd = {
   "@context": "https://schema.org",
   "@type": "PodcastSeries",
-  name: "History Tea — Bible Storycast",
-  description: "Every Bible story retold as immersive audio. From Genesis to Revelation.",
+  name: "History Tea — History Storycast",
+  description: "The stories that shaped the world, retold as immersive audio. From the pyramids to the moon landing.",
   url: "https://historytea.app",
   image: "https://historytea.app/icon.png",
   author: { "@type": "Organization", name: "History Tea" },
@@ -63,7 +63,7 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title}</title>
   <meta name="description" content={description} />
-  <meta name="theme-color" content="#0A0A0F" />
+  <meta name="theme-color" content="#06080F" />
   {canonical && <link rel="canonical" href={canonical} />}
 
   <meta property="og:title" content={title} />
@@ -78,7 +78,8 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={ogImage} />
 
-  <meta name="apple-itunes-app" content="app-id=6761665565" />
+  <!-- TODO: replace app-id with the History Tea App Store ID once published -->
+  <meta name="apple-itunes-app" content="app-id=0000000000" />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <link rel="apple-touch-icon" href="/icon.png" />
 
@@ -96,18 +97,18 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --bg: #0A0A0F;
-      --surface: #141420;
-      --surface-light: #1E1E2E;
-      --surface-border: #2A2A3E;
-      --primary: #C8A2FF;
-      --primary-dark: #9B6FDB;
-      --accent: #FFD166;
-      --text: #FFFFFF;
-      --text-secondary: #A0A0B8;
-      --text-muted: #8E8EA2;
-      --gradient-start: #C8A2FF;
-      --gradient-end: #6B5CE7;
+      --bg: #06080F;
+      --surface: #0E1320;
+      --surface-light: #171E30;
+      --surface-border: #2A3550;
+      --primary: #4DA6FF;
+      --primary-dark: #007FFF;
+      --accent: #FFB84D;
+      --text: #F0F4FF;
+      --text-secondary: #A0AEC4;
+      --text-muted: #5C6B85;
+      --gradient-start: #4DA6FF;
+      --gradient-end: #0057B8;
     }
 
     html, body { overflow-x: hidden; width: 100%; }
@@ -132,7 +133,7 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
       justify-content: space-between;
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      background: rgba(10, 10, 15, 0.8);
+      background: rgba(6, 8, 15, 0.8);
       border-bottom: 1px solid rgba(255,255,255,0.05);
     }
 
@@ -184,7 +185,7 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
 
     .nav-cta:hover {
       transform: translateY(-1px);
-      box-shadow: 0 4px 20px rgba(200, 162, 255, 0.3);
+      box-shadow: 0 4px 20px rgba(77, 166, 255, 0.3);
     }
 
     .menu-btn {
@@ -201,7 +202,7 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
       z-index: 100;
-      background: rgba(10, 10, 15, 0.95);
+      background: rgba(6, 8, 15, 0.95);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       flex-direction: column;
@@ -281,8 +282,8 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
     <div class="nav-links">
       <a href="/stories" class="nav-stories-link">Stories</a>
       <a href="/playlists" class="nav-stories-link">Playlists</a>
-      <a href="/characters" class="nav-stories-link">Characters</a>
-      <a href="/books" class="nav-stories-link">Books</a>
+      <a href="/characters" class="nav-stories-link">Figures</a>
+      <a href="/eras" class="nav-stories-link">Eras</a>
       <a href={APP_STORE_URL} class="nav-cta">
         <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
         Download
@@ -299,8 +300,8 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
     </button>
     <a href="/stories">Stories</a>
     <a href="/playlists">Playlists</a>
-    <a href="/characters">Characters</a>
-    <a href="/books">Books</a>
+    <a href="/characters">Figures</a>
+    <a href="/eras">Eras</a>
     <a href={APP_STORE_URL} class="nav-cta">
       <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
       Download for iOS
@@ -324,8 +325,8 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
     <div class="footer-links">
       <a href="/stories">Stories</a>
       <a href="/playlists">Playlists</a>
-      <a href="/characters">Characters</a>
-      <a href="/books">Books</a>
+      <a href="/characters">Figures</a>
+      <a href="/eras">Eras</a>
       <a href="/privacy">Privacy</a>
       <a href="/terms">Terms</a>
       <a href="mailto:contact@historytea.app">Contact</a>

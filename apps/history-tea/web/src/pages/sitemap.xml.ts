@@ -25,7 +25,7 @@ export const GET: APIRoute = async () => {
     { loc: SITE + "/stories", lastmod: today, changefreq: "weekly", priority: 0.9 },
     { loc: SITE + "/playlists", lastmod: today, changefreq: "weekly", priority: 0.9 },
     { loc: SITE + "/characters", lastmod: today, changefreq: "weekly", priority: 0.8 },
-    { loc: SITE + "/books", lastmod: today, changefreq: "weekly", priority: 0.8 },
+    { loc: SITE + "/eras", lastmod: today, changefreq: "weekly", priority: 0.8 },
     { loc: SITE + "/privacy", lastmod: "2026-03-26", changefreq: "yearly", priority: 0.3 },
     { loc: SITE + "/terms", lastmod: "2026-04-13", changefreq: "yearly", priority: 0.3 },
   ];
@@ -43,7 +43,7 @@ export const GET: APIRoute = async () => {
   }
 
   for (const season of seasons) {
-    entries.push({ loc: `${SITE}/books/${season.slug}`, lastmod: today, changefreq: "monthly", priority: 0.6 });
+    entries.push({ loc: `${SITE}/eras/${season.slug}`, lastmod: today, changefreq: "monthly", priority: 0.6 });
   }
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

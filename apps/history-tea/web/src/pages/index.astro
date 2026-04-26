@@ -2,15 +2,15 @@
 import Base from "../layouts/Base.astro";
 import { APP_STORE_URL, MEDIA_BASE } from "../lib/stories";
 
-const title = "History Tea: Bible Storycast — Spill the tea. Read the Bible.";
-const description = "Bible stories reimagined as immersive audio experiences. Spill the tea. Read the Bible.";
+const title = "History Tea: History Storycast — Spill the tea. Learn history.";
+const description = "World history retold as immersive audio. From the pyramids to the moon landing — the stories that shaped humanity, in your ears.";
 
 const homeLd = {
   "@context": "https://schema.org",
   "@type": "MobileApplication",
   name: "History Tea",
   operatingSystem: "iOS",
-  applicationCategory: "ReligionApplication",
+  applicationCategory: "EducationApplication",
   url: "https://historytea.app",
   image: "https://historytea.app/icon.png",
   description,
@@ -24,37 +24,37 @@ const homeLd = {
 };
 
 const storyCards = [
-  { id: "creation", title: "Creation", ref: "Genesis 1-2" },
-  { id: "adam-and-eve", title: "Adam & Eve", ref: "Genesis 2-3" },
-  { id: "david-and-goliath", title: "David & Goliath", ref: "1 Samuel 17" },
-  { id: "jonah-and-the-whale", title: "Jonah & the Whale", ref: "Jonah 1-4" },
-  { id: "the-prodigal-son", title: "The Prodigal Son", ref: "Luke 15:11-32" },
-  { id: "crossing-the-red-sea", title: "Crossing the Red Sea", ref: "Exodus 14" },
-  { id: "daniel-and-the-lions-den", title: "Daniel & the Lions", ref: "Daniel 6" },
-  { id: "the-resurrection", title: "The Resurrection", ref: "Matthew 28" },
-  { id: "samson-and-delilah", title: "Samson & Delilah", ref: "Judges 16" },
-  { id: "ruth-and-naomi", title: "Ruth & Naomi", ref: "Ruth 1-4" },
+  { id: "building-the-pyramids", title: "Building the Pyramids", ref: "c. 2560 BCE" },
+  { id: "the-trojan-horse", title: "The Trojan Horse", ref: "c. 1184 BCE" },
+  { id: "battle-of-thermopylae", title: "The 300 at Thermopylae", ref: "480 BCE" },
+  { id: "alexander-the-great", title: "Alexander the Great", ref: "336 BCE" },
+  { id: "cleopatra-and-caesar", title: "Cleopatra and Caesar", ref: "48 BCE" },
+  { id: "ides-of-march", title: "The Ides of March", ref: "44 BCE" },
+  { id: "battle-of-waterloo", title: "The Battle of Waterloo", ref: "1815 CE" },
+  { id: "titanic-sinks", title: "The Titanic Sinks", ref: "1912 CE" },
+  { id: "d-day", title: "D-Day", ref: "1944 CE" },
+  { id: "moon-landing", title: "The Moon Landing", ref: "1969 CE" },
 ];
 
 const playlistCards = [
-  { cover: "creation", name: "Start Here" },
-  { cover: "the-last-supper", name: "Holy Week" },
-  { cover: "adam-and-eve", name: "Love Stories" },
-  { cover: "crossing-the-red-sea", name: "Miracles & Wonders" },
-  { cover: "joseph-and-his-brothers", name: "Family Drama" },
-  { cover: "the-resurrection", name: "The Jesus Story" },
-  { cover: "daniel-and-the-lions-den", name: "Courage Under Fire" },
-  { cover: "samson-and-delilah", name: "Maximum Drama" },
-  { cover: "david-and-goliath", name: "Underdog Stories" },
+  { cover: "building-the-pyramids", name: "Start Here" },
+  { cover: "ides-of-march", name: "Ancient Rome" },
+  { cover: "alexander-the-great", name: "Conquerors" },
+  { cover: "cleopatra-and-caesar", name: "Love & Power" },
+  { cover: "d-day", name: "World Wars" },
+  { cover: "moon-landing", name: "Space Race" },
+  { cover: "battle-of-thermopylae", name: "Greatest Battles" },
+  { cover: "tutankhamuns-tomb", name: "Ancient Mysteries" },
+  { cover: "jfk-assassinated", name: "Assassinations" },
 ];
 
 const reviews = [
-  { text: "This app completely changed how I engage with the Bible. The narrations are beautiful and the artwork for each story is stunning. I listen every morning with my coffee.", name: "Sarah M.", initial: "S", date: "March 2025" },
-  { text: "Finally an app that makes Bible stories feel alive. My kids love listening to it before bed. The Story of the Day feature keeps us coming back every single day.", name: "James R.", initial: "J", date: "March 2025" },
-  { text: "I've tried so many Bible apps and this is the first one that actually made me excited to open it. The playlists are perfectly curated and the audio quality is incredible.", name: "Maria L.", initial: "M", date: "April 2025" },
-  { text: "Love the 'Spill the Tea' vibe — it makes scripture feel so approachable. I listen during my commute and it's become the best part of my day. Highly recommend!", name: "David K.", initial: "D", date: "April 2025" },
-  { text: "The character profiles are such a smart feature. Following Moses across different stories gives you so much more context. Beautiful design too — dark mode is perfect.", name: "Anna T.", initial: "A", date: "March 2025" },
-  { text: "As someone who grew up with these stories, hearing them narrated with such care and emotion brought tears to my eyes. This is how scripture should be experienced.", name: "Robert P.", initial: "R", date: "April 2025" },
+  { text: "I came for a casual listen and now I'm texting my group chat random facts about Byzantine emperors at midnight. The pacing is so tight — zero filler, all story.", name: "Priya V.", initial: "P", date: "February 2026" },
+  { text: "Been a history teacher for twelve years and this is the first app I'd actually recommend to my students. Accurate, vivid, and they finish episodes on their own.", name: "Marcus B.", initial: "M", date: "March 2026" },
+  { text: "Bought it for a long flight and finished eight episodes before we landed in Lisbon. Hannibal crossing the Alps had me picturing the whole thing like a movie.", name: "Elena C.", initial: "E", date: "April 2026" },
+  { text: "I'm a retired engineer and I've always loved reading about history but never audio. This changed me. Falling asleep to the Mongol empire is weirdly peaceful.", name: "Henry O.", initial: "H", date: "March 2026" },
+  { text: "The figures tab is genius. Tapped 'Cleopatra' and got every story she's in, in order. Feels like a Netflix for dead people. I mean that as a compliment.", name: "Tasha W.", initial: "T", date: "April 2026" },
+  { text: "Downloaded on a whim, now it's the first thing I open with my morning espresso. Short enough for a shower, deep enough to remember. No other app does this.", name: "Lucas F.", initial: "L", date: "February 2026" },
 ];
 
 const starSvg = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/></svg>`;
@@ -82,7 +82,7 @@ const appleSvg = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 1
       transform: translateX(-50%);
       width: 600px;
       height: 600px;
-      background: radial-gradient(circle, rgba(200, 162, 255, 0.08) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(77, 166, 255, 0.08) 0%, transparent 70%);
       pointer-events: none;
     }
     .hero-icon {
@@ -90,7 +90,7 @@ const appleSvg = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 1
       height: 120px;
       border-radius: 28px;
       margin-bottom: 2rem;
-      box-shadow: 0 20px 60px rgba(200, 162, 255, 0.15);
+      box-shadow: 0 20px 60px rgba(77, 166, 255, 0.15);
       animation: float 6s ease-in-out infinite;
     }
     @keyframes float {
@@ -136,11 +136,11 @@ const appleSvg = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 1
       font-weight: 600;
       font-size: 1.1rem;
       transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 30px rgba(200, 162, 255, 0.2);
+      box-shadow: 0 4px 30px rgba(77, 166, 255, 0.2);
     }
     .hero-cta:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 40px rgba(200, 162, 255, 0.35);
+      box-shadow: 0 8px 40px rgba(77, 166, 255, 0.35);
     }
     .hero-cta :global(svg) { width: 20px; height: 20px; }
 
@@ -214,7 +214,7 @@ const appleSvg = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 1
     .playlist-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, rgba(10,10,15,0.75) 0%, rgba(10,10,15,0.4) 100%);
+      background: linear-gradient(135deg, rgba(6, 8, 15,0.75) 0%, rgba(6, 8, 15,0.4) 100%);
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
@@ -254,7 +254,7 @@ const appleSvg = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 1
       padding: 2rem;
       transition: border-color 0.3s;
     }
-    .feature-card:hover { border-color: rgba(200, 162, 255, 0.3); }
+    .feature-card:hover { border-color: rgba(77, 166, 255, 0.3); }
     .feature-icon { font-size: 2rem; margin-bottom: 1rem; }
     .feature-card h3 {
       font-family: 'Playfair Display', serif;
@@ -296,7 +296,7 @@ const appleSvg = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 1
       padding: 1.75rem;
       transition: border-color 0.3s;
     }
-    .review-card:hover { border-color: rgba(200, 162, 255, 0.3); }
+    .review-card:hover { border-color: rgba(77, 166, 255, 0.3); }
     .review-stars { display: flex; gap: 2px; margin-bottom: 0.75rem; color: var(--accent); font-size: 0.9rem; }
     .review-text {
       color: var(--text-secondary);
@@ -332,7 +332,7 @@ const appleSvg = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 1
       transform: translateX(-50%);
       width: 600px;
       height: 400px;
-      background: radial-gradient(circle, rgba(107, 92, 231, 0.08) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(0, 87, 184, 0.08) 0%, transparent 70%);
       pointer-events: none;
     }
     .cta-section h2 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); margin-bottom: 1rem; }
@@ -368,8 +368,8 @@ const appleSvg = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 1
 
   <section class="hero">
     <img src="/icon-sm.png" alt="History Tea App Icon" class="hero-icon" width="120" height="120" />
-    <h1 class="heading">Spill the tea.<br/>Read the Bible.</h1>
-    <p class="hero-sub">Every Bible story — from Genesis to Revelation — retold as immersive audio you can listen to anywhere.</p>
+    <h1 class="heading">Spill the tea.<br/>Learn history.</h1>
+    <p class="hero-sub">The stories that shaped the world — from the pyramids to the moon landing — retold as immersive audio you can listen to anywhere.</p>
     <div class="hero-proof">
       <Fragment set:html={starSvg} />
       <Fragment set:html={starSvg} />
@@ -385,8 +385,8 @@ const appleSvg = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 1
   </section>
 
   <section class="showcase">
-    <h2 class="heading showcase-title">Explore Bible Stories</h2>
-    <p class="showcase-sub">From Creation to Resurrection — every story told like never before.</p>
+    <h2 class="heading showcase-title">Explore World History</h2>
+    <p class="showcase-sub">From ancient empires to the modern era — every story told like never before.</p>
     <div style="overflow: hidden;">
       <div class="card-scroll" id="card-scroll">
         {storyCards.map((s) => (
@@ -416,12 +416,12 @@ const appleSvg = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 1
   <section class="features">
     <h2 class="heading features-title">Why History Tea?</h2>
     <div class="features-grid">
-      <div class="feature-card"><div class="feature-icon">🎧</div><h3>Immersive Audio</h3><p>Every Bible story narrated with rich, engaging audio that brings scripture to life. Listen while commuting, working out, or winding down.</p></div>
-      <div class="feature-card"><div class="feature-icon">🎨</div><h3>Beautiful Artwork</h3><p>Each story features stunning, original cover art that captures the drama and emotion of the biblical narrative.</p></div>
-      <div class="feature-card"><div class="feature-icon">📖</div><h3>Old & New Testament</h3><p>From Genesis to Revelation — explore stories from both testaments, organized by season and theme for easy discovery.</p></div>
-      <div class="feature-card"><div class="feature-icon">👤</div><h3>Bible Characters</h3><p>Dive deep into the lives of Moses, David, Ruth, Paul, and more. Follow their journeys across multiple stories.</p></div>
-      <div class="feature-card"><div class="feature-icon">🍵</div><h3>Curated Playlists</h3><p>Start with "Start Here" or explore themed collections like Love Stories, Miracles, and Courage Under Fire.</p></div>
-      <div class="feature-card"><div class="feature-icon">🔥</div><h3>Daily Story</h3><p>A fresh Story of the Day every day to keep you inspired and engaged with scripture on a daily basis.</p></div>
+      <div class="feature-card"><div class="feature-icon">🎧</div><h3>Immersive Audio</h3><p>Every story narrated with rich, cinematic audio that brings the past to life. Listen while commuting, working out, or winding down.</p></div>
+      <div class="feature-card"><div class="feature-icon">🎨</div><h3>Beautiful Artwork</h3><p>Each story features stunning, original cover art that captures the drama and emotion of the moment — from ancient battles to space launches.</p></div>
+      <div class="feature-card"><div class="feature-icon">🏛️</div><h3>Ancient to Modern</h3><p>From Mesopotamia and Egypt to the Cold War and beyond — explore world history organized by era and theme for easy discovery.</p></div>
+      <div class="feature-card"><div class="feature-icon">👤</div><h3>Historical Figures</h3><p>Dive deep into the lives of Cleopatra, Caesar, Napoleon, Genghis Khan and more. Follow them across every story they appear in.</p></div>
+      <div class="feature-card"><div class="feature-icon">🍵</div><h3>Curated Playlists</h3><p>Start with "Start Here" or explore themed collections like Ancient Rome, Greatest Battles, Conquerors, and Ancient Mysteries.</p></div>
+      <div class="feature-card"><div class="feature-icon">🔥</div><h3>Daily Story</h3><p>A fresh Story of the Day every day to keep you hooked — a 5-10 minute slice of history, delivered to your ears.</p></div>
     </div>
   </section>
 
@@ -448,7 +448,7 @@ const appleSvg = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 1
 
   <section class="cta-section">
     <h2 class="heading">Ready to Spill the Tea?</h2>
-    <p>Download History Tea and experience the Bible like never before.</p>
+    <p>Download History Tea and experience the stories that shaped the world.</p>
     <a href={APP_STORE_URL} class="cta-btn">
       <Fragment set:html={appleSvg} />
       Download for iOS

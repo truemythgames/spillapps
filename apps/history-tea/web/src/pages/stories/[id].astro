@@ -132,22 +132,22 @@ const pageUrl = `https://historytea.app/stories/${story.id}`;
 // Generate contextual FAQs for "People Also Ask" rich results
 const faqs = [
   {
-    q: `What is the story of ${story.title} in the Bible?`,
-    a: `${story.description} This story is found in ${story.bibleRef}. History Tea retells it as an immersive audio experience with modern narration so you can listen anywhere.`,
+    q: `What happened during ${story.title}?`,
+    a: `${story.description} This event took place ${story.bibleRef}. History Tea retells it as an immersive audio experience with cinematic narration so you can listen anywhere.`,
   },
   {
-    q: `What is ${story.bibleRef} about?`,
-    a: `${story.bibleRef} tells the story of ${story.title}. ${story.description} You can listen to the full retelling with immersive narration on the History Tea app.`,
+    q: `When did ${story.title} happen?`,
+    a: `${story.title} took place ${story.bibleRef}. ${story.description} You can listen to the full retelling with immersive narration on the History Tea app.`,
   },
   {
-    q: `What is the lesson of ${story.title}?`,
+    q: `Why does ${story.title} matter?`,
     a: takeawayItems.length > 0
       ? `Key takeaways from ${story.title}: ${takeawayItems.slice(0, 3).join(". ")}. Listen to the full breakdown on History Tea.`
-      : `${story.title} (${story.bibleRef}) carries timeless lessons about faith, obedience, and God's character. Download History Tea to hear the full story and its takeaways.`,
+      : `${story.title} (${story.bibleRef}) is one of those moments that changed the course of history. Download History Tea to hear the full story and why it still matters.`,
   },
   {
     q: `Can I listen to ${story.title} as audio?`,
-    a: `Yes! History Tea offers ${story.title} as an immersive audio story with professional narration. Download the free app on iOS to listen to this and ${catalog.length - 1}+ other Bible stories.`,
+    a: `Yes! History Tea offers ${story.title} as an immersive audio story with cinematic narration. Download the free app on iOS to listen to this and ${catalog.length - 1}+ other history stories.`,
   },
 ];
 
@@ -185,7 +185,7 @@ const faqLd = {
 
 const breadcrumbItems = [
   { "@type": "ListItem" as const, position: 1, name: "Home", item: "https://historytea.app" },
-  { "@type": "ListItem" as const, position: 2, name: "Bible Stories", item: "https://historytea.app/stories" },
+  { "@type": "ListItem" as const, position: 2, name: "History Stories", item: "https://historytea.app/stories" },
 ];
 if (storyPlaylist) {
   breadcrumbItems.push({
@@ -208,7 +208,7 @@ const breadcrumbLd = {
 const audioLd = {
   "@context": "https://schema.org",
   "@type": "AudioObject",
-  name: `${story.title} — Bible Story Audio`,
+  name: `${story.title} — History Story Audio`,
   description: `Listen to ${story.title} (${story.bibleRef}) as immersive audio narration on History Tea.`,
   encodingFormat: "audio/mpeg",
   isAccessibleForFree: true,
@@ -316,7 +316,7 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
 
     .hero-ref {
       display: inline-block;
-      background: rgba(200, 162, 255, 0.12);
+      background: rgba(77, 166, 255, 0.12);
       color: var(--primary);
       padding: 0.3rem 0.75rem;
       border-radius: 6px;
@@ -344,15 +344,15 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
       font-weight: 600;
       text-decoration: none;
       transition: opacity 0.2s;
-      background: rgba(255, 209, 102, 0.12);
+      background: rgba(255, 184, 77, 0.12);
       color: var(--accent);
     }
 
     .hero-tag:hover { opacity: 0.7; }
 
     .hero-tag-char {
-      background: rgba(107, 92, 231, 0.12);
-      color: #A78BFA;
+      background: rgba(0, 87, 184, 0.12);
+      color: #4DA6FF;
     }
 
     .hero-desc {
@@ -374,12 +374,12 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
       font-weight: 600;
       font-size: 1rem;
       transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 24px rgba(200, 162, 255, 0.25);
+      box-shadow: 0 4px 24px rgba(77, 166, 255, 0.25);
     }
 
     .listen-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(200, 162, 255, 0.4);
+      box-shadow: 0 8px 32px rgba(77, 166, 255, 0.4);
     }
 
     .listen-btn svg { width: 20px; height: 20px; }
@@ -531,7 +531,7 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
 
     .faq-item:hover { border-color: var(--primary); }
 
-    .faq-item[open] { border-color: rgba(200, 162, 255, 0.3); }
+    .faq-item[open] { border-color: rgba(77, 166, 255, 0.3); }
 
     .faq-item summary {
       padding: 1rem 1.25rem;
@@ -718,7 +718,7 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
         {hasImage ? (
           <img src={cover} alt={story.title} class="hero-cover" loading="eager" />
         ) : (
-          <div class="hero-cover-placeholder">📖</div>
+          <div class="hero-cover-placeholder">🏛️</div>
         )}
         <div class="hero-info">
           {storyPlaylist ? (
@@ -735,7 +735,7 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
           {(storySeason || storyCharacters.length > 0) && (
             <div class="hero-tags">
               {storySeason && (
-                <a href={`/books/${storySeason.slug}`} class="hero-tag">{storySeason.name}</a>
+                <a href={`/eras/${storySeason.slug}`} class="hero-tag">{storySeason.name}</a>
               )}
               {storyCharacters.map((ch) => (
                 <a href={`/characters/${ch.id}`} class="hero-tag hero-tag-char">{ch.name}</a>
@@ -826,7 +826,7 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
                 {hasCover(r.id) ? (
                   <img src={coverUrl(r.id)} alt={r.title} loading="lazy" />
                 ) : (
-                  <div class="related-cover-ph">📖</div>
+                  <div class="related-cover-ph">🏛️</div>
                 )}
               </div>
               <div class="rc-title">{r.title}</div>

@@ -1,1 +1,330 @@
-[]
+[
+  {
+    "id": "hammurabi",
+    "name": "Hammurabi",
+    "subtitle": "The king who wrote the law",
+    "overview": "King of Babylon around 1750 BCE. He carved 282 laws onto a stone pillar and declared them for everyone — kings, priests, and commoners alike. The first legal code of civilization, and the ancestor of every law book you've ever heard of.",
+    "imagePrompt": "Portrait of Hammurabi, ancient Babylonian king, seated on a stone throne holding a staff of authority, long beard, ornate conical crown and royal robes, stele of law visible behind him, warm torchlight, museum-quality classical oil painting, cinematic, photorealistic, no text",
+    "storyIds": ["hammurabis-code"]
+  },
+  {
+    "id": "cyrus-the-great",
+    "name": "Cyrus the Great",
+    "subtitle": "Builder of the first world empire",
+    "overview": "Founder of the Persian Empire, the largest empire the world had ever seen. Famous for tolerance — he freed captive peoples, respected local religions, and wrote a declaration of human rights two thousand years before anyone else.",
+    "imagePrompt": "Portrait of Cyrus the Great, Persian emperor, golden crown with winged lions, flowing robes in royal purple and gold, ornate Persian palace behind him with carved reliefs, warm desert light, classical oil painting, photorealistic, cinematic, no text",
+    "storyIds": ["cyrus-the-great", "fall-of-babylon"]
+  },
+  {
+    "id": "ramses-ii",
+    "name": "Ramses II",
+    "subtitle": "Pharaoh of Pharaohs",
+    "overview": "The greatest builder Egypt ever saw. Ruled for 66 years, fathered 100+ children, built temples from Abu Simbel to Memphis, and fought one of history's first recorded battles at Kadesh. Then signed the first known peace treaty.",
+    "imagePrompt": "Portrait of Ramses II, ancient Egyptian pharaoh, ornate blue and gold nemes headdress with cobra uraeus, kohl-lined eyes, golden jewelry, pillars of a massive Egyptian temple behind him, warm desert sunlight, photorealistic classical painting, no text",
+    "storyIds": ["ramses-ii", "battle-of-kadesh"]
+  },
+  {
+    "id": "cleopatra",
+    "name": "Cleopatra",
+    "subtitle": "The last Pharaoh",
+    "overview": "Brilliant, multilingual, politically ruthless. She seduced Caesar, partnered with Antony, and fought Rome itself to save her kingdom. When she lost, she chose death by asp over surrender. The end of Ancient Egypt.",
+    "imagePrompt": "Portrait of Cleopatra VII, young Egyptian queen, traditional Ptolemaic diadem with golden cobra, dark braided hair, richly embroidered linen robes in deep blue and gold, Alexandrian palace behind her, warm Mediterranean light, classical oil painting, photorealistic, cinematic, no text",
+    "storyIds": ["cleopatra-and-caesar", "cleopatra-and-antony", "battle-of-actium", "death-of-cleopatra"]
+  },
+  {
+    "id": "alexander-the-great",
+    "name": "Alexander the Great",
+    "subtitle": "Conqueror of the known world",
+    "overview": "Tutored by Aristotle, king at 20, world conqueror by 30. He marched from Greece to India, never lost a battle, and reshaped civilization. Then died mysteriously at 32 with no heir — and his empire shattered.",
+    "imagePrompt": "Portrait of Alexander the Great, young Macedonian king in bronze armor and scarlet cloak, laurel wreath over wavy auburn hair, determined gaze, ancient Greek battlefield with spears and shields in the background, dramatic sunset light, classical oil painting style, photorealistic, no text",
+    "storyIds": ["alexander-the-great", "alexander-cuts-the-knot", "death-of-alexander"]
+  },
+  {
+    "id": "leonidas",
+    "name": "Leonidas",
+    "subtitle": "The Spartan king at Thermopylae",
+    "overview": "King of Sparta. Stood at the Hot Gates with 300 Spartans and a few thousand allies against the Persian army. Held them for three days. Died fighting — and became the most legendary last stand in history.",
+    "imagePrompt": "Portrait of Leonidas, Spartan king warrior, bronze Corinthian helmet with red horsehair crest, polished bronze cuirass, crimson cloak, gripping a spear and round bronze hoplite shield with lambda symbol, rocky mountain pass of Thermopylae behind him, warm golden light, classical oil painting, photorealistic, cinematic, no text",
+    "storyIds": ["battle-of-thermopylae"]
+  },
+  {
+    "id": "socrates",
+    "name": "Socrates",
+    "subtitle": "The father of philosophy",
+    "overview": "He asked questions nobody wanted to answer and annoyed Athens into a death sentence. Drank the hemlock and kept teaching until his last breath. His method still runs every philosophy class 2,400 years later.",
+    "imagePrompt": "Portrait of Socrates, elderly Greek philosopher, bald with a thick white beard, simple white robe, standing in a marble Athenian courtyard with Doric columns, warm afternoon light, thoughtful expression, classical oil painting in the style of Jacques-Louis David, photorealistic, no text",
+    "storyIds": ["socrates-drinks-the-hemlock"]
+  },
+  {
+    "id": "plato",
+    "name": "Plato",
+    "subtitle": "Founder of the Academy",
+    "overview": "Socrates' best student, Aristotle's teacher. Wrote down the dialogues that preserved his teacher's ideas, then built the first institution of higher learning — the Academy — that shaped Western thought forever.",
+    "imagePrompt": "Portrait of Plato, Greek philosopher, middle-aged with a dark beard, flowing white robes, holding a scroll, standing beside marble columns of the Academy in Athens, olive trees behind him, warm Mediterranean light, classical oil painting, photorealistic, no text",
+    "storyIds": ["platos-academy"]
+  },
+  {
+    "id": "archimedes",
+    "name": "Archimedes",
+    "subtitle": "Eureka!",
+    "overview": "Greatest scientist of antiquity. Discovered displacement in the bath, designed war machines that held off Rome for years, and got so absorbed in geometry he didn't notice a Roman soldier was about to kill him.",
+    "imagePrompt": "Portrait of Archimedes, elderly Greek mathematician, wild white hair and beard, ink-stained fingers, holding geometric instruments and a papyrus with diagrams, workshop full of mechanical devices and scrolls behind him, warm torchlight, classical oil painting, photorealistic, no text",
+    "storyIds": ["archimedes-eureka"]
+  },
+  {
+    "id": "julius-caesar",
+    "name": "Julius Caesar",
+    "subtitle": "Veni, vidi, vici",
+    "overview": "Conquered Gaul, crossed the Rubicon, defeated Pompey, and became dictator of Rome. Then 23 senators stabbed him in broad daylight. His death ended the Republic — and his grand-nephew built an empire on it.",
+    "imagePrompt": "Portrait of Julius Caesar, middle-aged Roman general, laurel wreath on short receding hair, white toga with purple stripe, sharp intelligent eyes, Roman forum and marble columns behind him, warm late-afternoon light, classical oil painting in the style of the Renaissance masters, photorealistic, no text",
+    "storyIds": ["caesar-conquers-gaul", "caesar-crosses-the-rubicon", "first-triumvirate", "ides-of-march"]
+  },
+  {
+    "id": "hannibal",
+    "name": "Hannibal Barca",
+    "subtitle": "Rome's greatest nightmare",
+    "overview": "Carthaginian general who swore as a child to destroy Rome. Then actually did the impossible — marched war elephants over the Alps, smashed Roman armies for 15 years, and came within miles of sacking the city.",
+    "imagePrompt": "Portrait of Hannibal Barca, Carthaginian general, bronze Punic helmet with elaborate cheek guards, dark beard, ornate armor with scale plating, snow-capped Alps and a war elephant behind him in the distance, dramatic cold light, classical oil painting, photorealistic, cinematic, no text",
+    "storyIds": ["hannibal-crosses-the-alps", "battle-of-cannae"]
+  },
+  {
+    "id": "augustus",
+    "name": "Augustus",
+    "subtitle": "Rome's first emperor",
+    "overview": "Caesar's teenage grand-nephew became the shrewdest politician in history. Defeated Antony and Cleopatra, ended a century of civil war, and quietly turned the Republic into an empire that lasted 500 years.",
+    "imagePrompt": "Portrait of Augustus Caesar, young Roman emperor, laurel wreath, idealized youthful features, white toga with gold embroidery, stoic confident expression, Roman senate building behind him, warm marble light, classical oil painting, photorealistic, no text",
+    "storyIds": ["augustus-becomes-emperor", "battle-of-actium"]
+  },
+  {
+    "id": "marcus-aurelius",
+    "name": "Marcus Aurelius",
+    "subtitle": "The philosopher emperor",
+    "overview": "Roman emperor who ruled at the height of the empire and wrote personal journals about virtue while on military campaigns. His Meditations are still read today. The last of the 'Five Good Emperors.'",
+    "imagePrompt": "Portrait of Marcus Aurelius, middle-aged Roman emperor, curly dark beard and hair, bronze cuirass over a purple cloak, thoughtful eyes, writing on a wax tablet, military camp at dusk behind him, warm campfire light, classical oil painting, photorealistic, cinematic, no text",
+    "storyIds": ["marcus-aurelius-philosopher-king"]
+  },
+  {
+    "id": "constantine",
+    "name": "Constantine the Great",
+    "subtitle": "The emperor who converted Rome",
+    "overview": "Saw a cross in the sky, won a civil war in its name, then made Christianity legal across the empire. Founded Constantinople and called the Council of Nicaea. Turned Rome from pagan to Christian forever.",
+    "imagePrompt": "Portrait of Constantine the Great, Roman emperor in ornate late-Roman armor, jeweled diadem, purple imperial cloak, glowing chi-rho symbol on his shield, fourth-century Roman architecture behind him, dramatic golden light, classical oil painting in Byzantine-Renaissance style, photorealistic, no text",
+    "storyIds": ["constantine-converts", "council-of-nicaea"]
+  },
+  {
+    "id": "justinian",
+    "name": "Justinian",
+    "subtitle": "The Byzantine reformer",
+    "overview": "Emperor of the Eastern Roman Empire. Rewrote Roman law into the Code that shaped every legal system after it, built the Hagia Sophia, and nearly reconquered the old Western empire. His wife Theodora ran the show with him.",
+    "imagePrompt": "Portrait of Emperor Justinian, Byzantine ruler, jeweled gold crown and halo, richly embroidered purple and gold robes, holding a scroll and a small golden cross, mosaic background of gold and lapis, warm candlelight, Byzantine religious icon style blended with classical oil painting, photorealistic, no text",
+    "storyIds": ["justinian-and-theodora", "hagia-sophia-rises", "justinian-plague", "the-nika-riots"]
+  },
+  {
+    "id": "charlemagne",
+    "name": "Charlemagne",
+    "subtitle": "Father of Europe",
+    "overview": "Frankish king crowned Holy Roman Emperor on Christmas Day 800. Ruled most of Western Europe, revived learning after centuries of decay, and became the template for every medieval monarch who followed.",
+    "imagePrompt": "Portrait of Charlemagne, Frankish king, golden imperial crown, long white beard, blue robes trimmed with ermine fur, holding a golden sword and orb, carved stone cathedral behind him, warm torchlight, medieval manuscript-inspired classical oil painting, photorealistic, no text",
+    "storyIds": ["charlemagne-crowned"]
+  },
+  {
+    "id": "william-the-conqueror",
+    "name": "William the Conqueror",
+    "subtitle": "The Norman who took England",
+    "overview": "Duke of Normandy who crossed the Channel in 1066, killed King Harold at Hastings, and became King of England. His invasion rewired English government, language, and culture for a thousand years.",
+    "imagePrompt": "Portrait of William the Conqueror, Norman king, conical Norman helmet with nose guard, chainmail hauberk, red and gold surcoat with lions, holding a sword, battlefield at Hastings and English banners behind him, cold dramatic light, classical oil painting, photorealistic, cinematic, no text",
+    "storyIds": ["battle-of-hastings"]
+  },
+  {
+    "id": "saladin",
+    "name": "Saladin",
+    "subtitle": "The sultan who took Jerusalem",
+    "overview": "Kurdish-born founder of the Ayyubid dynasty. Drove the Crusaders out of Jerusalem in 1187 but did it with such famous mercy that even his European enemies admired him. The gold standard of chivalry.",
+    "imagePrompt": "Portrait of Saladin, medieval Kurdish sultan, ornate turban with jeweled pin, trim dark beard, flowing robes in emerald green and gold with Arabic calligraphy embroidery, curved scimitar at his side, silhouette of Jerusalem and the Dome of the Rock behind him, warm desert sunset light, classical oil painting, photorealistic, cinematic, no text",
+    "storyIds": ["saladin-retakes-jerusalem"]
+  },
+  {
+    "id": "genghis-khan",
+    "name": "Genghis Khan",
+    "subtitle": "The great khan",
+    "overview": "Born an outcast on the Mongolian steppe, he united the tribes and built the largest contiguous empire in human history. Merciless in war, brilliant at governance, and terrifyingly fast — he reshaped Eurasia forever.",
+    "imagePrompt": "Portrait of Genghis Khan, Mongol warlord, traditional fur-trimmed deel robe, ornate steel helmet with feathers, long mustache and beard, composite bow over his shoulder, vast Mongolian steppe with horsemen riding in the distance, warm sunset light, classical oil painting, photorealistic, cinematic, no text",
+    "storyIds": ["genghis-khan-rises"]
+  },
+  {
+    "id": "marco-polo",
+    "name": "Marco Polo",
+    "subtitle": "The Venetian in China",
+    "overview": "Venetian merchant who spent 17 years at Kublai Khan's court and wrote the book that introduced Europe to Asia. Most of his contemporaries thought he was lying. Columbus sailed west with a copy in his hand.",
+    "imagePrompt": "Portrait of Marco Polo, young Venetian explorer, fur-lined crimson travel cloak over medieval European tunic, richly decorated Yuan-dynasty Chinese palace behind him, ornate silk hangings, warm candlelight, classical oil painting, photorealistic, cinematic, no text",
+    "storyIds": ["marco-polo-in-china"]
+  },
+  {
+    "id": "joan-of-arc",
+    "name": "Joan of Arc",
+    "subtitle": "The Maid of Orléans",
+    "overview": "A teenage peasant girl who said God told her to save France, talked her way into commanding an army, and actually did it. Captured, tried, and burned at 19. Canonized a saint 500 years later.",
+    "imagePrompt": "Portrait of Joan of Arc, young medieval French warrior, polished plate armor, cropped dark hair, holding a white banner with fleur-de-lis, standing before the fortress walls of Orléans, warm dawn light breaking through clouds, classical oil painting in the style of Bastien-Lepage, photorealistic, reverent, no text",
+    "storyIds": ["joan-of-arc"]
+  },
+  {
+    "id": "leonardo-da-vinci",
+    "name": "Leonardo da Vinci",
+    "subtitle": "The Renaissance mind",
+    "overview": "Painter of the Mona Lisa, engineer of flying machines, anatomist, inventor, musician. The original polymath who saw the world as one giant puzzle to solve. Florence's gift to humanity.",
+    "imagePrompt": "Portrait of Leonardo da Vinci, elderly Renaissance master, long white beard, velvet cap and robes, surrounded by sketches of flying machines, anatomical drawings, and the Mona Lisa on an easel, warm workshop candlelight, classical oil painting in Italian Renaissance style, photorealistic, no text",
+    "storyIds": ["leonardo-da-vinci"]
+  },
+  {
+    "id": "michelangelo",
+    "name": "Michelangelo",
+    "subtitle": "Sculptor of the divine",
+    "overview": "Carved the David, painted the Sistine Chapel ceiling flat on his back, and designed St. Peter's dome. Fought with popes, outworked rivals, and lived to 88 still chipping away at stone.",
+    "imagePrompt": "Portrait of Michelangelo, Renaissance sculptor and painter, dark beard, paint-stained robes, chisel in hand, unfinished marble sculpture behind him and the Sistine Chapel ceiling visible above, dramatic chiaroscuro lighting, classical oil painting in the style of Caravaggio, photorealistic, no text",
+    "storyIds": ["michelangelo-and-the-sistine"]
+  },
+  {
+    "id": "martin-luther",
+    "name": "Martin Luther",
+    "subtitle": "The monk who split Christianity",
+    "overview": "German monk who nailed 95 complaints to a church door and accidentally started the Reformation. Translated the Bible into German, married an ex-nun, and broke the thousand-year grip of the medieval church.",
+    "imagePrompt": "Portrait of Martin Luther, 16th-century German theologian, black scholar's robes, stern intelligent eyes, holding a Bible and a quill, Wittenberg church door with nailed theses visible behind him, warm candlelight, classical oil painting in the style of Lucas Cranach, photorealistic, no text",
+    "storyIds": ["luthers-95-theses"]
+  },
+  {
+    "id": "henry-viii",
+    "name": "Henry VIII",
+    "subtitle": "The king who married six times",
+    "overview": "Tudor king of England. Broke with Rome to get divorced, married six wives (two beheaded), and turned his court into a soap opera nobody could look away from. Left behind a new church and a queen — Elizabeth.",
+    "imagePrompt": "Portrait of Henry VIII, Tudor king of England, middle-aged, broad shoulders, ornate gold and ermine robes, jeweled flat cap with feather, stern piercing eyes, Hampton Court palace in the background, warm candlelight, classical oil painting in the style of Hans Holbein, photorealistic, no text",
+    "storyIds": ["henry-viii-six-wives", "anne-boleyn-beheaded"]
+  },
+  {
+    "id": "elizabeth-i",
+    "name": "Elizabeth I",
+    "subtitle": "The Virgin Queen",
+    "overview": "Henry VIII's daughter, imprisoned as a teenager, crowned at 25. Ruled England for 44 years, defeated the Spanish Armada, and presided over Shakespeare's golden age — all without ever marrying.",
+    "imagePrompt": "Portrait of Queen Elizabeth I, Tudor queen of England, red hair, white face powder, high lace ruff collar, ornate gold and pearl-embroidered gown, holding a scepter and orb, Tudor palace behind her, warm candlelight, classical oil painting in the style of the Armada portrait, photorealistic, no text",
+    "storyIds": ["elizabeth-i", "spanish-armada"]
+  },
+  {
+    "id": "columbus",
+    "name": "Christopher Columbus",
+    "subtitle": "The accidental world-changer",
+    "overview": "Genoese sailor who convinced Spain to fund a westward voyage to Asia. He never reached Asia — he bumped into the Americas and spent the rest of his life insisting he hadn't. The collision of worlds starts with him.",
+    "imagePrompt": "Portrait of Christopher Columbus, 15th-century Genoese explorer, wind-swept dark hair, navy blue coat with golden trim, holding a rolled map, deck of a wooden caravel with billowing sails behind him, warm sunset over the ocean, classical oil painting, photorealistic, cinematic, no text",
+    "storyIds": ["columbus-1492"]
+  },
+  {
+    "id": "magellan",
+    "name": "Ferdinand Magellan",
+    "subtitle": "First to circle the world",
+    "overview": "Portuguese navigator who sailed for Spain and proved the Earth was round by accident. He died halfway through the voyage in the Philippines, but his crew limped home — the first humans to circumnavigate the globe.",
+    "imagePrompt": "Portrait of Ferdinand Magellan, 16th-century Portuguese navigator, trim beard, dark velvet doublet, holding a brass astrolabe, deck of a weathered wooden ship with storm clouds and the vast Pacific Ocean behind him, dramatic golden light, classical oil painting, photorealistic, cinematic, no text",
+    "storyIds": ["magellan-circumnavigates"]
+  },
+  {
+    "id": "galileo",
+    "name": "Galileo Galilei",
+    "subtitle": "The father of modern science",
+    "overview": "Pointed his telescope at the sky, saw moons around Jupiter, and proved Earth wasn't the center of everything. The Church put him on trial. He muttered 'and yet it moves' — and modern science began.",
+    "imagePrompt": "Portrait of Galileo Galilei, elderly Italian astronomer, long white beard, scholar's black robes, holding a brass telescope, night sky with moons of Jupiter visible behind him, warm candlelight illuminating star charts on his desk, classical oil painting, photorealistic, no text",
+    "storyIds": ["galileos-trial"]
+  },
+  {
+    "id": "louis-xiv",
+    "name": "Louis XIV",
+    "subtitle": "The Sun King",
+    "overview": "Ruled France for 72 years — the longest reign of any European monarch. Built Versailles, turned the nobility into glorified courtiers, and made France the cultural capital of Europe. 'L'état, c'est moi.'",
+    "imagePrompt": "Portrait of Louis XIV, Sun King of France, towering powdered baroque wig, royal blue velvet robes with gold fleur-de-lis embroidery, ermine cape, holding a scepter, gilded Hall of Mirrors at Versailles behind him, warm candlelight reflecting off gold, classical oil painting in the style of Hyacinthe Rigaud, photorealistic, no text",
+    "storyIds": ["louis-xiv-versailles"]
+  },
+  {
+    "id": "newton",
+    "name": "Isaac Newton",
+    "subtitle": "The laws of the universe",
+    "overview": "Watched an apple fall and figured out gravity, motion, and calculus — most of it during a plague year locked in his mother's house. Rewrote how humans understand the universe in one decade.",
+    "imagePrompt": "Portrait of Isaac Newton, 17th-century English scientist, long curled wig, dark scholar's robes, holding a glass prism casting a rainbow of light, apple and a telescope on a desk beside him, warm candlelight, Cambridge study behind him, classical oil painting, photorealistic, no text",
+    "storyIds": ["newtons-apple"]
+  },
+  {
+    "id": "george-washington",
+    "name": "George Washington",
+    "subtitle": "The first American president",
+    "overview": "Virginian planter who commanded the Continental Army, beat the British Empire, refused to become a king, and walked away after two terms. Set every precedent for American democracy by being the guy who didn't grab power.",
+    "imagePrompt": "Portrait of George Washington, 18th-century American general, powdered hair, blue and buff Continental Army uniform with gold epaulets, holding a sword, crossing the Delaware with soldiers in the background, cold dramatic dawn light, classical oil painting in the style of Emanuel Leutze, photorealistic, no text",
+    "storyIds": ["washington-crosses-the-delaware", "yorktown-surrender"]
+  },
+  {
+    "id": "napoleon",
+    "name": "Napoleon Bonaparte",
+    "subtitle": "Emperor of the French",
+    "overview": "Corsican artillery officer who rode the French Revolution all the way to emperor. Conquered most of Europe twice, rewrote its laws, and lost it all at Waterloo. Died exiled on a rock in the Atlantic.",
+    "imagePrompt": "Portrait of Napoleon Bonaparte, Emperor of the French, black bicorne hat, green military uniform with red and gold trim, right hand tucked into waistcoat, resolute gaze, battlefield with cannons and French Imperial Guard in the background, dramatic dusk light, classical oil painting in the style of Jacques-Louis David, photorealistic, no text",
+    "storyIds": ["napoleons-rise", "napoleon-crowns-himself", "battle-of-austerlitz", "napoleon-invades-russia", "battle-of-waterloo", "napoleon-at-st-helena"]
+  },
+  {
+    "id": "marie-antoinette",
+    "name": "Marie Antoinette",
+    "subtitle": "The last queen of France",
+    "overview": "Austrian teenager married off to the French king. Scapegoated for a broken system, accused of everything from treason to incest, and guillotined at 37. 'Let them eat cake' — she never said it.",
+    "imagePrompt": "Portrait of Marie Antoinette, young French queen, powdered high pompadour hairstyle with feathers and pearls, pale blue silk gown with lace and ribbons, porcelain skin, melancholy eyes, grand Versailles salon behind her, warm candlelight, classical oil painting in the style of Vigée Le Brun, photorealistic, no text",
+    "storyIds": ["marie-antoinettes-execution"]
+  },
+  {
+    "id": "darwin",
+    "name": "Charles Darwin",
+    "subtitle": "The man who rewrote biology",
+    "overview": "Sailed on the Beagle to the Galápagos, noticed finches with different beaks, and came home with an idea so explosive he sat on it for 20 years. When he finally published, the whole picture of life on Earth changed.",
+    "imagePrompt": "Portrait of Charles Darwin, elderly Victorian naturalist, long white beard, black suit, holding a notebook, tropical Galápagos shore with finches and a sailing ship in the background, warm afternoon light, classical oil painting, photorealistic, no text",
+    "storyIds": ["darwin-publishes-origin"]
+  },
+  {
+    "id": "abraham-lincoln",
+    "name": "Abraham Lincoln",
+    "subtitle": "The Great Emancipator",
+    "overview": "Self-taught frontier lawyer who became America's 16th president. Led the Union through the Civil War, ended slavery, and was shot five days after the Confederacy surrendered. Every modern democracy borrows his cadence.",
+    "imagePrompt": "Portrait of Abraham Lincoln, 19th-century American president, tall stovepipe top hat, black wool suit with high collar, chin beard, gaunt solemn face, Civil War encampment and the Capitol dome in the background, warm evening light, classical oil painting in the style of George P.A. Healy, photorealistic, no text",
+    "storyIds": ["lincoln-elected", "emancipation-proclamation", "lincoln-assassinated"]
+  },
+  {
+    "id": "churchill",
+    "name": "Winston Churchill",
+    "subtitle": "Britain in the storm",
+    "overview": "Aristocrat, war correspondent, painter, and drinker. Britain's prime minister during World War II, he held the line against Hitler with speeches alone for an entire year until the Americans showed up. 'We shall never surrender.'",
+    "imagePrompt": "Portrait of Winston Churchill, mid-20th-century British prime minister, wearing a black bowler hat and black suit, polka-dot bow tie, cigar in hand, stern determined expression, London skyline during the Blitz with searchlights behind him, dramatic nocturnal light, classical oil painting, photorealistic, cinematic, no text",
+    "storyIds": ["battle-of-britain", "invasion-of-poland"]
+  },
+  {
+    "id": "jfk",
+    "name": "John F. Kennedy",
+    "subtitle": "The young American president",
+    "overview": "Second-youngest US president ever. Faced down the Soviets in the Cuban Missile Crisis, promised to put a man on the moon, and was assassinated in Dallas at 46. The Camelot myth never quite went away.",
+    "imagePrompt": "Portrait of John F. Kennedy, young American president, tailored dark navy suit, red tie, charismatic smile with sharp intelligent eyes, thick chestnut hair, Oval Office with American flag behind him, warm natural window light, classical oil painting, photorealistic, no text",
+    "storyIds": ["cuban-missile-crisis", "jfk-assassinated"]
+  },
+  {
+    "id": "mlk",
+    "name": "Martin Luther King Jr.",
+    "subtitle": "I have a dream",
+    "overview": "Baptist preacher who led the American civil rights movement with nonviolent protest. Organized the March on Washington, won the Nobel Peace Prize, and was shot on a motel balcony at 39. His speeches still land today.",
+    "imagePrompt": "Portrait of Martin Luther King Jr., mid-20th-century American civil rights leader, charcoal suit, crisp white shirt, narrow tie, standing at a microphone with hand raised mid-speech, the Lincoln Memorial and a sea of supporters behind him, warm golden light, classical oil painting, photorealistic, reverent, no text",
+    "storyIds": ["mlk-i-have-a-dream"]
+  },
+  {
+    "id": "mandela",
+    "name": "Nelson Mandela",
+    "subtitle": "From prisoner to president",
+    "overview": "Jailed for 27 years fighting apartheid. Walked out in 1990, negotiated the peaceful end of white-minority rule, and was elected South Africa's first Black president. Chose reconciliation over revenge.",
+    "imagePrompt": "Portrait of Nelson Mandela, elderly South African leader, patterned Madiba shirt in warm colors, short grey hair, gentle but steady eyes, warm smile, Cape Town landscape with Table Mountain in the background, golden hour light, classical oil painting, photorealistic, dignified, no text",
+    "storyIds": ["mandela-freed"]
+  },
+  {
+    "id": "neil-armstrong",
+    "name": "Neil Armstrong",
+    "subtitle": "One small step",
+    "overview": "Quiet Navy pilot who became the first human to walk on the moon in July 1969. Said eight words that the whole world heard. Then went home to teach engineering in Ohio like nothing happened.",
+    "imagePrompt": "Portrait of Neil Armstrong in his Apollo 11 EVA spacesuit, polished gold-visored helmet tucked under his arm, white bulky pressurized suit with NASA and American flag patches, lunar module and moon's cratered surface behind him, black starry sky, dramatic sunlight, classical oil painting, photorealistic, cinematic, no text",
+    "storyIds": ["moon-landing"]
+  }
+]

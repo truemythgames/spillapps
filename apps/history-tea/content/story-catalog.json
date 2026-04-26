@@ -191,7 +191,7 @@
   {
     "id": "the-trojan-war",
     "title": "The Trojan War",
-    "description": "A prince steals another king's wife, so Greece spends ten years besieging Troy over it. Ends with a giant wooden horse and a massacre.",
+    "description": "A prince steals another king's wife, so a thousand Greek ships sail to Troy and lay siege to its walls for ten blood-soaked years. Achilles rages, Hector dies, armies grind each other into the dust beneath the towers of Troy.",
     "section": "Ancient Greece",
     "bibleRef": "c. 1200 BCE",
     "inSeed": true,
@@ -448,6 +448,15 @@
     "bibleRef": "58 BCE",
     "inSeed": false,
     "seedId": null
+  },
+  {
+    "id": "caesar-crosses-the-rubicon",
+    "title": "Caesar Crosses the Rubicon",
+    "description": "A general stands on the wrong side of a tiny river and the law says he's a traitor if he steps across it with his army. He does it anyway. 'Alea iacta est' — the die is cast. Civil war begins.",
+    "section": "Roman Republic",
+    "bibleRef": "49 BCE",
+    "inSeed": true,
+    "seedId": "st-rubicon"
   },
   {
     "id": "caesar-crosses-the-rubicon",

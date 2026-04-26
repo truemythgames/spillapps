@@ -24,15 +24,16 @@ interface Props {
 const { season, allSeasons } = Astro.props;
 const stories = season.stories;
 
-const pageTitle = `${season.name} Bible Stories — Listen Free | History Tea`;
+const pageTitle = `${season.name} — History Stories | History Tea`;
 const pageDesc = `${season.description || `Explore every story from ${season.name}.`} Listen to ${stories.length} ${season.name} stories as immersive audio on History Tea.`;
-const pageUrl = `https://historytea.app/books/${season.slug}`;
+const pageUrl = `https://historytea.app/eras/${season.slug}`;
 const ogImage = season.cover_image_url || "https://historytea.app/icon.png";
+const eraLabel = season.testament === "old" ? "Pre-1500" : "Post-1500";
 
 const collectionLd = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
-  name: `${season.name} Bible Stories`,
+  name: `${season.name} — History Stories`,
   description: pageDesc,
   url: pageUrl,
   numberOfItems: stories.length,
@@ -63,29 +64,29 @@ const breadcrumbLd = {
   "@type": "BreadcrumbList",
   itemListElement: [
     { "@type": "ListItem", position: 1, name: "Home", item: "https://historytea.app" },
-    { "@type": "ListItem", position: 2, name: "Bible Stories", item: "https://historytea.app/stories" },
+    { "@type": "ListItem", position: 2, name: "History Eras", item: "https://historytea.app/eras" },
     { "@type": "ListItem", position: 3, name: season.name, item: pageUrl },
   ],
 };
 
 const faqs = [
   {
-    q: `What stories are in the Book of ${season.name}?`,
-    a: `History Tea covers ${stories.length} stories from ${season.name}, including ${stories.slice(0, 4).map((s) => s.title).join(", ")}${stories.length > 4 ? ` and ${stories.length - 4} more` : ""}. Each story is available as immersive audio narration.`,
+    q: `What stories does the ${season.name} era include?`,
+    a: `History Tea covers ${stories.length} stories from ${season.name}, including ${stories.slice(0, 4).map((s) => s.title).join(", ")}${stories.length > 4 ? ` and ${stories.length - 4} more` : ""}. Each one is retold as immersive audio narration.`,
   },
   {
     q: `Can I listen to ${season.name} stories for free?`,
     a: `Yes! All ${stories.length} ${season.name} stories on History Tea are completely free. Download the app on iOS and start listening today.`,
   },
   {
-    q: `What is the Book of ${season.name} about?`,
+    q: `What is the ${season.name} era about?`,
     a: season.description
-      ? `${season.description} History Tea retells each story from ${season.name} as modern, immersive audio you can listen to anywhere.`
-      : `The Book of ${season.name} contains some of the most well-known stories in the Bible. History Tea brings each one to life as immersive audio narration.`,
+      ? `${season.description} History Tea retells each ${season.name} story as modern, immersive audio you can listen to anywhere.`
+      : `${season.name} covers some of the most pivotal events in human history. History Tea brings each one to life as immersive audio narration.`,
   },
   {
     q: `How long are the ${season.name} audio stories?`,
-    a: `Each ${season.name} story on History Tea runs between 5-15 minutes of immersive audio narration — perfect for a commute, workout, or before bed.`,
+    a: `Each ${season.name} story on History Tea runs between 5–15 minutes of immersive audio narration — perfect for a commute, workout, or before bed.`,
   },
 ];
 
@@ -108,7 +109,7 @@ const otherSeasons = allSeasons.filter((s) => s.id !== season.id);
   title={pageTitle}
   description={pageDesc}
   ogImage={ogImage}
-  canonicalPath={`/books/${season.slug}`}
+  canonicalPath={`/eras/${season.slug}`}
   jsonLd={jsonLdArray}
 >
   <style>
@@ -208,12 +209,12 @@ const otherSeasons = allSeasons.filter((s) => s.id !== season.id);
       font-weight: 600;
       font-size: 1rem;
       transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 24px rgba(200, 162, 255, 0.2);
+      box-shadow: 0 4px 24px rgba(77, 166, 255, 0.2);
     }
 
     .hero-cta:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(200, 162, 255, 0.35);
+      box-shadow: 0 8px 32px rgba(77, 166, 255, 0.35);
     }
 
     .hero-cta svg { width: 18px; height: 18px; }
@@ -270,7 +271,7 @@ const otherSeasons = allSeasons.filter((s) => s.id !== season.id);
       border-radius: 12px; margin-bottom: 0.6rem; overflow: hidden; transition: border-color 0.2s;
     }
     .faq-item:hover { border-color: var(--primary); }
-    .faq-item[open] { border-color: rgba(200, 162, 255, 0.3); }
+    .faq-item[open] { border-color: rgba(77, 166, 255, 0.3); }
 
     .faq-item summary {
       padding: 1rem 1.25rem; cursor: pointer; font-weight: 600; font-size: 0.95rem;
@@ -321,7 +322,7 @@ const otherSeasons = allSeasons.filter((s) => s.id !== season.id);
       <div class="breadcrumbs">
         <a href="/">Home</a>
         <span class="sep">/</span>
-        <a href="/stories">Stories</a>
+        <a href="/eras">Eras</a>
         <span class="sep">/</span>
         <span>{season.name}</span>
       </div>
@@ -330,10 +331,10 @@ const otherSeasons = allSeasons.filter((s) => s.id !== season.id);
         {season.cover_image_url ? (
           <img src={season.cover_image_url} alt={season.name} class="book-cover" loading="eager" />
         ) : (
-          <div class="book-cover-ph">📖</div>
+          <div class="book-cover-ph">🏛️</div>
         )}
         <div class="book-info">
-          <div class="book-testament">{season.testament} Testament</div>
+          <div class="book-testament">{eraLabel}</div>
           <h1>{season.name}</h1>
           <p class="book-meta">{stories.length} stories</p>
           {season.description && <p class="book-desc">{season.description}</p>}
@@ -351,7 +352,7 @@ const otherSeasons = allSeasons.filter((s) => s.id !== season.id);
               {s.cover_image_url ? (
                 <img src={s.cover_image_url} alt={s.title} loading="lazy" />
               ) : (
-                <div class="card-cover-placeholder">📖</div>
+                <div class="card-cover-placeholder">🏛️</div>
               )}
             </div>
             <div class="card-title">{s.title}</div>
@@ -376,14 +377,14 @@ const otherSeasons = allSeasons.filter((s) => s.id !== season.id);
 
     {otherSeasons.length > 0 && (
       <section class="other-books">
-        <h2>More Books</h2>
+        <h2>More Eras</h2>
         <div class="books-row">
           {otherSeasons.map((s) => (
-            <a href={`/books/${s.slug}`} class="book-card">
+            <a href={`/eras/${s.slug}`} class="book-card">
               {s.cover_image_url ? (
                 <img src={s.cover_image_url} alt={s.name} class="book-card-img" loading="lazy" />
               ) : (
-                <div class="book-card-img" style="background:var(--surface-light);display:flex;align-items:center;justify-content:center;font-size:2rem;">📖</div>
+                <div class="book-card-img" style="background:var(--surface-light);display:flex;align-items:center;justify-content:center;font-size:2rem;">🏛️</div>
               )}
               <div class="book-card-body">
                 <div class="book-card-name">{s.name}</div>

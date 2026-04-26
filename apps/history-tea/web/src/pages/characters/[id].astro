@@ -22,7 +22,7 @@ interface Props {
 const { character, allCharacters } = Astro.props;
 const stories = character.stories;
 
-const pageTitle = `${character.name} — Bible Character Stories | History Tea`;
+const pageTitle = `${character.name} — Stories & Key Moments | History Tea`;
 const pageDesc = `${character.description}. Listen to ${stories.length > 0 ? stories.length : "all"} ${character.name} stories as immersive audio on History Tea.`;
 const pageUrl = `https://historytea.app/characters/${character.id}`;
 const ogImage = character.image_url || "https://historytea.app/icon.png";
@@ -39,7 +39,7 @@ const personLd = {
 const collectionLd = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
-  name: `${character.name} — Bible Stories`,
+  name: `${character.name} — History Stories`,
   description: pageDesc,
   url: pageUrl,
   about: personLd,
@@ -69,21 +69,21 @@ const breadcrumbLd = {
   "@type": "BreadcrumbList",
   itemListElement: [
     { "@type": "ListItem", position: 1, name: "Home", item: "https://historytea.app" },
-    { "@type": "ListItem", position: 2, name: "Bible Stories", item: "https://historytea.app/stories" },
+    { "@type": "ListItem", position: 2, name: "Historical Figures", item: "https://historytea.app/characters" },
     { "@type": "ListItem", position: 3, name: character.name, item: pageUrl },
   ],
 };
 
 const faqs = [
   {
-    q: `Who is ${character.name} in the Bible?`,
-    a: `${character.description}. ${character.name} is one of the most significant figures in the Bible${stories.length > 0 ? `. History Tea tells ${stories.length} stories featuring ${character.name}` : ""}. Download the app to listen to the full audio retellings.`,
+    q: `Who was ${character.name}?`,
+    a: `${character.description}. ${character.name} is one of the most significant figures in history${stories.length > 0 ? `. History Tea tells ${stories.length} stories featuring ${character.name}` : ""}. Download the app to listen to the full audio retellings.`,
   },
   {
-    q: `What Bible stories feature ${character.name}?`,
+    q: `What history stories feature ${character.name}?`,
     a: stories.length > 0
       ? `${character.name} appears in ${stories.length} stories on History Tea: ${stories.map((s) => s.title).join(", ")}. All are available as free immersive audio.`
-      : `History Tea features ${character.name} across multiple stories. Download the free app to explore all of them with immersive audio narration.`,
+      : `History Tea features ${character.name} across multiple stories. Download the free app to explore all of them with cinematic audio narration.`,
   },
   {
     q: `Can I listen to ${character.name}'s story for free?`,
@@ -180,9 +180,9 @@ const otherCharacters = allCharacters.filter((c) => c.id !== character.id).slice
       background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
       color: #fff; padding: 0.8rem 2rem; border-radius: 999px; text-decoration: none;
       font-weight: 600; font-size: 1rem; transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 24px rgba(200, 162, 255, 0.2);
+      box-shadow: 0 4px 24px rgba(77, 166, 255, 0.2);
     }
-    .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(200, 162, 255, 0.35); }
+    .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(77, 166, 255, 0.35); }
     .hero-cta svg { width: 18px; height: 18px; }
 
     .stories-grid {
@@ -213,7 +213,7 @@ const otherCharacters = allCharacters.filter((c) => c.id !== character.id).slice
     .faq-section h2 { font-family: 'Playfair Display', serif; font-size: 1.35rem; margin-bottom: 1rem; }
     .faq-item { background: var(--surface); border: 1px solid var(--surface-border); border-radius: 12px; margin-bottom: 0.6rem; overflow: hidden; transition: border-color 0.2s; }
     .faq-item:hover { border-color: var(--primary); }
-    .faq-item[open] { border-color: rgba(200, 162, 255, 0.3); }
+    .faq-item[open] { border-color: rgba(77, 166, 255, 0.3); }
     .faq-item summary { padding: 1rem 1.25rem; cursor: pointer; font-weight: 600; font-size: 0.95rem; color: var(--text); list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
     .faq-item summary::-webkit-details-marker { display: none; }
     .faq-item summary::after { content: '+'; font-size: 1.25rem; color: var(--primary); flex-shrink: 0; }
@@ -265,7 +265,7 @@ const otherCharacters = allCharacters.filter((c) => c.id !== character.id).slice
       <div class="breadcrumbs">
         <a href="/">Home</a>
         <span class="sep">/</span>
-        <a href="/stories">Stories</a>
+        <a href="/characters">Figures</a>
         <span class="sep">/</span>
         <span>{character.name}</span>
       </div>
@@ -277,7 +277,7 @@ const otherCharacters = allCharacters.filter((c) => c.id !== character.id).slice
           <div class="character-avatar-ph">👤</div>
         )}
         <div class="character-info">
-          <div class="character-label">Bible Character</div>
+          <div class="character-label">Historical Figure</div>
           <h1>{character.name}</h1>
           <p class="character-desc">{character.description}</p>
           {stories.length > 0 && <p class="character-meta">{stories.length} stories</p>}
@@ -296,7 +296,7 @@ const otherCharacters = allCharacters.filter((c) => c.id !== character.id).slice
                 {s.cover_image_url ? (
                   <img src={s.cover_image_url} alt={s.title} loading="lazy" />
                 ) : (
-                  <div class="card-cover-placeholder">📖</div>
+                  <div class="card-cover-placeholder">🏛️</div>
                 )}
               </div>
               <div class="card-title">{s.title}</div>
@@ -327,7 +327,7 @@ const otherCharacters = allCharacters.filter((c) => c.id !== character.id).slice
 
     {otherCharacters.length > 0 && (
       <section class="other-characters">
-        <h2>More Bible Characters</h2>
+        <h2>More Historical Figures</h2>
         <div class="characters-row">
           {otherCharacters.map((c) => (
             <a href={`/characters/${c.id}`} class="char-card">

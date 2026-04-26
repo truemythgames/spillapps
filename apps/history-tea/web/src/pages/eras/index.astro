@@ -5,15 +5,15 @@ import { getSeasons, APP_STORE_URL } from "../../lib/stories";
 const seasons = await getSeasons();
 const totalStories = seasons.reduce((sum, s) => sum + s.stories.length, 0);
 
-const title = "Bible Books — History Tea";
-const description = `Explore Bible stories by book. ${totalStories} stories across ${seasons.length} books from Genesis to the Gospels, available as immersive audio.`;
+const title = "History Eras — History Tea";
+const description = `Explore world history by era. ${totalStories} stories across ${seasons.length} eras from ancient civilizations to the modern world, available as immersive audio.`;
 
 const collectionLd = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
-  name: "Bible Books",
+  name: "History Eras",
   description,
-  url: "https://historytea.app/books",
+  url: "https://historytea.app/eras",
   publisher: {
     "@type": "Organization",
     name: "History Tea",
@@ -24,13 +24,13 @@ const collectionLd = {
 const itemListLd = {
   "@context": "https://schema.org",
   "@type": "ItemList",
-  name: "Bible Books",
+  name: "History Eras",
   numberOfItems: seasons.length,
   itemListElement: seasons.map((s, i) => ({
     "@type": "ListItem",
     position: i + 1,
     name: s.name,
-    url: `https://historytea.app/books/${s.slug}`,
+    url: `https://historytea.app/eras/${s.slug}`,
     description: s.description,
   })),
 };
@@ -40,22 +40,24 @@ const breadcrumbLd = {
   "@type": "BreadcrumbList",
   itemListElement: [
     { "@type": "ListItem", position: 1, name: "Home", item: "https://historytea.app" },
-    { "@type": "ListItem", position: 2, name: "Bible Books", item: "https://historytea.app/books" },
+    { "@type": "ListItem", position: 2, name: "History Eras", item: "https://historytea.app/eras" },
   ],
 };
 
+const eraLabel = (t: string) => (t === "old" ? "Pre-1500" : "Post-1500");
+
 const faqs = [
   {
-    q: "What books of the Bible does History Tea cover?",
-    a: `History Tea covers ${seasons.length} major sections: ${seasons.map((s) => s.name).join(", ")}. Each contains multiple stories retold as immersive audio narration.`,
+    q: "What eras of history does History Tea cover?",
+    a: `History Tea covers ${seasons.length} major eras: ${seasons.map((s) => s.name).join(", ")}. Each contains multiple stories retold as immersive audio narration.`,
   },
   {
-    q: "Can I listen to Bible books in order?",
-    a: "Yes! Each book section on History Tea is organized in narrative order. Start from Genesis and listen through the entire Bible story arc, or jump to any book that interests you.",
+    q: "Can I listen to history in chronological order?",
+    a: "Yes! Each era on History Tea is organized chronologically. Start from ancient Mesopotamia and listen through to the Space Race, or jump into any era that interests you.",
   },
   {
     q: "Is History Tea free?",
-    a: `Yes! All ${totalStories} stories across every book are completely free to listen to. Download History Tea on iOS to start listening.`,
+    a: `Yes! All ${totalStories} stories across every era are completely free to listen to. Download History Tea on iOS to start listening.`,
   },
 ];
 
@@ -75,7 +77,7 @@ const jsonLdArray = [collectionLd, itemListLd, breadcrumbLd, faqLd];
 <Base
   title={title}
   description={description}
-  canonicalPath="/books"
+  canonicalPath="/eras"
   jsonLd={jsonLdArray}
 >
   <style>
@@ -180,7 +182,7 @@ const jsonLdArray = [collectionLd, itemListLd, breadcrumbLd, faqLd];
     .faq-section h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 1.25rem; }
     .faq-item { background: var(--surface); border: 1px solid var(--surface-border); border-radius: 12px; margin-bottom: 0.6rem; overflow: hidden; transition: border-color 0.2s; }
     .faq-item:hover { border-color: var(--primary); }
-    .faq-item[open] { border-color: rgba(200, 162, 255, 0.3); }
+    .faq-item[open] { border-color: rgba(77, 166, 255, 0.3); }
     .faq-item summary { padding: 1rem 1.25rem; cursor: pointer; font-weight: 600; font-size: 0.95rem; color: var(--text); list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
     .faq-item summary::-webkit-details-marker { display: none; }
     .faq-item summary::after { content: '+'; font-size: 1.25rem; color: var(--primary); flex-shrink: 0; }
@@ -190,8 +192,8 @@ const jsonLdArray = [collectionLd, itemListLd, breadcrumbLd, faqLd];
     .bottom-cta { text-align: center; padding: 4rem 2rem 3rem; }
     .bottom-cta h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.5rem, 3vw, 2rem); margin-bottom: 0.75rem; }
     .bottom-cta p { color: var(--text-secondary); margin-bottom: 1.5rem; max-width: 450px; margin-left: auto; margin-right: auto; }
-    .hero-cta { display: inline-flex; align-items: center; gap: 0.6rem; background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)); color: #fff; padding: 0.8rem 2rem; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 1rem; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 24px rgba(200, 162, 255, 0.2); }
-    .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(200, 162, 255, 0.35); }
+    .hero-cta { display: inline-flex; align-items: center; gap: 0.6rem; background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)); color: #fff; padding: 0.8rem 2rem; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 1rem; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 24px rgba(77, 166, 255, 0.2); }
+    .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(77, 166, 255, 0.35); }
     .hero-cta svg { width: 18px; height: 18px; }
 
     @media (max-width: 640px) {
@@ -203,20 +205,20 @@ const jsonLdArray = [collectionLd, itemListLd, breadcrumbLd, faqLd];
   <main>
     <div class="books-page">
       <div class="page-hero">
-        <h1>Bible Books</h1>
-        <p>{totalStories} stories across {seasons.length} books. Explore the Bible by book and listen as immersive audio.</p>
+        <h1>History Eras</h1>
+        <p>{totalStories} stories across {seasons.length} eras. Explore world history chronologically and listen as immersive audio.</p>
       </div>
 
       <div class="books-grid">
         {seasons.map((s) => (
-          <a href={`/books/${s.slug}`} class="book-card">
+          <a href={`/eras/${s.slug}`} class="book-card">
             {s.cover_image_url ? (
               <img src={s.cover_image_url} alt={s.name} class="book-card-img" loading="lazy" />
             ) : (
-              <div class="book-card-ph">📖</div>
+              <div class="book-card-ph">🏛️</div>
             )}
             <div class="book-card-body">
-              <div class="book-testament">{s.testament} Testament</div>
+              <div class="book-testament">{eraLabel(s.testament)}</div>
               <div class="book-card-name">{s.name}</div>
               <div class="book-card-count">{s.stories.length} stories</div>
               {s.description && <div class="book-card-desc">{s.description}</div>}
@@ -238,7 +240,7 @@ const jsonLdArray = [collectionLd, itemListLd, breadcrumbLd, faqLd];
 
     <section class="bottom-cta">
       <h2>Start from the Beginning</h2>
-      <p>Download History Tea and listen to every book of the Bible as immersive audio.</p>
+      <p>Download History Tea and listen to every era of world history as immersive audio.</p>
       <a href={APP_STORE_URL} class="hero-cta">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
         Download for iOS

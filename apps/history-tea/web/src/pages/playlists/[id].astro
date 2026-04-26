@@ -26,7 +26,7 @@ interface Props {
 const { playlist, allPlaylists } = Astro.props;
 const stories = playlist.stories;
 
-const pageTitle = `${playlist.name} — Bible Stories | History Tea`;
+const pageTitle = `${playlist.name} — History Stories | History Tea`;
 const pageDesc = `${playlist.description} Listen to ${stories.length} stories in the ${playlist.name} collection on History Tea.`;
 const pageUrl = `https://historytea.app/playlists/${playlist.id}`;
 
@@ -82,8 +82,8 @@ const faqs = [
     a: `Yes! All ${stories.length} stories in the ${playlist.name} collection are completely free to listen to on the History Tea app. Download on iOS and start listening today.`,
   },
   {
-    q: `What Bible chapters does ${playlist.name} cover?`,
-    a: `The ${playlist.name} collection covers ${stories.slice(0, 4).map((s) => s.bibleRef).join(", ")}${stories.length > 4 ? " and more" : ""}. Each story is a modern retelling with immersive narration.`,
+    q: `What time periods does ${playlist.name} cover?`,
+    a: `The ${playlist.name} collection spans ${stories.slice(0, 4).map((s) => s.bibleRef).join(", ")}${stories.length > 4 ? " and more" : ""}. Each story is a fresh, cinematic retelling with immersive narration.`,
   },
 ];
 
@@ -175,12 +175,12 @@ const otherPlaylists = allPlaylists.filter((p) => p.id !== playlist.id).slice(0,
       font-weight: 600;
       font-size: 1rem;
       transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 24px rgba(200, 162, 255, 0.2);
+      box-shadow: 0 4px 24px rgba(77, 166, 255, 0.2);
     }
 
     .hero-cta:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(200, 162, 255, 0.35);
+      box-shadow: 0 8px 32px rgba(77, 166, 255, 0.35);
     }
 
     .hero-cta svg { width: 18px; height: 18px; }
@@ -285,7 +285,7 @@ const otherPlaylists = allPlaylists.filter((p) => p.id !== playlist.id).slice(0,
     }
 
     .faq-item:hover { border-color: var(--primary); }
-    .faq-item[open] { border-color: rgba(200, 162, 255, 0.3); }
+    .faq-item[open] { border-color: rgba(77, 166, 255, 0.3); }
 
     .faq-item summary {
       padding: 1rem 1.25rem;
@@ -438,7 +438,7 @@ const otherPlaylists = allPlaylists.filter((p) => p.id !== playlist.id).slice(0,
               {hasCover(s.id) ? (
                 <img src={coverUrl(s.id)} alt={s.title} loading="lazy" />
               ) : (
-                <div class="card-cover-placeholder">📖</div>
+                <div class="card-cover-placeholder">🏛️</div>
               )}
               <div class="card-overlay">
                 <div class="card-ref">{s.bibleRef}</div>

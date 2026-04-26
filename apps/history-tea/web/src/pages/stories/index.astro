@@ -9,14 +9,14 @@ import {
 
 const catalog = getCatalog();
 
-const title = "All Bible Stories — History Tea";
+const title = "All History Stories — History Tea";
 const description =
-  "Explore 200+ Bible stories from Genesis to Revelation. Immersive audio retellings you can listen to anywhere.";
+  `Explore ${catalog.length}+ world history stories from ancient civilizations to the modern era. Immersive audio retellings you can listen to anywhere.`;
 
 const collectionLd = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
-  name: "Bible Stories",
+  name: "World History Stories",
   description,
   url: "https://historytea.app/stories",
   publisher: {
@@ -29,8 +29,8 @@ const collectionLd = {
 const itemListLd = {
   "@context": "https://schema.org",
   "@type": "ItemList",
-  name: "Bible Stories Collection",
-  description: `${catalog.length} Bible stories from Genesis to Revelation, available as immersive audio.`,
+  name: "History Stories Collection",
+  description: `${catalog.length} world history stories from ancient civilizations to the modern era, available as immersive audio.`,
   numberOfItems: catalog.length,
   itemListElement: catalog.slice(0, 50).map((s, i) => ({
     "@type": "ListItem",
@@ -44,12 +44,12 @@ const itemListLd = {
 const appLd = {
   "@context": "https://schema.org",
   "@type": "MobileApplication",
-  name: "History Tea — Bible Storycast",
+  name: "History Tea — History Storycast",
   operatingSystem: "iOS",
-  applicationCategory: "ReligionApplication",
-  description: "Listen to every Bible story as immersive audio. Professional narration from Genesis to Revelation.",
+  applicationCategory: "EducationApplication",
+  description: "Listen to world history as immersive audio. Cinematic narration from ancient civilizations to the modern era.",
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-  installUrl: "https://apps.apple.com/app/history-tea-bible-storycast/id6761665565",
+  installUrl: APP_STORE_URL,
   screenshot: "https://historytea.app/icon.png",
   author: { "@type": "Organization", name: "History Tea", url: "https://historytea.app" },
 };
@@ -57,27 +57,27 @@ const appLd = {
 const listingFaqs = [
   {
     q: "What is History Tea?",
-    a: `History Tea is a free iOS app that retells every Bible story as immersive audio. With ${catalog.length}+ stories from Genesis to Revelation and professional narration, you can listen to the Bible like a podcast — anywhere, anytime.`,
+    a: `History Tea is a free iOS app that retells world history as immersive audio. With ${catalog.length}+ stories from ancient Mesopotamia to the Space Race and cinematic narration, you can listen to history like a podcast — anywhere, anytime.`,
   },
   {
-    q: "How many Bible stories does History Tea have?",
-    a: `History Tea currently has ${catalog.length} stories covering every major narrative from Genesis to Revelation, including the full stories of Creation, the Exodus, David, Jesus' ministry, the Crucifixion, and the early Church.`,
+    q: "How many history stories does History Tea have?",
+    a: `History Tea currently has ${catalog.length} stories spanning every major period of world history — ancient Egypt, Greece and Rome, the Middle Ages, the Renaissance, both World Wars, the Cold War, and more.`,
   },
   {
     q: "Is History Tea free?",
     a: "Yes! History Tea is completely free to download and listen to. All stories and audio narrations are available at no cost on iOS.",
   },
   {
-    q: "Can I read Bible stories on the website?",
-    a: "You can preview each story's setup and key takeaways on our website. For the full story text and immersive audio narration, download the free History Tea app on iOS.",
+    q: "Can I read the stories on the website?",
+    a: "You can preview each story's setup and key takeaways on our website. For the full story and immersive audio narration, download the free History Tea app on iOS.",
   },
   {
-    q: "What Bible translation does History Tea use?",
-    a: "History Tea doesn't use a specific translation — each story is a fresh, modern retelling of the original biblical narrative, written to be engaging and accessible while staying faithful to Scripture.",
+    q: "Is the content historically accurate?",
+    a: "Yes. Every story is researched from reliable historical sources and written as a fresh, modern retelling — engaging and accessible without sacrificing accuracy. Where historians disagree, we say so.",
   },
   {
-    q: "Does History Tea cover the Old and New Testament?",
-    a: `Yes. History Tea covers both Testaments with ${catalog.length} stories, from Genesis through the book of Acts and beyond — including all the major characters, events, and teachings.`,
+    q: "What eras does History Tea cover?",
+    a: `History Tea covers everything from ancient civilizations (Mesopotamia, Egypt, Greece, Rome) through the medieval and early modern periods, and right up to the 20th and 21st centuries — ${catalog.length} stories and growing.`,
   },
 ];
 
@@ -96,7 +96,7 @@ const breadcrumbLd = {
   "@type": "BreadcrumbList",
   itemListElement: [
     { "@type": "ListItem", position: 1, name: "Home", item: "https://historytea.app" },
-    { "@type": "ListItem", position: 2, name: "Bible Stories", item: "https://historytea.app/stories" },
+    { "@type": "ListItem", position: 2, name: "History Stories", item: "https://historytea.app/stories" },
   ],
 };
 
@@ -146,12 +146,12 @@ const jsonLdArray = [collectionLd, itemListLd, appLd, faqLd, breadcrumbLd];
       font-weight: 600;
       font-size: 1rem;
       transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 24px rgba(200, 162, 255, 0.2);
+      box-shadow: 0 4px 24px rgba(77, 166, 255, 0.2);
     }
 
     .hero-cta:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(200, 162, 255, 0.35);
+      box-shadow: 0 8px 32px rgba(77, 166, 255, 0.35);
     }
 
     .hero-cta svg { width: 18px; height: 18px; }
@@ -242,7 +242,7 @@ const jsonLdArray = [collectionLd, itemListLd, appLd, faqLd, breadcrumbLd];
     }
 
     .faq-item:hover { border-color: var(--primary); }
-    .faq-item[open] { border-color: rgba(200, 162, 255, 0.3); }
+    .faq-item[open] { border-color: rgba(77, 166, 255, 0.3); }
 
     .faq-item summary {
       padding: 1rem 1.25rem;
@@ -290,7 +290,7 @@ const jsonLdArray = [collectionLd, itemListLd, appLd, faqLd, breadcrumbLd];
       transform: translateX(-50%);
       width: 600px;
       height: 400px;
-      background: radial-gradient(circle, rgba(107, 92, 231, 0.06) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(0, 87, 184, 0.06) 0%, transparent 70%);
       pointer-events: none;
     }
 
@@ -317,9 +317,9 @@ const jsonLdArray = [collectionLd, itemListLd, appLd, faqLd, breadcrumbLd];
 
   <main>
     <div class="stories-hero">
-      <h1>Bible Stories</h1>
+      <h1>History Stories</h1>
       <p>
-        Every story from Genesis to Revelation — retold as immersive audio you can listen to anywhere.
+        The stories that shaped the world — from the pyramids to the moon landing — retold as immersive audio you can listen to anywhere.
       </p>
       <a href={APP_STORE_URL} class="hero-cta">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
@@ -336,7 +336,7 @@ const jsonLdArray = [collectionLd, itemListLd, appLd, faqLd, breadcrumbLd];
               {hasCover(s.id) ? (
                 <img src={coverUrl(s.id)} alt={s.title} loading="lazy" />
               ) : (
-                <div class="mini-cover-ph">📖</div>
+                <div class="mini-cover-ph">🏛️</div>
               )}
             </div>
             <div class="mini-title">{s.title}</div>
