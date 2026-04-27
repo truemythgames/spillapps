@@ -34,6 +34,7 @@ export default function PaywallScreen() {
   const [plan, setPlan] = useState<Plan>("weekly");
   const [busy, setBusy] = useState(false);
   const [purchasing, setPurchasing] = useState(false);
+  const [restoring, setRestoring] = useState(false);
   const [packages, setPackages] = useState<PurchasesPackage[]>([]);
   const returning = !!storage.getBoolean(StorageKeys.HAS_SEEN_INITIAL_OFFER);
 
@@ -121,6 +122,27 @@ export default function PaywallScreen() {
       : findPackage("quarterly_30day");
   }
 
+  // Resolved prices from the RevenueCat packages — never hardcoded.
+  const weeklyFreetrial = findPackage("weekly_freetrial");
+  const quarterly3day = findPackage("quarterly_3day");
+  const quarterlyOnboarding = findPackage("quarterly_onboarding");
+  const quarterly30day = findPackage("quarterly_30day");
+  const weeklyOffer = findPackage("weekly_offer");
+
+  function priceOf(pkg?: PurchasesPackage): string {
+    return pkg?.product?.priceString ?? "";
+  }
+  function introPriceOf(pkg?: PurchasesPackage): string {
+    return pkg?.product?.introPrice?.priceString ?? "";
+  }
+
+  const weeklyFullPrice = priceOf(weeklyFreetrial);
+  const quarterlyFullPriceReturning = priceOf(quarterly3day);
+  const quarterlyFullPriceOnboarding = priceOf(quarterlyOnboarding);
+  const quarterly30dayFullPrice = priceOf(quarterly30day);
+  const quarterly30dayIntroPrice = introPriceOf(quarterly30day);
+  const weeklyOfferPrice = priceOf(weeklyOffer);
+
   async function subscribe() {
     if (busy || purchasing) return;
 
@@ -147,8 +169,8 @@ export default function PaywallScreen() {
   }
 
   async function handleRestore() {
-    if (purchasing) return;
-    setPurchasing(true);
+    if (purchasing || restoring) return;
+    setRestoring(true);
     try {
       const success = await restorePurchases();
       if (success) {
@@ -161,7 +183,7 @@ export default function PaywallScreen() {
     } catch {
       Alert.alert("Restore failed", "Please try again later.");
     } finally {
-      setPurchasing(false);
+      setRestoring(false);
     }
   }
 
@@ -175,7 +197,7 @@ export default function PaywallScreen() {
       {/* STEP 1 */}
       <Animated.View style={[styles.page, s1Style]}>
         <Hero source={require("@/assets/onboarding/noahs-ark.webp")} />
-        <XBtn onPress={dismiss} disabled={busy} top={insets.top + 8} />
+        <XBtn onPress={dismiss} disabled={busy || purchasing} top={insets.top + 8} />
 
         <View style={[styles.body, { paddingBottom: insets.bottom + 16 }]}>
           <Text style={styles.title}>Unlock Bible Tea</Text>
@@ -187,36 +209,54 @@ export default function PaywallScreen() {
               <Pressable
                 style={[styles.plan, plan === "weekly" && styles.planOn]}
                 onPress={() => setPlan("weekly")}
+                disabled={purchasing}
               >
                 <View style={styles.radio}>
                   {plan === "weekly" && <View style={styles.radioDot} />}
                 </View>
                 <View style={{ flex: 1 }}>
                   <Text style={styles.planName}>Weekly Access</Text>
-                  <Text style={styles.planPrice}>3 days free then $6.99/week</Text>
+                  <Text style={styles.planPrice}>
+                    {weeklyFullPrice
+                      ? `3 days free then ${weeklyFullPrice}/week`
+                      : "3 days free"}
+                  </Text>
                 </View>
               </Pressable>
 
               <Pressable
                 style={[styles.plan, plan === "quarterly" && styles.planOn]}
                 onPress={() => setPlan("quarterly")}
+                disabled={purchasing}
               >
                 <View style={styles.radio}>
                   {plan === "quarterly" && <View style={styles.radioDot} />}
                 </View>
                 <View style={{ flex: 1 }}>
                   <Text style={styles.planName}>3 Month Access</Text>
-                  <Text style={styles.planPrice}>3 days free then $39.99/every 3 mo</Text>
+                  <Text style={styles.planPrice}>
+                    {quarterlyFullPriceReturning
+                      ? `3 days free then ${quarterlyFullPriceReturning}/3 mo`
+                      : "3 days free"}
+                  </Text>
                 </View>
                 <View style={styles.discountBadge}>
                   <Text style={styles.discountBadgeText}>50% off</Text>
                 </View>
               </Pressable>
 
-              <Pressable style={styles.cta} onPress={subscribe}>
-                <Text style={styles.ctaText}>Try for FREE</Text>
+              <Pressable
+                style={[styles.cta, purchasing && styles.ctaDisabled]}
+                onPress={subscribe}
+                disabled={purchasing}
+              >
+                {purchasing ? (
+                  <ActivityIndicator color={colors.background} />
+                ) : (
+                  <Text style={styles.ctaText}>Try for FREE</Text>
+                )}
               </Pressable>
-              <Legal onRestore={handleRestore} />
+              <Legal onRestore={handleRestore} restoring={restoring} disabled={purchasing} />
             </>
           ) : (
             <>
@@ -230,6 +270,7 @@ export default function PaywallScreen() {
               <Pressable
                 style={[styles.plan, plan === "weekly" && styles.planOn]}
                 onPress={() => setPlan("weekly")}
+                disabled={purchasing}
               >
                 <View style={{ flex: 1 }}>
                   <Text style={styles.planName}>Free</Text>
@@ -243,9 +284,10 @@ export default function PaywallScreen() {
               <Pressable
                 style={[styles.plan, plan === "quarterly" && styles.planOn]}
                 onPress={() => setPlan("quarterly")}
+                disabled={purchasing}
               >
                 <View style={{ flex: 1 }}>
-                  <Text style={styles.planName}>$6.99</Text>
+                  <Text style={styles.planName}>{quarterly30dayIntroPrice || "—"}</Text>
                   <Text style={styles.planPrice}>30-Day trial</Text>
                 </View>
                 <View style={styles.radio}>
@@ -253,17 +295,33 @@ export default function PaywallScreen() {
                 </View>
               </Pressable>
 
-              <Pressable style={styles.cta} onPress={subscribe}>
-                <Text style={styles.ctaText}>
-                  {plan === "weekly" ? "Try for free" : "Redeem 30 days for $6.99"}
-                </Text>
+              <Pressable
+                style={[styles.cta, purchasing && styles.ctaDisabled]}
+                onPress={subscribe}
+                disabled={purchasing}
+              >
+                {purchasing ? (
+                  <ActivityIndicator color={colors.background} />
+                ) : (
+                  <Text style={styles.ctaText}>
+                    {plan === "weekly"
+                      ? "Try for free"
+                      : quarterly30dayIntroPrice
+                        ? `Redeem 30 days for ${quarterly30dayIntroPrice}`
+                        : "Redeem 30 days"}
+                  </Text>
+                )}
               </Pressable>
               <Text style={styles.pricingNote}>
                 {plan === "weekly"
-                  ? "3 days free, then $39.99/quarterly\nCancel anytime"
-                  : "30 days for $6.99, then $39.99/quarterly\nCancel anytime"}
+                  ? quarterlyFullPriceOnboarding
+                    ? `3 days free, then ${quarterlyFullPriceOnboarding}/quarterly\nCancel anytime`
+                    : "3 days free\nCancel anytime"
+                  : quarterly30dayIntroPrice && quarterly30dayFullPrice
+                    ? `30 days for ${quarterly30dayIntroPrice}, then ${quarterly30dayFullPrice}/quarterly\nCancel anytime`
+                    : "Cancel anytime"}
               </Text>
-              <Legal onRestore={handleRestore} />
+              <Legal onRestore={handleRestore} restoring={restoring} disabled={purchasing} />
             </>
           )}
         </View>
@@ -272,9 +330,18 @@ export default function PaywallScreen() {
       {/* STEP 2 — bottom sheet overlay */}
       {step === 2 && (
         <>
-          <Pressable style={styles.overlay} onPress={hideOffer} />
+          <Pressable
+            style={styles.overlay}
+            onPress={hideOffer}
+            disabled={purchasing}
+          />
           <Animated.View style={[styles.sheet, { paddingBottom: insets.bottom + 20 }, s2Style]}>
-            <Pressable style={styles.sheetX} onPress={goBack} hitSlop={12}>
+            <Pressable
+              style={styles.sheetX}
+              onPress={goBack}
+              hitSlop={12}
+              disabled={purchasing}
+            >
               <Text style={styles.sheetXText}>✕</Text>
             </Pressable>
 
@@ -285,7 +352,9 @@ export default function PaywallScreen() {
 
             <View style={styles.sheetPlan}>
               <Text style={styles.sheetPlanName}>Weekly Plan</Text>
-              <Text style={styles.sheetPlanPrice}>$6.99/week</Text>
+              <Text style={styles.sheetPlanPrice}>
+                {weeklyOfferPrice ? `${weeklyOfferPrice}/week` : ""}
+              </Text>
             </View>
 
             <View style={styles.sheetCheck}>
@@ -293,8 +362,16 @@ export default function PaywallScreen() {
               <Text style={styles.sheetCheckText}>No commitment, cancel anytime</Text>
             </View>
 
-            <Pressable style={styles.sheetCta} onPress={subscribe}>
-              <Text style={styles.sheetCtaText}>Unlock</Text>
+            <Pressable
+              style={[styles.sheetCta, purchasing && styles.ctaDisabled]}
+              onPress={subscribe}
+              disabled={purchasing}
+            >
+              {purchasing ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Text style={styles.sheetCtaText}>Unlock</Text>
+              )}
             </Pressable>
           </Animated.View>
         </>
@@ -332,15 +409,27 @@ function NoPay() {
   );
 }
 
-function Legal({ onRestore }: { onRestore?: () => void }) {
+function Legal({
+  onRestore,
+  restoring,
+  disabled,
+}: {
+  onRestore?: () => void;
+  restoring?: boolean;
+  disabled?: boolean;
+}) {
   return (
     <View style={styles.legalRow}>
       <Text style={styles.legalLink}>Terms</Text>
       <Text style={styles.legalDot}>·</Text>
       <Text style={styles.legalLink}>Privacy Policy</Text>
       <Text style={styles.legalDot}>·</Text>
-      <Pressable onPress={onRestore} hitSlop={8}>
-        <Text style={styles.legalLink}>Restore</Text>
+      <Pressable onPress={onRestore} hitSlop={8} disabled={disabled || restoring}>
+        {restoring ? (
+          <ActivityIndicator size="small" color={colors.textMuted} />
+        ) : (
+          <Text style={styles.legalLink}>Restore</Text>
+        )}
       </Pressable>
     </View>
   );
@@ -459,7 +548,10 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     alignItems: "center",
     marginTop: 20,
+    minHeight: 56,
+    justifyContent: "center",
   },
+  ctaDisabled: { opacity: 0.7 },
   ctaText: { fontFamily: fonts.bodySemiBold, fontSize: fontSize.lg, color: colors.background },
 
   pricingNote: {
@@ -564,6 +656,8 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     alignItems: "center",
     marginBottom: 8,
+    minHeight: 56,
+    justifyContent: "center",
   },
   sheetCtaText: {
     fontFamily: fonts.bodySemiBold,
