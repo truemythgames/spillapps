@@ -18,8 +18,11 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
   withSpring,
+  withSequence,
   interpolate,
   Extrapolation,
+  runOnJS,
+  Easing,
   FadeIn,
   SlideInUp,
 } from "react-native-reanimated";
@@ -51,7 +54,7 @@ const HERO_IMAGE = require("@/assets/onboarding/teastories.webp");
 
 const SCREENSHOTS = {
   home: require("@/assets/onboarding/screenshot-home.webp"),
-  discover: require("@/assets/onboarding/screenshot-discover.webp"),
+  stories: require("@/assets/onboarding/screenshot-stories.webp"),
   chat: require("@/assets/onboarding/screenshot-chat.webp"),
 } as const;
 
@@ -119,7 +122,7 @@ const FEATURE_SLIDES: FeatureSlide[] = [
   },
   {
     title: "Every era, every legend —\nall in one place",
-    image: SCREENSHOTS.discover,
+    image: SCREENSHOTS.stories,
   },
   {
     title: "The past, finally\nin your language",
@@ -176,6 +179,8 @@ export default function OnboardingScreen() {
   const showcaseRef = useRef<FlatList>(null);
 
   const fadeAnim = useSharedValue(1);
+  const slideAnim = useSharedValue(0);
+  const ctaScale = useSharedValue(1);
   const reviewPrompted = useRef(false);
   const step = STEP_ORDER[stepIdx];
   const inShowcase = stepIdx >= SHOWCASE_START_IDX;
@@ -196,7 +201,25 @@ export default function OnboardingScreen() {
   }
 
   function animateTransition(next: () => void) {
-    next();
+    const OUT = 180;
+    const IN = 260;
+    const EASE_OUT = Easing.out(Easing.cubic);
+    const EASE_IN = Easing.out(Easing.cubic);
+    fadeAnim.value = withTiming(0, { duration: OUT, easing: EASE_OUT });
+    slideAnim.value = withTiming(-18, { duration: OUT, easing: EASE_OUT }, (finished) => {
+      if (!finished) return;
+      runOnJS(next)();
+      slideAnim.value = 24;
+      fadeAnim.value = withTiming(1, { duration: IN, easing: EASE_IN });
+      slideAnim.value = withTiming(0, { duration: IN, easing: EASE_IN });
+    });
+  }
+
+  function bumpCta() {
+    ctaScale.value = withSequence(
+      withTiming(0.94, { duration: 90, easing: Easing.out(Easing.quad) }),
+      withSpring(1, { damping: 8, stiffness: 260 }),
+    );
   }
 
   function goNext() {
@@ -242,16 +265,11 @@ export default function OnboardingScreen() {
 
   const contentStyle = useAnimatedStyle(() => ({
     opacity: fadeAnim.value,
-    transform: [
-      {
-        translateY: interpolate(
-          fadeAnim.value,
-          [0, 1],
-          [10, 0],
-          Extrapolation.CLAMP,
-        ),
-      },
-    ],
+    transform: [{ translateY: slideAnim.value }],
+  }));
+
+  const ctaAnimStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: ctaScale.value }],
   }));
 
   function renderShowcasePage(pageStep: Step) {
@@ -420,7 +438,7 @@ export default function OnboardingScreen() {
         style={StyleSheet.absoluteFill}
         contentFit={currentStep === "welcome" ? "contain" : "cover"}
         contentPosition={currentStep === "welcome" ? "center" : "center"}
-        transition={0}
+        transition={420}
       />
       <LinearGradient
         colors={
@@ -483,12 +501,17 @@ export default function OnboardingScreen() {
                 />
               ))}
             </View>
-            <Pressable
-              style={styles.ctaBtn}
-              onPress={isLastShowcase ? completeOnboarding : goNext}
-            >
-              <Text style={styles.ctaBtnText}>{btnLabel}</Text>
-            </Pressable>
+            <Animated.View style={ctaAnimStyle}>
+              <Pressable
+                style={styles.ctaBtn}
+                onPress={() => {
+                  bumpCta();
+                  isLastShowcase ? completeOnboarding() : goNext();
+                }}
+              >
+                <Text style={styles.ctaBtnText}>{btnLabel}</Text>
+              </Pressable>
+            </Animated.View>
           </View>
         </View>
       ) : (
@@ -505,13 +528,18 @@ export default function OnboardingScreen() {
           <View style={styles.contentInner}>{renderContent()}</View>
 
           <View style={styles.bottomArea}>
-            <Pressable
-              style={[styles.ctaBtn, isDisabled && styles.ctaBtnDisabled]}
-              onPress={goNext}
-              disabled={isDisabled}
-            >
-              <Text style={styles.ctaBtnText}>{btnLabel}</Text>
-            </Pressable>
+            <Animated.View style={ctaAnimStyle}>
+              <Pressable
+                style={[styles.ctaBtn, isDisabled && styles.ctaBtnDisabled]}
+                onPress={() => {
+                  bumpCta();
+                  goNext();
+                }}
+                disabled={isDisabled}
+              >
+                <Text style={styles.ctaBtnText}>{btnLabel}</Text>
+              </Pressable>
+            </Animated.View>
           </View>
         </Animated.View>
       )}
