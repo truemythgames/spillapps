@@ -122,6 +122,27 @@ export default function PaywallScreen() {
       : findPackage("quarterly_30day");
   }
 
+  // Resolved prices from the RevenueCat packages — never hardcoded.
+  const weeklyFreetrial = findPackage("weekly_freetrial");
+  const quarterly3day = findPackage("quarterly_3day");
+  const quarterlyOnboarding = findPackage("quarterly_onboarding");
+  const quarterly30day = findPackage("quarterly_30day");
+  const weeklyOffer = findPackage("weekly_offer");
+
+  function priceOf(pkg?: PurchasesPackage): string {
+    return pkg?.product?.priceString ?? "";
+  }
+  function introPriceOf(pkg?: PurchasesPackage): string {
+    return pkg?.product?.introPrice?.priceString ?? "";
+  }
+
+  const weeklyFullPrice = priceOf(weeklyFreetrial);
+  const quarterlyFullPriceReturning = priceOf(quarterly3day);
+  const quarterlyFullPriceOnboarding = priceOf(quarterlyOnboarding);
+  const quarterly30dayFullPrice = priceOf(quarterly30day);
+  const quarterly30dayIntroPrice = introPriceOf(quarterly30day);
+  const weeklyOfferPrice = priceOf(weeklyOffer);
+
   async function subscribe() {
     if (busy || purchasing) return;
 
@@ -195,7 +216,11 @@ export default function PaywallScreen() {
                 </View>
                 <View style={{ flex: 1 }}>
                   <Text style={styles.planName}>Weekly Access</Text>
-                  <Text style={styles.planPrice}>3 days free then $6.99/week</Text>
+                  <Text style={styles.planPrice}>
+                    {weeklyFullPrice
+                      ? `3 days free then ${weeklyFullPrice}/week`
+                      : "3 days free"}
+                  </Text>
                 </View>
               </Pressable>
 
@@ -209,7 +234,11 @@ export default function PaywallScreen() {
                 </View>
                 <View style={{ flex: 1 }}>
                   <Text style={styles.planName}>3 Month Access</Text>
-                  <Text style={styles.planPrice}>3 days free then $39.99/every 3 mo</Text>
+                  <Text style={styles.planPrice}>
+                    {quarterlyFullPriceReturning
+                      ? `3 days free then ${quarterlyFullPriceReturning}/3 mo`
+                      : "3 days free"}
+                  </Text>
                 </View>
                 <View style={styles.discountBadge}>
                   <Text style={styles.discountBadgeText}>50% off</Text>
@@ -258,7 +287,7 @@ export default function PaywallScreen() {
                 disabled={purchasing}
               >
                 <View style={{ flex: 1 }}>
-                  <Text style={styles.planName}>$6.99</Text>
+                  <Text style={styles.planName}>{quarterly30dayIntroPrice || "—"}</Text>
                   <Text style={styles.planPrice}>30-Day trial</Text>
                 </View>
                 <View style={styles.radio}>
@@ -275,14 +304,22 @@ export default function PaywallScreen() {
                   <ActivityIndicator color={colors.background} />
                 ) : (
                   <Text style={styles.ctaText}>
-                    {plan === "weekly" ? "Try for free" : "Redeem 30 days for $6.99"}
+                    {plan === "weekly"
+                      ? "Try for free"
+                      : quarterly30dayIntroPrice
+                        ? `Redeem 30 days for ${quarterly30dayIntroPrice}`
+                        : "Redeem 30 days"}
                   </Text>
                 )}
               </Pressable>
               <Text style={styles.pricingNote}>
                 {plan === "weekly"
-                  ? "3 days free, then $39.99/quarterly\nCancel anytime"
-                  : "30 days for $6.99, then $39.99/quarterly\nCancel anytime"}
+                  ? quarterlyFullPriceOnboarding
+                    ? `3 days free, then ${quarterlyFullPriceOnboarding}/quarterly\nCancel anytime`
+                    : "3 days free\nCancel anytime"
+                  : quarterly30dayIntroPrice && quarterly30dayFullPrice
+                    ? `30 days for ${quarterly30dayIntroPrice}, then ${quarterly30dayFullPrice}/quarterly\nCancel anytime`
+                    : "Cancel anytime"}
               </Text>
               <Legal onRestore={handleRestore} restoring={restoring} disabled={purchasing} />
             </>
@@ -315,7 +352,9 @@ export default function PaywallScreen() {
 
             <View style={styles.sheetPlan}>
               <Text style={styles.sheetPlanName}>Weekly Plan</Text>
-              <Text style={styles.sheetPlanPrice}>$6.99/week</Text>
+              <Text style={styles.sheetPlanPrice}>
+                {weeklyOfferPrice ? `${weeklyOfferPrice}/week` : ""}
+              </Text>
             </View>
 
             <View style={styles.sheetCheck}>
