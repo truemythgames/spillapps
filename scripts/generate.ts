@@ -434,7 +434,7 @@ async function generateNarration(
   const speaker = SPEAKERS[speakerKey];
   console.log(`  [narration] Generating ${speaker.label}...`);
 
-  const speechText = prepareForSpeech(transcript);
+  const speechText = stripMarkdown(transcript);
 
   const response = await fetch(
     `https://api.elevenlabs.io/v1/text-to-speech/${speaker.voiceId}`,
@@ -446,7 +446,7 @@ async function generateNarration(
       },
       body: JSON.stringify({
         text: speechText,
-        model_id: "eleven_multilingual_v2",
+        model_id: "eleven_turbo_v2_5",
         voice_settings: { ...speaker.voiceSettings },
       }),
     }
@@ -523,7 +523,7 @@ async function processStory(story: Story, step?: string) {
       console.log(`  [narration] No transcript found — generate transcript first`);
     } else {
       const rawTranscript = readFileSync(transcriptPath, "utf8");
-      const voiceKeys: (keyof typeof SPEAKERS)[] = ["grace", "elijah"];
+      const voiceKeys: (keyof typeof SPEAKERS)[] = ["elijah"];
       for (const key of voiceKeys) {
         const speaker = SPEAKERS[key];
         const narrationPath = join(storyDir, `narration-${key}.mp3`);
