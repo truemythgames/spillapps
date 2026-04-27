@@ -182,8 +182,26 @@ sql.push(
 );
 sql.push("");
 
+sql.push("-- ── STORY AUDIO ──");
+sql.push("-- One row per (story, speaker). audio_key is app-scoped by mediaUrl() at read time.");
+const SPEAKER_IDS = { grace: "sp-ht-grace", elijah: "sp-ht-elijah" } as const;
+let audioCount = 0;
+for (const story of catalog) {
+  const dbStoryId = storyDbId(story.id, story.seedId);
+  for (const [voice, speakerId] of Object.entries(SPEAKER_IDS)) {
+    const audioId = `sa-ht-${story.id}-${voice}`;
+    const audioKey = `stories/${story.id}/narration-${voice}.mp3`;
+    sql.push(
+      `INSERT OR IGNORE INTO story_audio (id, story_id, speaker_id, audio_key, duration_seconds) VALUES ('${audioId}', '${dbStoryId}', '${speakerId}', '${audioKey}', 0);`
+    );
+    audioCount++;
+  }
+}
+sql.push("");
+
 writeFileSync(OUT_PATH, sql.join("\n"), "utf8");
 console.log(`Generated ${OUT_PATH}`);
 console.log(`  Seasons: ${seasonsByName.size}`);
 console.log(`  Stories: ${catalog.length}`);
 console.log(`  Speakers: 2`);
+console.log(`  Story audio rows: ${audioCount}`);
