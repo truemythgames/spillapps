@@ -1,5 +1,5 @@
 ---
-import { APP_STORE_URL } from "../lib/stories";
+import { APP_STORE_URL, PLAY_STORE_URL } from "../lib/stories";
 
 interface Props {
   title: string;
@@ -32,7 +32,10 @@ const orgLd = {
   name: "Bible Tea",
   url: "https://bibletea.app",
   logo: "https://bibletea.app/icon.png",
-  sameAs: ["https://apps.apple.com/app/bible-tea-bible-storycast/id6761665565"],
+  sameAs: [
+    "https://apps.apple.com/app/bible-tea-bible-storycast/id6761665565",
+    "https://play.google.com/store/apps/details?id=app.bibletea",
+  ],
 };
 
 const podcastLd = {
@@ -187,6 +190,29 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
       box-shadow: 0 4px 20px rgba(200, 162, 255, 0.3);
     }
 
+    .nav-stores { display: inline-flex; align-items: center; gap: 0.5rem; }
+
+    .nav-store-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--primary);
+      color: #000;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+
+    .nav-store-icon:hover {
+      transform: translateY(-1px);
+      background: #fff;
+      box-shadow: 0 4px 20px rgba(200, 162, 255, 0.3);
+    }
+
+    .nav-store-icon svg { display: block; }
+
     .menu-btn {
       display: none;
       background: none;
@@ -226,7 +252,14 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
     .mobile-menu .nav-cta {
       font-family: 'Inter', sans-serif;
       font-size: 1rem;
-      padding: 0.8rem 2.5rem;
+      padding: 0.8rem 2rem;
+    }
+
+    .mobile-stores {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      align-items: center;
       margin-top: 1rem;
     }
 
@@ -263,6 +296,8 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
       nav { padding: 0.75rem 1rem; }
       .nav-links .nav-stories-link { display: none; }
       .nav-cta { padding: 0.5rem 1rem; font-size: 0.75rem; }
+      .nav-stores { gap: 0.35rem; }
+      .nav-store-icon { width: 32px; height: 32px; }
       .menu-btn { display: block; }
       .footer-links { flex-wrap: wrap; gap: 1rem 1.5rem; }
     }
@@ -283,10 +318,19 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
       <a href="/playlists" class="nav-stories-link">Playlists</a>
       <a href="/characters" class="nav-stories-link">Characters</a>
       <a href="/books" class="nav-stories-link">Books</a>
-      <a href={APP_STORE_URL} class="nav-cta">
-        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-        Download
-      </a>
+      <div class="nav-stores">
+        <a href={APP_STORE_URL} class="nav-store-icon" aria-label="Download on the App Store">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        </a>
+        <a href={PLAY_STORE_URL} class="nav-store-icon" aria-label="Get it on Google Play">
+          <svg viewBox="0 0 24 24" width="16" height="16">
+            <path fill="#00D7C6" d="M3.609 1.814L13.792 12 3.609 22.186a.996.996 0 0 1-.61-.92V2.734c0-.378.231-.707.61-.92z"/>
+            <path fill="#FFCE00" d="M16.81 15.015L6.051 21.344l8.805-8.805 1.954 2.476z"/>
+            <path fill="#FF3A44" d="M20.16 10.81a1.058 1.058 0 0 1 0 2.38l-3.35 1.825-2.2-2.2 2.2-2.2 3.35 1.195z"/>
+            <path fill="#00F076" d="M14.856 11.185L6.051 2.656 16.81 8.985z"/>
+          </svg>
+        </a>
+      </div>
       <button class="menu-btn" aria-label="Open menu">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       </button>
@@ -301,10 +345,21 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
     <a href="/playlists">Playlists</a>
     <a href="/characters">Characters</a>
     <a href="/books">Books</a>
-    <a href={APP_STORE_URL} class="nav-cta">
-      <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-      Download for iOS
-    </a>
+    <div class="mobile-stores">
+      <a href={APP_STORE_URL} class="nav-cta">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        App Store
+      </a>
+      <a href={PLAY_STORE_URL} class="nav-cta">
+        <svg viewBox="0 0 24 24" width="16" height="16">
+          <path fill="#000" d="M3.609 1.814L13.792 12 3.609 22.186a.996.996 0 0 1-.61-.92V2.734c0-.378.231-.707.61-.92z"/>
+          <path fill="#000" d="M16.81 15.015L6.051 21.344l8.805-8.805 1.954 2.476z"/>
+          <path fill="#000" d="M20.16 10.81a1.058 1.058 0 0 1 0 2.38l-3.35 1.825-2.2-2.2 2.2-2.2 3.35 1.195z"/>
+          <path fill="#000" d="M14.856 11.185L6.051 2.656 16.81 8.985z"/>
+        </svg>
+        Google Play
+      </a>
+    </div>
   </div>
 
   <script is:inline>

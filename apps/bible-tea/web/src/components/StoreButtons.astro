@@ -1,0 +1,154 @@
+---
+import { APP_STORE_URL, PLAY_STORE_URL } from "../lib/stories";
+
+interface Props {
+  variant?: "hero" | "light" | "compact";
+  className?: string;
+}
+
+const { variant = "hero", className = "" } = Astro.props;
+---
+
+<div class:list={["store-buttons", `store-buttons--${variant}`, className]}>
+  <a href={APP_STORE_URL} class="store-btn store-btn--apple" aria-label="Download on the App Store">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+    </svg>
+    <span class="store-btn-text">
+      <small>Download on the</small>
+      <strong>App Store</strong>
+    </span>
+  </a>
+  <a href={PLAY_STORE_URL} class="store-btn store-btn--play" aria-label="Get it on Google Play">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path fill="#00D7C6" d="M3.609 1.814L13.792 12 3.609 22.186a.996.996 0 0 1-.61-.92V2.734c0-.378.231-.707.61-.92z"/>
+      <path fill="#FFCE00" d="M16.81 15.015L6.051 21.344l8.805-8.805 1.954 2.476z"/>
+      <path fill="#FF3A44" d="M20.16 10.81a1.058 1.058 0 0 1 0 2.38l-3.35 1.825-2.2-2.2 2.2-2.2 3.35 1.195z"/>
+      <path fill="#00F076" d="M14.856 11.185L6.051 2.656 16.81 8.985z"/>
+    </svg>
+    <span class="store-btn-text">
+      <small>GET IT ON</small>
+      <strong>Google Play</strong>
+    </span>
+  </a>
+</div>
+
+<style>
+  .store-buttons {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .store-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.7rem 1.3rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+    min-width: 168px;
+    white-space: nowrap;
+  }
+
+  .store-btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .store-btn svg {
+    width: 26px;
+    height: 26px;
+    flex-shrink: 0;
+  }
+
+  .store-btn-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.1;
+  }
+
+  .store-btn-text small {
+    font-size: 0.65rem;
+    font-weight: 500;
+    opacity: 0.85;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  .store-btn-text strong {
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+
+  /* Hero variant: dark pill (works on dark backgrounds — the default for Bible Tea) */
+  .store-buttons--hero .store-btn {
+    background: #000;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+  }
+
+  .store-buttons--hero .store-btn:hover {
+    background: #111;
+    border-color: rgba(200, 162, 255, 0.45);
+    box-shadow: 0 8px 30px rgba(200, 162, 255, 0.2);
+  }
+
+  /* Light variant: white pill (for bottom CTA sections on lighter surfaces) */
+  .store-buttons--light .store-btn {
+    background: #fff;
+    color: #000;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .store-buttons--light .store-btn:hover {
+    box-shadow: 0 8px 30px rgba(255, 255, 255, 0.15);
+  }
+
+  /* Compact: icon-only, for nav bar */
+  .store-buttons--compact {
+    gap: 0.4rem;
+  }
+
+  .store-buttons--compact .store-btn {
+    padding: 0.5rem;
+    min-width: 0;
+    border-radius: 10px;
+    background: var(--primary);
+    color: #000;
+  }
+
+  .store-buttons--compact .store-btn:hover {
+    background: #fff;
+  }
+
+  .store-buttons--compact .store-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .store-buttons--compact .store-btn-text {
+    display: none;
+  }
+
+  @media (max-width: 480px) {
+    .store-btn {
+      min-width: 148px;
+      padding: 0.6rem 1rem;
+    }
+    .store-btn svg {
+      width: 22px;
+      height: 22px;
+    }
+    .store-btn-text strong {
+      font-size: 0.9rem;
+    }
+  }
+</style>

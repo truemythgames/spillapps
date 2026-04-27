@@ -527,8 +527,11 @@ async function processStory(story: Story, step?: string) {
       for (const key of voiceKeys) {
         const speaker = SPEAKERS[key];
         const narrationPath = join(storyDir, `narration-${key}.mp3`);
-        if (existsSync(narrationPath) && !step) {
-          console.log(`  [narration] ${key} already exists, skipping`);
+        if (existsSync(narrationPath)) {
+          // MP3 already on disk: don't burn another ElevenLabs call, but still
+          // (re)upload so R2 ends up in sync. Same pattern as the image step.
+          console.log(`  [narration] ${key} exists — uploading to R2 only.`);
+          uploadToR2(narrationPath, `stories/${story.id}/narration-${key}.mp3`, "audio/mpeg");
         } else {
           const buffer = await generateNarration(rawTranscript, key);
           writeFileSync(narrationPath, buffer);

@@ -17,6 +17,8 @@ const CATALOG_PATH = join(CONTENT_DIR, "story-catalog.json");
 export const MEDIA_BASE = "https://media.spillapps.com/bible-tea";
 export const APP_STORE_URL =
   "https://apps.apple.com/app/bible-tea-bible-storycast/id6761665565";
+export const PLAY_STORE_URL =
+  "https://play.google.com/store/apps/details?id=app.bibletea";
 
 export function getCatalog(): CatalogStory[] {
   return JSON.parse(readFileSync(CATALOG_PATH, "utf8"));
