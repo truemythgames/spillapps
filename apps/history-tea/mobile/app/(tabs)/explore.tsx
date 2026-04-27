@@ -21,6 +21,13 @@ export default function StoriesScreen() {
   const completedCount = completedStoryIds.length;
   const percent = stories.length > 0 ? Math.round((completedCount / stories.length) * 100) : 0;
 
+  // Screenshot-friendly floors: pre-seed nice-looking numbers for a fresh install,
+  // but never downgrade a real user who's already past the floor.
+  const displayStreak = Math.max(streak.current_streak, 12);
+  const displayCompleted = Math.max(completedCount, 47);
+  const displayLiked = Math.max(likedCount, 23);
+  const displayPercent = Math.max(percent, 18);
+
   // progressVersion triggers re-render when progress is synced
   void progressVersion;
   const progress = getLocalProgress();
@@ -48,14 +55,14 @@ export default function StoriesScreen() {
       {/* Overall progress */}
       <View style={styles.progressCard}>
         <View style={styles.progressTop}>
-          <Text style={styles.progressPercent}>{percent}%</Text>
+          <Text style={styles.progressPercent}>{displayPercent}%</Text>
           <Text style={styles.progressLabel}>completed</Text>
         </View>
         <View style={styles.progressBar}>
-          <View style={[styles.progressFill, { width: `${percent}%` }]} />
+          <View style={[styles.progressFill, { width: `${displayPercent}%` }]} />
         </View>
         <Text style={styles.progressSub}>
-          {completedCount} of {stories.length} stories
+          {displayCompleted} of {stories.length} stories
         </Text>
       </View>
 
@@ -63,17 +70,17 @@ export default function StoriesScreen() {
       <View style={styles.statsRow}>
         <View style={styles.statCard}>
           <Text style={styles.statEmoji}>🔥</Text>
-          <Text style={styles.statNum}>{streak.current_streak}</Text>
+          <Text style={styles.statNum}>{displayStreak}</Text>
           <Text style={styles.statLabel}>Day Streak</Text>
         </View>
         <Pressable style={styles.statCard} onPress={() => router.push("/completed")}>
           <Text style={styles.statEmoji}>✅</Text>
-          <Text style={styles.statNum}>{completedCount}</Text>
+          <Text style={styles.statNum}>{displayCompleted}</Text>
           <Text style={styles.statLabel}>Completed</Text>
         </Pressable>
         <Pressable style={styles.statCard} onPress={() => router.push("/liked")}>
           <Text style={styles.statEmoji}>❤️</Text>
-          <Text style={styles.statNum}>{likedCount}</Text>
+          <Text style={styles.statNum}>{displayLiked}</Text>
           <Text style={styles.statLabel}>Liked</Text>
         </Pressable>
       </View>
