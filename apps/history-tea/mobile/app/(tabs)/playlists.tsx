@@ -139,11 +139,11 @@ export default function DiscoverScreen() {
         </View>
       ) : (
         <>
-          {/* Bible Characters */}
+          {/* Historical Figures */}
           {characterList.length > 0 && (
             <View style={styles.section}>
               <View style={styles.sectionRow}>
-                <Text style={styles.sectionTitle}>Bible Characters</Text>
+                <Text style={styles.sectionTitle}>Historical Figures</Text>
                 <Pressable onPress={() => router.push("/characters")}>
                   <Text style={styles.seeAll}>See all</Text>
                 </Pressable>

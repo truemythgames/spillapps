@@ -17,7 +17,7 @@ export default function CharactersScreen() {
         <Pressable style={styles.backBtn} onPress={() => router.back()}>
           <Ionicons name="chevron-back" size={24} color={colors.text} />
         </Pressable>
-        <Text style={styles.headerTitle}>Bible Characters</Text>
+        <Text style={styles.headerTitle}>Historical Figures</Text>
         <View style={{ width: 40 }} />
       </View>
 
