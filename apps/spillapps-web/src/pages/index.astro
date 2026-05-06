@@ -1,0 +1,1113 @@
+---
+import Base from "../layouts/Base.astro";
+
+const title = "Spill Apps — Boring Topics, Told Like Tea";
+const description = "We take the world's 'boring' topics and retell them like gossip for Gen Z. Bible drama? Historical beef? We spill it all.";
+---
+
+<Base title={title} description={description}>
+  <style>
+    /* Hero */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 10rem 2rem 6rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -30%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 900px;
+      height: 900px;
+      background: radial-gradient(ellipse, rgba(124, 92, 252, 0.12) 0%, rgba(6, 214, 160, 0.04) 50%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 200px;
+      background: linear-gradient(to top, var(--bg), transparent);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      padding: 0.5rem 1.25rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 2.5rem;
+    }
+    .hero-badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .hero h1 {
+      font-size: clamp(2.75rem, 7vw, 5.5rem);
+      line-height: 1.05;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.03em;
+      max-width: 900px;
+    }
+    .hero h1 .gradient-text {
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-mid), var(--gradient-end));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      font-size: clamp(1.05rem, 2vw, 1.35rem);
+      color: var(--text-secondary);
+      max-width: 620px;
+      margin: 0 auto 3rem;
+      line-height: 1.7;
+      font-weight: 300;
+    }
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      color: #fff;
+      padding: 1.1rem 2.75rem;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.1rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 30px rgba(124, 92, 252, 0.25);
+      margin-bottom: 3rem;
+    }
+    .hero-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 50px rgba(124, 92, 252, 0.4);
+    }
+    .hero-stats {
+      display: flex;
+      gap: 3rem;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .hero-stat {
+      text-align: center;
+    }
+    .hero-stat-value {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 0.25rem;
+    }
+
+    /* Concept Section */
+    .concept {
+      padding: 8rem 2rem;
+      position: relative;
+    }
+    .concept-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .concept-text h2 {
+      font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+      margin-bottom: 1.5rem;
+      line-height: 1.15;
+    }
+    .concept-text p {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      line-height: 1.8;
+      margin-bottom: 1.25rem;
+    }
+    .concept-text p strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+    .concept-visual {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .concept-card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .concept-card:hover {
+      border-color: var(--primary);
+      transform: translateX(4px);
+    }
+    .concept-card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+    .concept-card-icon.purple { background: rgba(124, 92, 252, 0.15); }
+    .concept-card-icon.green { background: rgba(6, 214, 160, 0.15); }
+    .concept-card-icon.yellow { background: rgba(255, 209, 102, 0.15); }
+    .concept-card h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+    }
+    .concept-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    /* How It Works */
+    .how {
+      padding: 6rem 2rem;
+      background: var(--bg-alt);
+    }
+    .how-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .how-inner h2 {
+      font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+      margin-bottom: 3rem;
+    }
+    .how-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      text-align: left;
+    }
+    .how-step {
+      display: flex;
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+    .how-step-num {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .how-step-content h4 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+    .how-step-content p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    /* Features Section */
+    .features {
+      padding: 8rem 2rem;
+    }
+    .features-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .features-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    .features-header h2 {
+      font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+      margin-bottom: 1rem;
+    }
+    .features-header p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .feature-item {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .feature-item:hover {
+      border-color: var(--primary);
+      transform: translateY(-3px);
+    }
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    .feature-item h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .feature-item p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    /* Products Section */
+    .products {
+      padding: 8rem 2rem;
+      background: var(--bg-alt);
+    }
+    .products-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    .products-header h2 {
+      font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+      margin-bottom: 1rem;
+    }
+    .products-header p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      max-width: 550px;
+      margin: 0 auto;
+    }
+    .products-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    .product-card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      padding: 3rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .product-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+    }
+    .product-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+    }
+    .product-card.bible::before {
+      background: linear-gradient(90deg, #C8A2FF, #6B5CE7);
+    }
+    .product-card.history::before {
+      background: linear-gradient(90deg, #06D6A0, #048A65);
+    }
+    .product-card.engineering::before {
+      background: linear-gradient(90deg, #FF6B6B, #FF8E53);
+    }
+    .product-card.mythology::before {
+      background: linear-gradient(90deg, #FFD166, #EF476F);
+    }
+    .product-card.truecrime::before {
+      background: linear-gradient(90deg, #EF4444, #7C2D12);
+    }
+    .product-card.psychology::before {
+      background: linear-gradient(90deg, #A78BFA, #EC4899);
+    }
+    .product-card.coming-soon {
+      opacity: 0.85;
+    }
+    .product-card.coming-soon:hover {
+      opacity: 1;
+    }
+    .product-status {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.5rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
+    }
+    .product-status.live {
+      background: rgba(6, 214, 160, 0.15);
+      color: var(--accent);
+    }
+    .product-status.soon {
+      background: rgba(255, 209, 102, 0.15);
+      color: var(--accent-warm);
+    }
+    .product-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+    }
+    .product-icon.bible { background: linear-gradient(135deg, #C8A2FF, #6B5CE7); }
+    .product-icon.history { background: linear-gradient(135deg, #06D6A0, #048A65); }
+    .product-icon.engineering { background: linear-gradient(135deg, #FF6B6B, #FF8E53); }
+    .product-icon.mythology { background: linear-gradient(135deg, #FFD166, #EF476F); }
+    .product-icon.truecrime { background: linear-gradient(135deg, #EF4444, #7C2D12); }
+    .product-icon.psychology { background: linear-gradient(135deg, #A78BFA, #EC4899); }
+    .product-card h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .product-tagline {
+      font-size: 0.9rem;
+      color: var(--primary-light);
+      font-weight: 500;
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+    .product-card > p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+    .product-features {
+      list-style: none;
+      margin-bottom: 2rem;
+    }
+    .product-features li {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      padding: 0.4rem 0;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+    .product-features li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    .product-meta {
+      display: flex;
+      gap: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--surface-border);
+    }
+    .product-meta-item {
+      display: flex;
+      flex-direction: column;
+    }
+    .product-meta-value {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .product-meta-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .product-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--primary-light);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+      transition: gap 0.2s;
+    }
+    .product-link:hover { gap: 0.75rem; }
+    .product-link svg { width: 16px; height: 16px; }
+
+    /* Platform Section */
+    .platform {
+      padding: 8rem 2rem;
+      background: var(--bg-alt);
+    }
+    .platform-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    .platform-header h2 {
+      font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+      margin-bottom: 1rem;
+    }
+    .platform-header p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .platform-grid {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .platform-card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      transition: border-color 0.3s;
+    }
+    .platform-card:hover { border-color: rgba(124, 92, 252, 0.4); }
+    .platform-card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(124, 92, 252, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+    .platform-card h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .platform-card p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    /* Market Section */
+    .market {
+      padding: 8rem 2rem;
+    }
+    .market-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .market-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    .market-header h2 {
+      font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+      margin-bottom: 1rem;
+    }
+    .market-header p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .market-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+    .market-card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+    }
+    .market-card h4 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .market-card h4 span {
+      font-size: 1.5rem;
+    }
+    .market-card p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    /* Expansion Section */
+    .expansion {
+      padding: 8rem 2rem;
+      background: var(--bg-alt);
+    }
+    .expansion-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .expansion-inner h2 {
+      font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+      margin-bottom: 1.5rem;
+    }
+    .expansion-inner > p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      margin-bottom: 3rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .expansion-items {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .expansion-chip {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 999px;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: border-color 0.3s, color 0.3s;
+    }
+    .expansion-chip:hover {
+      border-color: var(--primary);
+      color: var(--text);
+    }
+    .expansion-chip.active {
+      border-color: var(--primary);
+      color: var(--text);
+      background: rgba(124, 92, 252, 0.1);
+    }
+
+    /* CTA Section */
+    .cta {
+      padding: 8rem 2rem;
+      text-align: center;
+      position: relative;
+    }
+    .cta::before {
+      content: '';
+      position: absolute;
+      bottom: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 500px;
+      background: radial-gradient(ellipse, rgba(124, 92, 252, 0.08) 0%, rgba(6, 214, 160, 0.03) 40%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta h2 {
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      margin-bottom: 1.25rem;
+      line-height: 1.1;
+    }
+    .cta > p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      margin-bottom: 2.5rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      color: #fff;
+      padding: 1.1rem 3rem;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.1rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 30px rgba(124, 92, 252, 0.25);
+    }
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 50px rgba(124, 92, 252, 0.4);
+    }
+    .cta-note {
+      margin-top: 1.5rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero { padding: 8rem 1.5rem 4rem; }
+      .hero-stats { gap: 2rem; }
+      .concept-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .features-grid { grid-template-columns: 1fr; }
+      .products-grid { grid-template-columns: 1fr; }
+      .platform-grid { grid-template-columns: 1fr; }
+      .market-grid { grid-template-columns: 1fr; }
+      .product-card { padding: 2rem; }
+      .how-step { gap: 1rem; }
+    }
+  </style>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      2 apps live &mdash; Gen Z is listening
+    </div>
+    <h1 class="heading">
+      Boring topics.<br/><span class="gradient-text">Told like tea.</span>
+    </h1>
+    <p class="hero-sub">
+      We take the subjects nobody wants to study — the Bible, world history, and more — and retell them as drama, gossip, and audio you actually want to hear. Built for Gen Z.
+    </p>
+    <a href="#products" class="hero-cta">
+      See the Apps
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M6 9l6 6 6-6"/></svg>
+    </a>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-value">2</div>
+        <div class="hero-stat-label">Live Apps</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">500+</div>
+        <div class="hero-stat-label">Stories</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">50+</div>
+        <div class="hero-stat-label">Playlists</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">Daily</div>
+        <div class="hero-stat-label">Fresh Content</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Concept -->
+  <section class="concept">
+    <div class="concept-inner">
+      <div class="concept-text">
+        <h2 class="heading">The Idea</h2>
+        <p>
+          Gen Z doesn't do textbooks. They don't do long lectures. But they <strong>love drama</strong>. They love gossip. They love "spilling the tea."
+        </p>
+        <p>
+          So we took the world's most important (and most ignored) subjects and <strong>retold them the way Gen Z actually talks</strong> — as short, vivid, dramatic audio stories that feel like your friend is spilling the hottest gossip of the century.
+        </p>
+        <p>
+          The Bible? It's full of betrayal, forbidden love, and absolute chaos. History? Empires fell over petty beef. <strong>The stories were always incredible — they just needed better delivery.</strong>
+        </p>
+      </div>
+      <div class="concept-visual">
+        <div class="concept-card">
+          <div class="concept-card-icon purple">📚</div>
+          <div>
+            <h4>Pick a "boring" topic</h4>
+            <p>Bible, history, mythology, science — it's all drama in disguise</p>
+          </div>
+        </div>
+        <div class="concept-card">
+          <div class="concept-card-icon green">🍵</div>
+          <div>
+            <h4>Spill it like tea</h4>
+            <p>Retell it with energy, personality, and the gossip format Gen Z lives for</p>
+          </div>
+        </div>
+        <div class="concept-card">
+          <div class="concept-card-icon yellow">🎧</div>
+          <div>
+            <h4>Serve it as audio</h4>
+            <p>Short-form audio stories — perfect for commutes, gym, or bedtime</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how">
+    <div class="how-inner">
+      <h2 class="heading">The Formula</h2>
+      <div class="how-steps">
+        <div class="how-step">
+          <div class="how-step-num">1</div>
+          <div class="how-step-content">
+            <h4>Find a topic everyone thinks is boring</h4>
+            <p>The Bible. World history. Greek myths. Subjects with billions of potential listeners — but zero engaging delivery for young audiences.</p>
+          </div>
+        </div>
+        <div class="how-step">
+          <div class="how-step-num">2</div>
+          <div class="how-step-content">
+            <h4>Rewrite it like you're telling your group chat</h4>
+            <p>Dramatic narration. Character angles. Cliffhangers. "Wait, so Moses literally just walked through the ocean? And Pharaoh tried to follow? That's insane."</p>
+          </div>
+        </div>
+        <div class="how-step">
+          <div class="how-step-num">3</div>
+          <div class="how-step-content">
+            <h4>Ship a beautiful app that Gen Z actually opens</h4>
+            <p>Dark-mode-first design. Curated playlists. Characters you follow like influencers. Daily stories that hit like morning gossip. Subscription monetization.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features">
+    <div class="features-inner">
+      <div class="features-header">
+        <h2 class="heading">Not Just Stories</h2>
+        <p>Every app is packed with features that keep Gen Z coming back daily.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-item">
+          <div class="feature-icon">🍵</div>
+          <h4>Curated Playlists</h4>
+          <p>Themed collections like "Maximum Drama," "Forbidden Love," "Power Moves" — bingeable like Netflix seasons.</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🤖</div>
+          <h4>AI Chat</h4>
+          <p>Ask anything about the story. Dive deeper. Debate. The AI knows every character, every plot twist, every detail.</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🔥</div>
+          <h4>Daily Fresh Content</h4>
+          <p>A new "Story of the Day" every single day. Users wake up to fresh tea — a built-in habit loop.</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">👤</div>
+          <h4>Character Profiles</h4>
+          <p>Follow historical figures and characters across multiple stories — like following your favorite creator.</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🎧</div>
+          <h4>Immersive Audio</h4>
+          <p>Professional narration with personality. Not a boring audiobook — it's storytelling with energy and emotion.</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">❤️</div>
+          <h4>Likes & Progress</h4>
+          <p>Track what you've listened to, save favorites, and pick up right where you left off.</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🎨</div>
+          <h4>Stunning Artwork</h4>
+          <p>Every story has unique AI-generated cover art. Scroll the feed and it feels like browsing an art gallery.</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🌙</div>
+          <h4>Dark Mode Native</h4>
+          <p>Built dark-first for the generation that lives on their phone at night. Easy on the eyes, always.</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">⚡</div>
+          <h4>5-Minute Episodes</h4>
+          <p>No hour-long commitments. Each story is short enough for a commute, a shower, or a coffee break.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Products -->
+  <section class="products" id="products">
+    <div class="products-header">
+      <h2 class="heading">The Lineup</h2>
+      <p>Six "boring" topics. Six apps. Two live, four brewing.</p>
+    </div>
+    <div class="products-grid">
+      <div class="product-card bible">
+        <div class="product-status live">LIVE</div>
+        <div class="product-icon bible">📖</div>
+        <h3>Bible Tea</h3>
+        <div class="product-tagline">"Spill the tea. Read the Bible."</div>
+        <p>
+          The Bible is full of wild stories — betrayal, war, romance, miracles, political drama. We retell all of it as engaging audio that makes Gen Z actually want to hear scripture.
+        </p>
+        <ul class="product-features">
+          <li>100+ stories from Genesis to Revelation</li>
+          <li>Playlists like "Maximum Drama" and "Family Drama"</li>
+          <li>Character profiles — follow Moses, David, Ruth like characters in a show</li>
+          <li>Daily "Story of the Day" for habit loops</li>
+          <li>AI chat for deeper questions</li>
+        </ul>
+        <div class="product-meta">
+          <div class="product-meta-item">
+            <span class="product-meta-value">iOS + Android</span>
+            <span class="product-meta-label">Platforms</span>
+          </div>
+          <div class="product-meta-item">
+            <span class="product-meta-value">Religion</span>
+            <span class="product-meta-label">Category</span>
+          </div>
+          <div class="product-meta-item">
+            <span class="product-meta-value">5.0 ★</span>
+            <span class="product-meta-label">Rating</span>
+          </div>
+        </div>
+        <a href="https://bibletea.app" class="product-link">
+          Visit bibletea.app
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      <div class="product-card history">
+        <div class="product-status live">LIVE</div>
+        <div class="product-icon history">🏛️</div>
+        <h3>History Tea</h3>
+        <div class="product-tagline">"Spill the tea. Learn history."</div>
+        <p>
+          History class put you to sleep. We won't. From ancient empires beefing to modern revolutions — every story told like the drama it actually was.
+        </p>
+        <ul class="product-features">
+          <li>100+ stories spanning 5,000 years of human history</li>
+          <li>Playlists like "Roman Conquests" and "Power Moves"</li>
+          <li>Historical figures you follow across multiple stories</li>
+          <li>Era-based navigation — Ancient to Modern</li>
+          <li>AI chat for deeper questions</li>
+        </ul>
+        <div class="product-meta">
+          <div class="product-meta-item">
+            <span class="product-meta-value">iOS + Android</span>
+            <span class="product-meta-label">Platforms</span>
+          </div>
+          <div class="product-meta-item">
+            <span class="product-meta-value">Education</span>
+            <span class="product-meta-label">Category</span>
+          </div>
+          <div class="product-meta-item">
+            <span class="product-meta-value">5.0 ★</span>
+            <span class="product-meta-label">Rating</span>
+          </div>
+        </div>
+        <a href="https://historytea.app" class="product-link">
+          Visit historytea.app
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      <div class="product-card coming-soon engineering">
+        <div class="product-status soon">COMING SOON</div>
+        <div class="product-icon engineering">⚙️</div>
+        <h3>Engineering Tea</h3>
+        <div class="product-tagline">"Spill the tea. Build the future."</div>
+        <p>
+          Bridges that collapsed because of one bad bolt. Rockets that exploded on live TV. The wildest engineering failures and triumphs — told like the high-stakes drama they are.
+        </p>
+        <ul class="product-features">
+          <li>Disasters, breakthroughs, and the egos behind them</li>
+          <li>Playlists like "Epic Fails" and "Space Race"</li>
+          <li>Engineers profiled like mad scientists</li>
+        </ul>
+      </div>
+
+      <div class="product-card coming-soon mythology">
+        <div class="product-status soon">COMING SOON</div>
+        <div class="product-icon mythology">⚡</div>
+        <h3>Mythology Tea</h3>
+        <div class="product-tagline">"Spill the tea. Anger the gods."</div>
+        <p>
+          Zeus was a menace. Loki was unhinged. Every mythology is pure chaos — Greek, Norse, Egyptian, Hindu. The original drama, retold with the energy it deserves.
+        </p>
+        <ul class="product-features">
+          <li>Pantheons from every civilization</li>
+          <li>Playlists like "Olympus Drama" and "Ragnarok Saga"</li>
+          <li>Gods and heroes profiled like reality TV stars</li>
+        </ul>
+      </div>
+
+      <div class="product-card coming-soon truecrime">
+        <div class="product-status soon">COMING SOON</div>
+        <div class="product-icon truecrime">🔍</div>
+        <h3>True Crime Tea</h3>
+        <div class="product-tagline">"Spill the tea. Solve the case."</div>
+        <p>
+          Cold cases. Impossible heists. Prison escapes. Unsolved mysteries that still haunt investigators. The stories Gen Z already binges — now in short, gripping audio.
+        </p>
+        <ul class="product-features">
+          <li>Cases, heists, and disappearances told like thriller episodes</li>
+          <li>Playlists like "Unsolved" and "Greatest Escapes"</li>
+          <li>Suspects and detectives profiled across cases</li>
+        </ul>
+      </div>
+
+      <div class="product-card coming-soon psychology">
+        <div class="product-status soon">COMING SOON</div>
+        <div class="product-icon psychology">🧠</div>
+        <h3>Psychology Tea</h3>
+        <div class="product-tagline">"Spill the tea. Read their mind."</div>
+        <p>
+          Insane experiments. Cult leaders who brainwashed thousands. The dark side of the human mind — manipulation tactics, cognitive biases, and the psychology behind why people snap.
+        </p>
+        <ul class="product-features">
+          <li>Experiments, cults, and criminal minds told like horror stories</li>
+          <li>Playlists like "Dark Experiments" and "Cult Leaders"</li>
+          <li>Psychologists and subjects profiled like characters in a thriller</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Platform -->
+  <section class="platform" id="platform">
+    <div class="platform-header">
+      <h2 class="heading">One Platform, Infinite Topics</h2>
+      <p>Every "Tea" app shares the same engine. Launch a new topic in days, not months.</p>
+    </div>
+    <div class="platform-grid">
+      <div class="platform-card">
+        <div class="platform-card-icon">🤖</div>
+        <h4>AI Content Pipeline</h4>
+        <p>Scripts, artwork, and metadata generated with AI. A tiny team produces content at studio speed.</p>
+      </div>
+      <div class="platform-card">
+        <div class="platform-card-icon">⚡</div>
+        <h4>Shared Backend</h4>
+        <p>One API, one database, one CMS — scoped by product. Zero duplicated infrastructure between apps.</p>
+      </div>
+      <div class="platform-card">
+        <div class="platform-card-icon">📱</div>
+        <h4>Cross-Platform</h4>
+        <p>React Native + Expo for iOS and Android. Clone the template, rebrand, and ship to the App Store.</p>
+      </div>
+      <div class="platform-card">
+        <div class="platform-card-icon">💰</div>
+        <h4>Subscription Revenue</h4>
+        <p>RevenueCat-powered paywalls and subscriptions. Each product has its own pricing and offers.</p>
+      </div>
+      <div class="platform-card">
+        <div class="platform-card-icon">🌐</div>
+        <h4>SEO Websites</h4>
+        <p>Auto-generated marketing sites with structured data. Every story is a Google-indexed page.</p>
+      </div>
+      <div class="platform-card">
+        <div class="platform-card-icon">🔁</div>
+        <h4>Repeat the Formula</h4>
+        <p>Pick a topic. Clone the app. Seed the content. Ship. The playbook works for any "boring" subject.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Market -->
+  <section class="market" id="market">
+    <div class="market-inner">
+      <div class="market-header">
+        <h2 class="heading">Why It Works</h2>
+        <p>A generation that loves audio, hates textbooks, and can't resist drama.</p>
+      </div>
+      <div class="market-grid">
+        <div class="market-card">
+          <h4><span>📱</span> Gen Z Lives in Audio</h4>
+          <p>This generation grew up on podcasts, Spotify, and TikTok voiceovers. Audio is their native medium — not text, not video lectures.</p>
+        </div>
+        <div class="market-card">
+          <h4><span>🍵</span> Tea Culture Is Universal</h4>
+          <p>"Spill the tea" isn't a fad — it's how Gen Z processes stories. We package knowledge in the format they already share and consume.</p>
+        </div>
+        <div class="market-card">
+          <h4><span>🎯</span> Niche Topics, Huge Audiences</h4>
+          <p>2.4 billion Christians. 8 billion people with shared history. Each "boring" topic unlocks a passionate global audience waiting for better content.</p>
+        </div>
+        <div class="market-card">
+          <h4><span>🧠</span> AI Makes It Scale</h4>
+          <p>AI-generated scripts and artwork mean one small team can produce what used to require a content studio. Lower costs, faster launches, more topics.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Expansion -->
+  <section class="expansion">
+    <div class="expansion-inner">
+      <h2 class="heading">And Beyond...</h2>
+      <p>Every "boring" subject is a new app waiting to happen. The formula is infinitely repeatable.</p>
+      <div class="expansion-items">
+        <div class="expansion-chip active">Bible Tea ✓</div>
+        <div class="expansion-chip active">History Tea ✓</div>
+        <div class="expansion-chip active">Engineering Tea</div>
+        <div class="expansion-chip active">Mythology Tea</div>
+        <div class="expansion-chip active">True Crime Tea</div>
+        <div class="expansion-chip active">Psychology Tea</div>
+        <div class="expansion-chip">Economics Tea</div>
+        <div class="expansion-chip">Space Tea</div>
+        <div class="expansion-chip">Royal Tea</div>
+        <div class="expansion-chip">Sports Tea</div>
+        <div class="expansion-chip">Law Tea</div>
+        <div class="expansion-chip">Music Tea</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta" id="contact">
+    <h2 class="heading">Let's Build Together</h2>
+    <p>We're scaling fast and open to the right partner — whether that's investment, acquisition, or a strategic collaboration. If you see what we see, let's talk.</p>
+    <a href="mailto:contact@spillapps.com" class="cta-btn">
+      Start a Conversation
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+    <p class="cta-note">contact@spillapps.com</p>
+  </section>
+</Base>

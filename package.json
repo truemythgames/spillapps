@@ -7,6 +7,7 @@
     "apps/cms",
     "apps/bible-tea/*",
     "apps/history-tea/*",
+    "apps/spillapps-web",
     "packages/*"
   ],
   "scripts": {
@@ -28,6 +29,8 @@
     "deploy:api": "npm run deploy --workspace=@spillapps/api",
     "deploy:web": "npm run deploy --workspace=@spillapps/bible-tea-web",
     "deploy:web:history": "npm run deploy --workspace=@spillapps/history-tea-web",
+    "dev:web:spillapps": "npm run dev --workspace=@spillapps/web",
+    "deploy:web:spillapps": "npm run deploy --workspace=@spillapps/web",
     "deploy:cms": "npm run deploy --workspace=@spillapps/cms",
     "db:generate": "npm run generate --workspace=@spillapps/db",
     "db:migrate": "npm run migrate --workspace=@spillapps/db",
