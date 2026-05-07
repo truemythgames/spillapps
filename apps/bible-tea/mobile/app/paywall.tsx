@@ -150,7 +150,7 @@ export default function PaywallScreen() {
 
     if (!pkg) {
       setSubscribed(true);
-      goBack();
+      router.replace("/post-purchase" as any);
       return;
     }
 
@@ -159,7 +159,7 @@ export default function PaywallScreen() {
       const success = await purchasePackage(pkg);
       if (success) {
         setSubscribed(true);
-        goBack();
+        router.replace("/post-purchase" as any);
       }
     } catch (e: any) {
       Alert.alert("Purchase failed", e?.message ?? "Something went wrong. Please try again.");

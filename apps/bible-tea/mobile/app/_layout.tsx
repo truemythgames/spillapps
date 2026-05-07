@@ -85,7 +85,7 @@ export default function RootLayout() {
 
   const hasOnboarded = storage.getBoolean(StorageKeys.HAS_ONBOARDED);
 
-  const hideMini = pathname === "/player" || pathname === "/onboarding" || pathname === "/paywall";
+  const hideMini = pathname === "/player" || pathname === "/onboarding" || pathname === "/paywall" || pathname === "/post-purchase";
 
   if (!hasOnboarded && pathname !== "/onboarding") {
     return <Redirect href="/onboarding" />;
@@ -124,6 +124,14 @@ export default function RootLayout() {
           name="special-offer"
           options={{
             animation: "slide_from_bottom",
+            presentation: "fullScreenModal",
+            gestureEnabled: false,
+          }}
+        />
+        <Stack.Screen
+          name="post-purchase"
+          options={{
+            animation: "fade",
             presentation: "fullScreenModal",
             gestureEnabled: false,
           }}

@@ -75,7 +75,8 @@ export default function SpecialOfferScreen() {
       const success = await purchasePackage(yearly);
       if (success) {
         setSubscribed(true);
-        close();
+        router.replace("/post-purchase" as any);
+        return;
       }
     } catch (e: any) {
       Alert.alert(

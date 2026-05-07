@@ -16,6 +16,7 @@
     "dev:cms": "npm run dev --workspace=@spillapps/cms",
     "dev:web": "npm run dev --workspace=@spillapps/bible-tea-web",
     "dev:mobile": "npx tsx scripts/content-server.ts & npm run start --workspace=@spillapps/bible-tea-mobile",
+    "dev:mobile:bible": "npx tsx scripts/content-server.ts & npm run start --workspace=@spillapps/bible-tea-mobile",
     "dev:mobile:clear": "npm run start:clear --workspace=@spillapps/bible-tea-mobile",
     "dev:mobile:ios": "npm run start:ios --workspace=@spillapps/bible-tea-mobile",
     "dev:mobile:native": "npm run ios --workspace=@spillapps/bible-tea-mobile",
