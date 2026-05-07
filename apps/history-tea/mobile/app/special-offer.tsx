@@ -148,8 +148,12 @@ export default function SpecialOfferScreen() {
             )}
 
             <View style={styles.pricePill}>
-              <Text style={styles.priceText}>{pricePerWeek}/week</Text>
+              <Text style={styles.priceText}>{yearlyPrice}/year</Text>
             </View>
+
+            <Text style={styles.perWeekNote}>
+              works out to just {pricePerWeek}/week
+            </Text>
 
             <Text style={styles.lowest}>Lowest price ever</Text>
           </LinearGradient>
@@ -175,7 +179,7 @@ export default function SpecialOfferScreen() {
         </Pressable>
 
         <Text style={styles.billing}>
-          billed yearly at {yearlyPrice} per year
+          Auto-renews yearly at {yearlyPrice}. Cancel anytime in Settings.
         </Text>
       </View>
     </View>
@@ -288,18 +292,23 @@ const styles = StyleSheet.create({
   pricePill: {
     width: "100%",
     backgroundColor: "#FFFFFF",
-    paddingVertical: 18,
+    paddingVertical: 22,
     borderRadius: 999,
     alignItems: "center",
-    marginBottom: 12,
+    marginBottom: 10,
   },
   priceText: {
-    fontSize: 24,
-    fontWeight: "700",
+    fontSize: 30,
+    fontWeight: "800",
     color: INK,
   },
+  perWeekNote: {
+    fontSize: 13,
+    color: MUTED,
+    marginBottom: 6,
+  },
   lowest: {
-    fontSize: 14,
+    fontSize: 13,
     color: MUTED,
   },
   footer: {

@@ -134,6 +134,12 @@ export async function restorePurchases(): Promise<boolean> {
 export async function checkSubscription(): Promise<boolean | null> {
   if (!Purchases) return null;
   try {
+    // Bust any stale local cache so we get the authoritative answer from
+    // the RevenueCat backend (e.g. after manual entitlement revoke / customer
+    // delete in the dashboard, or after subscription cancel/expire).
+    try {
+      await Purchases.invalidateCustomerInfoCache();
+    } catch {}
     const customerInfo = await Purchases.getCustomerInfo();
     return hasActiveEntitlement(customerInfo);
   } catch (e) {

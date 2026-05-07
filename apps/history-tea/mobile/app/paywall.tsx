@@ -13,16 +13,17 @@ import Animated, {
 } from "react-native-reanimated";
 import { useAppStore } from "@/stores/app";
 import { storage, StorageKeys } from "@/lib/storage";
-import { getOfferings, purchasePackage, restorePurchases, type PurchasesPackage } from "@/lib/purchases";
+import { getOfferings, purchasePackage, restorePurchases, PRODUCT_IDS, type PurchasesPackage } from "@/lib/purchases";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
 const { height: SCREEN_H } = Dimensions.get("window");
 
-type Plan = "weekly" | "quarterly";
+type Plan = "weekly" | "quarterly" | "offer";
 
-// Per-cold-start flag: the special-offer screen shows at most once per app
-// launch when dismissing the *normal* sales page (not the onboarding paywall).
-let SPECIAL_OFFER_SHOWN_THIS_SESSION = false;
+// The highlighted yearly_offer card on the inside-app paywall is a
+// "one-time" offer per app session — show it the first time the inside-app
+// paywall opens, then hide it for the rest of the cold-start session.
+let YEARLY_OFFER_SHOWN_THIS_SESSION = false;
 
 export default function PaywallScreen() {
   const router = useRouter();
@@ -30,25 +31,45 @@ export default function PaywallScreen() {
   const setSubscribed = useAppStore((s) => s.setSubscribed);
   const isSubscribed = useAppStore((s) => s.isSubscribed);
 
-  const [step, setStep] = useState<1 | 2>(1);
-  const [plan, setPlan] = useState<Plan>("weekly");
+  // Snapshot `returning` ONCE at mount so it stays stable for the lifetime
+  // of this paywall instance. Otherwise setting HAS_SEEN_INITIAL_OFFER below
+  // would flip the onboarding paywall into the inside-app variant mid-render.
+  const [returning] = useState(
+    () => !!storage.getBoolean(StorageKeys.HAS_SEEN_INITIAL_OFFER),
+  );
+  // Snapshot whether the yearly_offer card should render this mount. We show
+  // it the FIRST time the inside-app paywall is opened in this session, then
+  // hide it on subsequent opens until the next cold start.
+  const [showYearlyOffer] = useState(() => {
+    if (!returning) return false;
+    if (YEARLY_OFFER_SHOWN_THIS_SESSION) return false;
+    YEARLY_OFFER_SHOWN_THIS_SESSION = true;
+    return true;
+  });
+  const [plan, setPlan] = useState<Plan>(showYearlyOffer ? "offer" : "weekly");
   const [busy, setBusy] = useState(false);
   const [purchasing, setPurchasing] = useState(false);
   const [restoring, setRestoring] = useState(false);
   const [packages, setPackages] = useState<PurchasesPackage[]>([]);
-  const returning = !!storage.getBoolean(StorageKeys.HAS_SEEN_INITIAL_OFFER);
 
   const s1Y = useSharedValue(SCREEN_H);
-  const s2Y = useSharedValue(SCREEN_H);
   const badgeSc = useSharedValue(0);
 
   useEffect(() => {
     s1Y.value = withSpring(0, { damping: 22, stiffness: 90 });
+    // Mark that the user has seen the initial offer so the NEXT time the
+    // paywall opens it renders the inside-app variant (yearly_offer card).
+    // The current mount keeps the snapshot above, so this only takes effect
+    // on subsequent opens.
+    if (!returning) {
+      storage.set(StorageKeys.HAS_SEEN_INITIAL_OFFER, true);
+    }
     getOfferings().then((offering) => {
       if (offering?.availablePackages) {
         setPackages(offering.availablePackages);
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function goBack() {
@@ -63,71 +84,39 @@ export default function PaywallScreen() {
     router.replace(path as any);
   }
 
-  function showOffer() {
-    if (busy) return;
-    setBusy(true);
-    storage.set(StorageKeys.HAS_SEEN_INITIAL_OFFER, true);
-    setStep(2);
-    s2Y.value = 400;
-    s2Y.value = withSpring(0, { damping: 20, stiffness: 120 });
-    setTimeout(() => setBusy(false), 500);
-  }
-
-  function hideOffer() {
-    if (busy) return;
-    setBusy(true);
-    s2Y.value = withSpring(400, { damping: 20, stiffness: 120 });
-    setTimeout(() => {
-      setStep(1);
-      setBusy(false);
-    }, 300);
-  }
-
   function dismiss() {
-    if (busy) return;
-    if (step === 1 && !returning) {
-      showOffer();
-      return;
-    }
-    // Normal sales page (post-onboarding): show the special offer once per
-    // session when dismissing. Onboarding entry uses router.replace() so
-    // canGoBack() === false there, which we use to skip this branch.
-    if (
-      !SPECIAL_OFFER_SHOWN_THIS_SESSION &&
-      router.canGoBack() &&
-      step === 1
-    ) {
-      SPECIAL_OFFER_SHOWN_THIS_SESSION = true;
-      router.replace("/special-offer" as any);
-      return;
-    }
+    if (busy || purchasing) return;
     goBack();
   }
 
-  function findPackage(identifier: string): PurchasesPackage | undefined {
-    return packages.find((p) => p.identifier === identifier);
+  function findPackage(
+    identifier: string,
+    productIdentifier?: string,
+  ): PurchasesPackage | undefined {
+    return packages.find(
+      (p) =>
+        p.identifier === identifier ||
+        (productIdentifier && p.product?.identifier === productIdentifier),
+    );
   }
 
   function getTargetPackage(): PurchasesPackage | undefined {
-    if (step === 2) {
-      return findPackage("weekly_offer");
+    if (plan === "offer") {
+      return returning ? yearlyOffer : weeklyOffer;
     }
     if (returning) {
-      return plan === "weekly"
-        ? findPackage("weekly_freetrial")
-        : findPackage("quarterly_3day");
+      return plan === "weekly" ? weeklyFreetrial : quarterly3day;
     }
-    return plan === "weekly"
-      ? findPackage("quarterly_onboarding")
-      : findPackage("quarterly_30day");
+    return plan === "weekly" ? quarterlyOnboarding : quarterly30day;
   }
 
   // Resolved prices from the RevenueCat packages — never hardcoded.
-  const weeklyFreetrial = findPackage("weekly_freetrial");
-  const quarterly3day = findPackage("quarterly_3day");
-  const quarterlyOnboarding = findPackage("quarterly_onboarding");
-  const quarterly30day = findPackage("quarterly_30day");
-  const weeklyOffer = findPackage("weekly_offer");
+  const weeklyFreetrial = findPackage("weekly_freetrial", PRODUCT_IDS.weeklyFreeTrial);
+  const quarterly3day = findPackage("quarterly_3day", PRODUCT_IDS.quarterly3DayTrial);
+  const quarterlyOnboarding = findPackage("quarterly_onboarding", PRODUCT_IDS.quarterlyOnboarding3DayTrial);
+  const quarterly30day = findPackage("quarterly_30day", PRODUCT_IDS.quarterly30DayTrial);
+  const weeklyOffer = findPackage("weekly_offer", PRODUCT_IDS.weeklyOffer);
+  const yearlyOffer = findPackage("yearly_offer", PRODUCT_IDS.yearlyOffer);
 
   function priceOf(pkg?: PurchasesPackage): string {
     return pkg?.product?.priceString ?? "";
@@ -142,15 +131,28 @@ export default function PaywallScreen() {
   const quarterly30dayFullPrice = priceOf(quarterly30day);
   const quarterly30dayIntroPrice = introPriceOf(quarterly30day);
   const weeklyOfferPrice = priceOf(weeklyOffer);
+  const yearlyOfferPrice = priceOf(yearlyOffer);
+  const yearlyOfferPerWeek = yearlyOffer?.product?.pricePerWeekString ?? "";
+
+  // Calculate yearly discount vs weekly_freetrial for the badge.
+  let yearlyDiscount: string | null = null;
+  if (yearlyOffer?.product?.price && weeklyFreetrial?.product?.price) {
+    const pct = Math.round(
+      (1 - yearlyOffer.product.price / 52 / weeklyFreetrial.product.price) * 100,
+    );
+    if (pct > 0 && pct < 100) yearlyDiscount = `${pct}% off`;
+  }
 
   async function subscribe() {
     if (busy || purchasing) return;
 
-    const pkg = getTargetPackage() ?? packages[0];
+    const pkg = getTargetPackage();
 
     if (!pkg) {
-      setSubscribed(true);
-      goBack();
+      Alert.alert(
+        "Subscription unavailable",
+        "We couldn't load this plan right now. Please check your connection and try again.",
+      );
       return;
     }
 
@@ -188,7 +190,6 @@ export default function PaywallScreen() {
   }
 
   const s1Style = useAnimatedStyle(() => ({ transform: [{ translateY: s1Y.value }] }));
-  const s2Style = useAnimatedStyle(() => ({ transform: [{ translateY: s2Y.value }] }));
   const badgeStyle = useAnimatedStyle(() => ({ transform: [{ scale: badgeSc.value }] }));
 
   return (
@@ -206,6 +207,38 @@ export default function PaywallScreen() {
           {returning ? (
             <>
               <NoPay />
+              {showYearlyOffer && yearlyOffer && yearlyOfferPrice ? (
+                <Pressable
+                  style={[styles.offerPlan, plan === "offer" && styles.offerPlanOn]}
+                  onPress={() => setPlan("offer")}
+                  disabled={purchasing}
+                >
+                  <View style={styles.radio}>
+                    {plan === "offer" && <View style={styles.radioDot} />}
+                  </View>
+                  <View style={styles.offerBody}>
+                    <View style={styles.offerHeaderRow}>
+                      <Text style={styles.offerStar}>★</Text>
+                      <Text style={styles.offerLabel}>YEARLY</Text>
+                      {yearlyDiscount && (
+                        <View style={styles.bestBadge}>
+                          <Text style={styles.bestBadgeText}>BEST · {yearlyDiscount}</Text>
+                        </View>
+                      )}
+                    </View>
+                    <Text style={styles.offerPriceMain}>{yearlyOfferPrice}/year</Text>
+                    {yearlyOfferPerWeek ? (
+                      <Text style={styles.offerPriceSub}>
+                        just {yearlyOfferPerWeek}/week
+                      </Text>
+                    ) : null}
+                    <Text style={styles.offerOnceNote}>
+                      🎁 One-time offer · you won't see this again
+                    </Text>
+                  </View>
+                </Pressable>
+              ) : null}
+
               <Pressable
                 style={[styles.plan, plan === "weekly" && styles.planOn]}
                 onPress={() => setPlan("weekly")}
@@ -240,9 +273,11 @@ export default function PaywallScreen() {
                       : "3 days free"}
                   </Text>
                 </View>
-                <View style={styles.discountBadge}>
-                  <Text style={styles.discountBadgeText}>50% off</Text>
-                </View>
+                {!showYearlyOffer && (
+                  <View style={styles.discountBadge}>
+                    <Text style={styles.discountBadgeText}>50% off</Text>
+                  </View>
+                )}
               </Pressable>
 
               <Pressable
@@ -253,9 +288,20 @@ export default function PaywallScreen() {
                 {purchasing ? (
                   <ActivityIndicator color={colors.background} />
                 ) : (
-                  <Text style={styles.ctaText}>Try for FREE</Text>
+                  <Text style={styles.ctaText}>
+                    {plan === "offer"
+                      ? yearlyOfferPrice
+                        ? `Subscribe — ${yearlyOfferPrice}/year`
+                        : "Subscribe"
+                      : "Try for FREE"}
+                  </Text>
                 )}
               </Pressable>
+              {plan === "offer" && yearlyOfferPrice ? (
+                <Text style={styles.pricingNote}>
+                  Auto-renews yearly at {yearlyOfferPrice}.{"\n"}Cancel anytime.
+                </Text>
+              ) : null}
               <Legal onRestore={handleRestore} restoring={restoring} disabled={purchasing} />
             </>
           ) : (
@@ -263,7 +309,9 @@ export default function PaywallScreen() {
               <View style={styles.noPay}>
                 <Text style={styles.noPayCheck}>✓</Text>
                 <Text style={styles.noPayText}>
-                  {plan === "weekly" ? "No Payment Due Now" : "No commitment, cancel anytime"}
+                  {plan === "weekly"
+                    ? "No Payment Due Now"
+                    : "No commitment, cancel anytime"}
                 </Text>
               </View>
 
@@ -295,6 +343,24 @@ export default function PaywallScreen() {
                 </View>
               </Pressable>
 
+              {weeklyOffer && weeklyOfferPrice ? (
+                <Pressable
+                  style={[styles.plan, plan === "offer" && styles.planOn]}
+                  onPress={() => setPlan("offer")}
+                  disabled={purchasing}
+                >
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.planName}>Just want to try?</Text>
+                    <Text style={styles.planPrice}>
+                      {weeklyOfferPrice}/week — no trial, cancel anytime
+                    </Text>
+                  </View>
+                  <View style={styles.radio}>
+                    {plan === "offer" && <View style={styles.radioDot} />}
+                  </View>
+                </Pressable>
+              ) : null}
+
               <Pressable
                 style={[styles.cta, purchasing && styles.ctaDisabled]}
                 onPress={subscribe}
@@ -306,9 +372,13 @@ export default function PaywallScreen() {
                   <Text style={styles.ctaText}>
                     {plan === "weekly"
                       ? "Try for free"
-                      : quarterly30dayIntroPrice
-                        ? `Redeem 30 days for ${quarterly30dayIntroPrice}`
-                        : "Redeem 30 days"}
+                      : plan === "quarterly"
+                        ? quarterly30dayIntroPrice
+                          ? `Redeem 30 days for ${quarterly30dayIntroPrice}`
+                          : "Redeem 30 days"
+                        : weeklyOfferPrice
+                          ? `Subscribe — ${weeklyOfferPrice}/week`
+                          : "Subscribe"}
                   </Text>
                 )}
               </Pressable>
@@ -317,9 +387,13 @@ export default function PaywallScreen() {
                   ? quarterlyFullPriceOnboarding
                     ? `3 days free, then ${quarterlyFullPriceOnboarding}/quarterly\nCancel anytime`
                     : "3 days free\nCancel anytime"
-                  : quarterly30dayIntroPrice && quarterly30dayFullPrice
-                    ? `30 days for ${quarterly30dayIntroPrice}, then ${quarterly30dayFullPrice}/quarterly\nCancel anytime`
-                    : "Cancel anytime"}
+                  : plan === "quarterly"
+                    ? quarterly30dayIntroPrice && quarterly30dayFullPrice
+                      ? `30 days for ${quarterly30dayIntroPrice}, then ${quarterly30dayFullPrice}/quarterly\nCancel anytime`
+                      : "Cancel anytime"
+                    : weeklyOfferPrice
+                      ? `Auto-renews weekly at ${weeklyOfferPrice}.\nCancel anytime.`
+                      : "Cancel anytime"}
               </Text>
               <Legal onRestore={handleRestore} restoring={restoring} disabled={purchasing} />
             </>
@@ -327,55 +401,6 @@ export default function PaywallScreen() {
         </View>
       </Animated.View>
 
-      {/* STEP 2 — bottom sheet overlay */}
-      {step === 2 && (
-        <>
-          <Pressable
-            style={styles.overlay}
-            onPress={hideOffer}
-            disabled={purchasing}
-          />
-          <Animated.View style={[styles.sheet, { paddingBottom: insets.bottom + 20 }, s2Style]}>
-            <Pressable
-              style={styles.sheetX}
-              onPress={goBack}
-              hitSlop={12}
-              disabled={purchasing}
-            >
-              <Text style={styles.sheetXText}>✕</Text>
-            </Pressable>
-
-            <Text style={styles.sheetTitle}>Want to start small?</Text>
-            <Text style={styles.sheetSub}>
-              No pressure. Go <Text style={styles.sheetBold}>week by week</Text> instead
-            </Text>
-
-            <View style={styles.sheetPlan}>
-              <Text style={styles.sheetPlanName}>Weekly Plan</Text>
-              <Text style={styles.sheetPlanPrice}>
-                {weeklyOfferPrice ? `${weeklyOfferPrice}/week` : ""}
-              </Text>
-            </View>
-
-            <View style={styles.sheetCheck}>
-              <Text style={styles.sheetCheckIcon}>✓</Text>
-              <Text style={styles.sheetCheckText}>No commitment, cancel anytime</Text>
-            </View>
-
-            <Pressable
-              style={[styles.sheetCta, purchasing && styles.ctaDisabled]}
-              onPress={subscribe}
-              disabled={purchasing}
-            >
-              {purchasing ? (
-                <ActivityIndicator color="#fff" />
-              ) : (
-                <Text style={styles.sheetCtaText}>Unlock</Text>
-              )}
-            </Pressable>
-          </Animated.View>
-        </>
-      )}
     </View>
   );
 }
@@ -540,6 +565,81 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#fff",
     letterSpacing: 0.3,
+  },
+
+  // Highlighted yearly_offer card on the inside-app paywall.
+  offerPlan: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    borderWidth: 1.5,
+    borderColor: colors.surfaceBorder,
+    backgroundColor: colors.surface,
+    borderRadius: 16,
+    paddingHorizontal: 14,
+    paddingVertical: 14,
+    marginBottom: 10,
+  },
+  offerPlanOn: {
+    borderWidth: 2,
+    backgroundColor: colors.primary + "1F",
+    borderColor: colors.primary,
+  },
+  offerBody: {
+    flex: 1,
+  },
+  offerHeaderRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    flexWrap: "wrap",
+    gap: 8,
+    marginBottom: 6,
+  },
+  offerStar: {
+    fontSize: 16,
+    color: colors.primary,
+  },
+  offerLabel: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: 13,
+    color: colors.primary,
+    letterSpacing: 1,
+  },
+  bestBadge: {
+    backgroundColor: "#FF6B35",
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    marginLeft: "auto",
+  },
+  bestBadgeText: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: 11,
+    color: "#fff",
+    letterSpacing: 0.4,
+  },
+  radioOnOffer: {
+    marginLeft: 8,
+  },
+  offerPriceMain: {
+    fontFamily: fonts.heading,
+    fontSize: 26,
+    fontWeight: "800",
+    color: colors.text,
+    marginTop: 2,
+  },
+  offerPriceSub: {
+    fontFamily: fonts.body,
+    fontSize: 13,
+    color: colors.textMuted,
+    marginTop: 2,
+  },
+  offerOnceNote: {
+    fontFamily: fonts.bodyMedium,
+    fontSize: 12,
+    color: colors.primary,
+    marginTop: 8,
+    letterSpacing: 0.2,
   },
 
   cta: {
