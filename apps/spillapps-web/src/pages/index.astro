@@ -1,8 +1,8 @@
 ---
 import Base from "../layouts/Base.astro";
 
-const title = "Spill Apps — Boring Topics, Told Like Tea";
-const description = "We take the world's 'boring' topics and retell them like gossip for Gen Z. Bible drama? Historical beef? We spill it all.";
+const title = "Spill Apps — The Gen Z Audio Network";
+const description = "We turn the world's 'boring' topics into drama-fueled audio Gen Z can't stop listening to. A scalable media platform with 2 live apps, 500+ stories, and infinite verticals.";
 ---
 
 <Base title={title} description={description}>
@@ -638,6 +638,127 @@ const description = "We take the world's 'boring' topics and retell them like go
       background: rgba(124, 92, 252, 0.1);
     }
 
+    /* Infrastructure Section */
+    .infra {
+      padding: 8rem 2rem;
+    }
+    .infra-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .infra-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .infra-label {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(6, 214, 160, 0.1);
+      border: 1px solid rgba(6, 214, 160, 0.25);
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      margin-bottom: 1.5rem;
+    }
+    .infra-header h2 {
+      font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+      margin-bottom: 1rem;
+    }
+    .infra-sub {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .infra-highlight {
+      background: linear-gradient(135deg, rgba(124, 92, 252, 0.08), rgba(6, 214, 160, 0.08));
+      border: 1px solid rgba(124, 92, 252, 0.2);
+      border-radius: var(--radius);
+      padding: 2rem 2.5rem;
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+    .infra-highlight p {
+      font-size: 1.15rem;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.7;
+    }
+    .infra-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 3rem;
+    }
+    .infra-item {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+    }
+    .infra-item-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+    .infra-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+    .infra-item h4 {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+    .infra-item p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.7;
+      padding-left: 1.6rem;
+    }
+    .infra-assets {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+    }
+    .infra-assets h4 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    .infra-assets-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .infra-asset {
+      text-align: center;
+    }
+    .infra-asset-num {
+      display: block;
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.3rem;
+    }
+    .infra-asset-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
     /* CTA Section */
     .cta {
       padding: 8rem 2rem;
@@ -701,8 +822,11 @@ const description = "We take the world's 'boring' topics and retell them like go
       .products-grid { grid-template-columns: 1fr; }
       .platform-grid { grid-template-columns: 1fr; }
       .market-grid { grid-template-columns: 1fr; }
+      .infra-grid { grid-template-columns: 1fr; }
+      .infra-assets-grid { grid-template-columns: repeat(2, 1fr); }
       .product-card { padding: 2rem; }
       .how-step { gap: 1rem; }
+      .infra-highlight { padding: 1.5rem; }
     }
   </style>
 
@@ -1039,13 +1163,13 @@ const description = "We take the world's 'boring' topics and retell them like go
       </div>
       <div class="platform-card">
         <div class="platform-card-icon">🌐</div>
-        <h4>SEO Websites</h4>
-        <p>Auto-generated marketing sites with structured data. Every story is a Google-indexed page.</p>
+        <h4>Dedicated Landing Pages</h4>
+        <p>Each app has its own website — bibletea.app, historytea.app — with cohesive branding, SEO-optimized pages for every story, and App Store links. The domains follow the "Tea" naming convention.</p>
       </div>
       <div class="platform-card">
         <div class="platform-card-icon">🔁</div>
-        <h4>Repeat the Formula</h4>
-        <p>Pick a topic. Clone the app. Seed the content. Ship. The playbook works for any "boring" subject.</p>
+        <h4>Cohesive Brand System</h4>
+        <p>Every product follows the same "[Topic] Tea" identity — same design language, same UX patterns, same tone. Recognizable across the entire portfolio.</p>
       </div>
     </div>
   </section>
@@ -1100,10 +1224,100 @@ const description = "We take the world's 'boring' topics and retell them like go
     </div>
   </section>
 
+  <!-- Infrastructure / Investor Section -->
+  <section class="infra" id="infrastructure">
+    <div class="infra-inner">
+      <div class="infra-header">
+        <div class="infra-label">For Investors & Acquirers</div>
+        <h2 class="heading">The Tea Engine</h2>
+        <p class="infra-sub">This isn't a collection of apps — it's a proprietary content operating system purpose-built for rapid vertical expansion.</p>
+      </div>
+
+      <div class="infra-highlight">
+        <p>Our proprietary "Tea-Engine" CMS allows for sub-7-day deployment of new niche verticals and instant multi-language localization.</p>
+      </div>
+
+      <div class="infra-grid">
+        <div class="infra-item">
+          <div class="infra-item-header">
+            <div class="infra-dot"></div>
+            <h4>Vertical Deployment</h4>
+          </div>
+          <p>New topic → live app in under 7 days. Template architecture means every new product inherits subscriptions, analytics, AI chat, and marketing site from day one.</p>
+        </div>
+        <div class="infra-item">
+          <div class="infra-item-header">
+            <div class="infra-dot"></div>
+            <h4>Multi-Language Ready</h4>
+          </div>
+          <p>Instant localization pipeline built into the engine. One story, every language — expanding TAM from English-only to global overnight.</p>
+        </div>
+        <div class="infra-item">
+          <div class="infra-item-header">
+            <div class="infra-dot"></div>
+            <h4>AI Content Factory</h4>
+          </div>
+          <p>Proprietary generation pipeline (scripting, narration, artwork, metadata) produces broadcast-quality content at a fraction of traditional studio cost.</p>
+        </div>
+        <div class="infra-item">
+          <div class="infra-item-header">
+            <div class="infra-dot"></div>
+            <h4>Revenue Architecture</h4>
+          </div>
+          <p>Per-product subscription tiers, paywalls, special offers, and trial flows — all managed through a unified billing layer with RevenueCat.</p>
+        </div>
+        <div class="infra-item">
+          <div class="infra-item-header">
+            <div class="infra-dot"></div>
+            <h4>Zero-Redundancy Infra</h4>
+          </div>
+          <p>Single Cloudflare Worker API, one D1 database, one R2 media store, one CMS. Adding a product costs zero additional infrastructure spend.</p>
+        </div>
+        <div class="infra-item">
+          <div class="infra-item-header">
+            <div class="infra-dot"></div>
+            <h4>Organic Acquisition</h4>
+          </div>
+          <p>Each product auto-generates an SEO-optimized marketing site with structured data — every story is a Google-indexed landing page driving organic installs.</p>
+        </div>
+      </div>
+
+      <div class="infra-assets">
+        <h4>What You're Acquiring</h4>
+        <div class="infra-assets-grid">
+          <div class="infra-asset">
+            <span class="infra-asset-num">2</span>
+            <span class="infra-asset-label">Live revenue-generating apps (iOS + Android)</span>
+          </div>
+          <div class="infra-asset">
+            <span class="infra-asset-num">4</span>
+            <span class="infra-asset-label">Pre-production verticals ready to launch</span>
+          </div>
+          <div class="infra-asset">
+            <span class="infra-asset-num">1</span>
+            <span class="infra-asset-label">Proprietary CMS + content generation engine</span>
+          </div>
+          <div class="infra-asset">
+            <span class="infra-asset-num">500+</span>
+            <span class="infra-asset-label">Published audio stories with artwork</span>
+          </div>
+          <div class="infra-asset">
+            <span class="infra-asset-num">∞</span>
+            <span class="infra-asset-label">Repeatable playbook for any niche</span>
+          </div>
+          <div class="infra-asset">
+            <span class="infra-asset-num">Full</span>
+            <span class="infra-asset-label">IP, codebase, domains, brand portfolio</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- CTA -->
   <section class="cta" id="contact">
-    <h2 class="heading">Let's Build Together</h2>
-    <p>We're scaling fast and open to the right partner — whether that's investment, acquisition, or a strategic collaboration. If you see what we see, let's talk.</p>
+    <h2 class="heading">Serious Inquiries Only</h2>
+    <p>We're open to strategic conversations — acquisition, investment, or partnership. If you see what we see, let's talk.</p>
     <a href="mailto:contact@spillapps.com" class="cta-btn">
       Start a Conversation
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
