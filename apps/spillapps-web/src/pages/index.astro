@@ -131,6 +131,15 @@ const description = "We turn the world's 'boring' topics into drama-fueled audio
       letter-spacing: 0.08em;
       margin-top: 0.25rem;
     }
+    .hero-stat.highlight {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 16px;
+      padding: 1.25rem 2rem;
+    }
+    .hero-stat.highlight .hero-stat-value {
+      font-size: 2.5rem;
+    }
 
     /* Concept Section */
     .concept {
@@ -848,17 +857,21 @@ const description = "We turn the world's 'boring' topics into drama-fueled audio
     </a>
 
     <div class="hero-stats">
+      <div class="hero-stat highlight">
+        <div class="hero-stat-value">500+</div>
+        <div class="hero-stat-label">Audio Stories</div>
+      </div>
+      <div class="hero-stat highlight">
+        <div class="hero-stat-value">5.0 ★</div>
+        <div class="hero-stat-label">App Store Rating</div>
+      </div>
       <div class="hero-stat">
         <div class="hero-stat-value">2</div>
         <div class="hero-stat-label">Live Apps</div>
       </div>
       <div class="hero-stat">
-        <div class="hero-stat-value">500+</div>
-        <div class="hero-stat-label">Stories Across Apps</div>
-      </div>
-      <div class="hero-stat">
         <div class="hero-stat-value">50+</div>
-        <div class="hero-stat-label">Playlists</div>
+        <div class="hero-stat-label">Curated Playlists</div>
       </div>
       <div class="hero-stat">
         <div class="hero-stat-value">Daily</div>
@@ -1170,6 +1183,11 @@ const description = "We turn the world's 'boring' topics into drama-fueled audio
         <div class="platform-card-icon">🔁</div>
         <h4>Cohesive Brand System</h4>
         <p>Every product follows the same "[Topic] Tea" identity — same design language, same UX patterns, same tone. Recognizable across the entire portfolio.</p>
+      </div>
+      <div class="platform-card">
+        <div class="platform-card-icon">🌍</div>
+        <h4>Global Scale</h4>
+        <p>Built for instant multi-language deployment to unlock high-CPM international markets. One story, six languages — expanding TAM from English-only to global overnight.</p>
       </div>
     </div>
   </section>
