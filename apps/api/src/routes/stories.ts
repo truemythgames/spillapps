@@ -15,7 +15,8 @@ storiesRoutes.get("/", async (c) => {
   const offset = parseInt(c.req.query("offset") || "0");
 
   let query = `
-    SELECT s.*, se.name as season_name, se.testament
+    SELECT s.*, se.name as season_name, se.testament,
+      (SELECT COUNT(*) FROM story_audio sa WHERE sa.story_id = s.id) as audio_count
     FROM stories s
     JOIN seasons se ON s.season_id = se.id AND se.app_id = s.app_id
     WHERE s.is_published = 1 AND s.app_id = ?

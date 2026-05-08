@@ -436,12 +436,14 @@ for (const story of catalog) {
   newStoryIds.push(story.id);
   const transcriptPath = join(CONTENT_DIR, "stories", story.id, "transcript.md");
   let durationSeconds = 0;
+  let transcriptText = "";
   if (existsSync(transcriptPath)) {
-    const wordCount = readFileSync(transcriptPath, "utf8").split(/\s+/).length;
+    transcriptText = readFileSync(transcriptPath, "utf8");
+    const wordCount = transcriptText.split(/\s+/).length;
     durationSeconds = Math.round((wordCount / 150) * 60);
   }
   sql.push(
-    `INSERT OR IGNORE INTO stories (id, app_id, season_id, title, slug, description, cover_image_key, duration_seconds, sort_order, is_free, is_published) VALUES ('${dbId}', 'bible-tea', '${seasonInfo.id}', '${esc(story.title)}', '${esc(story.id)}', '${esc(story.description)}', 'stories/${story.id}/cover.webp', ${durationSeconds}, ${storyOrder}, 0, 1);`
+    `INSERT OR IGNORE INTO stories (id, app_id, season_id, title, slug, description, cover_image_key, duration_seconds, transcript, sort_order, is_free, is_published) VALUES ('${dbId}', 'bible-tea', '${seasonInfo.id}', '${esc(story.title)}', '${esc(story.id)}', '${esc(story.description)}', 'stories/${story.id}/cover.webp', ${durationSeconds}, '${esc(transcriptText)}', ${storyOrder}, 0, 1);`
   );
   storyOrder++;
 }

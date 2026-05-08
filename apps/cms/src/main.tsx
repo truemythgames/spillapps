@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 import { AuthProvider, useAuth } from "./lib/auth";
 import { CmsAppProvider } from "./lib/cms-app-context";
+import { LocaleProvider } from "./lib/locale-context";
 import { isCmsAppGateComplete } from "./lib/cms-app";
 import { Layout } from "./components/Layout";
 import { Login } from "./pages/Login";
@@ -22,6 +23,7 @@ import { Speakers } from "./pages/Speakers";
 import { Playlists } from "./pages/Playlists";
 import { Characters } from "./pages/Characters";
 import { Upload } from "./pages/Upload";
+import { Settings } from "./pages/Settings";
 import "./index.css";
 
 function AuthenticatedRoutes() {
@@ -53,6 +55,7 @@ function AuthenticatedRoutes() {
         <Route path="playlists" element={<Playlists />} />
         <Route path="characters" element={<Characters />} />
         <Route path="upload" element={<Upload />} />
+        <Route path="settings" element={<Settings />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
@@ -62,11 +65,13 @@ function AuthenticatedRoutes() {
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <CmsAppProvider>
-      <AuthProvider>
-        <BrowserRouter>
-          <AuthenticatedRoutes />
-        </BrowserRouter>
-      </AuthProvider>
+      <LocaleProvider>
+        <AuthProvider>
+          <BrowserRouter>
+            <AuthenticatedRoutes />
+          </BrowserRouter>
+        </AuthProvider>
+      </LocaleProvider>
     </CmsAppProvider>
   </React.StrictMode>
 );

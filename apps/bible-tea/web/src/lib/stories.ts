@@ -28,14 +28,17 @@ export function getCatalog(locale: Locale = "en"): CatalogStory[] {
   return JSON.parse(readFileSync(join(CONTENT_DIR, "story-catalog.json"), "utf8"));
 }
 
-export function getTranscript(id: string, locale: Locale = "en"): string | null {
-  if (locale !== "en") {
-    const localePath = join(CONTENT_DIR, "stories", id, `transcript.${locale}.md`);
-    if (existsSync(localePath)) return readFileSync(localePath, "utf8");
+export async function getTranscript(id: string, locale: Locale = "en"): Promise<string | null> {
+  try {
+    const res = await fetch(`${API_BASE}/stories/${id}`, {
+      headers: apiHeaders(locale),
+    });
+    if (!res.ok) return null;
+    const { story } = (await res.json()) as any;
+    return story?.transcript ?? null;
+  } catch {
+    return null;
   }
-  const path = join(CONTENT_DIR, "stories", id, "transcript.md");
-  if (!existsSync(path)) return null;
-  return readFileSync(path, "utf8");
 }
 
 export function hasCover(id: string): boolean {

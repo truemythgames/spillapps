@@ -24,6 +24,7 @@ import { colors } from "@/lib/theme";
 import { storage, StorageKeys } from "@/lib/storage";
 import { initPurchases } from "@/lib/purchases";
 import { initAnalytics } from "@/lib/analytics";
+import { UpdatePrompt } from "@/components/UpdatePrompt";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -93,6 +94,7 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1, backgroundColor: colors.background }}>
+      <UpdatePrompt />
       <StatusBar style="light" />
       <Stack
         screenOptions={{

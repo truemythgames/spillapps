@@ -78,7 +78,7 @@ interface Props {
 const { story, catalog, storyPlaylist, playlistSiblings, storySeason, storyCharacters } = Astro.props;
 const locale = getLocale(Astro.currentLocale);
 
-const transcript = getTranscript(story.id, locale);
+const transcript = await getTranscript(story.id, locale);
 const hasImage = hasCover(story.id);
 const cover = coverUrl(story.id);
 

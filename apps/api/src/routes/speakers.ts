@@ -8,7 +8,12 @@ export const speakersRoutes = new Hono<{ Bindings: Env }>();
 speakersRoutes.get("/", async (c) => {
   const appId = resolvePublicAppId(c);
   const result = await c.env.DB.prepare(
-    "SELECT * FROM speakers WHERE app_id = ? ORDER BY is_default DESC, name ASC"
+    `SELECT sp.*, COUNT(sa.id) as story_count
+     FROM speakers sp
+     LEFT JOIN story_audio sa ON sp.id = sa.speaker_id
+     WHERE sp.app_id = ?
+     GROUP BY sp.id
+     ORDER BY sp.is_default DESC, sp.name ASC`
   )
     .bind(appId)
     .all();

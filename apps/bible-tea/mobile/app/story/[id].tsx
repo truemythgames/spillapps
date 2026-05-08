@@ -160,6 +160,14 @@ export default function StoryScreen() {
 
   useEffect(() => {
     if (!story) return;
+
+    if (storyDetail?.transcript) {
+      const stripped = storyDetail.transcript.replace(/^#\s+.*\n+\*.*\*\n*/m, "");
+      setTranscript(stripped);
+      setLoadingTranscript(false);
+      return;
+    }
+
     const urlsToTry: string[] = [];
     if (coverImageUrl) {
       const derived = coverImageUrl.replace(/\/cover\.webp(\?.*)?$/, "/transcript.md");
@@ -188,7 +196,7 @@ export default function StoryScreen() {
       }
     })();
     return () => { cancelled = true; };
-  }, [id, coverImageUrl]);
+  }, [id, coverImageUrl, storyDetail?.transcript]);
 
   const handlePlayPause = useCallback(async () => {
     if (!story || !activeSpeaker) return;

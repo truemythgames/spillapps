@@ -2,8 +2,10 @@ import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { marked } from "marked";
 import { adminApi } from "../lib/api";
+import { useTranslations } from "../lib/use-translations";
+import { InlineEditor } from "../components/InlineEditor";
 
-type Tab = "preview" | "details";
+type Tab = "preview" | "edit" | "details";
 
 interface ApiStory {
   id: string;
@@ -13,7 +15,7 @@ interface ApiStory {
   season_name: string;
   testament: string;
   cover_image_url: string | null;
-  content: string | null;
+  transcript: string | null;
 }
 
 interface AudioVersion {
@@ -31,12 +33,16 @@ export function StoryEditor() {
   const [characters, setCharacters] = useState<any[]>([]);
   const [tab, setTab] = useState<Tab>("preview");
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
 
   const [activeSpeaker, setActiveSpeaker] = useState<string>("");
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const { locale, translations, saving: tSaving, saveTranslation, getTranslated, isTranslating } =
+    useTranslations("story");
 
   useEffect(() => {
     if (!id) return;
@@ -63,6 +69,21 @@ export function StoryEditor() {
       setDuration(0);
     }
   }, [activeSpeaker]);
+
+  async function handleSave(fields: Record<string, string>) {
+    if (!story) return;
+    if (isTranslating) {
+      await saveTranslation(story.id, fields);
+    } else {
+      setSaving(true);
+      try {
+        await adminApi.updateStory(story.id, fields);
+        setStory({ ...story, ...fields } as ApiStory);
+      } finally {
+        setSaving(false);
+      }
+    }
+  }
 
   function togglePlay() {
     const av = audioVersions.find((a) => a.speaker_name === activeSpeaker);
@@ -106,10 +127,13 @@ export function StoryEditor() {
   if (loading) return <p className="text-gray-500">Loading...</p>;
   if (!story) return <p className="text-gray-500">Story not found.</p>;
 
-  const html = story.content ? marked.parse(story.content) : "";
+  const displayTitle = getTranslated(story.id, "title", story.title);
+  const displayDesc = getTranslated(story.id, "description", story.description);
+  const html = story.transcript ? marked.parse(story.transcript) : "";
 
   const TABS: { id: Tab; label: string }[] = [
     { id: "preview", label: "Preview" },
+    { id: "edit", label: "Edit" },
     { id: "details", label: "Details" },
   ];
 
@@ -126,32 +150,33 @@ export function StoryEditor() {
       <div className="flex gap-8 mb-6">
         <div className="w-56 h-56 rounded-xl overflow-hidden flex-shrink-0 bg-surface-light">
           {story.cover_image_url ? (
-            <img
-              src={story.cover_image_url}
-              alt={story.title}
-              className="w-full h-full object-cover"
-            />
+            <img src={story.cover_image_url} alt={story.title} className="w-full h-full object-cover" />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-gray-600 text-4xl">
-              📖
-            </div>
+            <div className="w-full h-full flex items-center justify-center text-gray-600 text-4xl">📖</div>
           )}
         </div>
         <div className="flex flex-col justify-center">
           <p className="text-primary/70 text-xs font-semibold tracking-widest uppercase mb-2">
             {story.season_name} — {story.bible_ref}
           </p>
-          <h1 className="text-3xl font-bold mb-2">{story.title}</h1>
-          <p className="text-gray-400 leading-relaxed text-sm">{story.description}</p>
-          <span
-            className={`inline-block mt-3 text-xs font-bold px-2 py-0.5 rounded-full w-fit ${
-              story.testament === "old"
-                ? "bg-orange-500/10 text-orange-400"
-                : "bg-green-500/10 text-green-400"
-            }`}
-          >
-            {story.testament === "old" ? "Old Testament" : "New Testament"}
-          </span>
+          <h1 className="text-3xl font-bold mb-2">{displayTitle}</h1>
+          <p className="text-gray-400 leading-relaxed text-sm">{displayDesc}</p>
+          <div className="flex items-center gap-2 mt-3">
+            <span
+              className={`text-xs font-bold px-2 py-0.5 rounded-full ${
+                story.testament === "old"
+                  ? "bg-orange-500/10 text-orange-400"
+                  : "bg-green-500/10 text-green-400"
+              }`}
+            >
+              {story.testament === "old" ? "Old Testament" : "New Testament"}
+            </span>
+            {isTranslating && (
+              <span className="text-xs text-gray-500">
+                Editing: {locale.toUpperCase()}
+              </span>
+            )}
+          </div>
         </div>
       </div>
 
@@ -174,13 +199,10 @@ export function StoryEditor() {
 
       {tab === "preview" && (
         <div className="space-y-6">
-          {/* Audio player */}
           {audioVersions.length > 0 && (
             <div className="bg-surface border border-white/5 rounded-xl p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wide">
-                  Narration
-                </h3>
+                <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wide">Narration</h3>
                 <div className="flex gap-2">
                   {audioVersions.map((av) => (
                     <button
@@ -205,36 +227,26 @@ export function StoryEditor() {
                   {isPlaying ? "⏸" : "▶"}
                 </button>
                 <div className="flex-1">
-                  <div
-                    className="h-2 bg-white/5 rounded-full cursor-pointer group"
-                    onClick={seek}
-                  >
+                  <div className="h-2 bg-white/5 rounded-full cursor-pointer group" onClick={seek}>
                     <div
                       className="h-full bg-primary rounded-full transition-[width] duration-200 relative"
-                      style={{
-                        width: duration > 0 ? `${(progress / duration) * 100}%` : "0%",
-                      }}
+                      style={{ width: duration > 0 ? `${(progress / duration) * 100}%` : "0%" }}
                     >
                       <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-primary rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
                   </div>
                   <div className="flex justify-between mt-1">
                     <span className="text-[11px] text-gray-600">{fmtTime(progress)}</span>
-                    <span className="text-[11px] text-gray-600">
-                      {duration > 0 ? fmtTime(duration) : "—"}
-                    </span>
+                    <span className="text-[11px] text-gray-600">{duration > 0 ? fmtTime(duration) : "—"}</span>
                   </div>
                 </div>
               </div>
             </div>
           )}
 
-          {/* Transcript / content preview */}
           {html ? (
             <div className="bg-surface border border-white/5 rounded-xl p-8">
-              <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-6">
-                Content
-              </h3>
+              <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-6">Content</h3>
               <div
                 className="prose prose-invert prose-sm max-w-none prose-headings:font-bold prose-headings:text-white prose-p:text-gray-300 prose-p:leading-relaxed prose-p:mb-4 prose-strong:text-white prose-blockquote:border-l-2 prose-blockquote:border-white/10 prose-blockquote:bg-white/[0.03] prose-blockquote:rounded-lg prose-blockquote:pl-4 prose-blockquote:py-3"
                 dangerouslySetInnerHTML={{ __html: html as string }}
@@ -248,30 +260,49 @@ export function StoryEditor() {
         </div>
       )}
 
+      {tab === "edit" && (
+        <div className="space-y-6">
+          <div className="bg-surface border border-white/5 rounded-xl p-6">
+            <InlineEditor
+              fields={[
+                {
+                  key: "title",
+                  label: "Title",
+                  value: isTranslating ? (translations[story.id]?.title ?? "") : story.title,
+                },
+                {
+                  key: "description",
+                  label: "Description",
+                  value: isTranslating ? (translations[story.id]?.description ?? "") : story.description,
+                  multiline: true,
+                },
+                {
+                  key: "transcript",
+                  label: "Transcript (Markdown)",
+                  value: isTranslating ? (translations[story.id]?.transcript ?? "") : (story.transcript || ""),
+                  multiline: true,
+                },
+              ]}
+              saving={saving || tSaving}
+              onSave={handleSave}
+              onClose={() => setTab("preview")}
+            />
+          </div>
+        </div>
+      )}
+
       {tab === "details" && (
         <div className="space-y-6">
-          {/* Characters */}
           {characters.length > 0 && (
             <div className="bg-surface border border-white/5 rounded-xl p-6">
-              <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-4">
-                Characters
-              </h3>
+              <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-4">Characters</h3>
               <div className="flex flex-wrap gap-3">
                 {characters.map((ch: any) => (
-                  <div
-                    key={ch.id}
-                    className="flex items-center gap-2 bg-white/5 rounded-lg px-3 py-2"
-                  >
+                  <div key={ch.id} className="flex items-center gap-2 bg-white/5 rounded-lg px-3 py-2">
                     {ch.cover_image_url ? (
-                      <img
-                        src={ch.cover_image_url}
-                        alt={ch.name}
-                        className="w-8 h-8 rounded-full object-cover"
-                      />
+                      <img src={ch.cover_image_url} alt={ch.name} className="w-8 h-8 rounded-full object-cover" />
                     ) : (
-                      <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-sm">
-                        👤
-                      </div>
+                      <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-sm">👤</div>
                     )}
                     <span className="text-sm text-white">{ch.name}</span>
                   </div>
@@ -280,18 +311,12 @@ export function StoryEditor() {
             </div>
           )}
 
-          {/* Audio versions list */}
           {audioVersions.length > 0 && (
             <div className="bg-surface border border-white/5 rounded-xl p-6">
-              <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-4">
-                Audio Versions
-              </h3>
+              <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-4">Audio Versions</h3>
               <div className="space-y-2">
                 {audioVersions.map((av) => (
-                  <div
-                    key={av.id}
-                    className="flex items-center justify-between bg-white/5 rounded-lg px-4 py-3"
-                  >
+                  <div key={av.id} className="flex items-center justify-between bg-white/5 rounded-lg px-4 py-3">
                     <span className="text-sm font-medium">{av.speaker_name}</span>
                     <button
                       onClick={() => {

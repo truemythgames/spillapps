@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { adminApi } from "../lib/api";
+import { useTranslations } from "../lib/use-translations";
+import { InlineEditor } from "../components/InlineEditor";
 
 interface ApiStory {
   id: string;
@@ -31,6 +33,10 @@ export function Characters() {
   const [editing, setEditing] = useState<CharacterForm | null>(null);
   const [storySearch, setStorySearch] = useState("");
   const [saving, setSaving] = useState(false);
+  const [inlineEditId, setInlineEditId] = useState<string | null>(null);
+
+  const { locale, translations, loading: tLoading, saving: tSaving, saveTranslation, getTranslated, hasTranslation, isTranslating } =
+    useTranslations("character");
 
   useEffect(() => {
     load();
@@ -102,6 +108,23 @@ export function Characters() {
     });
   }
 
+  async function handleInlineSave(charId: string, fields: Record<string, string>) {
+    if (isTranslating) {
+      await saveTranslation(charId, fields);
+    } else {
+      setSaving(true);
+      try {
+        await adminApi.updateCharacter(charId, fields);
+        setCharacters((prev) =>
+          prev.map((c) => (c.id === charId ? { ...c, ...fields } : c))
+        );
+      } finally {
+        setSaving(false);
+      }
+    }
+    setInlineEditId(null);
+  }
+
   const filteredStories = storySearch.trim()
     ? allStories.filter(
         (s) =>
@@ -110,10 +133,25 @@ export function Characters() {
       )
     : allStories.slice(0, 20);
 
+  const untranslatedCount = isTranslating
+    ? characters.filter((c) => !hasTranslation(c.id, "name")).length
+    : 0;
+
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold">Characters</h2>
+        <div>
+          <h2 className="text-2xl font-bold">Characters</h2>
+          <p className="text-gray-500 text-sm mt-1">
+            {characters.length} total
+            {isTranslating && !tLoading && (
+              <span className="ml-2">
+                · <span className="text-green-400">{characters.length - untranslatedCount}</span> translated ·{" "}
+                <span className="text-orange-400">{untranslatedCount}</span> missing
+              </span>
+            )}
+          </p>
+        </div>
         <button
           onClick={startCreate}
           className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
@@ -122,7 +160,7 @@ export function Characters() {
         </button>
       </div>
 
-      {/* Editor modal */}
+      {/* Full editor modal (create / advanced edit with stories) */}
       {editing && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
           <div className="bg-surface border border-white/10 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
@@ -203,21 +241,13 @@ export function Characters() {
                         key={story.id}
                         onClick={() => toggleStory(story.id)}
                         className={`w-full text-left flex items-center gap-2 px-2 py-1.5 rounded text-sm transition-colors ${
-                          selected
-                            ? "bg-primary/15 text-primary"
-                            : "text-gray-300 hover:bg-white/5"
+                          selected ? "bg-primary/15 text-primary" : "text-gray-300 hover:bg-white/5"
                         }`}
                       >
                         {story.cover_image_url ? (
-                          <img
-                            src={story.cover_image_url}
-                            alt=""
-                            className="w-8 h-8 rounded object-cover flex-shrink-0"
-                          />
+                          <img src={story.cover_image_url} alt="" className="w-8 h-8 rounded object-cover flex-shrink-0" />
                         ) : (
-                          <div className="w-8 h-8 rounded bg-white/10 flex-shrink-0 flex items-center justify-center text-xs">
-                            📖
-                          </div>
+                          <div className="w-8 h-8 rounded bg-white/10 flex-shrink-0 flex items-center justify-center text-xs">📖</div>
                         )}
                         <span className="truncate">{story.title}</span>
                         {selected && <span className="ml-auto text-primary">✓</span>}
@@ -251,6 +281,10 @@ export function Characters() {
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         {characters.map((ch) => {
           const charImg = ch.image_url ?? ch.stories?.[0]?.cover_image_url ?? null;
+          const displayName = getTranslated(ch.id, "name", ch.name);
+          const displayDesc = getTranslated(ch.id, "description", ch.description || "");
+          const isInlineEditing = inlineEditId === ch.id;
+
           return (
             <div
               key={ch.id}
@@ -269,8 +303,21 @@ export function Characters() {
                   </div>
                 )}
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-white">{ch.name}</h3>
-                  <p className="text-gray-500 text-sm mt-0.5 truncate">{ch.description}</p>
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-semibold text-white">{displayName}</h3>
+                    {isTranslating && (
+                      <span
+                        className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                          hasTranslation(ch.id, "name")
+                            ? "bg-green-500/15 text-green-400"
+                            : "bg-orange-500/15 text-orange-400"
+                        }`}
+                      >
+                        {locale.toUpperCase()}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-gray-500 text-sm mt-0.5 truncate">{displayDesc}</p>
                   <p className="text-gray-600 text-xs mt-1">
                     {ch.stories?.length || 0} stories · order {ch.sort_order}
                   </p>
@@ -278,11 +325,19 @@ export function Characters() {
               </div>
               <div className="flex gap-2 mt-3 pt-3 border-t border-white/5">
                 <button
-                  onClick={() => startEdit(ch)}
+                  onClick={() => setInlineEditId(isInlineEditing ? null : ch.id)}
                   className="text-xs text-primary hover:text-primary/80 transition-colors"
                 >
-                  Edit
+                  {isInlineEditing ? "Close" : "Edit"}
                 </button>
+                {!isTranslating && (
+                  <button
+                    onClick={() => startEdit(ch)}
+                    className="text-xs text-primary hover:text-primary/80 transition-colors"
+                  >
+                    Manage Stories
+                  </button>
+                )}
                 <button
                   onClick={() => remove(ch.id)}
                   className="text-xs text-red-400 hover:text-red-300 transition-colors"
@@ -290,13 +345,36 @@ export function Characters() {
                   Delete
                 </button>
               </div>
+
+              {isInlineEditing && (
+                <div className="mt-3 pt-3 border-t border-white/5">
+                  <InlineEditor
+                    fields={[
+                      {
+                        key: "name",
+                        label: "Name",
+                        value: isTranslating ? (translations[ch.id]?.name ?? "") : ch.name,
+                      },
+                      {
+                        key: "description",
+                        label: "Description",
+                        value: isTranslating ? (translations[ch.id]?.description ?? "") : (ch.description || ""),
+                        multiline: true,
+                      },
+                    ]}
+                    saving={saving || tSaving}
+                    onSave={(fields) => handleInlineSave(ch.id, fields)}
+                    onClose={() => setInlineEditId(null)}
+                  />
+                </div>
+              )}
             </div>
           );
         })}
 
         {characters.length === 0 && (
           <div className="col-span-full text-center py-12 text-gray-500">
-            No characters yet. Click "Add Character" to create one.
+            No characters yet. Click "+ Add Character" to create one.
           </div>
         )}
       </div>

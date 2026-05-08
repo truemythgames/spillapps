@@ -56,6 +56,7 @@ adminRoutes.put("/stories/:id", async (c) => {
        title = COALESCE(?, title),
        slug = COALESCE(?, slug),
        description = COALESCE(?, description),
+       transcript = COALESCE(?, transcript),
        cover_image_key = COALESCE(?, cover_image_key),
        duration_seconds = COALESCE(?, duration_seconds),
        sort_order = COALESCE(?, sort_order),
@@ -68,6 +69,7 @@ adminRoutes.put("/stories/:id", async (c) => {
       body.title ?? null,
       body.slug ?? null,
       body.description ?? null,
+      body.transcript ?? null,
       body.cover_image_key !== undefined
         ? normalizeKeyForDb(body.cover_image_key, appId)
         : null,
@@ -187,6 +189,71 @@ adminRoutes.post("/playlists", async (c) => {
     .run();
 
   return c.json({ id, success: true }, 201);
+});
+
+adminRoutes.put("/playlists/:id", async (c) => {
+  const appId = resolveAdminTargetAppId(c);
+  const id = c.req.param("id");
+  const body = await c.req.json();
+
+  await c.env.DB.prepare(
+    `UPDATE playlists SET
+       name = COALESCE(?, name),
+       description = COALESCE(?, description),
+       sort_order = COALESCE(?, sort_order)
+     WHERE id = ? AND app_id = ?`
+  )
+    .bind(
+      body.name ?? null,
+      body.description ?? null,
+      body.sort_order ?? null,
+      id,
+      appId
+    )
+    .run();
+
+  return c.json({ success: true });
+});
+
+// --- Seasons ---
+
+adminRoutes.post("/seasons", async (c) => {
+  const appId = resolveAdminTargetAppId(c);
+  const body = await c.req.json();
+  const id = crypto.randomUUID();
+
+  await c.env.DB.prepare(
+    `INSERT INTO seasons (id, app_id, testament, name, slug, description, sort_order)
+     VALUES (?, ?, ?, ?, ?, ?, ?)`
+  )
+    .bind(id, appId, body.testament || "old", body.name, body.slug, body.description || "", body.sort_order || 0)
+    .run();
+
+  return c.json({ id, success: true }, 201);
+});
+
+adminRoutes.put("/seasons/:id", async (c) => {
+  const appId = resolveAdminTargetAppId(c);
+  const id = c.req.param("id");
+  const body = await c.req.json();
+
+  await c.env.DB.prepare(
+    `UPDATE seasons SET
+       name = COALESCE(?, name),
+       description = COALESCE(?, description),
+       sort_order = COALESCE(?, sort_order)
+     WHERE id = ? AND app_id = ?`
+  )
+    .bind(
+      body.name ?? null,
+      body.description ?? null,
+      body.sort_order ?? null,
+      id,
+      appId
+    )
+    .run();
+
+  return c.json({ success: true });
 });
 
 // --- Characters ---
@@ -372,4 +439,32 @@ adminRoutes.post("/cache/purge", async (c) => {
     await c.env.CACHE.delete(key);
   }
   return c.json({ success: true, purged: keys });
+});
+
+// --- App Settings ---
+
+adminRoutes.get("/settings", async (c) => {
+  const appId = resolveAdminTargetAppId(c);
+  const { results } = await c.env.DB.prepare(
+    "SELECT key, value, updated_at FROM app_settings WHERE app_id = ?"
+  ).bind(appId).all();
+
+  const settings: Record<string, string> = {};
+  for (const row of results as any[]) {
+    settings[row.key] = row.value;
+  }
+  return c.json({ settings });
+});
+
+adminRoutes.put("/settings", async (c) => {
+  const appId = resolveAdminTargetAppId(c);
+  const body = await c.req.json();
+
+  for (const [key, value] of Object.entries(body as Record<string, string>)) {
+    await c.env.DB.prepare(
+      `INSERT OR REPLACE INTO app_settings (app_id, key, value, updated_at) VALUES (?, ?, ?, datetime('now'))`
+    ).bind(appId, key, value).run();
+  }
+
+  return c.json({ success: true });
 });

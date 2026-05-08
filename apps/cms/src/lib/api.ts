@@ -79,7 +79,7 @@ export async function exchangeGoogleSession(idToken: string): Promise<{
 
 export const adminApi = {
   getSeasons: () => request<{ seasons: any[] }>("/v1/seasons"),
-  getStories: () => request<{ stories: any[] }>("/v1/stories"),
+  getStories: () => request<{ stories: any[] }>("/v1/stories?limit=1000"),
   getStory: (id: string) => request<any>(`/v1/stories/${id}`),
   getSpeakers: () => request<{ speakers: any[] }>("/v1/speakers"),
   getPlaylists: () => request<{ playlists: any[] }>("/v1/playlists"),
@@ -133,8 +133,51 @@ export const adminApi = {
       method: "DELETE",
     }),
 
+  createSeason: (data: any) =>
+    request<{ id: string }>("/admin/seasons", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  updateSeason: (id: string, data: any) =>
+    request<{ success: boolean }>(`/admin/seasons/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    }),
+
+  updatePlaylist: (id: string, data: any) =>
+    request<{ success: boolean }>(`/admin/playlists/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    }),
+
+  getTranslations: (entityType: string, locale: string) =>
+    request<{ translations: { entity_id: string; field: string; value: string }[] }>(
+      `/admin/translations/${entityType}/${locale}`
+    ),
+
+  saveTranslation: (data: {
+    entity_type: string;
+    entity_id: string;
+    locale: string;
+    translations: Record<string, string>;
+  }) =>
+    request<{ success: boolean }>("/admin/translations", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
   purgeCache: () =>
     request<{ success: boolean }>("/admin/cache/purge", { method: "POST" }),
+
+  getSettings: () =>
+    request<{ settings: Record<string, string> }>("/admin/settings"),
+
+  updateSettings: (data: Record<string, string>) =>
+    request<{ success: boolean }>("/admin/settings", {
+      method: "PUT",
+      body: JSON.stringify(data),
+    }),
 
   upload: async (file: File, key: string) => {
     const formData = new FormData();

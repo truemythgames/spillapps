@@ -1,6 +1,7 @@
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../lib/auth";
 import { useCmsApp } from "../lib/cms-app-context";
+import { useLocale } from "../lib/locale-context";
 
 const nav = [
   { path: "/", label: "Dashboard", icon: "📊" },
@@ -10,6 +11,7 @@ const nav = [
   { path: "/playlists", label: "Playlists", icon: "🎵" },
   { path: "/characters", label: "Characters", icon: "👤" },
   { path: "/upload", label: "Upload", icon: "📤" },
+  { path: "/settings", label: "Settings", icon: "⚙️" },
 ];
 
 export function Layout() {
@@ -17,12 +19,13 @@ export function Layout() {
   const navigate = useNavigate();
   const { email, picture, logout } = useAuth();
   const { appId, setAppId, allowedAppIds } = useCmsApp();
+  const { locale, setLocale, locales, localeLabel } = useLocale();
 
   return (
     <div className="flex h-screen">
       <aside className="w-56 bg-surface border-r border-white/5 flex flex-col p-4">
         <div className="mb-8">
-          <h1 className="text-primary font-bold text-xl leading-tight">Spill</h1>
+          <h1 className="text-primary font-bold text-xl leading-tight">SpillApps</h1>
           <p className="text-gray-500 text-xs mt-1">Admin</p>
           <div className="mt-3 flex items-center gap-2 rounded-lg border border-white/10 bg-bg/80 px-2 py-1.5">
             <span className="text-[10px] uppercase text-gray-500 shrink-0">App</span>
@@ -47,6 +50,20 @@ export function Layout() {
                 {appId}
               </span>
             )}
+          </div>
+          <div className="mt-2 flex items-center gap-2 rounded-lg border border-white/10 bg-bg/80 px-2 py-1.5">
+            <span className="text-[10px] uppercase text-gray-500 shrink-0">Lang</span>
+            <select
+              value={locale}
+              onChange={(e) => setLocale(e.target.value as any)}
+              className="min-w-0 flex-1 bg-transparent text-sm font-mono text-primary border-0 focus:ring-0 cursor-pointer"
+            >
+              {locales.map((l) => (
+                <option key={l} value={l} className="bg-bg text-white">
+                  {localeLabel(l)}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
         <nav className="flex flex-col gap-1">
