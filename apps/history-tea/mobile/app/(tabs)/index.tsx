@@ -151,7 +151,7 @@ export default function HomeScreen() {
   const { guardedPush } = useGate();
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const { storyOfTheDay, playlists, stories, loadInitialData, isLoading } =
+  const { storyOfTheDay, playlists, stories, loadInitialData, isLoading, streak, completedStoryIds, likedStoryIds } =
     useAppStore();
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -222,6 +222,31 @@ export default function HomeScreen() {
           <Text style={styles.headerTeaIcon}>🍵</Text>
         </Pressable>
       </View>
+
+      {/* Stats */}
+      {(streak.current_streak > 0 || completedStoryIds.length > 0) && (
+        <View style={styles.statsRow}>
+          <View style={styles.statItem}>
+            <Text style={styles.statValue}>{streak.current_streak}</Text>
+            <Text style={styles.statLabel}>{t("home.streak")}</Text>
+          </View>
+          <View style={styles.statDivider} />
+          <View style={styles.statItem}>
+            <Text style={styles.statValue}>{completedStoryIds.length}</Text>
+            <Text style={styles.statLabel}>{t("home.completed")}</Text>
+          </View>
+          <View style={styles.statDivider} />
+          <View style={styles.statItem}>
+            <Text style={styles.statValue}>{likedStoryIds.length}</Text>
+            <Text style={styles.statLabel}>{t("home.liked")}</Text>
+          </View>
+          <View style={styles.statDivider} />
+          <View style={styles.statItem}>
+            <Text style={styles.statValue}>{stories.length}</Text>
+            <Text style={styles.statLabel}>{t("home.stories")}</Text>
+          </View>
+        </View>
+      )}
 
       {/* Story of the Day */}
       {storyOfTheDay && (
@@ -308,6 +333,38 @@ const styles = StyleSheet.create({
   },
   headerTeaIcon: {
     fontSize: 28,
+  },
+
+  statsRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
+    marginHorizontal: spacing.lg,
+    marginBottom: spacing.lg,
+    backgroundColor: colors.surface,
+    borderRadius: radius.lg,
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.sm,
+  },
+  statItem: {
+    alignItems: "center",
+    flex: 1,
+  },
+  statValue: {
+    fontFamily: fonts.heading,
+    fontSize: fontSize.xxl,
+    color: colors.accent,
+  },
+  statLabel: {
+    fontFamily: fonts.body,
+    fontSize: fontSize.xs,
+    color: colors.textMuted,
+    marginTop: 2,
+  },
+  statDivider: {
+    width: 1,
+    height: 32,
+    backgroundColor: colors.surfaceLight,
   },
 
   sotdCard: {

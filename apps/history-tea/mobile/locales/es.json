@@ -24,7 +24,11 @@
   },
   "home": {
     "title": "History Tea",
-    "storyOfTheDay": "HISTORIA DEL DÍA"
+    "storyOfTheDay": "HISTORIA DEL DÍA",
+    "streak": "Racha",
+    "completed": "Completadas",
+    "liked": "Favoritas",
+    "stories": "Historias"
   },
   "explore": {
     "title": "Historias",

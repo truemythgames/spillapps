@@ -61,6 +61,12 @@ const SCREENSHOTS = {
   chat: require("@/assets/onboarding/screenshot-chat.webp"),
 } as const;
 
+const SCREENSHOTS_ES = {
+  home: require("@/assets/onboarding/screenshot-home-es.png"),
+  discover: require("@/assets/onboarding/screenshot-discover-es.png"),
+  chat: require("@/assets/onboarding/screenshot-chat-es.png"),
+} as const;
+
 const BACKGROUNDS = [
   HERO_IMAGE,                            // welcome
   LOCAL_COVERS["creation"],              // q1
@@ -110,7 +116,7 @@ const SHOWCASE_START_IDX = STEP_ORDER.indexOf("feature1");
 export default function OnboardingScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const Q1_OPTIONS = [t("onboarding.q1Opt1"), t("onboarding.q1Opt2"), t("onboarding.q1Opt3"), t("onboarding.q1Opt4")];
   const Q1_COMMENTS: Record<string, string> = {
@@ -129,10 +135,11 @@ export default function OnboardingScreen() {
     [t("onboarding.q2Opt5")]: t("onboarding.q2Comment5"),
   };
 
+  const shots = i18n.language === "es" ? SCREENSHOTS_ES : SCREENSHOTS;
   const FEATURE_SLIDES: FeatureSlide[] = [
-    { title: t("onboarding.feature1"), image: SCREENSHOTS.home },
-    { title: t("onboarding.feature2"), image: SCREENSHOTS.discover },
-    { title: t("onboarding.feature3"), image: SCREENSHOTS.chat },
+    { title: t("onboarding.feature1"), image: shots.home },
+    { title: t("onboarding.feature2"), image: shots.discover },
+    { title: t("onboarding.feature3"), image: shots.chat },
   ];
 
   const REVIEWS = [

@@ -7,7 +7,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const CACHE_KEY = "app_data_cache_v2_history";
 const CACHE_TTL_MS = 5 * 60 * 1000; // 5 min — background refresh if stale
 
-const DEMO_MODE = true;
+const DEMO_MODE = false;
 
 export interface StoryWithCover {
   id: string;

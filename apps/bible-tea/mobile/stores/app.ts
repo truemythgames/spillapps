@@ -255,8 +255,8 @@ export const useAppStore = create<AppState>((set, get) => ({
         const allStories = stories ?? get().stories;
         if (allStories.length > 0) {
           const ids = allStories.map((s: StoryWithCover) => s.id);
-          const completedIds = ids.slice(0, Math.min(18, ids.length));
-          const likedIds = ids.slice(0, Math.min(12, ids.length));
+          const completedIds = ids.slice(0, Math.min(64, ids.length));
+          const likedIds = ids.slice(0, Math.min(38, ids.length));
           const inProgressIds = ids.slice(completedIds.length, completedIds.length + 4);
           const progressEntries: Record<string, ProgressEntry> = {};
           for (const id of completedIds) {
@@ -278,7 +278,7 @@ export const useAppStore = create<AppState>((set, get) => ({
             completedStoryIds: completedIds,
             likedStoryIds: likedIds,
             progressMap: progressEntries,
-            streak: { current_streak: 12, max_streak: 24, last_listen_date: new Date().toISOString().split("T")[0] },
+            streak: { current_streak: 27, max_streak: 27, last_listen_date: new Date().toISOString().split("T")[0] },
             isSubscribed: true,
           });
         }

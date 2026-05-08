@@ -24,7 +24,11 @@
   },
   "home": {
     "title": "History Tea",
-    "storyOfTheDay": "STORY OF THE DAY"
+    "storyOfTheDay": "STORY OF THE DAY",
+    "streak": "Day Streak",
+    "completed": "Completed",
+    "liked": "Liked",
+    "stories": "Stories"
   },
   "explore": {
     "title": "Stories",
