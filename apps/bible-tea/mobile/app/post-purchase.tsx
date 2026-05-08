@@ -12,18 +12,20 @@ import Animated, {
   Easing,
   FadeInDown,
 } from "react-native-reanimated";
+import { useTranslation } from "react-i18next";
 import { colors, fonts, fontSize, spacing } from "@/lib/theme";
-
-const FEATURES = [
-  { icon: "🎧", text: "200+ narrated Bible stories" },
-  { icon: "👤", text: "Deep-dive character profiles" },
-  { icon: "📚", text: "Curated playlists & collections" },
-  { icon: "💬", text: "AI chat companion" },
-];
 
 export default function PostPurchaseScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
+
+  const FEATURES = [
+    { icon: "🎧", text: t("postPurchase.feature1") },
+    { icon: "👤", text: t("postPurchase.feature2") },
+    { icon: "📚", text: t("postPurchase.feature3") },
+    { icon: "💬", text: t("postPurchase.feature4") },
+  ];
 
   const circleScale = useSharedValue(0);
   const checkOpacity = useSharedValue(0);
@@ -91,13 +93,13 @@ export default function PostPurchaseScreen() {
           entering={FadeInDown.delay(500).duration(400)}
           style={styles.title}
         >
-          You're all set!
+          {t("postPurchase.title")}
         </Animated.Text>
         <Animated.Text
           entering={FadeInDown.delay(650).duration(400)}
           style={styles.subtitle}
         >
-          Welcome to Bible Tea Premium
+          {t("postPurchase.subtitle")}
         </Animated.Text>
       </View>
 
@@ -119,7 +121,7 @@ export default function PostPurchaseScreen() {
           entering={FadeInDown.delay(1400).duration(400)}
           style={styles.motivation}
         >
-          Your journey through the Bible starts now.{"\n"}One story at a time.
+          {t("postPurchase.motivation")}
         </Animated.Text>
 
         <Animated.View
@@ -127,7 +129,7 @@ export default function PostPurchaseScreen() {
           style={ctaAnimStyle}
         >
           <Pressable style={styles.cta} onPress={handleContinue}>
-            <Text style={styles.ctaText}>Start Exploring</Text>
+            <Text style={styles.ctaText}>{t("postPurchase.cta")}</Text>
           </Pressable>
         </Animated.View>
       </View>

@@ -10,6 +10,7 @@ import {
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
+import { useTranslation } from "react-i18next";
 import { useAppStore } from "@/stores/app";
 import {
   getOfferings,
@@ -22,6 +23,7 @@ export default function SpecialOfferScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const setSubscribed = useAppStore((s) => s.setSubscribed);
+  const { t } = useTranslation();
 
   const [packages, setPackages] = useState<PurchasesPackage[]>([]);
   const [loaded, setLoaded] = useState(false);
@@ -80,8 +82,8 @@ export default function SpecialOfferScreen() {
       }
     } catch (e: any) {
       Alert.alert(
-        "Purchase failed",
-        e?.message ?? "Something went wrong. Please try again."
+        t("specialOffer.purchaseFailed"),
+        e?.message ?? t("specialOffer.purchaseError")
       );
     } finally {
       setPurchasing(false);
@@ -119,8 +121,8 @@ export default function SpecialOfferScreen() {
 
       <View style={styles.content}>
         <View style={styles.header}>
-          <Text style={styles.title}>One-time Offer</Text>
-          <Text style={styles.subtitle}>You will never see this again</Text>
+          <Text style={styles.title}>{t("specialOffer.title")}</Text>
+          <Text style={styles.subtitle}>{t("specialOffer.subtitle")}</Text>
         </View>
 
         <View style={styles.cardWrap}>
@@ -136,15 +138,15 @@ export default function SpecialOfferScreen() {
           >
             {discount ? (
               <View style={styles.discountRow}>
-                <Text style={styles.discountText}>Here's an </Text>
+                <Text style={styles.discountText}>{t("specialOffer.discountPrefix")}</Text>
                 <View style={styles.discountPill}>
                   <Text style={styles.discountPillText}>{discount}</Text>
                 </View>
-                <Text style={styles.discountText}> discount 🙌</Text>
+                <Text style={styles.discountText}>{t("specialOffer.discountSuffix")}</Text>
               </View>
             ) : (
               <View style={styles.discountRow}>
-                <Text style={styles.discountText}>Limited-time price 🙌</Text>
+                <Text style={styles.discountText}>{t("specialOffer.limitedTime")}</Text>
               </View>
             )}
 
@@ -152,7 +154,7 @@ export default function SpecialOfferScreen() {
               <Text style={styles.priceText}>{pricePerWeek}/week</Text>
             </View>
 
-            <Text style={styles.lowest}>Lowest price ever</Text>
+            <Text style={styles.lowest}>{t("specialOffer.lowestPrice")}</Text>
           </LinearGradient>
         </View>
       </View>
@@ -160,7 +162,7 @@ export default function SpecialOfferScreen() {
       <View style={[styles.footer, { paddingBottom: insets.bottom + 16 }]}>
         <View style={styles.commitRow}>
           <Text style={styles.commitCheck}>✓</Text>
-          <Text style={styles.commitText}>No commitment, cancel anytime</Text>
+          <Text style={styles.commitText}>{t("specialOffer.noCommitment")}</Text>
         </View>
 
         <Pressable
@@ -171,12 +173,12 @@ export default function SpecialOfferScreen() {
           {purchasing ? (
             <ActivityIndicator color="#FFFFFF" />
           ) : (
-            <Text style={styles.ctaText}>Claim my limited time offer</Text>
+            <Text style={styles.ctaText}>{t("specialOffer.claimOffer")}</Text>
           )}
         </Pressable>
 
         <Text style={styles.billing}>
-          billed yearly at {yearlyPrice} per year
+          {t("specialOffer.billedYearly", { price: yearlyPrice })}
         </Text>
       </View>
     </View>

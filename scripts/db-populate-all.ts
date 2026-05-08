@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { readFileSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -434,8 +434,14 @@ for (const story of catalog) {
   }
 
   newStoryIds.push(story.id);
+  const transcriptPath = join(CONTENT_DIR, "stories", story.id, "transcript.md");
+  let durationSeconds = 0;
+  if (existsSync(transcriptPath)) {
+    const wordCount = readFileSync(transcriptPath, "utf8").split(/\s+/).length;
+    durationSeconds = Math.round((wordCount / 150) * 60);
+  }
   sql.push(
-    `INSERT OR IGNORE INTO stories (id, app_id, season_id, title, slug, description, cover_image_key, sort_order, is_free, is_published) VALUES ('${dbId}', 'bible-tea', '${seasonInfo.id}', '${esc(story.title)}', '${esc(story.id)}', '${esc(story.description)}', 'stories/${story.id}/cover.webp', ${storyOrder}, 0, 1);`
+    `INSERT OR IGNORE INTO stories (id, app_id, season_id, title, slug, description, cover_image_key, duration_seconds, sort_order, is_free, is_published) VALUES ('${dbId}', 'bible-tea', '${seasonInfo.id}', '${esc(story.title)}', '${esc(story.id)}', '${esc(story.description)}', 'stories/${story.id}/cover.webp', ${durationSeconds}, ${storyOrder}, 0, 1);`
   );
   storyOrder++;
 }
@@ -519,6 +525,75 @@ for (const [plId, stories] of Object.entries(playlistStoryMap)) {
   }
 }
 
+// 6. Season & playlist translations (Spanish)
+sql.push("-- ── SEASON TRANSLATIONS (es) ──");
+
+const seasonTranslations: Record<string, { name: string; desc: string }> = {
+  "s-genesis": { name: "Génesis", desc: "Donde todo comenzó. Creación, los primeros humanos, diluvios épicos y drama familiar que pone en vergüenza a la televisión." },
+  "s-exodus": { name: "Éxodo", desc: "Esclavitud, plagas, un mar que se parte en dos y supervivencia en el desierto. La película de acción original." },
+  "s-leviticus": { name: "Levítico", desc: "Reglas, rituales y lo que significa ser santo. Menos emocionante que Éxodo, pero la base de todo." },
+  "s-numbers": { name: "Números", desc: "40 años vagando, quejándose y aprendiendo a confiar en Dios. El viaje por carretera que salió terriblemente mal." },
+  "s-deuteronomy": { name: "Deuteronomio", desc: "Los discursos de despedida de Moisés. Un recordatorio de todo lo que Dios hizo y todo lo que Israel debe hacer." },
+  "s-joshua": { name: "Josué", desc: "La conquista de la Tierra Prometida. Murallas caen, ciudades arden e Israel por fin llega a casa." },
+  "s-judges": { name: "Jueces", desc: "La era más oscura de Israel. Héroes surgen, el caos reina y todos hacen lo que quieren." },
+  "s-ruth": { name: "Rut", desc: "Una historia de amor de lealtad y redención ambientada en el período más oscuro de la historia de Israel." },
+  "s-1samuel": { name: "1 Samuel", desc: "Del último juez al primer rey. Samuel, Saúl y el ascenso de David." },
+  "s-2samuel": { name: "2 Samuel", desc: "El reinado de David — triunfos, tragedias y la familia más complicada de la Biblia." },
+  "s-1kings": { name: "1 Reyes", desc: "La gloria de Salomón, el reino se divide y Elías se enfrenta a 450 profetas." },
+  "s-2kings": { name: "2 Reyes", desc: "El largo declive. Reyes buenos, reyes malos y la caída de dos naciones." },
+  "s-2chronicles": { name: "2 Crónicas", desc: "La historia del reino del sur contada de nuevo — reformadores, rebeldes y el camino al exilio." },
+  "s-daniel": { name: "Daniel", desc: "Fosos de leones, hornos de fuego y visiones apocalípticas. Fidelidad bajo presión." },
+  "s-esther": { name: "Ester", desc: "Una reina de belleza salva a su pueblo. El nombre de Dios nunca se menciona, pero sus huellas están en todas partes." },
+  "s-jonah": { name: "Jonás", desc: "Un profeta huye de Dios, es tragado por un pez y aprende sobre la misericordia por las malas." },
+  "s-matthew": { name: "Mateo", desc: "El Evangelio escrito para lectores judíos. Jesús como el Mesías prometido, desde el nacimiento hasta la resurrección." },
+  "s-mark": { name: "Marcos", desc: "El Evangelio de ritmo rápido. Milagros llenos de acción y el siervo sufriente." },
+  "s-luke": { name: "Lucas", desc: "El Evangelio más detallado. Jesús como amigo de los marginados, pecadores y olvidados." },
+  "s-john": { name: "Juan", desc: "El Evangelio espiritual. Conversaciones profundas, señales y el Verbo hecho carne." },
+  "s-acts": { name: "Hechos", desc: "La iglesia primitiva explota. De una habitación en Jerusalén a los confines del Imperio Romano." },
+  "s-james": { name: "Santiago", desc: "La fe sin obras está muerta. Sabiduría práctica para la vida cristiana real." },
+  "s-2peter": { name: "2 Pedro", desc: "La carta final urgente de Pedro. Aférrate a la verdad, cuidado con los falsos." },
+  "s-2timothy": { name: "2 Timoteo", desc: "La última carta de Pablo desde prisión. Un veterano pasa la antorcha a la siguiente generación." },
+  "s-revelation": { name: "Apocalipsis", desc: "El final definitivo. Visiones, bestias y el nuevo cielo y la nueva tierra." },
+};
+
+for (const [seasonId, trans] of Object.entries(seasonTranslations)) {
+  sql.push(
+    `INSERT OR REPLACE INTO content_translations (app_id, entity_type, entity_id, locale, field, value) VALUES ('bible-tea', 'season', '${seasonId}', 'es', 'name', '${esc(trans.name)}');`
+  );
+  sql.push(
+    `INSERT OR REPLACE INTO content_translations (app_id, entity_type, entity_id, locale, field, value) VALUES ('bible-tea', 'season', '${seasonId}', 'es', 'description', '${esc(trans.desc)}');`
+  );
+}
+sql.push("");
+
+sql.push("-- ── PLAYLIST TRANSLATIONS (es) ──");
+const playlistTranslations: Record<string, { name: string; desc: string }> = {
+  "pl-easter": { name: "Semana Santa", desc: "La historia completa de la Pascua, desde el Domingo de Ramos hasta la Ascensión." },
+  "pl-beginners": { name: "Para Principiantes", desc: "Las historias más importantes de la Biblia. Empieza aquí." },
+  "pl-drama": { name: "Drama Máximo", desc: "Traiciones, muertes y caos. Las historias más intensas de la Biblia." },
+  "pl-underdogs": { name: "Los Desfavorecidos", desc: "Cuando los más pequeños vencen a los grandes." },
+  "pl-love": { name: "Historias de Amor", desc: "Romance, lealtad y amor que cambia todo." },
+  "pl-miracles": { name: "Milagros", desc: "Mares que se abren, muertos que resucitan y pan del cielo." },
+  "pl-family": { name: "Drama Familiar", desc: "Hermanos peleando, padres sufriendo y familias rotas que Dios restaura." },
+  "pl-jesus": { name: "La Vida de Jesús", desc: "Desde el pesebre hasta la ascensión. La historia completa." },
+  "pl-courage": { name: "Coraje", desc: "Cuando el miedo era real pero la fe fue más grande." },
+  "pl-abraham": { name: "La Saga de Abraham", desc: "El padre de las naciones y su viaje de fe." },
+  "pl-jacob": { name: "La Saga de Jacob", desc: "El tramposo que luchó con Dios y fue transformado." },
+  "pl-exodus": { name: "El Éxodo", desc: "De la esclavitud a la libertad. La aventura original." },
+  "pl-second-chances": { name: "Segundas Oportunidades", desc: "Cuando Dios da otra chance a los que fallaron." },
+  "pl-relationships": { name: "Relaciones", desc: "Amor, amistad y lealtad a través de la Biblia." },
+};
+
+for (const [plId, trans] of Object.entries(playlistTranslations)) {
+  sql.push(
+    `INSERT OR REPLACE INTO content_translations (app_id, entity_type, entity_id, locale, field, value) VALUES ('bible-tea', 'playlist', '${plId}', 'es', 'name', '${esc(trans.name)}');`
+  );
+  sql.push(
+    `INSERT OR REPLACE INTO content_translations (app_id, entity_type, entity_id, locale, field, value) VALUES ('bible-tea', 'playlist', '${plId}', 'es', 'description', '${esc(trans.desc)}');`
+  );
+}
+sql.push("");
+
 const output = sql.join("\n");
 const outputPath = join(ROOT, "scripts", "db-populate-all.sql");
 import { writeFileSync } from "node:fs";
@@ -528,3 +603,5 @@ console.log(`  New seasons: ${createdSeasons.size}`);
 console.log(`  New stories: ${newStoryIds.length}`);
 console.log(`  Characters: ${Object.keys(characterStoryMap).length}`);
 console.log(`  Playlists: ${Object.keys(playlistStoryMap).length}`);
+console.log(`  Season translations (es): ${Object.keys(seasonTranslations).length}`);
+console.log(`  Playlist translations (es): ${Object.keys(playlistTranslations).length}`);

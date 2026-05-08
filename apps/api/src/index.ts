@@ -30,7 +30,7 @@ app.use(
       return o;
     },
     allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowHeaders: ["Content-Type", "Authorization", "X-App-Id"],
+    allowHeaders: ["Content-Type", "Authorization", "X-App-Id", "Accept-Language"],
   })
 );
 

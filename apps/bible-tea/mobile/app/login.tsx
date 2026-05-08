@@ -10,10 +10,12 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
 import { useAuthStore } from "@/stores/auth";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
 export default function LoginScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle);
@@ -30,7 +32,7 @@ export default function LoginScreen() {
       await signInWithGoogle();
       goToTabs();
     } catch (err: any) {
-      Alert.alert("Sign-in failed", err.message ?? "Please try again.");
+      Alert.alert(t("login.signInFailed"), err.message ?? t("login.tryAgain"));
     } finally {
       setLoading(null);
     }
@@ -46,7 +48,7 @@ export default function LoginScreen() {
         setLoading(null);
         return;
       }
-      Alert.alert("Sign-in failed", err.message ?? "Please try again.");
+      Alert.alert(t("login.signInFailed"), err.message ?? t("login.tryAgain"));
     } finally {
       setLoading(null);
     }
@@ -61,9 +63,9 @@ export default function LoginScreen() {
     >
       <View style={styles.hero}>
         <Text style={styles.emoji}>☕</Text>
-        <Text style={styles.title}>Create Account</Text>
+        <Text style={styles.title}>{t("login.title")}</Text>
         <Text style={styles.subtitle}>
-          Save your progress, streaks, and{"\n"}favorites across all your devices.
+          {t("login.subtitle")}
         </Text>
       </View>
 
@@ -78,7 +80,7 @@ export default function LoginScreen() {
           ) : (
             <>
               <Text style={styles.btnIcon}>G</Text>
-              <Text style={styles.btnText}>Continue with Google</Text>
+              <Text style={styles.btnText}>{t("login.continueGoogle")}</Text>
             </>
           )}
         </Pressable>
@@ -95,7 +97,7 @@ export default function LoginScreen() {
               <>
                 <Text style={[styles.btnIcon, { color: colors.text }]}></Text>
                 <Text style={[styles.btnText, { color: colors.text }]}>
-                  Continue with Apple
+                  {t("login.continueApple")}
                 </Text>
               </>
             )}
@@ -103,11 +105,11 @@ export default function LoginScreen() {
         )}
 
         <Pressable style={styles.skipBtn} onPress={goToTabs}>
-          <Text style={styles.skipText}>Skip for now</Text>
+          <Text style={styles.skipText}>{t("login.skip")}</Text>
         </Pressable>
 
         <Text style={styles.terms}>
-          By continuing, you agree to our Terms of Service{"\n"}and Privacy Policy.
+          {t("login.terms")}
         </Text>
       </View>
     </View>

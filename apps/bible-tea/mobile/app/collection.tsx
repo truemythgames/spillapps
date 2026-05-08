@@ -3,10 +3,12 @@ import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
 import { useAppStore } from "@/stores/app";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
 export default function CollectionScreen() {
+  const { t } = useTranslation();
   const { type, id, name } = useLocalSearchParams<{ type: string; id?: string; name?: string }>();
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -17,10 +19,10 @@ export default function CollectionScreen() {
 
   if (type === "playlist" && id) {
     const pl = playlists.find((p) => p.id === id);
-    title = pl?.name ?? "Playlist";
+    title = pl?.name ?? t("collection.fallbackTitle");
     stories = pl?.stories ?? [];
   } else if (type === "recent") {
-    title = "Recently Added";
+    title = t("collection.recentlyAdded");
     stories = recentStories;
   } else if (type === "season" && name) {
     title = name;
@@ -38,7 +40,7 @@ export default function CollectionScreen() {
       </View>
 
       <ScrollView contentContainerStyle={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
-        <Text style={styles.count}>{stories.length} {stories.length === 1 ? "story" : "stories"}</Text>
+        <Text style={styles.count}>{stories.length} {stories.length === 1 ? t("common.story") : t("common.stories")}</Text>
         {stories.map((story) => (
           <Pressable
             key={story.id}

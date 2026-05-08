@@ -3,10 +3,12 @@ import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
 import { getAllCharacters, characterImageUrl } from "@/lib/content";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
 export default function CharactersScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const characters = getAllCharacters();
@@ -17,7 +19,7 @@ export default function CharactersScreen() {
         <Pressable style={styles.backBtn} onPress={() => router.back()}>
           <Ionicons name="chevron-back" size={24} color={colors.text} />
         </Pressable>
-        <Text style={styles.headerTitle}>Bible Characters</Text>
+        <Text style={styles.headerTitle}>{t("characters.title")}</Text>
         <View style={{ width: 40 }} />
       </View>
 

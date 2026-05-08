@@ -181,6 +181,15 @@ const PROMPT_KITS: Record<string, PromptKit> = {
 
 const KIT: PromptKit = PROMPT_KITS[APP_ID] ?? PROMPT_KITS["bible-tea"];
 
+const LOCALE_NAMES: Record<string, string> = {
+  en: "English",
+  es: "Spanish",
+  fr: "French",
+  pt: "Portuguese",
+  de: "German",
+  it: "Italian",
+};
+
 // ---------------------------------------------------------------------------
 // CLI parsing
 // ---------------------------------------------------------------------------
@@ -208,7 +217,12 @@ function parseArgs() {
 // Transcript generation (OpenAI GPT-4o)
 // ---------------------------------------------------------------------------
 
-async function generateTranscript(story: Story): Promise<string> {
+async function generateTranscript(story: Story, locale?: string): Promise<string> {
+  const langName = locale && locale !== "en" ? LOCALE_NAMES[locale] ?? locale : null;
+  const langInstruction = langName
+    ? `\n\nIMPORTANT: Write the ENTIRE script in ${langName}. Use standard ${langName} Bible names and references (e.g. ${langName === "Spanish" ? "Génesis, Éxodo, Moisés, Abrahán" : "localized names"}). Section headings in ${langName}: "## La Preparación" (The Setup), "## La Historia" (The Story), "## Lo Que Aprendemos" (The Takeaway). Use ${langName === "Spanish" ? "RVR1960" : "a standard"} Bible translation for any quoted Scripture. Keep the casual Gen-Z tone natural in ${langName}.`
+    : "";
+
   const systemPrompt = `You are a world-class storyteller for the app "${KIT.appLabel}." Your audience is Gen-Z and young millennials. Your job is to write narration scripts that are:
 
 - ${KIT.accuracyRule}
@@ -242,7 +256,7 @@ Additional formatting rules:
 - Start with a level-1 heading: # Title
 - ${KIT.subtitleRule}
 - Use ## for section headings (The Setup, The Story, The Takeaway)
-- Do NOT use bullet points or numbered lists inside The Setup or The Story — only The Takeaway uses bullets`;
+- Do NOT use bullet points or numbered lists inside The Setup or The Story — only The Takeaway uses bullets${langInstruction}`;
 
   const userPrompt = `Write a narration script for this ${KIT.domainLabel}:
 
@@ -468,7 +482,7 @@ async function generateNarration(
 // Main pipeline
 // ---------------------------------------------------------------------------
 
-async function processStory(story: Story, step?: string) {
+async function processStory(story: Story, step?: string, locale?: string) {
   const storyDir = join(CONTENT_DIR, "stories", story.id);
   mkdirSync(storyDir, { recursive: true });
 
@@ -481,18 +495,21 @@ async function processStory(story: Story, step?: string) {
 
   // Step 1: Transcript
   if (shouldRun("transcript")) {
-    const transcriptPath = join(storyDir, "transcript.md");
+    const suffix = locale && locale !== "en" ? `.${locale}` : "";
+    const transcriptPath = join(storyDir, `transcript${suffix}.md`);
     if (existsSync(transcriptPath) && !step) {
-      console.log(`  [transcript] Already exists, skipping (use --step transcript to regenerate)`);
+      console.log(`  [transcript${suffix}] Already exists, skipping (use --step transcript to regenerate)`);
     } else {
-      const transcript = await generateTranscript(story);
+      const transcript = await generateTranscript(story, locale);
       writeFileSync(transcriptPath, transcript, "utf8");
-      metadata.transcript = {
+      const key = `transcript${suffix}`;
+      metadata[key] = {
         model: "gpt-4o",
+        locale: locale || "en",
         generatedAt: new Date().toISOString(),
         wordCount: transcript.split(/\s+/).length,
       };
-      uploadToR2(transcriptPath, `stories/${story.id}/transcript.md`, "text/markdown");
+      uploadToR2(transcriptPath, `stories/${story.id}/transcript${suffix}.md`, "text/markdown");
     }
   }
 
@@ -590,9 +607,10 @@ async function main() {
   }
 
   const step = typeof flags.step === "string" ? flags.step : undefined;
+  const locale = typeof flags.locale === "string" ? flags.locale : undefined;
 
   console.log(
-    `\nGenerating content for ${stories.length} stor${stories.length === 1 ? "y" : "ies"}${step ? ` (step: ${step})` : ""}...\n`
+    `\nGenerating content for ${stories.length} stor${stories.length === 1 ? "y" : "ies"}${step ? ` (step: ${step})` : ""}${locale ? ` (locale: ${locale})` : ""}...\n`
   );
 
   let completed = 0;
@@ -603,7 +621,7 @@ async function main() {
       `[${completed + failed + 1}/${stories.length}] ${story.title} (${story.bibleRef})`
     );
     try {
-      await processStory(story, step);
+      await processStory(story, step, locale);
       completed++;
     } catch (err: any) {
       console.error(`  ERROR: ${err.message}`);

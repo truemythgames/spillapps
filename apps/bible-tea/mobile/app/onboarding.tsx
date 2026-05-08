@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, {
@@ -73,75 +74,10 @@ const BACKGROUNDS = [
   LOCAL_COVERS["the-crucifixion"],       // rate
 ];
 
-const Q1_OPTIONS = [
-  "None of it",
-  "I know some stories",
-  "Most of it",
-  "Every page!",
-];
-
-const Q1_COMMENTS: Record<string, string> = {
-  "None of it":
-    "Perfect — Bible Tea makes it easy to jump in. No prior knowledge needed, just press play.",
-  "I know some stories":
-    "Great start! You'll hear those stories in a way that hits completely different.",
-  "Most of it":
-    "You've got a great foundation. Bible Tea brings fresh perspectives you haven't heard before.",
-  "Every page!":
-    "Impressive! You'll love how our narrators bring these stories to life with a modern twist.",
-};
-
-const Q2_OPTIONS = [
-  "Listen to Bible stories",
-  "Learn about characters",
-  "Build a daily habit",
-  "Explore my faith",
-  "Just curious",
-];
-
-const Q2_COMMENTS: Record<string, string> = {
-  "Listen to Bible stories":
-    "You're in the right place — short audio stories you can listen to anytime, anywhere.",
-  "Learn about characters":
-    "We've got deep dives on everyone from Moses to Mary. You'll meet them like never before.",
-  "Build a daily habit":
-    "One story a day. Track your streak, build consistency, grow your understanding.",
-  "Explore my faith":
-    "Bible Tea is a judgment-free zone. Explore at your own pace, on your own terms.",
-  "Just curious":
-    "Curiosity is the best starting point. Let's show you what Bible Tea is all about.",
-};
-
 interface FeatureSlide {
   title: string;
   image: number;
 }
-
-const FEATURE_SLIDES: FeatureSlide[] = [
-  {
-    title: "Hear the Bible like\nyou've never heard it",
-    image: SCREENSHOTS.home,
-  },
-  {
-    title: "Every story, every hero —\nall in one place",
-    image: SCREENSHOTS.discover,
-  },
-  {
-    title: "Scripture that actually\nspeaks your language",
-    image: SCREENSHOTS.chat,
-  },
-];
-
-const REVIEWS = [
-  {
-    text: "I never thought I'd binge Bible stories on my commute. This app changed that.",
-    name: "Mia R.",
-  },
-  {
-    text: "The narrators actually make you feel like you're IN the story. Obsessed.",
-    name: "Daniel P.",
-  },
-];
 
 type Step =
   | "welcome"
@@ -174,6 +110,36 @@ const SHOWCASE_START_IDX = STEP_ORDER.indexOf("feature1");
 export default function OnboardingScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
+
+  const Q1_OPTIONS = [t("onboarding.q1Opt1"), t("onboarding.q1Opt2"), t("onboarding.q1Opt3"), t("onboarding.q1Opt4")];
+  const Q1_COMMENTS: Record<string, string> = {
+    [t("onboarding.q1Opt1")]: t("onboarding.q1Comment1"),
+    [t("onboarding.q1Opt2")]: t("onboarding.q1Comment2"),
+    [t("onboarding.q1Opt3")]: t("onboarding.q1Comment3"),
+    [t("onboarding.q1Opt4")]: t("onboarding.q1Comment4"),
+  };
+
+  const Q2_OPTIONS = [t("onboarding.q2Opt1"), t("onboarding.q2Opt2"), t("onboarding.q2Opt3"), t("onboarding.q2Opt4"), t("onboarding.q2Opt5")];
+  const Q2_COMMENTS: Record<string, string> = {
+    [t("onboarding.q2Opt1")]: t("onboarding.q2Comment1"),
+    [t("onboarding.q2Opt2")]: t("onboarding.q2Comment2"),
+    [t("onboarding.q2Opt3")]: t("onboarding.q2Comment3"),
+    [t("onboarding.q2Opt4")]: t("onboarding.q2Comment4"),
+    [t("onboarding.q2Opt5")]: t("onboarding.q2Comment5"),
+  };
+
+  const FEATURE_SLIDES: FeatureSlide[] = [
+    { title: t("onboarding.feature1"), image: SCREENSHOTS.home },
+    { title: t("onboarding.feature2"), image: SCREENSHOTS.discover },
+    { title: t("onboarding.feature3"), image: SCREENSHOTS.chat },
+  ];
+
+  const REVIEWS = [
+    { text: t("onboarding.review1"), name: t("onboarding.review1Name") },
+    { text: t("onboarding.review2"), name: t("onboarding.review2Name") },
+  ];
+
   const [stepIdx, setStepIdx] = useState(0);
   const [q1Answer, setQ1Answer] = useState<string | null>(null);
   const [q2Answer, setQ2Answer] = useState<string | null>(null);
@@ -297,7 +263,7 @@ export default function OnboardingScreen() {
       case "reviews":
         return (
           <View style={styles.reviewsContent}>
-            <Text style={styles.reviewsTitle}>Don't just take our word for it</Text>
+            <Text style={styles.reviewsTitle}>{t("onboarding.reviewsTitle")}</Text>
             <Text style={styles.starsRow}>⭐⭐⭐⭐⭐</Text>
             {REVIEWS.map((r, i) => (
               <View key={i} style={styles.reviewCard}>
@@ -310,14 +276,13 @@ export default function OnboardingScreen() {
       case "rate":
         return (
           <View style={styles.rateContent}>
-            <Text style={styles.rateTitle}>Rate the App</Text>
+            <Text style={styles.rateTitle}>{t("onboarding.rateTitle")}</Text>
             <Text style={styles.starsRowLarge}>⭐⭐⭐⭐⭐</Text>
             <View style={styles.rateCard}>
               <Text style={styles.reviewText}>
-                "I put this on during my morning walk and honestly forgot I was
-                learning scripture. It just flows."
+                "{t("onboarding.rateReview")}"
               </Text>
-              <Text style={styles.reviewName}>— Priya S.</Text>
+              <Text style={styles.reviewName}>— {t("onboarding.rateReviewName")}</Text>
             </View>
           </View>
         );
@@ -333,7 +298,7 @@ export default function OnboardingScreen() {
           <View style={styles.welcomeContent}>
             <View style={styles.welcomeSpacer} />
             <Text style={styles.welcomeSub}>
-              Spill the tea.{"\n"}Read the Bible.
+              {t("onboarding.welcome")}
             </Text>
           </View>
         );
@@ -341,9 +306,9 @@ export default function OnboardingScreen() {
       case "q1":
         return (
           <View style={styles.questionContent}>
-            <Text style={styles.stepLabel}>Question 1 of 2</Text>
+            <Text style={styles.stepLabel}>{t("onboarding.q1Label")}</Text>
             <Text style={styles.questionTitle}>
-              How much of the Bible{"\n"}have you read?
+              {t("onboarding.q1Title")}
             </Text>
             <View style={styles.optionsContainer}>
               {Q1_OPTIONS.map((opt) => (
@@ -373,7 +338,7 @@ export default function OnboardingScreen() {
         return (
           <View style={styles.commentContent}>
             <Text style={styles.commentText}>
-              {Q1_COMMENTS[q1Answer!] ?? Q1_COMMENTS["None of it"]}
+              {Q1_COMMENTS[q1Answer!] ?? t("onboarding.q1Comment1")}
             </Text>
           </View>
         );
@@ -381,9 +346,9 @@ export default function OnboardingScreen() {
       case "q2":
         return (
           <View style={styles.questionContent}>
-            <Text style={styles.stepLabel}>Question 2 of 2</Text>
+            <Text style={styles.stepLabel}>{t("onboarding.q2Label")}</Text>
             <Text style={styles.questionTitle}>
-              What brings you to{"\n"}Bible Tea?
+              {t("onboarding.q2Title")}
             </Text>
             <View style={styles.optionsContainer}>
               {Q2_OPTIONS.map((opt) => (
@@ -413,7 +378,7 @@ export default function OnboardingScreen() {
         return (
           <View style={styles.commentContent}>
             <Text style={styles.commentText}>
-              {Q2_COMMENTS[q2Answer!] ?? Q2_COMMENTS["Just curious"]}
+              {Q2_COMMENTS[q2Answer!] ?? t("onboarding.q2Comment5")}
             </Text>
           </View>
         );
@@ -428,10 +393,10 @@ export default function OnboardingScreen() {
   const isLastShowcase = showcaseIdx === SHOWCASE_STEPS.length - 1;
   const showBack = inShowcase ? true : stepIdx > 0;
   const btnLabel = step === "welcome"
-    ? "Get Started"
+    ? t("onboarding.getStarted")
     : inShowcase && isLastShowcase
-      ? "Continue"
-      : "Next";
+      ? t("onboarding.continue")
+      : t("onboarding.next");
 
   return (
     <View style={styles.root}>

@@ -1,3 +1,4 @@
+import "@/lib/i18n";
 import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { Stack, usePathname, Redirect } from "expo-router";

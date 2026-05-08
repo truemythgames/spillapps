@@ -2,13 +2,15 @@ import { Hono } from "hono";
 import type { Env } from "../types";
 import { mediaUrl } from "../lib/media";
 import { resolvePublicAppId } from "../lib/request-app";
+import { resolveLocale, overlayTranslation } from "../lib/locale";
 
 export const featuredRoutes = new Hono<{ Bindings: Env }>();
 
 featuredRoutes.get("/story-of-the-day", async (c) => {
   const appId = resolvePublicAppId(c);
+  const locale = resolveLocale(c);
   const today = new Date().toISOString().split("T")[0];
-  const cacheKey = `sotd:${appId}:${today}`;
+  const cacheKey = `sotd:${appId}:${locale}:${today}`;
 
   const cached = await c.env.CACHE.get(cacheKey);
   if (cached) {
@@ -58,6 +60,15 @@ featuredRoutes.get("/story-of-the-day", async (c) => {
       .first();
   }
 
+  if (storyRow) {
+    storyRow = await overlayTranslation(c.env.DB, storyRow, {
+      entityType: "story",
+      appId,
+      locale,
+      fields: ["title", "description"],
+    });
+  }
+
   const response = {
     story: storyRow
       ? {
@@ -79,19 +90,26 @@ featuredRoutes.get("/story-of-the-day", async (c) => {
 
 featuredRoutes.get("/playlist-of-the-week", async (c) => {
   const appId = resolvePublicAppId(c);
-  const cacheKey = `playlist-of-the-week:${appId}`;
+  const locale = resolveLocale(c);
+  const cacheKey = `playlist-of-the-week:${appId}:${locale}`;
   const cached = await c.env.CACHE.get(cacheKey);
   if (cached) {
     return c.json({ playlist: JSON.parse(cached) });
   }
 
-  const playlist = await c.env.DB.prepare(
+  let playlist = await c.env.DB.prepare(
     "SELECT * FROM playlists WHERE is_featured = 1 AND app_id = ? LIMIT 1"
   )
     .bind(appId)
     .first();
 
   if (playlist) {
+    playlist = await overlayTranslation(c.env.DB, playlist as any, {
+      entityType: "playlist",
+      appId,
+      locale,
+      fields: ["name", "description"],
+    });
     await c.env.CACHE.put(cacheKey, JSON.stringify(playlist), {
       expirationTtl: 604800,
     });

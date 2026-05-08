@@ -1,0 +1,422 @@
+---
+import Base from "../../../layouts/Base.astro";
+import StoreButtons from "../../../components/StoreButtons.astro";
+import {
+  getCatalog,
+  getPlaylists,
+  hasCover,
+  coverUrl,
+} from "../../../lib/stories";
+import { getLocale, localePath, t } from "../../../lib/i18n";
+
+const locale = getLocale(Astro.currentLocale);
+const catalog = getCatalog(locale);
+const playlists = await getPlaylists(catalog, locale);
+
+const title = t(locale, "playlists.title");
+const description = t(locale, "playlists.description");
+
+const collectionLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "Listas de Historias Bíblicas",
+  description,
+  url: "https://bibletea.app/es/playlists",
+  publisher: {
+    "@type": "Organization",
+    name: "Bible Tea",
+    logo: { "@type": "ImageObject", url: "https://bibletea.app/icon.png" },
+  },
+};
+
+const itemListLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "Listas de Historias Bíblicas",
+  numberOfItems: playlists.length,
+  itemListElement: playlists.map((pl, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: pl.name,
+    url: `https://bibletea.app/es/playlists/${pl.id}`,
+    description: pl.description,
+  })),
+};
+
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Inicio", item: "https://bibletea.app/es" },
+    { "@type": "ListItem", position: 2, name: "Listas", item: "https://bibletea.app/es/playlists" },
+  ],
+};
+
+const faqs = [
+  {
+    q: "¿Qué son las listas de Bible Tea?",
+    a: `Las listas son colecciones curadas de historias bíblicas organizadas por tema, personaje o arco narrativo. Bible Tea tiene ${playlists.length} listas para ayudarte a encontrar las historias perfectas para escuchar.`,
+  },
+  {
+    q: "¿Cuál es la mejor lista para principiantes?",
+    a: "Comienza con la lista 'Empieza Aquí' — cubre las historias bíblicas más esenciales desde la Creación hasta la Resurrección en el mejor orden para escuchar.",
+  },
+  {
+    q: "¿Las listas son gratuitas?",
+    a: "¡Sí! Todas las listas y cada historia en ellas son completamente gratuitas en la app Bible Tea para iOS y Android.",
+  },
+  {
+    q: "¿Puedo escuchar las listas en orden?",
+    a: "Por supuesto. Cada lista está organizada en un orden deliberado — ya sea cronológico, temático o construyendo hacia un clímax. Solo presiona play en la primera historia.",
+  },
+];
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const jsonLdArray = [collectionLd, itemListLd, breadcrumbLd, faqLd];
+---
+
+<Base
+  title={title}
+  description={description}
+  canonicalPath="/playlists"
+  jsonLd={jsonLdArray}
+>
+  <style>
+    .playlists-hero {
+      padding: 7rem 2rem 2rem;
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .playlists-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin-bottom: 0.75rem;
+      background: linear-gradient(135deg, var(--text) 0%, var(--primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .playlists-hero p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      color: #fff;
+      padding: 0.8rem 2rem;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 24px rgba(200, 162, 255, 0.2);
+    }
+
+    .hero-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(200, 162, 255, 0.35);
+    }
+
+    .hero-cta svg { width: 18px; height: 18px; }
+
+    .playlist-section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem 1.5rem;
+    }
+
+    .playlist-header {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+      margin-bottom: 0.35rem;
+      padding-top: 2rem;
+    }
+
+    .playlist-header a {
+      text-decoration: none;
+      color: inherit;
+      transition: color 0.2s;
+    }
+
+    .playlist-header a:hover { color: var(--primary); }
+
+    .playlist-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+    }
+
+    .see-all {
+      font-size: 0.8rem;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: opacity 0.2s;
+    }
+
+    .see-all:hover { opacity: 0.7; }
+
+    .playlist-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .story-row {
+      display: flex;
+      gap: 1rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 0.75rem;
+      scrollbar-width: none;
+    }
+
+    .story-row::-webkit-scrollbar { display: none; }
+
+    .story-card {
+      flex-shrink: 0;
+      width: 180px;
+      scroll-snap-align: start;
+      text-decoration: none;
+      transition: transform 0.25s;
+    }
+
+    .story-card:hover { transform: translateY(-6px) scale(1.03); }
+
+    .card-cover {
+      width: 180px;
+      height: 180px;
+      border-radius: 14px;
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 0.5rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .card-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-cover-placeholder {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--surface) 0%, var(--surface-light) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+    }
+
+    .card-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 0.5rem 0.65rem;
+      background: linear-gradient(transparent, rgba(0,0,0,0.8));
+    }
+
+    .card-ref {
+      font-size: 0.6rem;
+      color: var(--accent);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.25;
+      margin-top: 0.3rem;
+    }
+
+    .card-desc {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .story-row.featured .story-card { width: 240px; }
+    .story-row.featured .card-cover { width: 240px; height: 240px; }
+
+    .faq-section {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--surface-border);
+    }
+
+    .faq-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .faq-item {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 12px;
+      margin-bottom: 0.6rem;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .faq-item:hover { border-color: var(--primary); }
+    .faq-item[open] { border-color: rgba(200, 162, 255, 0.3); }
+
+    .faq-item summary {
+      padding: 1rem 1.25rem;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text);
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .faq-item summary::-webkit-details-marker { display: none; }
+
+    .faq-item summary::after {
+      content: '+';
+      font-size: 1.25rem;
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+
+    .faq-item[open] summary::after { content: '−'; }
+
+    .faq-item p {
+      padding: 0 1.25rem 1rem;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    .bottom-cta {
+      text-align: center;
+      padding: 5rem 2rem 4rem;
+      position: relative;
+    }
+
+    .bottom-cta::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(107, 92, 231, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .bottom-cta h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.5rem, 3vw, 2.25rem);
+      margin-bottom: 0.75rem;
+    }
+
+    .bottom-cta p {
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+      max-width: 450px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @media (max-width: 640px) {
+      .playlists-hero { padding: 6rem 1.5rem 1.5rem; }
+      .playlist-section { padding: 0 1rem 1rem; }
+      .story-card { width: 150px; }
+      .card-cover { width: 150px; height: 150px; }
+      .story-row.featured .story-card { width: 200px; }
+      .story-row.featured .card-cover { width: 200px; height: 200px; }
+    }
+  </style>
+
+  <main>
+    <div class="playlists-hero">
+      <h1>{t(locale, "playlists.h1")}</h1>
+      <p>
+        {t(locale, "playlists.subtitle")}
+      </p>
+      <StoreButtons variant="hero" />
+    </div>
+
+    {playlists.map((pl, idx) => (
+      <div class="playlist-section">
+        <div class="playlist-header">
+          <a href={localePath(`/playlists/${pl.id}`, locale)}><h2>{pl.name}</h2></a>
+          <a href={localePath(`/playlists/${pl.id}`, locale)} class="see-all">Ver todo →</a>
+        </div>
+        <p class="playlist-desc">{pl.description}</p>
+        <div class={`story-row${idx === 0 ? " featured" : ""}`}>
+          {pl.stories.map((s) => (
+            <a href={localePath(`/stories/${s.id}`, locale)} class="story-card">
+              <div class="card-cover">
+                {hasCover(s.id) ? (
+                  <img src={coverUrl(s.id)} alt={s.title} loading="lazy" />
+                ) : (
+                  <div class="card-cover-placeholder">📖</div>
+                )}
+                <div class="card-overlay">
+                  <div class="card-ref">{s.bibleRef}</div>
+                </div>
+              </div>
+              <div class="card-title">{s.title}</div>
+              <div class="card-desc">{s.description}</div>
+            </a>
+          ))}
+        </div>
+      </div>
+    ))}
+
+    <section class="faq-section">
+      <h2>Preguntas Frecuentes</h2>
+      {faqs.map((f) => (
+        <details class="faq-item">
+          <summary>{f.q}</summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </section>
+
+    <section class="bottom-cta">
+      <h2 class="heading">{t(locale, "playlists.ctaTitle")}</h2>
+      <p>{t(locale, "playlists.ctaDesc")}</p>
+      <StoreButtons variant="hero" />
+    </section>
+  </main>
+</Base>

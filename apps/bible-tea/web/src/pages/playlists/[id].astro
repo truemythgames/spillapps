@@ -8,6 +8,7 @@ import {
   coverUrl,
   type Playlist,
 } from "../../lib/stories";
+import { getLocale, localePath, t } from "../../lib/i18n";
 
 export async function getStaticPaths() {
   const catalog = getCatalog();
@@ -24,10 +25,11 @@ interface Props {
 }
 
 const { playlist, allPlaylists } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
 const stories = playlist.stories;
 
-const pageTitle = `${playlist.name} — Bible Stories | Bible Tea`;
-const pageDesc = `${playlist.description} Listen to ${stories.length} stories in the ${playlist.name} collection on Bible Tea.`;
+const pageTitle = t(locale, "playlist.pageTitle").replace("{name}", playlist.name);
+const pageDesc = t(locale, "playlist.pageDesc").replace(/\{description\}/g, playlist.description).replace(/\{count\}/g, String(stories.length)).replace(/\{name\}/g, playlist.name);
 const pageUrl = `https://bibletea.app/playlists/${playlist.id}`;
 
 const firstCover = stories.find((s) => hasCover(s.id));
@@ -72,19 +74,15 @@ const breadcrumbLd = {
   ],
 };
 
+function faqT(key: string): string {
+  return t(locale, key as any).replace(/\{name\}/g, playlist.name).replace(/\{count\}/g, String(stories.length));
+}
+const faqStoryList = stories.slice(0, 5).map((s) => s.title).join(", ") + (stories.length > 5 ? t(locale, "playlist.faqA1More").replace("{more}", String(stories.length - 5)) : "");
+const faqRefs = stories.slice(0, 4).map((s) => s.bibleRef).join(", ") + (stories.length > 4 ? t(locale, "playlist.faqA3More") : "");
 const faqs = [
-  {
-    q: `What stories are in the ${playlist.name} collection?`,
-    a: `The ${playlist.name} collection includes ${stories.length} stories: ${stories.slice(0, 5).map((s) => s.title).join(", ")}${stories.length > 5 ? `, and ${stories.length - 5} more` : ""}. All available as immersive audio on Bible Tea.`,
-  },
-  {
-    q: `Can I listen to ${playlist.name} stories for free?`,
-    a: `Yes! All ${stories.length} stories in the ${playlist.name} collection are completely free to listen to on the Bible Tea app. Download on iOS or Android and start listening today.`,
-  },
-  {
-    q: `What Bible chapters does ${playlist.name} cover?`,
-    a: `The ${playlist.name} collection covers ${stories.slice(0, 4).map((s) => s.bibleRef).join(", ")}${stories.length > 4 ? " and more" : ""}. Each story is a modern retelling with immersive narration.`,
-  },
+  { q: faqT("playlist.faqQ1"), a: faqT("playlist.faqA1").replace("{stories}", faqStoryList) },
+  { q: faqT("playlist.faqQ2"), a: faqT("playlist.faqA2") },
+  { q: faqT("playlist.faqQ3"), a: faqT("playlist.faqA3").replace("{refs}", faqRefs) },
 ];
 
 const faqLd = {
@@ -414,9 +412,9 @@ const otherPlaylists = allPlaylists.filter((p) => p.id !== playlist.id).slice(0,
   <main>
     <div class="playlist-page">
       <div class="breadcrumbs">
-        <a href="/">Home</a>
+        <a href={localePath("/", locale)}>{t(locale, "playlist.breadcrumbHome")}</a>
         <span class="sep">/</span>
-        <a href="/playlists">Playlists</a>
+        <a href={localePath("/playlists", locale)}>{t(locale, "playlist.breadcrumbPlaylists")}</a>
         <span class="sep">/</span>
         <span>{playlist.name}</span>
       </div>
@@ -424,13 +422,13 @@ const otherPlaylists = allPlaylists.filter((p) => p.id !== playlist.id).slice(0,
       <div class="playlist-hero">
         <h1>{playlist.name}</h1>
         <p>{playlist.description}</p>
-        <p class="playlist-meta">{stories.length} stories</p>
+        <p class="playlist-meta">{stories.length} {t(locale, "playlists.storyCount")}</p>
         <StoreButtons variant="hero" />
       </div>
 
       <div class="stories-grid">
         {stories.map((s) => (
-          <a href={`/stories/${s.id}`} class="story-card">
+          <a href={localePath(`/stories/${s.id}`, locale)} class="story-card">
             <div class="card-cover">
               {hasCover(s.id) ? (
                 <img src={coverUrl(s.id)} alt={s.title} loading="lazy" />
@@ -449,7 +447,7 @@ const otherPlaylists = allPlaylists.filter((p) => p.id !== playlist.id).slice(0,
     </div>
 
     <section class="faq-section" style="max-width:700px;margin:0 auto;padding:3rem 2rem;">
-      <h2>Frequently Asked Questions</h2>
+      <h2>{t(locale, "playlist.faqTitle")}</h2>
       {faqs.map((f) => (
         <details class="faq-item">
           <summary>{f.q}</summary>
@@ -460,12 +458,12 @@ const otherPlaylists = allPlaylists.filter((p) => p.id !== playlist.id).slice(0,
 
     {otherPlaylists.length > 0 && (
       <section class="more-playlists">
-        <h2>More Collections</h2>
+        <h2>{t(locale, "playlist.moreCollections")}</h2>
         <div class="playlists-row">
           {otherPlaylists.map((p) => (
-            <a href={`/playlists/${p.id}`} class="playlist-card">
+            <a href={localePath(`/playlists/${p.id}`, locale)} class="playlist-card">
               <div class="pc-name">{p.name}</div>
-              <div class="pc-count">{p.stories.length} stories</div>
+              <div class="pc-count">{p.stories.length} {t(locale, "playlists.storyCount")}</div>
               <div class="pc-desc">{p.description}</div>
             </a>
           ))}
@@ -474,8 +472,8 @@ const otherPlaylists = allPlaylists.filter((p) => p.id !== playlist.id).slice(0,
     )}
 
     <section class="bottom-cta">
-      <h2>Ready to Listen?</h2>
-      <p>Download Bible Tea and listen to every story in {playlist.name} with immersive narration.</p>
+      <h2>{t(locale, "playlist.listenOn")}</h2>
+      <p>{t(locale, "playlist.listenOnDesc")}</p>
       <StoreButtons variant="hero" />
     </section>
   </main>

@@ -1,5 +1,6 @@
 import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
+import type { Locale } from "./i18n";
 
 export interface CatalogStory {
   id: string;
@@ -12,7 +13,6 @@ export interface CatalogStory {
 }
 
 const CONTENT_DIR = join(process.cwd(), "..", "content");
-const CATALOG_PATH = join(CONTENT_DIR, "story-catalog.json");
 
 export const MEDIA_BASE = "https://media.spillapps.com/bible-tea";
 export const APP_STORE_URL =
@@ -20,11 +20,19 @@ export const APP_STORE_URL =
 export const PLAY_STORE_URL =
   "https://play.google.com/store/apps/details?id=app.bibletea";
 
-export function getCatalog(): CatalogStory[] {
-  return JSON.parse(readFileSync(CATALOG_PATH, "utf8"));
+export function getCatalog(locale: Locale = "en"): CatalogStory[] {
+  if (locale !== "en") {
+    const locPath = join(CONTENT_DIR, `story-catalog.${locale}.json`);
+    if (existsSync(locPath)) return JSON.parse(readFileSync(locPath, "utf8"));
+  }
+  return JSON.parse(readFileSync(join(CONTENT_DIR, "story-catalog.json"), "utf8"));
 }
 
-export function getTranscript(id: string): string | null {
+export function getTranscript(id: string, locale: Locale = "en"): string | null {
+  if (locale !== "en") {
+    const localePath = join(CONTENT_DIR, "stories", id, `transcript.${locale}.md`);
+    if (existsSync(localePath)) return readFileSync(localePath, "utf8");
+  }
   const path = join(CONTENT_DIR, "stories", id, "transcript.md");
   if (!existsSync(path)) return null;
   return readFileSync(path, "utf8");
@@ -41,6 +49,10 @@ export function coverUrl(id: string): string {
 const API_BASE = "https://api.spillapps.com/v1";
 const APP_ID = "bible-tea";
 
+function apiHeaders(locale: Locale = "en"): Record<string, string> {
+  return { "x-app-id": APP_ID, "Accept-Language": locale };
+}
+
 export interface Playlist {
   id: string;
   name: string;
@@ -49,18 +61,18 @@ export interface Playlist {
   stories: CatalogStory[];
 }
 
-export async function getPlaylists(catalog: CatalogStory[]): Promise<Playlist[]> {
+export async function getPlaylists(catalog: CatalogStory[], locale: Locale = "en"): Promise<Playlist[]> {
   const slugMap = new Map(catalog.map((s) => [s.id, s]));
 
   const listRes = await fetch(`${API_BASE}/playlists`, {
-    headers: { "x-app-id": APP_ID },
+    headers: apiHeaders(locale),
   });
   const { playlists: rawPlaylists } = (await listRes.json()) as any;
 
   const results: Playlist[] = [];
   for (const pl of rawPlaylists) {
     const detailRes = await fetch(`${API_BASE}/playlists/${pl.id}`, {
-      headers: { "x-app-id": APP_ID },
+      headers: apiHeaders(locale),
     });
     const { playlist, stories: rawStories } = (await detailRes.json()) as any;
 
@@ -115,16 +127,16 @@ export interface SeasonStory {
   duration_seconds: number | null;
 }
 
-export async function getSeasons(): Promise<Season[]> {
+export async function getSeasons(locale: Locale = "en"): Promise<Season[]> {
   const res = await fetch(`${API_BASE}/seasons`, {
-    headers: { "x-app-id": APP_ID },
+    headers: apiHeaders(locale),
   });
   const { seasons: rawSeasons } = (await res.json()) as any;
 
   const results: Season[] = [];
   for (const s of rawSeasons) {
     const detailRes = await fetch(`${API_BASE}/seasons/${s.id}`, {
-      headers: { "x-app-id": APP_ID },
+      headers: apiHeaders(locale),
     });
     const { season, stories } = (await detailRes.json()) as any;
     results.push({
@@ -163,9 +175,9 @@ export interface CharacterStory {
   cover_image_url: string | null;
 }
 
-export async function getCharacters(): Promise<Character[]> {
+export async function getCharacters(locale: Locale = "en"): Promise<Character[]> {
   const res = await fetch(`${API_BASE}/characters`, {
-    headers: { "x-app-id": APP_ID },
+    headers: apiHeaders(locale),
   });
   const { characters } = (await res.json()) as any;
   return (characters as any[]).map((ch: any) => ({

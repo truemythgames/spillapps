@@ -10,10 +10,12 @@ import {
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
 import { api } from "@/lib/api";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
 export default function PlaylistScreen() {
+  const { t } = useTranslation();
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -49,7 +51,7 @@ export default function PlaylistScreen() {
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <Pressable style={styles.backBtn} onPress={() => router.back()}>
-        <Text style={styles.backText}>← Back</Text>
+        <Text style={styles.backText}>{t("common.back")}</Text>
       </Pressable>
 
       <FlatList
@@ -75,7 +77,7 @@ export default function PlaylistScreen() {
             )}
             <Text style={styles.playlistTitle}>{playlist?.name}</Text>
             <Text style={styles.playlistDesc}>{playlist?.description}</Text>
-            <Text style={styles.storyCount}>{stories.length} stories</Text>
+            <Text style={styles.storyCount}>{t("common.storiesCount", { count: stories.length })}</Text>
           </View>
         }
         renderItem={({ item, index }) => (
@@ -101,7 +103,7 @@ export default function PlaylistScreen() {
             <View style={styles.storyInfo}>
               <Text style={styles.storyTitle}>{item.title}</Text>
               <Text style={styles.storyMeta}>
-                {item.season_name} • {Math.ceil(item.duration_seconds / 60)} min
+                {item.season_name} • {t("common.min", { count: Math.ceil(item.duration_seconds / 60) })}
               </Text>
             </View>
           </Pressable>

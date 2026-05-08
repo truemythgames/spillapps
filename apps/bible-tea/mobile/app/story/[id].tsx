@@ -14,6 +14,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Markdown from "react-native-markdown-display";
 import { Ionicons } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -39,6 +40,7 @@ const { width } = Dimensions.get("window");
 const COVER_HEIGHT = 420;
 
 export default function StoryScreen() {
+  const { t } = useTranslation();
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -220,9 +222,9 @@ export default function StoryScreen() {
   if (!story) {
     return (
       <View style={[styles.center, { paddingTop: insets.top }]}>
-        <Text style={styles.errorText}>Story not found</Text>
+        <Text style={styles.errorText}>{t("story.notFound")}</Text>
         <Pressable onPress={() => router.back()} style={{ marginTop: 16 }}>
-          <Text style={{ fontFamily: fonts.bodyMedium, fontSize: fontSize.md, color: colors.primary }}>Go back</Text>
+          <Text style={{ fontFamily: fonts.bodyMedium, fontSize: fontSize.md, color: colors.primary }}>{t("story.goBack")}</Text>
         </Pressable>
       </View>
     );
@@ -282,19 +284,19 @@ export default function StoryScreen() {
                   style={styles.metaItem}
                   onPress={openSheet}
                 >
-                  <Text style={styles.metaLabel}>Speaker</Text>
+                  <Text style={styles.metaLabel}>{t("story.speaker")}</Text>
                   <View style={styles.metaValueRow}>
                     <Text style={styles.metaValue}>
-                      {isBuffering && isThisLoaded ? "Loading..." : activeSpeaker?.name ?? "—"}
+                      {isBuffering && isThisLoaded ? t("story.loading") : activeSpeaker?.name ?? "—"}
                     </Text>
                     <Ionicons name="chevron-down" size={14} color="#fff" />
                   </View>
                 </Pressable>
                 <View style={styles.metaDivider} />
                 <View style={styles.metaItem}>
-                  <Text style={styles.metaLabel}>Length</Text>
+                  <Text style={styles.metaLabel}>{t("story.length")}</Text>
                   <Text style={styles.metaValue}>
-                    {estimatedMinutes ? `${estimatedMinutes} min` : "—"}
+                    {estimatedMinutes ? t("common.min", { count: estimatedMinutes }) : "—"}
                   </Text>
                 </View>
               </View>
@@ -312,7 +314,7 @@ export default function StoryScreen() {
                 color={colors.background}
               />
               <Text style={styles.playSessionText}>
-                {isThisPlaying ? "Pause" : "Play Session"}
+                {isThisPlaying ? t("story.pause") : t("story.playSession")}
               </Text>
             </Pressable>
           )}
@@ -321,7 +323,7 @@ export default function StoryScreen() {
             onPress={() => router.push(`/chat?topic=story&storyId=${id}&storyTitle=${encodeURIComponent(story.title)}&storyRef=${encodeURIComponent(story.bibleRef)}` as any)}
           >
             <Ionicons name="sparkles" size={18} color={colors.text} />
-            <Text style={styles.askBtnText}>Ask a question</Text>
+            <Text style={styles.askBtnText}>{t("story.askQuestion")}</Text>
           </Pressable>
         </View>
 
@@ -333,7 +335,7 @@ export default function StoryScreen() {
             <Markdown style={markdownStyles}>{transcript}</Markdown>
           ) : (
             <Text style={styles.noTranscript}>
-              Transcript not yet generated.
+              {t("story.noTranscript")}
             </Text>
           )}
         </View>
@@ -357,7 +359,7 @@ export default function StoryScreen() {
               ]}
             >
               <View style={styles.sheetHandle} />
-              <Text style={styles.sheetTitle}>Choose a voice</Text>
+              <Text style={styles.sheetTitle}>{t("story.chooseVoice")}</Text>
               {speakers.map((s) => (
                 <Pressable
                   key={s.key}

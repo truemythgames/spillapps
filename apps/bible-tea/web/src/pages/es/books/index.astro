@@ -1,0 +1,252 @@
+---
+import Base from "../../../layouts/Base.astro";
+import StoreButtons from "../../../components/StoreButtons.astro";
+import { getSeasons } from "../../../lib/stories";
+import { getLocale, localePath, t } from "../../../lib/i18n";
+
+const locale = getLocale(Astro.currentLocale);
+const seasons = await getSeasons(locale);
+const totalStories = seasons.reduce((sum, s) => sum + s.stories.length, 0);
+
+const title = t(locale, "books.title");
+const description = t(locale, "books.description");
+
+const collectionLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "Libros de la Biblia",
+  description,
+  url: "https://bibletea.app/es/books",
+  publisher: {
+    "@type": "Organization",
+    name: "Bible Tea",
+    logo: { "@type": "ImageObject", url: "https://bibletea.app/icon.png" },
+  },
+};
+
+const itemListLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "Libros de la Biblia",
+  numberOfItems: seasons.length,
+  itemListElement: seasons.map((s, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: s.name,
+    url: `https://bibletea.app/es/books/${s.slug}`,
+    description: s.description,
+  })),
+};
+
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Inicio", item: "https://bibletea.app/es" },
+    { "@type": "ListItem", position: 2, name: "Libros de la Biblia", item: "https://bibletea.app/es/books" },
+  ],
+};
+
+const faqs = [
+  {
+    q: "¿Qué libros de la Biblia cubre Bible Tea?",
+    a: `Bible Tea cubre ${seasons.length} secciones principales: ${seasons.map((s) => s.name).join(", ")}. Cada una contiene múltiples historias narradas como audio inmersivo.`,
+  },
+  {
+    q: "¿Puedo escuchar los libros de la Biblia en orden?",
+    a: "¡Sí! Cada sección de libro en Bible Tea está organizada en orden narrativo. Empieza desde el Génesis y escucha todo el arco bíblico, o salta a cualquier libro que te interese.",
+  },
+  {
+    q: "¿Es Bible Tea gratis?",
+    a: `¡Sí! Las ${totalStories} historias de todos los libros son completamente gratuitas. Descarga Bible Tea en iOS o Android para empezar a escuchar.`,
+  },
+];
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const jsonLdArray = [collectionLd, itemListLd, breadcrumbLd, faqLd];
+---
+
+<Base
+  title={title}
+  description={description}
+  canonicalPath="/books"
+  jsonLd={jsonLdArray}
+>
+  <style>
+    .books-hero {
+      padding: 7rem 2rem 2rem;
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .books-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin-bottom: 0.75rem;
+      background: linear-gradient(135deg, var(--text) 0%, var(--primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .books-hero p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .books-page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 2rem 0;
+    }
+
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .book-card {
+      text-decoration: none;
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform 0.25s, border-color 0.2s;
+    }
+
+    .book-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--primary);
+    }
+
+    .book-card-img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .book-card-ph {
+      width: 100%;
+      height: 160px;
+      background: var(--surface-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+    }
+
+    .book-card-body { padding: 1.25rem; }
+
+    .book-testament {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 0.3rem;
+    }
+
+    .book-card-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+    }
+
+    .book-card-count {
+      font-size: 0.8rem;
+      color: var(--primary);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .book-card-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .faq-section { max-width: 700px; margin: 0 auto; padding: 3rem 2rem; border-top: 1px solid var(--surface-border); }
+    .faq-section h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 1.25rem; }
+    .faq-item { background: var(--surface); border: 1px solid var(--surface-border); border-radius: 12px; margin-bottom: 0.6rem; overflow: hidden; transition: border-color 0.2s; }
+    .faq-item:hover { border-color: var(--primary); }
+    .faq-item[open] { border-color: rgba(200, 162, 255, 0.3); }
+    .faq-item summary { padding: 1rem 1.25rem; cursor: pointer; font-weight: 600; font-size: 0.95rem; color: var(--text); list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after { content: '+'; font-size: 1.25rem; color: var(--primary); flex-shrink: 0; }
+    .faq-item[open] summary::after { content: '−'; }
+    .faq-item p { padding: 0 1.25rem 1rem; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+
+    .bottom-cta { text-align: center; padding: 4rem 2rem 3rem; }
+    .bottom-cta h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.5rem, 3vw, 2rem); margin-bottom: 0.75rem; }
+    .bottom-cta p { color: var(--text-secondary); margin-bottom: 1.5rem; max-width: 450px; margin-left: auto; margin-right: auto; }
+    .hero-cta { display: inline-flex; align-items: center; gap: 0.6rem; background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)); color: #fff; padding: 0.8rem 2rem; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 1rem; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 24px rgba(200, 162, 255, 0.2); }
+    .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(200, 162, 255, 0.35); }
+    .hero-cta svg { width: 18px; height: 18px; }
+
+    @media (max-width: 640px) {
+      .books-hero { padding: 6rem 1.5rem 1.5rem; }
+      .books-page { padding: 1.5rem 1.5rem 0; }
+      .books-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+
+  <main>
+    <div class="books-hero">
+      <h1>{t(locale, "books.h1")}</h1>
+      <p>{t(locale, "books.subtitle")}</p>
+      <StoreButtons variant="hero" />
+    </div>
+
+    <div class="books-page">
+      <div class="books-grid">
+        {seasons.map((s) => (
+          <a href={localePath(`/books/${s.slug}`, locale)} class="book-card">
+            {s.cover_image_url ? (
+              <img src={s.cover_image_url} alt={s.name} class="book-card-img" loading="lazy" />
+            ) : (
+              <div class="book-card-ph">📖</div>
+            )}
+            <div class="book-card-body">
+              <div class="book-testament">{s.testament?.toLowerCase() === "old" ? t(locale, "books.oldTestament") : t(locale, "books.newTestament")}</div>
+              <div class="book-card-name">{s.name}</div>
+              <div class="book-card-count">{s.stories.length} {t(locale, "books.storyCount")}</div>
+              {s.description && <div class="book-card-desc">{s.description}</div>}
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <section class="faq-section">
+      <h2>Preguntas Frecuentes</h2>
+      {faqs.map((f) => (
+        <details class="faq-item">
+          <summary>{f.q}</summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </section>
+
+    <section class="bottom-cta">
+      <h2>Empieza desde el Principio</h2>
+      <p>Descarga Bible Tea y escucha cada libro de la Biblia como audio inmersivo.</p>
+      <StoreButtons variant="hero" />
+    </section>
+  </main>
+</Base>

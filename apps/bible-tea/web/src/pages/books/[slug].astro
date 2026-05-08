@@ -7,6 +7,7 @@ import {
   coverUrl,
   type Season,
 } from "../../lib/stories";
+import { getLocale, localePath, t } from "../../lib/i18n";
 
 export async function getStaticPaths() {
   const seasons = await getSeasons();
@@ -22,10 +23,13 @@ interface Props {
 }
 
 const { season, allSeasons } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
 const stories = season.stories;
 
-const pageTitle = `${season.name} Bible Stories — Listen Free | Bible Tea`;
-const pageDesc = `${season.description || `Explore every story from ${season.name}.`} Listen to ${stories.length} ${season.name} stories as immersive audio on Bible Tea.`;
+const pageTitle = t(locale, "book.pageTitle").replace("{name}", season.name);
+const pageDesc = season.description
+  ? t(locale, "book.pageDesc").replace(/\{description\}/g, season.description).replace(/\{count\}/g, String(stories.length)).replace(/\{name\}/g, season.name)
+  : t(locale, "book.pageDescFallback").replace(/\{count\}/g, String(stories.length)).replace(/\{name\}/g, season.name);
 const pageUrl = `https://bibletea.app/books/${season.slug}`;
 const ogImage = season.cover_image_url || "https://bibletea.app/icon.png";
 
@@ -68,25 +72,15 @@ const breadcrumbLd = {
   ],
 };
 
+function faqT(key: string): string {
+  return t(locale, key as any).replace(/\{name\}/g, season.name).replace(/\{count\}/g, String(stories.length)).replace(/\{description\}/g, season.description || "");
+}
+const faqStoryList = stories.slice(0, 4).map((s) => s.title).join(", ") + (stories.length > 4 ? t(locale, "book.faqA1More").replace("{more}", String(stories.length - 4)) : "");
 const faqs = [
-  {
-    q: `What stories are in the Book of ${season.name}?`,
-    a: `Bible Tea covers ${stories.length} stories from ${season.name}, including ${stories.slice(0, 4).map((s) => s.title).join(", ")}${stories.length > 4 ? ` and ${stories.length - 4} more` : ""}. Each story is available as immersive audio narration.`,
-  },
-  {
-    q: `Can I listen to ${season.name} stories for free?`,
-    a: `Yes! All ${stories.length} ${season.name} stories on Bible Tea are completely free. Download the app on iOS or Android and start listening today.`,
-  },
-  {
-    q: `What is the Book of ${season.name} about?`,
-    a: season.description
-      ? `${season.description} Bible Tea retells each story from ${season.name} as modern, immersive audio you can listen to anywhere.`
-      : `The Book of ${season.name} contains some of the most well-known stories in the Bible. Bible Tea brings each one to life as immersive audio narration.`,
-  },
-  {
-    q: `How long are the ${season.name} audio stories?`,
-    a: `Each ${season.name} story on Bible Tea runs between 5-15 minutes of immersive audio narration — perfect for a commute, workout, or before bed.`,
-  },
+  { q: faqT("book.faqQ1"), a: faqT("book.faqA1").replace("{stories}", faqStoryList) },
+  { q: faqT("book.faqQ2"), a: faqT("book.faqA2") },
+  { q: faqT("book.faqQ3"), a: season.description ? faqT("book.faqA3") : faqT("book.faqA3Fallback") },
+  { q: faqT("book.faqQ4"), a: faqT("book.faqA4") },
 ];
 
 const faqLd = {
@@ -319,9 +313,9 @@ const otherSeasons = allSeasons.filter((s) => s.id !== season.id);
   <main>
     <div class="book-page">
       <div class="breadcrumbs">
-        <a href="/">Home</a>
+        <a href={localePath("/", locale)}>{t(locale, "book.breadcrumbHome")}</a>
         <span class="sep">/</span>
-        <a href="/stories">Stories</a>
+        <a href={localePath("/stories", locale)}>{t(locale, "book.breadcrumbBooks")}</a>
         <span class="sep">/</span>
         <span>{season.name}</span>
       </div>
@@ -333,9 +327,9 @@ const otherSeasons = allSeasons.filter((s) => s.id !== season.id);
           <div class="book-cover-ph">📖</div>
         )}
         <div class="book-info">
-          <div class="book-testament">{season.testament} Testament</div>
+          <div class="book-testament">{season.testament?.toLowerCase() === "old" ? t(locale, "books.oldTestament") : t(locale, "books.newTestament")}</div>
           <h1>{season.name}</h1>
-          <p class="book-meta">{stories.length} stories</p>
+          <p class="book-meta">{stories.length} {t(locale, "books.storyCount")}</p>
           {season.description && <p class="book-desc">{season.description}</p>}
           <StoreButtons variant="hero" />
         </div>
@@ -343,7 +337,7 @@ const otherSeasons = allSeasons.filter((s) => s.id !== season.id);
 
       <div class="stories-grid">
         {stories.map((s) => (
-          <a href={`/stories/${s.slug}`} class="story-card">
+          <a href={localePath(`/stories/${s.slug}`, locale)} class="story-card">
             <div class="card-cover">
               {s.cover_image_url ? (
                 <img src={s.cover_image_url} alt={s.title} loading="lazy" />
@@ -353,7 +347,7 @@ const otherSeasons = allSeasons.filter((s) => s.id !== season.id);
             </div>
             <div class="card-title">{s.title}</div>
             <div class="card-desc">{s.description}</div>
-            {s.duration_seconds && (
+            {s.duration_seconds > 0 && (
               <div class="card-duration">{Math.round(s.duration_seconds / 60)} min</div>
             )}
           </a>
@@ -362,7 +356,7 @@ const otherSeasons = allSeasons.filter((s) => s.id !== season.id);
     </div>
 
     <section class="faq-section">
-      <h2>Frequently Asked Questions</h2>
+      <h2>{t(locale, "book.faqTitle")}</h2>
       {faqs.map((f) => (
         <details class="faq-item">
           <summary>{f.q}</summary>
@@ -373,10 +367,10 @@ const otherSeasons = allSeasons.filter((s) => s.id !== season.id);
 
     {otherSeasons.length > 0 && (
       <section class="other-books">
-        <h2>More Books</h2>
+        <h2>{t(locale, "book.moreBooks")}</h2>
         <div class="books-row">
           {otherSeasons.map((s) => (
-            <a href={`/books/${s.slug}`} class="book-card">
+            <a href={localePath(`/books/${s.slug}`, locale)} class="book-card">
               {s.cover_image_url ? (
                 <img src={s.cover_image_url} alt={s.name} class="book-card-img" loading="lazy" />
               ) : (
@@ -384,7 +378,7 @@ const otherSeasons = allSeasons.filter((s) => s.id !== season.id);
               )}
               <div class="book-card-body">
                 <div class="book-card-name">{s.name}</div>
-                <div class="book-card-count">{s.stories.length} stories</div>
+                <div class="book-card-count">{s.stories.length} {t(locale, "books.storyCount")}</div>
               </div>
             </a>
           ))}
@@ -393,8 +387,8 @@ const otherSeasons = allSeasons.filter((s) => s.id !== season.id);
     )}
 
     <section class="bottom-cta">
-      <h2>Ready to Listen?</h2>
-      <p>Download Bible Tea and listen to every {season.name} story with immersive narration.</p>
+      <h2>{t(locale, "book.listenOn")}</h2>
+      <p>{t(locale, "book.listenOnDesc")}</p>
       <StoreButtons variant="hero" />
     </section>
   </main>

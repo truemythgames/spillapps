@@ -2,11 +2,13 @@
 import Base from "../../layouts/Base.astro";
 import StoreButtons from "../../components/StoreButtons.astro";
 import { getCharacters } from "../../lib/stories";
+import { getLocale, localePath, t } from "../../lib/i18n";
 
-const characters = await getCharacters();
+const locale = getLocale(Astro.currentLocale);
+const characters = await getCharacters(locale);
 
-const title = "Bible Characters — Bible Tea";
-const description = `Meet ${characters.length} Bible characters from Adam to Paul. Explore their stories as immersive audio on Bible Tea.`;
+const title = t(locale, "characters.title");
+const description = t(locale, "characters.description");
 
 const collectionLd = {
   "@context": "https://schema.org",
@@ -199,15 +201,15 @@ const jsonLdArray = [collectionLd, itemListLd, breadcrumbLd, faqLd];
 
   <main>
     <div class="characters-hero">
-      <h1>Bible Characters</h1>
-      <p>Meet {characters.length} characters from Genesis to Revelation. Explore their stories as immersive audio.</p>
+      <h1>{t(locale, "characters.h1")}</h1>
+      <p>{t(locale, "characters.subtitle")}</p>
       <StoreButtons variant="hero" />
     </div>
 
     <div class="characters-page">
       <div class="characters-grid">
         {characters.map((ch) => (
-          <a href={`/characters/${ch.id}`} class="char-card">
+          <a href={localePath(`/characters/${ch.id}`, locale)} class="char-card">
             {ch.image_url ? (
               <img src={ch.image_url} alt={ch.name} class="char-avatar" loading="lazy" />
             ) : (
@@ -216,7 +218,7 @@ const jsonLdArray = [collectionLd, itemListLd, breadcrumbLd, faqLd];
             <div class="char-name">{ch.name}</div>
             <div class="char-desc">{ch.description}</div>
             {ch.stories.length > 0 && (
-              <div class="char-count">{ch.stories.length} {ch.stories.length === 1 ? "story" : "stories"}</div>
+              <div class="char-count">{ch.stories.length} {t(locale, "characters.storyCount")}</div>
             )}
           </a>
         ))}
@@ -234,8 +236,8 @@ const jsonLdArray = [collectionLd, itemListLd, breadcrumbLd, faqLd];
     </section>
 
     <section class="bottom-cta">
-      <h2>Hear Their Stories</h2>
-      <p>Download Bible Tea and listen to every character's story with immersive audio narration.</p>
+      <h2>{t(locale, "characters.ctaTitle")}</h2>
+      <p>{t(locale, "characters.ctaDesc")}</p>
       <StoreButtons variant="hero" />
     </section>
   </main>

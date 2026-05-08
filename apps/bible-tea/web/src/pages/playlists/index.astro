@@ -7,13 +7,14 @@ import {
   hasCover,
   coverUrl,
 } from "../../lib/stories";
+import { getLocale, localePath, t } from "../../lib/i18n";
 
-const catalog = getCatalog();
-const playlists = await getPlaylists(catalog);
+const locale = getLocale(Astro.currentLocale);
+const catalog = getCatalog(locale);
+const playlists = await getPlaylists(catalog, locale);
 
-const title = "Bible Curated Playlists — Bible Tea";
-const description =
-  `${playlists.length} curated playlists of Bible stories. From beginners to deep dives — pick a collection and start listening.`;
+const title = t(locale, "playlists.title");
+const description = t(locale, "playlists.description");
 
 const collectionLd = {
   "@context": "https://schema.org",
@@ -367,10 +368,9 @@ const jsonLdArray = [collectionLd, itemListLd, breadcrumbLd, faqLd];
 
   <main>
     <div class="playlists-hero">
-      <h1>Bible Curated Playlists</h1>
+      <h1>{t(locale, "playlists.h1")}</h1>
       <p>
-        {playlists.length} handpicked collections of Bible stories.
-        From beginners to deep dives — pick a theme and start listening.
+        {t(locale, "playlists.subtitle")}
       </p>
       <StoreButtons variant="hero" />
     </div>
@@ -378,13 +378,13 @@ const jsonLdArray = [collectionLd, itemListLd, breadcrumbLd, faqLd];
     {playlists.map((pl, idx) => (
       <div class="playlist-section">
         <div class="playlist-header">
-          <a href={`/playlists/${pl.id}`}><h2>{pl.name}</h2></a>
-          <a href={`/playlists/${pl.id}`} class="see-all">See all →</a>
+          <a href={localePath(`/playlists/${pl.id}`, locale)}><h2>{pl.name}</h2></a>
+          <a href={localePath(`/playlists/${pl.id}`, locale)} class="see-all">See all →</a>
         </div>
         <p class="playlist-desc">{pl.description}</p>
         <div class={`story-row${idx === 0 ? " featured" : ""}`}>
           {pl.stories.map((s) => (
-            <a href={`/stories/${s.id}`} class="story-card">
+            <a href={localePath(`/stories/${s.id}`, locale)} class="story-card">
               <div class="card-cover">
                 {hasCover(s.id) ? (
                   <img src={coverUrl(s.id)} alt={s.title} loading="lazy" />
@@ -414,8 +414,8 @@ const jsonLdArray = [collectionLd, itemListLd, breadcrumbLd, faqLd];
     </section>
 
     <section class="bottom-cta">
-      <h2 class="heading">Ready to Listen?</h2>
-      <p>Download Bible Tea and experience curated Bible story collections with immersive narration.</p>
+      <h2 class="heading">{t(locale, "playlists.ctaTitle")}</h2>
+      <p>{t(locale, "playlists.ctaDesc")}</p>
       <StoreButtons variant="hero" />
     </section>
   </main>

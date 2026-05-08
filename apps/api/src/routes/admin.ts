@@ -281,6 +281,78 @@ adminRoutes.delete("/characters/:id", async (c) => {
   return c.json({ success: true });
 });
 
+// --- Translations ---
+
+adminRoutes.post("/translations", async (c) => {
+  const appId = resolveAdminTargetAppId(c);
+  const body = await c.req.json();
+  const { entity_type, entity_id, locale, translations } = body;
+
+  if (!entity_type || !entity_id || !locale || !translations || typeof translations !== "object") {
+    return c.json({ error: "entity_type, entity_id, locale, and translations (object) are required" }, 400);
+  }
+
+  const entries = Object.entries(translations as Record<string, string>);
+  if (entries.length === 0) {
+    return c.json({ error: "translations object must have at least one field" }, 400);
+  }
+
+  for (const [field, value] of entries) {
+    await c.env.DB.prepare(
+      `INSERT OR REPLACE INTO content_translations (app_id, entity_type, entity_id, locale, field, value)
+       VALUES (?, ?, ?, ?, ?, ?)`
+    )
+      .bind(appId, entity_type, entity_id, locale, field, value as string)
+      .run();
+  }
+
+  return c.json({ success: true, count: entries.length }, 201);
+});
+
+adminRoutes.post("/translations/bulk", async (c) => {
+  const appId = resolveAdminTargetAppId(c);
+  const body = await c.req.json();
+  const { items } = body;
+
+  if (!Array.isArray(items) || items.length === 0) {
+    return c.json({ error: "items array is required" }, 400);
+  }
+
+  let count = 0;
+  for (const item of items) {
+    const { entity_type, entity_id, locale, translations } = item;
+    if (!entity_type || !entity_id || !locale || !translations) continue;
+
+    for (const [field, value] of Object.entries(translations as Record<string, string>)) {
+      await c.env.DB.prepare(
+        `INSERT OR REPLACE INTO content_translations (app_id, entity_type, entity_id, locale, field, value)
+         VALUES (?, ?, ?, ?, ?, ?)`
+      )
+        .bind(appId, entity_type, entity_id, locale, field, value as string)
+        .run();
+      count++;
+    }
+  }
+
+  return c.json({ success: true, count }, 201);
+});
+
+adminRoutes.get("/translations/:entityType/:locale", async (c) => {
+  const appId = resolveAdminTargetAppId(c);
+  const entityType = c.req.param("entityType");
+  const locale = c.req.param("locale");
+
+  const { results } = await c.env.DB.prepare(
+    `SELECT entity_id, field, value FROM content_translations
+     WHERE app_id = ? AND entity_type = ? AND locale = ?
+     ORDER BY entity_id, field`
+  )
+    .bind(appId, entityType, locale)
+    .all();
+
+  return c.json({ translations: results });
+});
+
 adminRoutes.post("/cache/purge", async (c) => {
   const appId = resolveAdminTargetAppId(c);
   const keys = [
@@ -288,6 +360,14 @@ adminRoutes.post("/cache/purge", async (c) => {
     `playlist-of-the-week:${appId}`,
     `popular-stories:${appId}`,
   ];
+
+  for (const locale of ["en", "es"]) {
+    keys.push(`popular-stories:${appId}:${locale}`);
+    const today = new Date().toISOString().split("T")[0];
+    keys.push(`sotd:${appId}:${locale}:${today}`);
+    keys.push(`playlist-of-the-week:${appId}:${locale}`);
+  }
+
   for (const key of keys) {
     await c.env.CACHE.delete(key);
   }

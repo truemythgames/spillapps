@@ -3,11 +3,13 @@ import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
 import { getAllCharacters, characterImageUrl } from "@/lib/content";
 import { useAppStore } from "@/stores/app";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
 export default function CharacterScreen() {
+  const { t } = useTranslation();
   const { name } = useLocalSearchParams<{ name: string }>();
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -45,7 +47,7 @@ export default function CharacterScreen() {
           <Text style={styles.overview}>{char.overview}</Text>
         ) : null}
 
-        <Text style={styles.count}>{stories.length} {stories.length === 1 ? "story" : "stories"}</Text>
+        <Text style={styles.count}>{stories.length} {stories.length === 1 ? t("common.story") : t("common.stories")}</Text>
 
         {stories.map((story) => (
           <Pressable

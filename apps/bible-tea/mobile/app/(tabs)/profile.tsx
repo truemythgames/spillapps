@@ -2,26 +2,28 @@ import { View, Text, StyleSheet, ScrollView, Pressable } from "react-native";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
 import { useAppStore } from "@/stores/app";
 import { coverUrl } from "@/lib/content";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 import { LinearGradient } from "expo-linear-gradient";
 
-const CHAT_TOPIC_DEFS = [
-  { id: "verse", title: "Spill a verse\nfor what I'm feeling", storyId: "the-good-samaritan" },
-  { id: "advice", title: "What would\nGod say about...", storyId: "solomons-wisdom" },
-  { id: "explain", title: "Break down\na Bible passage", storyId: "the-ten-commandments" },
-];
-
 export default function ChatScreen() {
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const stories = useAppStore((s) => s.stories);
   const storyMap = Object.fromEntries(stories.map((s) => [s.id, s]));
 
-  const CHAT_TOPICS = CHAT_TOPIC_DEFS.map((t) => ({
-    ...t,
-    image: storyMap[t.storyId]?.cover_image_url ?? coverUrl(t.storyId),
+  const CHAT_TOPIC_DEFS = [
+    { id: "verse", title: t("chatTab.topicVerse"), storyId: "the-good-samaritan" },
+    { id: "advice", title: t("chatTab.topicAdvice"), storyId: "solomons-wisdom" },
+    { id: "explain", title: t("chatTab.topicExplain"), storyId: "the-ten-commandments" },
+  ];
+
+  const CHAT_TOPICS = CHAT_TOPIC_DEFS.map((td) => ({
+    ...td,
+    image: storyMap[td.storyId]?.cover_image_url ?? coverUrl(td.storyId),
   }));
 
   function handleTopic(topicId: string) {
@@ -38,9 +40,9 @@ export default function ChatScreen() {
       contentContainerStyle={{ paddingBottom: 120 }}
       showsVerticalScrollIndicator={false}
     >
-      <Text style={styles.pageTitle}>Chat</Text>
+      <Text style={styles.pageTitle}>{t("chatTab.title")}</Text>
 
-      <Text style={styles.subtitle}>Select a topic or start a new chat</Text>
+      <Text style={styles.subtitle}>{t("chatTab.subtitle")}</Text>
 
       {/* Topic cards */}
       <View style={styles.cards}>
@@ -60,7 +62,7 @@ export default function ChatScreen() {
 
       {/* Free chat button */}
       <Pressable style={styles.freeBtn} onPress={handleFreeChat}>
-        <Text style={styles.freeBtnText}>Just chat with me</Text>
+        <Text style={styles.freeBtnText}>{t("chatTab.freeChat")}</Text>
       </Pressable>
     </ScrollView>
   );

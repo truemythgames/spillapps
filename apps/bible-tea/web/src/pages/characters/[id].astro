@@ -5,6 +5,7 @@ import {
   getCharacters,
   type Character,
 } from "../../lib/stories";
+import { getLocale, localePath, t } from "../../lib/i18n";
 
 export async function getStaticPaths() {
   const characters = await getCharacters();
@@ -20,10 +21,11 @@ interface Props {
 }
 
 const { character, allCharacters } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
 const stories = character.stories;
 
-const pageTitle = `${character.name} — Bible Character Stories | Bible Tea`;
-const pageDesc = `${character.description}. Listen to ${stories.length > 0 ? stories.length : "all"} ${character.name} stories as immersive audio on Bible Tea.`;
+const pageTitle = t(locale, "character.pageTitle").replace("{name}", character.name);
+const pageDesc = t(locale, "character.pageDesc").replace(/\{description\}/g, character.description).replace(/\{count\}/g, String(stories.length > 0 ? stories.length : "")).replace(/\{name\}/g, character.name);
 const pageUrl = `https://bibletea.app/characters/${character.id}`;
 const ogImage = character.image_url || "https://bibletea.app/icon.png";
 
@@ -74,21 +76,21 @@ const breadcrumbLd = {
   ],
 };
 
+function faqT(key: string): string {
+  return t(locale, key as any).replace(/\{name\}/g, character.name).replace(/\{description\}/g, character.description).replace(/\{count\}/g, String(stories.length));
+}
 const faqs = [
   {
-    q: `Who is ${character.name} in the Bible?`,
-    a: `${character.description}. ${character.name} is one of the most significant figures in the Bible${stories.length > 0 ? `. Bible Tea tells ${stories.length} stories featuring ${character.name}` : ""}. Download the app to listen to the full audio retellings.`,
+    q: faqT("character.faqQ1"),
+    a: stories.length > 0 ? faqT("character.faqA1Stories") : faqT("character.faqA1"),
   },
   {
-    q: `What Bible stories feature ${character.name}?`,
+    q: faqT("character.faqQ2"),
     a: stories.length > 0
-      ? `${character.name} appears in ${stories.length} stories on Bible Tea: ${stories.map((s) => s.title).join(", ")}. All are available as free immersive audio.`
-      : `Bible Tea features ${character.name} across multiple stories. Download the free app to explore all of them with immersive audio narration.`,
+      ? faqT("character.faqA2").replace("{stories}", stories.map((s) => s.title).join(", "))
+      : faqT("character.faqA2None"),
   },
-  {
-    q: `Can I listen to ${character.name}'s story for free?`,
-    a: `Yes! Every ${character.name} story on Bible Tea is completely free to listen to. Download the app on iOS or Android and start listening today.`,
-  },
+  { q: faqT("character.faqQ3"), a: faqT("character.faqA3") },
 ];
 
 const faqLd = {
@@ -263,9 +265,9 @@ const otherCharacters = allCharacters.filter((c) => c.id !== character.id).slice
   <main>
     <div class="character-page">
       <div class="breadcrumbs">
-        <a href="/">Home</a>
+        <a href={localePath("/", locale)}>{t(locale, "character.breadcrumbHome")}</a>
         <span class="sep">/</span>
-        <a href="/stories">Stories</a>
+        <a href={localePath("/characters", locale)}>{t(locale, "character.breadcrumbCharacters")}</a>
         <span class="sep">/</span>
         <span>{character.name}</span>
       </div>
@@ -277,10 +279,10 @@ const otherCharacters = allCharacters.filter((c) => c.id !== character.id).slice
           <div class="character-avatar-ph">👤</div>
         )}
         <div class="character-info">
-          <div class="character-label">Bible Character</div>
+          <div class="character-label">{t(locale, "character.label")}</div>
           <h1>{character.name}</h1>
           <p class="character-desc">{character.description}</p>
-          {stories.length > 0 && <p class="character-meta">{stories.length} stories</p>}
+          {stories.length > 0 && <p class="character-meta">{stories.length} {t(locale, "characters.storyCount")}</p>}
           <StoreButtons variant="hero" />
         </div>
       </div>
@@ -288,7 +290,7 @@ const otherCharacters = allCharacters.filter((c) => c.id !== character.id).slice
       {stories.length > 0 ? (
         <div class="stories-grid">
           {stories.map((s) => (
-            <a href={`/stories/${s.slug}`} class="story-card">
+            <a href={localePath(`/stories/${s.slug}`, locale)} class="story-card">
               <div class="card-cover">
                 {s.cover_image_url ? (
                   <img src={s.cover_image_url} alt={s.title} loading="lazy" />
@@ -310,7 +312,7 @@ const otherCharacters = allCharacters.filter((c) => c.id !== character.id).slice
     </div>
 
     <section class="faq-section">
-      <h2>Frequently Asked Questions</h2>
+      <h2>{t(locale, "character.faqTitle")}</h2>
       {faqs.map((f) => (
         <details class="faq-item">
           <summary>{f.q}</summary>
@@ -321,10 +323,10 @@ const otherCharacters = allCharacters.filter((c) => c.id !== character.id).slice
 
     {otherCharacters.length > 0 && (
       <section class="other-characters">
-        <h2>More Bible Characters</h2>
+        <h2>{t(locale, "character.moreCharacters")}</h2>
         <div class="characters-row">
           {otherCharacters.map((c) => (
-            <a href={`/characters/${c.id}`} class="char-card">
+            <a href={localePath(`/characters/${c.id}`, locale)} class="char-card">
               {c.image_url ? (
                 <img src={c.image_url} alt={c.name} class="char-card-avatar" loading="lazy" />
               ) : (
@@ -339,8 +341,8 @@ const otherCharacters = allCharacters.filter((c) => c.id !== character.id).slice
     )}
 
     <section class="bottom-cta">
-      <h2>Explore Every Story</h2>
-      <p>Download Bible Tea and listen to {character.name}'s complete story with immersive audio narration.</p>
+      <h2>{t(locale, "character.listenOn")}</h2>
+      <p>{t(locale, "character.listenOnDesc")}</p>
       <StoreButtons variant="hero" />
     </section>
   </main>

@@ -3,12 +3,14 @@ import { Image } from "expo-image";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
 import { useAppStore, type StoryWithCover } from "@/stores/app";
 import { useGate } from "@/lib/useGate";
 import { getLocalProgress } from "@/lib/storage";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
 export default function TestamentScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -17,7 +19,7 @@ export default function TestamentScreen() {
   const progress = getLocalProgress();
 
   const isOT = id === "old";
-  const title = isOT ? "Old Testament" : "New Testament";
+  const title = isOT ? t("testament.old") : t("testament.new");
 
   const testamentStories = stories.filter((s) =>
     isOT ? s.testament === "old" : s.testament === "new",
@@ -44,7 +46,7 @@ export default function TestamentScreen() {
         <View style={{ width: 40 }} />
       </View>
 
-      <Text style={styles.subtitle}>{totalStories} stories</Text>
+      <Text style={styles.subtitle}>{t("common.storiesCount", { count: totalStories })}</Text>
 
       <ScrollView
         contentContainerStyle={{ paddingBottom: 100 }}
@@ -59,7 +61,7 @@ export default function TestamentScreen() {
             <View key={name} style={styles.seasonBlock}>
               <View style={styles.seasonHeader}>
                 <Text style={styles.seasonName}>{name}</Text>
-                <Text style={styles.seasonMeta}>{sectionStories.length} stories · {pct}% done</Text>
+                <Text style={styles.seasonMeta}>{t("testament.progressLabel", { count: sectionStories.length, percent: pct })}</Text>
                 <View style={styles.seasonBar}>
                   <View style={[styles.seasonBarFill, { width: `${pct}%` }]} />
                 </View>

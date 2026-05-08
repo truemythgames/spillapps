@@ -8,6 +8,7 @@ import {
 } from "../middleware/auth";
 import { resolvePublicAppId } from "../lib/request-app";
 import { resolveChatSystemPrompt } from "../lib/chat-prompts";
+import { resolveLocale } from "../lib/locale";
 
 const chat = new Hono<{ Bindings: Env }>();
 
@@ -49,6 +50,7 @@ const listSchema = z.object({
 // Send a message and get AI response
 chat.post("/", zValidator("json", sendMessageSchema), async (c) => {
   const { userId, appId } = await getChatContext(c);
+  const locale = resolveLocale(c);
   const { conversation_id, topic, message } = c.req.valid("json");
 
   if (!c.env.OPENAI_API_KEY) {
@@ -69,8 +71,7 @@ chat.post("/", zValidator("json", sendMessageSchema), async (c) => {
       .bind(convId, userId, topic, message.slice(0, 100), appId)
       .run();
 
-    // Insert system prompt as first message
-    const systemPrompt = await resolveChatSystemPrompt(c.env.DB, appId, topic);
+    const systemPrompt = await resolveChatSystemPrompt(c.env.DB, appId, topic, locale);
     await c.env.DB.prepare(
       "INSERT INTO chat_messages (id, conversation_id, role, content) VALUES (?, ?, 'system', ?)",
     )
@@ -88,14 +89,12 @@ chat.post("/", zValidator("json", sendMessageSchema), async (c) => {
     }
   }
 
-  // Store user message
   await c.env.DB.prepare(
     "INSERT INTO chat_messages (id, conversation_id, role, content) VALUES (?, ?, 'user', ?)",
   )
     .bind(crypto.randomUUID(), convId, message)
     .run();
 
-  // Fetch conversation history for context
   const history = await c.env.DB.prepare(
     "SELECT role, content FROM chat_messages WHERE conversation_id = ? ORDER BY created_at ASC",
   )
@@ -160,6 +159,7 @@ chat.post("/", zValidator("json", sendMessageSchema), async (c) => {
 // Stream a message (SSE)
 chat.post("/stream", zValidator("json", sendMessageSchema), async (c) => {
   const { userId, appId } = await getChatContext(c);
+  const locale = resolveLocale(c);
   const { conversation_id, topic, message } = c.req.valid("json");
 
   if (!c.env.OPENAI_API_KEY) {
@@ -179,7 +179,7 @@ chat.post("/stream", zValidator("json", sendMessageSchema), async (c) => {
       .bind(convId, userId, topic, message.slice(0, 100), appId)
       .run();
 
-    const systemPrompt = await resolveChatSystemPrompt(c.env.DB, appId, topic);
+    const systemPrompt = await resolveChatSystemPrompt(c.env.DB, appId, topic, locale);
     await c.env.DB.prepare(
       "INSERT INTO chat_messages (id, conversation_id, role, content) VALUES (?, ?, 'system', ?)",
     )

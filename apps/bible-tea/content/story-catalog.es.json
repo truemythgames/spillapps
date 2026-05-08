@@ -1,0 +1,2135 @@
+[
+  {
+    "id": "creation",
+    "title": "La Creación",
+    "description": "Dios construye todo el universo en 6 días y se toma un día libre. La historia de origen de literalmente todo.",
+    "section": "Génesis",
+    "bibleRef": "Génesis 1-2",
+    "inSeed": true,
+    "seedId": "st-creation"
+  },
+  {
+    "id": "adam-and-eve",
+    "title": "Adán y Eva",
+    "description": "Una regla. Tenían una regla. Y ni siquiera pudieron con eso. Los problemas de confianza originales.",
+    "section": "Génesis",
+    "bibleRef": "Génesis 2-3",
+    "inSeed": true,
+    "seedId": "st-adam-eve"
+  },
+  {
+    "id": "cain-and-abel",
+    "title": "Caín y Abel",
+    "description": "Los primeros hermanos. Los primeros celos. El primer asesinato. Las cosas se salieron de control rapidísimo.",
+    "section": "Génesis",
+    "bibleRef": "Génesis 4",
+    "inSeed": true,
+    "seedId": "st-cain-abel"
+  },
+  {
+    "id": "noahs-ark",
+    "title": "El Arca de Noé",
+    "description": "Dios reinicia todo el planeta. Un hombre construye un zoológico flotante y sobrevive al apocalipsis.",
+    "section": "Génesis",
+    "bibleRef": "Génesis 6-9",
+    "inSeed": true,
+    "seedId": "st-noah"
+  },
+  {
+    "id": "tower-of-babel",
+    "title": "La Torre de Babel",
+    "description": "La humanidad se une para llegar al cielo. Dios mezcla sus idiomas y los dispersa por todos lados.",
+    "section": "Génesis",
+    "bibleRef": "Génesis 11",
+    "inSeed": true,
+    "seedId": "st-babel"
+  },
+  {
+    "id": "abrahams-call",
+    "title": "El Llamado de Abraham",
+    "description": "Un hombre de 75 años escucha a Dios decir 'deja todo y vete'. Sin mapa. Sin GPS. Solo fe.",
+    "section": "Génesis",
+    "bibleRef": "Génesis 12",
+    "inSeed": true,
+    "seedId": "st-abraham-call"
+  },
+  {
+    "id": "abrahams-sister-lie",
+    "title": "La Mentira de la Hermana de Abraham",
+    "description": "Abraham le dice al faraón que su esposa es su hermana para salvar su propio pellejo. No es su mejor momento.",
+    "section": "Génesis",
+    "bibleRef": "Génesis 12:10-20",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-same-lie-again",
+    "title": "La Misma Mentira, Diferente Rey",
+    "description": "Abraham hace el mismo truco de 'es mi hermana' con otro rey. Pensarías que aprendería.",
+    "section": "Génesis",
+    "bibleRef": "Génesis 20",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "gods-promise-of-a-son",
+    "title": "La Promesa de Dios de un Hijo",
+    "description": "Dios promete a una pareja de 100 años que tendrán un bebé. Sara literalmente se ríe en la cara de Dios.",
+    "section": "Génesis",
+    "bibleRef": "Génesis 15-17",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "tired-of-waiting",
+    "title": "Cansados de Esperar",
+    "description": "Abraham y Sara se impacientan con la promesa de Dios y tratan de forzarla con Agar. Sale espectacularmente mal.",
+    "section": "Génesis",
+    "bibleRef": "Génesis 16",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "sodom-and-gomorrah",
+    "title": "Sodoma y Gomorra",
+    "description": "Dos ciudades tan perdidas que Dios hace llover fuego del cielo. Abraham negocia, pero no hay ni 10 personas buenas.",
+    "section": "Génesis",
+    "bibleRef": "Génesis 18-19",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "lots-escape-gone-wrong",
+    "title": "La Huida de Lot Sale Mal",
+    "description": "Escapan de la ciudad en llamas, su esposa mira atrás y se convierte en sal, luego las cosas se ponen aún más raras en una cueva.",
+    "section": "Génesis",
+    "bibleRef": "Génesis 19:30-38",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "birth-of-isaac",
+    "title": "El Nacimiento de Isaac",
+    "description": "El bebé milagro finalmente llega. La risa llena la tienda donde la duda vivió durante décadas.",
+    "section": "Génesis",
+    "bibleRef": "Génesis 21",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "abraham-and-isaac",
+    "title": "Abraham e Isaac",
+    "description": "Dios le pide a Abraham que sacrifique a su único hijo. La prueba de confianza más intensa de la historia.",
+    "section": "Génesis",
+    "bibleRef": "Génesis 22",
+    "inSeed": true,
+    "seedId": "st-abraham-isaac"
+  },
+  {
+    "id": "isaac-and-rebekah",
+    "title": "Isaac y Rebeca",
+    "description": "Un sirviente, unos camellos, un pozo y una oración. La relación a larga distancia original funciona perfectamente.",
+    "section": "Génesis",
+    "bibleRef": "Génesis 24",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "jacob-and-esau",
+    "title": "Jacob y Esaú",
+    "description": "Hermanos gemelos, una bendición robada y décadas de rencor. Drama familiar en su máxima expresión.",
+    "section": "Génesis",
+    "bibleRef": "Génesis 25, 27",
+    "inSeed": true,
+    "seedId": "st-jacob-esau"
+  },
+  {
+    "id": "jacobs-ladder",
+    "title": "La Escalera de Jacob",
+    "description": "Huyendo y durmiendo sobre una roca, Jacob sueña con una escalera al cielo y Dios le hace una promesa.",
+    "section": "Génesis",
+    "bibleRef": "Génesis 28",
+    "inSeed": true,
+    "seedId": "st-jacobs-ladder"
+  },
+  {
+    "id": "jacob-rachel-and-leah",
+    "title": "Jacob, Raquel y Lea",
+    "description": "Trabaja 7 años por la chica que ama, lo engañan para casarse con su hermana, luego trabaja 7 más. Triángulo amoroso infernal.",
+    "section": "Génesis",
+    "bibleRef": "Génesis 29-30",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "jacob-wrestles-god",
+    "title": "Jacob Lucha con Dios",
+    "description": "Una lucha nocturna con un extraño misterioso. Jacob no lo suelta hasta que obtiene una bendición y un nuevo nombre.",
+    "section": "Génesis",
+    "bibleRef": "Génesis 32",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "joseph-and-his-brothers",
+    "title": "José y Sus Hermanos",
+    "description": "Sus hermanos lo vendieron como esclavo porque estaban celosos de su atuendo. Sí, un abrigo inició todo esto.",
+    "section": "Génesis",
+    "bibleRef": "Génesis 37",
+    "inSeed": true,
+    "seedId": "st-joseph-brothers"
+  },
+  {
+    "id": "joseph-in-egypt",
+    "title": "José en Egipto",
+    "description": "De la cárcel a dirigir todo el país. La transformación definitiva.",
+    "section": "Génesis",
+    "bibleRef": "Génesis 39-41",
+    "inSeed": true,
+    "seedId": "st-joseph-egypt"
+  },
+  {
+    "id": "joseph-forgives-his-brothers",
+    "title": "José Perdona a Sus Hermanos",
+    "description": "Sus hermanos llegan rogando por comida, sin saber que él es básicamente el vicepresidente ahora. La revelación lo es todo.",
+    "section": "Génesis",
+    "bibleRef": "Génesis 42-45",
+    "inSeed": true,
+    "seedId": "st-joseph-forgives"
+  },
+  {
+    "id": "jacobs-family-moves-to-egypt",
+    "title": "La Familia de Jacob se Muda a Egipto",
+    "description": "Toda la familia se traslada a Egipto. Lo que empieza como refugio se convierte en una estancia de 400 años que nadie planeó.",
+    "section": "Génesis",
+    "bibleRef": "Génesis 46-47",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "baby-moses",
+    "title": "Bebé Moisés",
+    "description": "Su mamá lo escondió en una canasta en el río para salvarle la vida. La hija del faraón lo encontró y lo crió como realeza.",
+    "section": "Éxodo",
+    "bibleRef": "Éxodo 2",
+    "inSeed": true,
+    "seedId": "st-baby-moses"
+  },
+  {
+    "id": "the-burning-bush",
+    "title": "La Zarza Ardiente",
+    "description": "Moisés ve una zarza en llamas que no se consume. Luego Dios empieza a hablar desde ella. Cambio de carrera a la vista.",
+    "section": "Éxodo",
+    "bibleRef": "Éxodo 3-4",
+    "inSeed": true,
+    "seedId": "st-burning-bush"
+  },
+  {
+    "id": "the-ten-plagues",
+    "title": "Las 10 Plagas",
+    "description": "Dios envió 10 plagas cada vez más locas a Egipto. Ríos de sangre, invasiones de ranas, oscuridad total. El faraón aún dijo que no.",
+    "section": "Éxodo",
+    "bibleRef": "Éxodo 7-12",
+    "inSeed": true,
+    "seedId": "st-ten-plagues"
+  },
+  {
+    "id": "crossing-the-red-sea",
+    "title": "Cruzando el Mar Rojo",
+    "description": "Atrapados entre el mar y un ejército. Moisés levanta su bastón y el mar se divide en dos. El ejército no lo logra.",
+    "section": "Éxodo",
+    "bibleRef": "Éxodo 14",
+    "inSeed": true,
+    "seedId": "st-red-sea"
+  },
+  {
+    "id": "bread-from-heaven",
+    "title": "Pan del Cielo, Agua de la Roca",
+    "description": "¿No hay comida? Dios envía pan del cielo cada mañana. ¿No hay agua? Moisés golpea una roca y sale agua.",
+    "section": "Éxodo",
+    "bibleRef": "Éxodo 16-17",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-ten-commandments",
+    "title": "Los 10 Mandamientos",
+    "description": "Truenos, fuego y la voz de Dios desde una montaña. Moisés baja con los términos y condiciones definitivos tallados en piedra.",
+    "section": "Éxodo",
+    "bibleRef": "Éxodo 19-20",
+    "inSeed": true,
+    "seedId": "st-ten-commandments"
+  },
+  {
+    "id": "the-golden-calf",
+    "title": "El Becerro de Oro",
+    "description": "Moisés se fue 40 días y la gente inmediatamente derritió sus joyas en un dios falso. La audacia fue increíble.",
+    "section": "Éxodo",
+    "bibleRef": "Éxodo 32",
+    "inSeed": true,
+    "seedId": "st-golden-calf"
+  },
+  {
+    "id": "god-gives-a-second-chance",
+    "title": "Dios Da una Segunda Oportunidad",
+    "description": "Después del desastre del becerro de oro, Moisés sube de nuevo a la montaña. Dios renueva el pacto. Su cara literalmente brilla.",
+    "section": "Éxodo",
+    "bibleRef": "Éxodo 34",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "building-gods-tent",
+    "title": "Construyendo la Tienda de Dios",
+    "description": "Dios da planos para un templo portátil. Cada detalle importa — aquí es donde el cielo se encuentra con la tierra en el desierto.",
+    "section": "Éxodo",
+    "bibleRef": "Éxodo 35-40",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-first-priests",
+    "title": "Los Primeros Sacerdotes",
+    "description": "Aarón y sus hijos son ordenados. Cae fuego sagrado. Luego dos de ellos hacen lo suyo y les cuesta todo.",
+    "section": "Levítico",
+    "bibleRef": "Levítico 8-10",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "offerings-and-sacrifices",
+    "title": "Ofrendas y Sacrificios",
+    "description": "Ofrendas quemadas, ofrendas de grano, ofrendas de paz — Dios crea todo un lenguaje para acercarse a él.",
+    "section": "Levítico",
+    "bibleRef": "Levítico 1-7",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "clean-and-unclean",
+    "title": "Limpio e Impuro",
+    "description": "Reglas sobre comida, piel, moho y fluidos corporales. Suena raro, pero es Dios enseñándoles que la santidad toca todo.",
+    "section": "Levítico",
+    "bibleRef": "Levítico 11-15",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-day-of-atonement",
+    "title": "El Día de la Expiación",
+    "description": "Un día al año, un sacerdote entra en la presencia de Dios para cubrir los pecados de toda la nación. El peso de esto es abrumador.",
+    "section": "Levítico",
+    "bibleRef": "Levítico 16",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "real-world-holiness",
+    "title": "Santidad en el Mundo Real",
+    "description": "'Ama a tu prójimo como a ti mismo' aparece aquí primero. Dios detalla cómo se ven la justicia y la bondad en la vida diaria.",
+    "section": "Levítico",
+    "bibleRef": "Levítico 19",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "sacred-feasts-and-rhythms",
+    "title": "Fiestas Sagradas y Ritmos",
+    "description": "Pascua, festivales de cosecha y el Día de la Expiación. Dios construye un calendario alrededor de recordar lo que ha hecho.",
+    "section": "Levítico",
+    "bibleRef": "Levítico 23",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "sabbath-jubilee-and-justice",
+    "title": "Sábado, Jubileo y Justicia",
+    "description": "Cada 7 años, deudas canceladas. Cada 50 años, todo se reinicia. La política económica de Dios es salvaje.",
+    "section": "Levítico",
+    "bibleRef": "Levítico 25",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "organizing-the-camp",
+    "title": "Organizando el Campamento",
+    "description": "Dos millones de personas en el desierto necesitan estructura. Dios organiza cada tribu alrededor de su presencia en el centro.",
+    "section": "Números",
+    "bibleRef": "Números 1-4",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "camp-rules-and-the-cloud",
+    "title": "Reglas del Campamento y la Nube",
+    "description": "Leyes de pureza, trompetas y una nube que les dice cuándo moverse y cuándo quedarse. Dios guía en tiempo real.",
+    "section": "Números",
+    "bibleRef": "Números 5-10",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "complaining-craving-and-chaos",
+    "title": "Quejas, Antojos y Caos",
+    "description": "Están hartos del maná y quieren carne. Dios envía codornices — tantas que se enferman. Ten cuidado con lo que deseas.",
+    "section": "Números",
+    "bibleRef": "Números 11",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "12-spies-and-a-40-year-detour",
+    "title": "12 Espías y un Desvío de 40 Años",
+    "description": "Envían 12 espías a la tierra prometida. 10 regresan aterrados, 2 dicen 'vamos.' El miedo gana, y les cuesta 40 años.",
+    "section": "Números",
+    "bibleRef": "Números 13-14",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "rebellion-and-the-earth-opens",
+    "title": "Rebelión y la Tierra se Abre",
+    "description": "Coré desafía la autoridad de Moisés. El suelo literalmente se abre y se traga a los rebeldes. Dios no juega.",
+    "section": "Números",
+    "bibleRef": "Números 16",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "snakes-water-and-the-long-road",
+    "title": "Serpientes, Agua y el Largo Camino",
+    "description": "Más quejas, serpientes venenosas, una serpiente de bronce en un palo, y Moisés pierde la calma con una roca.",
+    "section": "Números",
+    "bibleRef": "Números 20-21",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "a-new-census-a-new-start",
+    "title": "Un Nuevo Censo, un Nuevo Comienzo",
+    "description": "La vieja generación se ha ido. Un nuevo censo cuenta a un nuevo pueblo listo para finalmente entrar en la tierra prometida.",
+    "section": "Números",
+    "bibleRef": "Números 26",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "make-your-promises-count",
+    "title": "Haz que tus Promesas Cuenten",
+    "description": "Leyes sobre votos y ofrendas. Dios toma en serio tu palabra — no hagas promesas que no vas a cumplir.",
+    "section": "Números",
+    "bibleRef": "Números 30",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "a-talking-donkey-and-a-hired-prophet",
+    "title": "Un Burro que Habla y un Profeta Contratado",
+    "description": "Un profeta es contratado para maldecir a Israel, pero su burro ve un ángel y empieza a hablar. No puedes inventar esto.",
+    "section": "Números",
+    "bibleRef": "Números 22",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "when-curses-wont-stick",
+    "title": "Cuando las Maldiciones no Pegan",
+    "description": "Balaam intenta maldecir a Israel tres veces. Cada vez, salen bendiciones en su lugar. El enemigo cambia a una táctica más sucia.",
+    "section": "Números",
+    "bibleRef": "Números 23-24",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-battle-against-midian",
+    "title": "La Batalla Contra Madián",
+    "description": "Se hace justicia sobre Madián por desviar a Israel. La guerra en el mundo antiguo era brutal y decisiva.",
+    "section": "Números",
+    "bibleRef": "Números 31",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "dont-get-comfortable-too-early",
+    "title": "No te Pongas Cómodo Demasiado Pronto",
+    "description": "Dos tribus quieren asentarse al este del Jordán. Moisés casi pierde la calma — no puedes rendirte antes de cruzar la meta.",
+    "section": "Números",
+    "bibleRef": "Números 32",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "wandering-the-desert",
+    "title": "Vagando por el Desierto",
+    "description": "40 años de caminata porque no pudieron confiar en Dios. El viaje por carretera más largo del mundo con las peores vibras.",
+    "section": "Números",
+    "bibleRef": "Números 14-36",
+    "inSeed": true,
+    "seedId": "st-wandering"
+  },
+  {
+    "id": "what-kind-of-leaders-god-wants",
+    "title": "Qué Tipo de Líderes Quiere Dios",
+    "description": "Reyes, sacerdotes, profetas — Dios establece la descripción del trabajo. El poder debe estar atado a la Escritura y la humildad.",
+    "section": "Deuteronomio",
+    "bibleRef": "Deuteronomio 17-18",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "rules-for-war",
+    "title": "Reglas para la Guerra",
+    "description": "Incluso en la batalla, hay límites. Protege a los vulnerables, cuida los árboles frutales, ofrece paz primero.",
+    "section": "Deuteronomio",
+    "bibleRef": "Deuteronomio 20",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "law-for-messy-lives",
+    "title": "Ley para Vidas Complicadas",
+    "description": "Asesinato, matrimonio, propiedad perdida, hijos tercos — Dios tiene algo que decir sobre todo. La santidad se vuelve práctica.",
+    "section": "Deuteronomio",
+    "bibleRef": "Deuteronomio 21-22",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "community-standards",
+    "title": "Estándares Comunitarios",
+    "description": "Honestidad en el tribunal, límites en el castigo, cuidado de los trabajadores. El amor del pacto se parece a una comunidad que protege a sus más débiles.",
+    "section": "Deuteronomio",
+    "bibleRef": "Deuteronomio 23-25",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "one-god-one-place",
+    "title": "Un Dios, Un Lugar de Adoración",
+    "description": "No hay santuarios en cada colina. Un nombre, un altar, un Dios. La identidad comienza con a quién adoras y cómo.",
+    "section": "Deuteronomio",
+    "bibleRef": "Deuteronomio 12-14",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "what-god-really-wants",
+    "title": "Lo que Dios Realmente Quiere",
+    "description": "No solo rituales — lealtad a nivel del corazón. Ámalo, camina en sus caminos, sirve con todo lo que tienes.",
+    "section": "Deuteronomio",
+    "bibleRef": "Deuteronomio 10",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "dont-let-success-ruin-you",
+    "title": "No Dejes que el Éxito te Arruine",
+    "description": "Cuando las bendiciones lleguen, no olvides quién te las dio. La gratitud es la barandilla contra la arrogancia.",
+    "section": "Deuteronomio",
+    "bibleRef": "Deuteronomio 8",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "remember-where-you-started",
+    "title": "Recuerda de Dónde Empezaste",
+    "description": "Eras esclavo. No eras nadie. La memoria es la mejor armadura contra el orgullo y el camino más corto hacia la gratitud.",
+    "section": "Deuteronomio",
+    "bibleRef": "Deuteronomio 7-9",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "cancel-debts-set-people-free",
+    "title": "Cancelar Deudas, Liberar a la Gente",
+    "description": "Cada 7 años, borrón y cuenta nueva. La generosidad no es opcional, es como la comunidad se mantiene unida.",
+    "section": "Deuteronomio",
+    "bibleRef": "Deuteronomio 15",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-ultimate-choice",
+    "title": "La Elección Definitiva",
+    "description": "Bendición o maldición, vida o muerte. Dios pone ambas opciones sobre la mesa y dice elige.",
+    "section": "Deuteronomio",
+    "bibleRef": "Deuteronomio 30",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "cities-of-refuge",
+    "title": "Ciudades de Refugio",
+    "description": "Refugios seguros para asesinos accidentales. Incluso la justicia antigua tenía matices: la intención importa.",
+    "section": "Deuteronomio",
+    "bibleRef": "Deuteronomio 19",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "setting-boundaries",
+    "title": "Estableciendo Límites",
+    "description": "Líneas de propiedad y juegos de poder. A Dios le importan los límites, la honestidad y cumplir tu palabra.",
+    "section": "Deuteronomio",
+    "bibleRef": "Deuteronomio 27",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "fair-play-and-fair-trade",
+    "title": "Juego Limpio y Comercio Justo",
+    "description": "Balanzas honestas, trato justo, nada de trampas en los negocios o el culto. La integridad en las pequeñas cosas importa.",
+    "section": "Deuteronomio",
+    "bibleRef": "Deuteronomio 25",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "moses-farewell-address",
+    "title": "Discurso de Despedida de Moisés",
+    "description": "Una canción, una bendición sobre cada tribu, una última mirada desde una montaña. Las palabras finales del mayor profeta.",
+    "section": "Deuteronomio",
+    "bibleRef": "Deuteronomio 33",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "choose-life-or-death",
+    "title": "Elige Vida o Muerte",
+    "description": "La elección está cerca de ti, en tu boca y en tu corazón. Dios les ruega que elijan la vida.",
+    "section": "Deuteronomio",
+    "bibleRef": "Deuteronomio 30:15-20",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "blessings-and-curses",
+    "title": "Bendiciones y Maldiciones",
+    "description": "Obedece y prospera, desobedece y todo se desmorona. Moisés expone los dos caminos con brutal claridad.",
+    "section": "Deuteronomio",
+    "bibleRef": "Deuteronomio 28",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-warning-song",
+    "title": "La Canción de Advertencia",
+    "description": "Moisés escribe una canción prediciendo exactamente cómo Israel se equivocará. Es una advertencia disfrazada de poesía.",
+    "section": "Deuteronomio",
+    "bibleRef": "Deuteronomio 31-32",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "moses-final-days",
+    "title": "Los Días Finales de Moisés",
+    "description": "Los llevó hasta allí, pero nunca pudo entrar. Ve la tierra prometida desde una montaña y muere.",
+    "section": "Deuteronomio",
+    "bibleRef": "Deuteronomio 34",
+    "inSeed": true,
+    "seedId": "st-moses-final"
+  },
+  {
+    "id": "joshua-takes-command",
+    "title": "Josué Toma el Mando",
+    "description": "Nuevo líder, mismo Dios. Josué toma el relevo, envía espías, y una prostituta llamada Rahab los esconde en su techo.",
+    "section": "Josué",
+    "bibleRef": "Josué 1-2",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "crossing-the-jordan",
+    "title": "Cruzando el Jordán",
+    "description": "Los sacerdotes pisan el río desbordado y se detiene. Caminan sobre tierra seca y apilan piedras para recordar.",
+    "section": "Josué",
+    "bibleRef": "Josué 3-4",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "joshua-and-jericho",
+    "title": "Josué y Jericó",
+    "description": "Camina alrededor de la ciudad 7 días, toca trompetas, grita. Las murallas se derrumban. Estrategia militar: confiar en Dios.",
+    "section": "Josué",
+    "bibleRef": "Josué 6",
+    "inSeed": true,
+    "seedId": "st-jericho"
+  },
+  {
+    "id": "achans-hidden-sin",
+    "title": "El Pecado Oculto de Acán",
+    "description": "Un hombre roba botín prohibido y lo esconde bajo su tienda. Israel pierde la siguiente batalla por eso.",
+    "section": "Josué",
+    "bibleRef": "Josué 7",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-gibeonite-trick",
+    "title": "El Truco de los Gabaonitas y el Sol se Detiene",
+    "description": "Un tratado de paz falso engaña a Josué. Luego Dios detiene el sol en el cielo para que Israel gane una batalla. Día salvaje.",
+    "section": "Josué",
+    "bibleRef": "Josué 9-10",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "conquering-the-land",
+    "title": "Conquistando la Tierra",
+    "description": "Campaña tras campaña, el mapa se llena. La promesa toma forma una batalla a la vez.",
+    "section": "Josué",
+    "bibleRef": "Josué 10-12",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "caleb-claims-his-mountain",
+    "title": "Caleb Reclama su Montaña",
+    "description": "85 años y sigue en pie de lucha. Caleb dice 'dame la colina con los gigantes' y la toma.",
+    "section": "Josué",
+    "bibleRef": "Josué 14",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "claim-your-inheritance",
+    "title": "Reclama tu Herencia",
+    "description": "La tierra está dividida, pero algunas tribus son perezosas para reclamarla. No te conformes con tiendas cuando Dios prometió territorio.",
+    "section": "Josué",
+    "bibleRef": "Josué 18",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "safe-cities-sacred-spaces",
+    "title": "Ciudades Seguras, Espacios Sagrados",
+    "description": "Se asignan ciudades de refugio. Las ciudades levitas están esparcidas por la tierra. Justicia y adoración por todas partes.",
+    "section": "Josué",
+    "bibleRef": "Josué 20-21",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-altar-that-almost-started-a-war",
+    "title": "El Altar que Casi Inicia una Guerra",
+    "description": "Dos tribus y media construyen un altar y el resto de Israel casi entra en guerra civil por ello. Hablarlo los salva.",
+    "section": "Josué",
+    "bibleRef": "Josué 22",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "joshuas-final-challenge",
+    "title": "El Último Desafío de Josué",
+    "description": "'Elijan hoy a quién van a servir.' Josué traza una línea y reta a Israel a comprometerse.",
+    "section": "Josué",
+    "bibleRef": "Josué 24",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-cycle-of-disobedience",
+    "title": "El Ciclo de la Desobediencia",
+    "description": "Pecado, sufrimiento, clamor, rescate, repetir. Israel cae en un patrón que define toda una era.",
+    "section": "Jueces",
+    "bibleRef": "Jueces 1-3",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "deborah-and-jael",
+    "title": "Débora y la Estaca de la Tienda",
+    "description": "Una jueza lidera a Israel a la batalla. Luego otra mujer termina la guerra con una estaca de tienda. No las subestimes.",
+    "section": "Jueces",
+    "bibleRef": "Jueces 4-5",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "gideon-vs-the-midianites",
+    "title": "Gedeón vs. los Madianitas",
+    "description": "Dios reduce el ejército de Gedeón de 32,000 a 300. Antorchas, jarras y trompetas contra un ejército masivo. A Dios le encantan las probabilidades imposibles.",
+    "section": "Jueces",
+    "bibleRef": "Jueces 6-7",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "when-victory-goes-to-your-head",
+    "title": "Cuando la Victoria se te Sube a la Cabeza",
+    "description": "Gedeón gana pero hace un ídolo con el oro. La victoria sin humildad se amarga rápido.",
+    "section": "Jueces",
+    "bibleRef": "Jueces 8",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-bramble-king",
+    "title": "El Rey Zarza",
+    "description": "Abimelec asesina a 70 hermanos para ser rey. Una parábola sobre una zarza predice su caída. El ego destruye.",
+    "section": "Jueces",
+    "bibleRef": "Jueces 9",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "jephthahs-reckless-vow",
+    "title": "El Voto Imprudente de Jefté",
+    "description": "Un guerrero rudo hace un voto que no puede retractar. Le cuesta lo que más ama.",
+    "section": "Jueces",
+    "bibleRef": "Jueces 11",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "samson-and-delilah",
+    "title": "Sansón y Dalila",
+    "description": "El hombre más fuerte tenía una debilidad: una mujer que le preguntó su secreto tres veces y aún así se lo contó.",
+    "section": "Jueces",
+    "bibleRef": "Jueces 13-16",
+    "inSeed": true,
+    "seedId": "st-samson"
+  },
+  {
+    "id": "everyone-did-what-they-wanted",
+    "title": "Todos Hacían lo que Querían",
+    "description": "Sin rey, sin reglas, puro caos. Israel toca fondo. El horror muestra lo que pasa sin Dios.",
+    "section": "Jueces",
+    "bibleRef": "Jueces 17-21",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "homemade-religion",
+    "title": "Religión Casera",
+    "description": "Un tipo construye su propio santuario, contrata a su propio sacerdote, y toda una tribu lo roba. El culto DIY no lleva a nada bueno.",
+    "section": "Jueces",
+    "bibleRef": "Jueces 17-18",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "ruth-and-naomi",
+    "title": "Rut y Noemí",
+    "description": "Una viuda extranjera elige la lealtad sobre la comodidad. 'Donde tú vayas, yo iré.' Su fidelidad lo cambia todo.",
+    "section": "Rut",
+    "bibleRef": "Rut 1-4",
+    "inSeed": true,
+    "seedId": "st-ruth"
+  },
+  {
+    "id": "david-and-goliath",
+    "title": "David y Goliat",
+    "description": "Un adolescente con una honda contra un gigante de 9 pies con armadura completa. Todos pensaban que estaba loco. No lo estaba.",
+    "section": "1 Samuel",
+    "bibleRef": "1 Samuel 17",
+    "inSeed": true,
+    "seedId": "st-david-goliath"
+  },
+  {
+    "id": "sauls-last-stand",
+    "title": "La Última Batalla de Saúl",
+    "description": "El primer rey cae en batalla. David llora a su enemigo con uno de los lamentos más hermosos jamás escritos.",
+    "section": "2 Samuel",
+    "bibleRef": "2 Samuel 1",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "two-kings-two-armies",
+    "title": "Dos Reyes, Dos Ejércitos",
+    "description": "Israel se divide entre David y el hijo de Saúl. Generales rivales, diplomacia arriesgada y una larga lucha por el poder.",
+    "section": "2 Samuel",
+    "bibleRef": "2 Samuel 2-4",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "david-becomes-king",
+    "title": "David se Convierte en Rey",
+    "description": "El joven pastor finalmente toma el trono. Israel se une bajo una corona después de años de guerra civil.",
+    "section": "2 Samuel",
+    "bibleRef": "2 Samuel 5",
+    "inSeed": true,
+    "seedId": "st-david-king"
+  },
+  {
+    "id": "david-dances-before-the-ark",
+    "title": "David Baila ante el Arca",
+    "description": "El Arca llega a Jerusalén. David baila sin vergüenza. Su esposa lo observa desde la ventana y lo juzga duramente.",
+    "section": "2 Samuel",
+    "bibleRef": "2 Samuel 6",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "gods-promise-to-david",
+    "title": "La Promesa de Dios a David",
+    "description": "David quiere construirle una casa a Dios. Dios lo voltea: 'Construiré TU casa. Tu trono durará para siempre.'",
+    "section": "2 Samuel",
+    "bibleRef": "2 Samuel 7",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "kindness-to-mephibosheth",
+    "title": "Bondad hacia Mefiboset",
+    "description": "En el apogeo de su poder, David busca al nieto discapacitado de Saúl, no para matarlo, sino para invitarlo a cenar para siempre.",
+    "section": "2 Samuel",
+    "bibleRef": "2 Samuel 9",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "david-and-bathsheba",
+    "title": "David y Betsabé",
+    "description": "Incluso el rey más grande cayó duro. Poder, lujuria, un encubrimiento y un asesinato. Luego un profeta entra y lo denuncia.",
+    "section": "2 Samuel",
+    "bibleRef": "2 Samuel 11-12",
+    "inSeed": true,
+    "seedId": "st-david-bathsheba"
+  },
+  {
+    "id": "absaloms-rise",
+    "title": "El Ascenso de Absalón",
+    "description": "La familia de David se fractura. Violación, venganza, exilio: las consecuencias de Betsabé se extienden por su propia casa.",
+    "section": "2 Samuel",
+    "bibleRef": "2 Samuel 13-14",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "absaloms-rebellion",
+    "title": "La Rebelión de Absalón",
+    "description": "El propio hijo de David se gana el corazón del pueblo y obliga al rey a huir de su propia capital. Carisma sin carácter.",
+    "section": "2 Samuel",
+    "bibleRef": "2 Samuel 15-17",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "a-fathers-worst-battle",
+    "title": "La Peor Batalla de un Padre",
+    "description": "El ejército de David lucha contra el de Absalón. David gana la guerra pero pierde a su hijo. 'Oh Absalón, mi hijo, mi hijo.' Devastador.",
+    "section": "2 Samuel",
+    "bibleRef": "2 Samuel 18",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "davids-broken-return",
+    "title": "El Regreso Quebrado de David",
+    "description": "El rey regresa a Jerusalén, pero nada es igual. El perdón es complicado y reparar toma más tiempo que destruir.",
+    "section": "2 Samuel",
+    "bibleRef": "2 Samuel 19-20",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "davids-last-battles",
+    "title": "Las Últimas Batallas de David",
+    "description": "Los gigantes caen, las deudas se saldan, y los salmos de agradecimiento cierran una era de guerra.",
+    "section": "2 Samuel",
+    "bibleRef": "2 Samuel 21-23",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "davids-final-mistake",
+    "title": "El Último Error de David",
+    "description": "David ordena un censo por orgullo. Sigue una plaga. Compra una era de trillar que se convierte en el futuro sitio del templo.",
+    "section": "2 Samuel",
+    "bibleRef": "2 Samuel 24",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "solomons-wisdom",
+    "title": "La Sabiduría de Salomón",
+    "description": "Dios dice 'pide lo que quieras.' Salomón elige sabiduría. Luego lo demuestra de inmediato con la decisión más loca de todas.",
+    "section": "1 Reyes",
+    "bibleRef": "1 Reyes 3",
+    "inSeed": true,
+    "seedId": "st-solomon"
+  },
+  {
+    "id": "elijah-on-mount-carmel",
+    "title": "Elías en el Monte Carmelo",
+    "description": "Un profeta contra 450 profetas de Baal. Construyen altares, llaman al fuego. Solo un Dios responde. Elías no se inmuta.",
+    "section": "1 Reyes",
+    "bibleRef": "1 Reyes 18",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-kingdom-splits",
+    "title": "El Reino se Divide",
+    "description": "El hijo de Salomón ignora el consejo sabio y se aferra a un gobierno duro. Una nación se convierte en dos por una decisión tonta.",
+    "section": "1 Reyes",
+    "bibleRef": "1 Reyes 12",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "kings-who-copied-the-worst",
+    "title": "Reyes que Copiaron lo Peor",
+    "description": "Un rey malo tras otro copia los pecados de los anteriores. La religión cosmética no puede curar la podredumbre profunda.",
+    "section": "1-2 Reyes",
+    "bibleRef": "1-2 Reyes various",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "decay-coups-and-leprosy",
+    "title": "Decadencia, Golpes de Estado y Lepra",
+    "description": "La corrupción interna invita al desastre externo. La monarquía se pudre lentamente desde adentro.",
+    "section": "2 Reyes",
+    "bibleRef": "2 Reyes various",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "manasseh-hits-reverse",
+    "title": "Manasés Pone Marcha Atrás",
+    "description": "Un hijo deshace las reformas de su padre y lleva a la nación a su peor bajón espiritual. Una generación puede deshacer décadas de progreso.",
+    "section": "2 Reyes",
+    "bibleRef": "2 Reyes 21",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "josiah-finds-the-lost-book",
+    "title": "Josías Encuentra el Libro Perdido",
+    "description": "Los trabajadores encuentran el Libro de la Ley enterrado en los escombros del templo. Cuando el rey lo escucha, rasga sus vestiduras y reforma todo.",
+    "section": "2 Reyes",
+    "bibleRef": "2 Reyes 22-23",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "josiahs-last-battle",
+    "title": "La Última Batalla de Josías",
+    "description": "El rey del avivamiento libra una última guerra. Los altares son destruidos, los corazones son llamados a casa, pero el reloj avanza para Judá.",
+    "section": "2 Crónicas",
+    "bibleRef": "2 Crónicas 35",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "hezekiahs-extra-years",
+    "title": "Los Años Extra de Ezequías",
+    "description": "Dios le da a Ezequías 15 años más, luego él lo arruina mostrando sus tesoros a las personas equivocadas.",
+    "section": "2 Reyes",
+    "bibleRef": "2 Reyes 20",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "one-angel-one-army-destroyed",
+    "title": "Un Ángel, Un Ejército Destruido",
+    "description": "185,000 soldados asirios rodean Jerusalén. Ezequías ora. Un ángel. Una noche. Todo el ejército desaparece por la mañana.",
+    "section": "2 Reyes",
+    "bibleRef": "2 Reyes 19",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "hezekiah-vs-the-empire",
+    "title": "Ezequías vs. el Imperio",
+    "description": "Un rey fiel enfrenta a la máquina de guerra asiria. Llegan cartas de intimidación. Las extiende ante Dios y ora.",
+    "section": "2 Crónicas",
+    "bibleRef": "2 Crónicas 32",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-northern-kingdom-falls",
+    "title": "El Reino del Norte Cae",
+    "description": "Siglos de malos reyes pasan factura. Asiria conquista Israel y dispersa las 10 tribus. Nunca regresan.",
+    "section": "2 Reyes",
+    "bibleRef": "2 Reyes 17",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "jerusalem-burns",
+    "title": "Jerusalén Arde",
+    "description": "Babilonia rompe las murallas y quema el templo hasta los cimientos. El pueblo es llevado al exilio. Todo se ha perdido.",
+    "section": "2 Reyes",
+    "bibleRef": "2 Reyes 25",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "daniel-and-the-lions-den",
+    "title": "Daniel y el Foso de los Leones",
+    "description": "Lo lanzaron a un foso de leones porque no dejaba de orar. Los leones no lo tocaron.",
+    "section": "Daniel",
+    "bibleRef": "Daniel 6",
+    "inSeed": true,
+    "seedId": "st-daniel-lions"
+  },
+  {
+    "id": "esther-saves-her-people",
+    "title": "Ester Salva a su Pueblo",
+    "description": "Una reina judía secreta arriesga todo para detener un genocidio. Entra sin invitación ante el rey. Energía de personaje principal total.",
+    "section": "Ester",
+    "bibleRef": "Ester 1-10",
+    "inSeed": true,
+    "seedId": "st-esther"
+  },
+  {
+    "id": "jonah-and-the-whale",
+    "title": "Jonás y la Ballena",
+    "description": "Dios dijo ve a la izquierda. Jonás fue a la derecha. Un pez gigante se lo tragó por 3 días. Lección aprendida a la mala.",
+    "section": "Jonás",
+    "bibleRef": "Jonás 1-4",
+    "inSeed": true,
+    "seedId": "st-jonah"
+  },
+  {
+    "id": "angel-visits-zechariah",
+    "title": "Un Ángel Visita a Zacarías",
+    "description": "Un sacerdote mayor recibe la visita de un ángel prometiendo un bebé milagro. Duda y pierde la voz por 9 meses.",
+    "section": "Evangelios",
+    "bibleRef": "Lucas 1:5-25",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "angel-visits-mary",
+    "title": "Un Ángel Visita a María",
+    "description": "A una adolescente le dicen que llevará al hijo de Dios. Ella dice que sí. José casi se va. El embarazo más importante de la historia.",
+    "section": "Evangelios",
+    "bibleRef": "Lucas 1:26-38",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "birth-of-john-the-baptist",
+    "title": "El Nacimiento de Juan el Bautista",
+    "description": "Llega el bebé milagro. Zacarías recupera su voz y profetiza. Nace el precursor de Jesús.",
+    "section": "Evangelios",
+    "bibleRef": "Lucas 1:57-80",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "birth-of-jesus",
+    "title": "El Nacimiento de Jesús",
+    "description": "Una adolescente, sin lugar en la posada, un bebé nace en un establo con animales. Ángeles cantan a pastores. Navidad pero de verdad.",
+    "section": "Evangelios",
+    "bibleRef": "Lucas 2:1-20",
+    "inSeed": true,
+    "seedId": "st-birth-jesus"
+  },
+  {
+    "id": "simeon-and-anna",
+    "title": "Simeón y Ana en el Templo",
+    "description": "Dos creyentes ancianos esperaron toda su vida para ver al Mesías. Reconocen a un bebé en los brazos de sus padres.",
+    "section": "Evangelios",
+    "bibleRef": "Lucas 2:22-40",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-wise-men",
+    "title": "Los Reyes Magos",
+    "description": "Eruditos seguidores de estrellas del este traen oro, incienso y mirra. El rey Herodes no está contento con la competencia.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 2:1-12",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "flight-to-egypt",
+    "title": "Huida a Egipto",
+    "description": "Un ángel advierte a José en un sueño. La familia huye a Egipto en la noche. Herodes mata a todos los bebés varones en Belén.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 2:13-23",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "boy-jesus-at-the-temple",
+    "title": "El Niño Jesús en el Templo",
+    "description": "Jesús de doce años se queda en el templo, debatiendo con eruditos. Sus padres se asustan. Él dice 'Estoy en la casa de mi Padre.'",
+    "section": "Evangelios",
+    "bibleRef": "Lucas 2:41-52",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "john-the-baptist-preaches",
+    "title": "Juan el Bautista Predica",
+    "description": "Un hombre salvaje en el desierto vistiendo pelo de camello, comiendo langostas, gritando 'arrepiéntanse.' Está preparando el camino para alguien más grande.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 3:1-12",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "john-declares-the-lamb",
+    "title": "Juan Declara 'El Cordero de Dios'",
+    "description": "Juan ve venir a Jesús y dice 'Miren — el Cordero de Dios.' Un profeta que señala más allá de sí mismo al que importa.",
+    "section": "Evangelios",
+    "bibleRef": "Juan 1:29-34",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "jesus-gets-baptized",
+    "title": "Jesús es Bautizado",
+    "description": "Jesús entra al río Jordán y el cielo se abre. Una paloma desciende. Dios dice 'ese es mi hijo' en voz alta.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 3:13-17",
+    "inSeed": true,
+    "seedId": "st-baptism"
+  },
+  {
+    "id": "40-days-in-the-desert",
+    "title": "40 Días en el Desierto",
+    "description": "Hambriento y solo, Jesús enfrenta los tres mejores trucos del diablo. Los derriba todos con las Escrituras.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 4:1-11",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "meeting-the-first-disciples",
+    "title": "Conociendo a los Primeros Discípulos",
+    "description": "Invitaciones simples — 'ven y verás' — cambian el curso de la historia. Pescadores dejan sus redes y siguen.",
+    "section": "Evangelios",
+    "bibleRef": "Juan 1:35-51",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "water-to-wine",
+    "title": "Agua en Vino",
+    "description": "El primer milagro de Jesús ocurre en una fiesta de bodas porque su mamá básicamente lo presionó. Icónico.",
+    "section": "Evangelios",
+    "bibleRef": "Juan 2:1-11",
+    "inSeed": true,
+    "seedId": "st-first-miracles"
+  },
+  {
+    "id": "nicodemus-comes-at-night",
+    "title": "Nicodemo Viene de Noche",
+    "description": "Un líder religioso se cuela a ver a Jesús después del anochecer. 'Debes nacer de nuevo.' La conversación que lo explica todo.",
+    "section": "Evangelios",
+    "bibleRef": "Juan 3:1-21",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "jesus-flips-tables",
+    "title": "Jesús Vuelca Mesas en el Templo",
+    "description": "Jesús entra al templo, lo ve convertido en un mercado, y empieza a volcar mesas. Nadie lo detiene.",
+    "section": "Evangelios",
+    "bibleRef": "Juan 2:13-25",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "john-the-baptists-last-words",
+    "title": "Las Últimas Palabras de Juan el Bautista",
+    "description": "Mientras su propio seguimiento disminuye, Juan dice 'Él debe crecer, yo debo menguar.' Un profeta que conocía su papel.",
+    "section": "Evangelios",
+    "bibleRef": "Juan 3:22-36",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "healing-at-the-pool",
+    "title": "Sanación en el Estanque de Betesda",
+    "description": "Un hombre espera 38 años junto a un estanque esperando sanación. Jesús se acerca y dice '¿quieres ser sano?' Una palabra y listo.",
+    "section": "Evangelios",
+    "bibleRef": "Juan 5",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-miraculous-catch",
+    "title": "La Pesca Milagrosa",
+    "description": "Pescadores profesionales no pescan nada en toda la noche. Jesús dice inténtalo de nuevo. Las redes casi se rompen por la captura.",
+    "section": "Evangelios",
+    "bibleRef": "Lucas 5:1-11",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "casting-out-an-evil-spirit",
+    "title": "Expulsando un Espíritu Maligno",
+    "description": "En la sinagoga, un demonio le grita a Jesús. Una orden y se va. La multitud está asombrada — ¿quién ES este tipo?",
+    "section": "Evangelios",
+    "bibleRef": "Marcos 1:21-28",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "peters-mother-in-law-healed",
+    "title": "La Suegra de Pedro Sanada",
+    "description": "Jesús toca su mano, la fiebre se va, y ella inmediatamente se levanta y empieza a servir la cena. La noticia corre rápido.",
+    "section": "Evangelios",
+    "bibleRef": "Marcos 1:29-34",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "touching-the-leper",
+    "title": "Tocando al Leproso",
+    "description": "Nadie toca a los leprosos. Jesús extiende su mano. 'Quiero. Sé limpio.' El marginado es restaurado.",
+    "section": "Evangelios",
+    "bibleRef": "Marcos 1:40-45",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "through-the-roof",
+    "title": "A Través del Techo",
+    "description": "Cuatro amigos no pueden pasar entre la multitud, así que abren el techo y bajan a su amigo paralizado hasta Jesús. Eso es amistad.",
+    "section": "Evangelios",
+    "bibleRef": "Marcos 2:1-12",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "matthew-leaves-everything",
+    "title": "Mateo Deja Todo",
+    "description": "Un odiado recaudador de impuestos escucha 'sígueme', se aleja de la mesa del dinero y organiza una cena para Jesús con todos sus amigos dudosos.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 9:9-13",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-sabbath-showdowns",
+    "title": "Los Enfrentamientos del Sábado",
+    "description": "Jesús sana en sábado y los líderes religiosos pierden la cabeza. Las reglas se hicieron para la gente, no al revés.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 12:1-14",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "picking-the-twelve",
+    "title": "Eligiendo a los Doce",
+    "description": "Después de una noche de oración, Jesús elige a su equipo — pescadores, un recaudador de impuestos, un zelote y un traidor. Elecciones interesantes.",
+    "section": "Evangelios",
+    "bibleRef": "Lucas 6:12-49",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-centurions-faith",
+    "title": "La Fe del Centurión",
+    "description": "Un soldado romano dice 'solo di la palabra y mi siervo será sanado.' Jesús se queda impresionado — este forastero tiene más fe que Israel.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 8:5-13",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-widows-son-lives-again",
+    "title": "El Hijo de la Viuda Vive de Nuevo",
+    "description": "Una procesión fúnebre. Una madre afligida. Jesús toca el ataúd, dice 'levántate,' y el muerto se sienta. La multitud se vuelve loca.",
+    "section": "Evangelios",
+    "bibleRef": "Lucas 7:11-17",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "deaf-ears-opened",
+    "title": "Oídos Sordos Abiertos",
+    "description": "Un hombre sordo con problemas de habla se encuentra con Jesús. Oídos abiertos, lengua suelta, y la multitud no puede dejar de hablar de ello.",
+    "section": "Evangelios",
+    "bibleRef": "Marcos 7:31-37",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "jesus-stops-a-storm",
+    "title": "Jesús Detiene una Tormenta",
+    "description": "Olas chocando, barco hundiéndose, discípulos gritando. Jesús se despierta de una siesta y le dice a la tormenta que se calle. Y lo hace.",
+    "section": "Evangelios",
+    "bibleRef": "Marcos 4:35-41",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "legion-and-the-pigs",
+    "title": "Legión y los Cerdos",
+    "description": "Un hombre poseído por miles de demonios vive en un cementerio. Jesús lo libera en una frase. Los demonios van a los cerdos.",
+    "section": "Evangelios",
+    "bibleRef": "Marcos 5:1-20",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "jairus-daughter-and-the-bleeding-woman",
+    "title": "La Hija de Jairo y la Mujer con Hemorragia",
+    "description": "Un padre desesperado y una mujer atrevida. Ambos necesitan un milagro. Ambos lo obtienen. La fe interrumpe la muerte.",
+    "section": "Evangelios",
+    "bibleRef": "Marcos 5:21-43",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "healing-the-officials-son",
+    "title": "Sanando al Hijo del Oficial",
+    "description": "Un oficial real le suplica a Jesús que sane a su hijo moribundo. Jesús dice 've a casa, tu hijo está bien.' Y lo está.",
+    "section": "Evangelios",
+    "bibleRef": "Juan 4:43-54",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "demons-and-accusations",
+    "title": "Demonios y Acusaciones",
+    "description": "Jesús expulsa un demonio y los fariseos lo acusan de trabajar para Satanás. Jesús desmantela su lógica en segundos.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 12:22-37",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "john-the-baptist-beheaded",
+    "title": "Juan el Bautista Decapitado",
+    "description": "Una fiesta de cumpleaños, un baile, y una petición horripilante. El mayor profeta pierde la cabeza por un rencor.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 14:1-12",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "feeding-5000",
+    "title": "Jesús Alimenta a 5,000",
+    "description": "5 panes, 2 peces, 5,000 personas hambrientas. Lo hizo funcionar. Y hubo sobras.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 14:13-21",
+    "inSeed": true,
+    "seedId": "st-feeds-5000"
+  },
+  {
+    "id": "walking-on-water",
+    "title": "Jesús Camina sobre el Agua",
+    "description": "En medio de una tormenta. Discípulos en pánico. Luego ven a alguien caminando sobre las olas hacia ellos.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 14:22-33",
+    "inSeed": true,
+    "seedId": "st-walks-water"
+  },
+  {
+    "id": "feeding-4000",
+    "title": "Jesús Alimenta a 4,000",
+    "description": "Multitud diferente, misma compasión. Unos pocos panes, unos pocos peces, miles alimentados. El pan se convierte en un tema recurrente.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 15:32-39",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "bread-of-life",
+    "title": "Pan de Vida",
+    "description": "Después del milagro de la comida, Jesús dice 'YO SOY el pan de vida.' La multitud quería comida. Él se ofreció a sí mismo. Muchos se alejan.",
+    "section": "Evangelios",
+    "bibleRef": "Juan 6:22-71",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-purity-debate",
+    "title": "El Debate de la Pureza",
+    "description": "Los fariseos se obsesionan con los rituales de lavado de manos. Jesús dice que no es lo que entra en ti lo que te contamina, sino lo que sale de tu corazón.",
+    "section": "Evangelios",
+    "bibleRef": "Marcos 7:1-23",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "a-mothers-desperate-faith",
+    "title": "La Fe Desesperada de una Madre",
+    "description": "Una mujer sirofenicia le suplica a Jesús que sane a su hija. Él la pone a prueba. Ella responde con uno de los mejores comebacks de la Biblia.",
+    "section": "Evangelios",
+    "bibleRef": "Marcos 7:24-30",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "peters-big-confession",
+    "title": "La Gran Confesión de Pedro",
+    "description": "'¿Quién dices que soy?' Pedro lo clava: 'Eres el Cristo'. Luego Jesús suelta la primera predicción de su muerte.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 16:13-28",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-transfiguration",
+    "title": "La Transfiguración",
+    "description": "Jesús lleva a tres discípulos a una montaña. Su rostro brilla como el sol. Aparecen Moisés y Elías. Pedro quiere construir tiendas.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 17:1-13",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-boy-with-a-demon",
+    "title": "El Niño con un Demonio",
+    "description": "Los discípulos no pueden sanar a un niño poseído por un demonio. Jesús lo hace al instante y dice 'este tipo requiere oración y ayuno'.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 17:14-21",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "jesus-predicts-his-death",
+    "title": "Jesús Predice Su Muerte",
+    "description": "Jesús les dice a los discípulos exactamente lo que viene: traición, muerte, resurrección. No entienden. Lo dice tres veces.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 20:17-19",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-fish-with-a-coin",
+    "title": "El Pez con una Moneda",
+    "description": "Los recaudadores de impuestos vienen a preguntar. Jesús le dice a Pedro que pesque un pez: habrá una moneda en su boca. Y la hay. Cuenta pagada.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 17:24-27",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-festival-showdown",
+    "title": "El Enfrentamiento en el Festival",
+    "description": "Jesús aparece en la Fiesta de los Tabernáculos y las multitudes están divididas: ¿profeta, engañador o Mesías? La tensión es palpable.",
+    "section": "Evangelios",
+    "bibleRef": "Juan 7",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "born-blind-now-sees",
+    "title": "Nacido Ciego, Ahora Ve",
+    "description": "Jesús sana a un hombre ciego de nacimiento. Los fariseos lo interrogan sin parar. Su respuesta es simple: 'Era ciego. Ahora veo.'",
+    "section": "Evangelios",
+    "bibleRef": "Juan 9",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-good-shepherd",
+    "title": "El Buen Pastor",
+    "description": "'Yo soy el buen pastor. El buen pastor da su vida por las ovejas.' Jesús define el liderazgo por el sacrificio.",
+    "section": "Evangelios",
+    "bibleRef": "Juan 10",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "sending-out-72",
+    "title": "Enviando a 72 Misioneros",
+    "description": "Jesús envía a 72 seguidores delante de él en parejas. Regresan asombrados: incluso los demonios les obedecen.",
+    "section": "Evangelios",
+    "bibleRef": "Lucas 10:1-24",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-good-samaritan",
+    "title": "El Buen Samaritano",
+    "description": "Un hombre es robado y dejado por muerto. Personas religiosas pasan de largo. El despreciado forastero se detiene a ayudar. '¿Quién fue el vecino?'",
+    "section": "Evangelios",
+    "bibleRef": "Lucas 10:25-37",
+    "inSeed": true,
+    "seedId": "st-good-samaritan"
+  },
+  {
+    "id": "mary-and-martha",
+    "title": "María y Marta",
+    "description": "Una hermana está ocupada en la cocina, la otra está sentada a los pies de Jesús. Marta se queja. Jesús se pone del lado de María.",
+    "section": "Evangelios",
+    "bibleRef": "Lucas 10:38-42",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "teaching-them-to-pray",
+    "title": "Enseñándoles a Orar",
+    "description": "'Señor, enséñanos a orar.' Jesús les da la oración más simple y poderosa de la historia. Luego cuenta una historia sobre la persistencia.",
+    "section": "Evangelios",
+    "bibleRef": "Lucas 11:1-13",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "casting-out-demons-and-taking-heat",
+    "title": "Expulsando Demonios y Aguantando Críticas",
+    "description": "Jesús expulsa a un demonio. Algunos dicen que está usando el poder de Satanás. Jesús desmantela la acusación y advierte sobre casas vacías.",
+    "section": "Evangelios",
+    "bibleRef": "Lucas 11:14-28",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "calling-out-the-pharisees",
+    "title": "Llamando la Atención a los Fariseos",
+    "description": "Jesús acepta una invitación a cenar y luego absolutamente destroza a los fariseos en su cara. La hipocresía queda expuesta en la mesa.",
+    "section": "Evangelios",
+    "bibleRef": "Lucas 11:37-54",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-woman-at-the-well",
+    "title": "La Mujer en el Pozo",
+    "description": "Una marginada samaritana se encuentra con Jesús en un pozo. Él sabe todo sobre ella. Ella se convierte en la primera evangelista.",
+    "section": "Evangelios",
+    "bibleRef": "Juan 4:1-42",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "lazarus-lives-again",
+    "title": "Lázaro Vive de Nuevo",
+    "description": "Muerto cuatro días, sellado en una tumba. Jesús llora, luego grita '¡Lázaro, sal fuera!' Y lo hace. El mic drop definitivo.",
+    "section": "Evangelios",
+    "bibleRef": "Juan 11:1-44",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "go-ahead-throw-a-stone",
+    "title": "Adelante, Lanza una Piedra",
+    "description": "Una mujer sorprendida en adulterio es arrastrada ante Jesús. 'Que el que esté sin pecado tire primero.' Uno por uno, se van.",
+    "section": "Evangelios",
+    "bibleRef": "Juan 8:1-11",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-wedding-feast-parables",
+    "title": "Las Parábolas del Banquete de Bodas",
+    "description": "Se envían invitaciones a los VIPs. Todos ponen excusas. Así que el anfitrión invita a todos de las calles en su lugar.",
+    "section": "Evangelios",
+    "bibleRef": "Lucas 14:1-24",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-narrow-door",
+    "title": "La Puerta Estrecha",
+    "description": "'Esfuércense por entrar por la puerta estrecha.' Muchos lo intentarán y fallarán. La urgencia resuena — no esperes.",
+    "section": "Evangelios",
+    "bibleRef": "Lucas 13:22-30",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "counting-the-cost",
+    "title": "Contando el Costo",
+    "description": "Seguir a Jesús no es casual. Cuenta el costo primero. No busca fans — quiere gente que cargue una cruz.",
+    "section": "Evangelios",
+    "bibleRef": "Lucas 14:25-35",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-prodigal-son",
+    "title": "El Hijo Pródigo",
+    "description": "Tomó su herencia, la despilfarró toda, y regresó arrastrándose para comer comida de cerdos. Su papá le hizo una fiesta de todos modos.",
+    "section": "Evangelios",
+    "bibleRef": "Lucas 15",
+    "inSeed": true,
+    "seedId": "st-prodigal-son"
+  },
+  {
+    "id": "the-shrewd-manager",
+    "title": "El Administrador Astuto",
+    "description": "Un administrador a punto de ser despedido hace tratos con los deudores de su jefe. Jesús alaba el ingenio. ¿Qué?",
+    "section": "Evangelios",
+    "bibleRef": "Lucas 16:1-15",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-rich-man-and-lazarus",
+    "title": "El Rico y Lázaro",
+    "description": "Un hombre rico ignora a un mendigo en su puerta. Ambos mueren. La inversión en el otro lado es permanente.",
+    "section": "Evangelios",
+    "bibleRef": "Lucas 16:19-31",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "zacchaeus-climbs-a-tree",
+    "title": "Zaqueo Sube a un Árbol",
+    "description": "Un cobrador de impuestos bajito y rico sube a un sicómoro para ver a Jesús. Jesús lo ve y se invita a cenar. Todo cambia.",
+    "section": "Evangelios",
+    "bibleRef": "Lucas 19:1-10",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-cursed-fig-tree",
+    "title": "La Higuera Maldita y la Furia en el Templo",
+    "description": "Jesús maldice una higuera sin fruto y limpia el templo de comerciantes. Ambos actos dicen lo mismo: da fruto o serás cortado.",
+    "section": "Evangelios",
+    "bibleRef": "Marcos 11:12-25",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "palm-sunday",
+    "title": "Domingo de Ramos",
+    "description": "Jesús entra en Jerusalén montado en un burro. Las multitudes agitan palmas y gritan '¡Hosanna!' El rey llega — pero no como nadie esperaba.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 21:1-11",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "caesars-coin",
+    "title": "La Moneda del César",
+    "description": "Intentan atrapar a Jesús con una pregunta política. Él pide una moneda. 'Den al César lo que es del César, y a Dios lo que es de Dios.' Fin del asunto.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 22:15-22",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "faith-figs-and-loaded-questions",
+    "title": "Fe, Higueras y Preguntas Trucadas",
+    "description": "Los líderes religiosos lanzan trampa tras trampa a Jesús. Él responde a cada una y devuelve el golpe más fuerte.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 21-22",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "marriage-and-the-afterlife",
+    "title": "Matrimonio y la Vida Después de la Muerte",
+    "description": "Los saduceos creen que tienen a Jesús con un acertijo sobre el matrimonio después de la muerte. Él lo desarma en una frase.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 22:23-33",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-greatest-commandment",
+    "title": "El Mandamiento Más Grande",
+    "description": "'Ama a Dios con todo. Ama a tu prójimo como a ti mismo.' Toda la ley y los profetas dependen de estas dos líneas.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 22:34-40",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "whose-son-is-the-messiah",
+    "title": "¿De Quién es Hijo el Mesías?",
+    "description": "Jesús plantea a los fariseos un acertijo sobre el hijo de David. Nadie puede responder. Él revela que el Mesías es más grande de lo que imaginaban.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 22:41-46",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "signs-of-the-end",
+    "title": "Señales del Fin",
+    "description": "En el Monte de los Olivos, Jesús describe el fin del mundo — guerras, terremotos, engaños. 'Mantente listo. No sabes el día.'",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 24-25",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-plot-against-jesus",
+    "title": "La Conspiración Contra Jesús",
+    "description": "Los líderes religiosos ya han tenido suficiente. Comienzan a conspirar en secreto para arrestar y matar a Jesús antes de que termine el festival.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 26:1-5",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "judas-makes-a-deal",
+    "title": "Judas Hace un Trato",
+    "description": "Treinta monedas de plata. Ese es el precio que Judas pone a Jesús. Camina hacia los sacerdotes y ofrece entregarlo.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 26:14-16",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "anointed-at-bethany",
+    "title": "Ungido en Betania",
+    "description": "Una mujer derrama perfume caro sobre Jesús. Los discípulos dicen que es un desperdicio. Jesús dice que lo está preparando para el entierro.",
+    "section": "Evangelios",
+    "bibleRef": "Juan 12:1-8",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-last-supper",
+    "title": "La Última Cena",
+    "description": "Su última comida con sus 12 amigos más cercanos. El pan y el vino se convierten en su cuerpo y sangre. Uno de ellos está a punto de traicionarlo.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 26:17-30",
+    "inSeed": true,
+    "seedId": "st-last-supper"
+  },
+  {
+    "id": "gethsemane",
+    "title": "Getsemaní",
+    "description": "'Aparta de mí esta copa. Pero no se haga mi voluntad — sino la tuya.' En una tristeza aplastante, Jesús elige la obediencia sobre la fuga.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 26:36-46",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "arrested-in-the-garden",
+    "title": "Arrestado en el Jardín",
+    "description": "Un beso de Judas. Antorchas y espadas. Pedro blande una espada y corta una oreja. Jesús la sana y se entrega.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 26:47-56",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "before-the-sanhedrin",
+    "title": "Ante el Sanedrín",
+    "description": "Testigos falsos, preguntas cargadas y una respuesta honesta: 'Yo soy.' El sumo sacerdote rasga sus vestiduras. Culpable de blasfemia.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 26:57-68",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "peters-three-denials",
+    "title": "Las Tres Negaciones de Pedro",
+    "description": "'No lo conozco.' Tres veces. Luego canta el gallo. Pedro recuerda y se rompe en llanto.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 26:69-75",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "jesus-before-pilate",
+    "title": "Jesús Ante Pilato",
+    "description": "Pilato no encuentra culpa en él. La multitud grita por crucifixión. Se lava las manos y entrega a Jesús.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 27:11-26",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-crucifixion",
+    "title": "La Crucifixión",
+    "description": "Se burlaron de él, lo golpearon y lo clavaron en una cruz. El cielo se oscureció. Dijo 'Consumado es' y entregó su espíritu.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 27:32-56",
+    "inSeed": true,
+    "seedId": "st-crucifixion"
+  },
+  {
+    "id": "buried-in-a-borrowed-tomb",
+    "title": "Enterrado en una Tumba Prestada",
+    "description": "José de Arimatea baja el cuerpo, lo envuelve en lino y lo coloca en su propia tumba nueva. Una piedra sella la entrada.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 27:57-66",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-resurrection",
+    "title": "La Resurrección",
+    "description": "Tres días después, la tumba está vacía. Está vivo. Todo lo que dijo era verdad. El mejor regreso de la historia.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 28:1-10",
+    "inSeed": true,
+    "seedId": "st-resurrection"
+  },
+  {
+    "id": "the-road-to-emmaus",
+    "title": "El Camino a Emaús",
+    "description": "Dos discípulos desconsolados caminan a casa. Un extraño se une a ellos y les explica las Escrituras. Cuando parte el pan, se dan cuenta: es Jesús.",
+    "section": "Evangelios",
+    "bibleRef": "Lucas 24:13-35",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "doubting-thomas",
+    "title": "Tomás el Incrédulo",
+    "description": "'A menos que ponga mi dedo en los agujeros de los clavos, no creeré.' Jesús aparece y dice 'adelante.' Tomás cae de rodillas.",
+    "section": "Evangelios",
+    "bibleRef": "Juan 20:24-29",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-great-commission",
+    "title": "La Gran Comisión",
+    "description": "'Vayan y hagan discípulos de todas las naciones.' Jesús da la declaración de misión final antes de dejar la tierra.",
+    "section": "Evangelios",
+    "bibleRef": "Mateo 28:16-20",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-ascension",
+    "title": "La Ascensión",
+    "description": "Jesús lleva a sus discípulos a una colina, los bendice y asciende al cielo. Dos ángeles dicen 'volverá.'",
+    "section": "Hechos",
+    "bibleRef": "Hechos 1:1-11",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "pentecost",
+    "title": "Pentecostés",
+    "description": "El Espíritu Santo llega como fuego y viento. Todos empiezan a hablar idiomas que nunca aprendieron. La iglesia nace.",
+    "section": "Hechos",
+    "bibleRef": "Hechos 2",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-beautiful-gate-miracle",
+    "title": "El Milagro de la Puerta Hermosa",
+    "description": "Un mendigo discapacitado le pide dinero a Pedro. Pedro dice 'No tengo dinero, pero tengo algo mejor.' El hombre camina.",
+    "section": "Hechos",
+    "bibleRef": "Hechos 3",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "ananias-and-sapphira",
+    "title": "Ananías y Safira",
+    "description": "Una pareja miente sobre su donación a la iglesia. Ambos caen muertos. Dios no está jugando con falsos en la iglesia primitiva.",
+    "section": "Hechos",
+    "bibleRef": "Hechos 5",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "stephen-the-first-martyr",
+    "title": "Esteban, el Primer Mártir",
+    "description": "Un hombre lleno de fe y fuego predica la verdad. Lo apedrean hasta la muerte. Los perdona mientras muere.",
+    "section": "Hechos",
+    "bibleRef": "Hechos 6-7",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-church-scatters",
+    "title": "La Iglesia se Dispersa y Felipe",
+    "description": "La persecución dispersa a los creyentes por todas partes. Felipe termina bautizando a un funcionario etíope en un camino desértico. El evangelio se expande.",
+    "section": "Hechos",
+    "bibleRef": "Hechos 8",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "saul-meets-jesus",
+    "title": "Saulo se Encuentra con Jesús en el Camino",
+    "description": "Un cazador de cristianos queda cegado por una luz. Jesús dice '¿por qué me persigues?' Saulo se convierte en Pablo. El mayor giro de 180 en la historia.",
+    "section": "Hechos",
+    "bibleRef": "Hechos 9:1-31",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "peters-miracles",
+    "title": "Los Milagros de Pedro en Lida y Joppe",
+    "description": "Pedro sana a un hombre paralítico y resucita a una mujer muerta. Los apóstoles caminan en el mismo poder que tenía Jesús.",
+    "section": "Hechos",
+    "bibleRef": "Hechos 9:32-43",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "cornelius-and-the-vision",
+    "title": "Cornelio y la Visión del Lienzo",
+    "description": "Dios envía a Pedro una visión de comida prohibida y dice 'come.' El mensaje: la salvación ya no es solo para los judíos.",
+    "section": "Hechos",
+    "bibleRef": "Hechos 10",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-antioch-church",
+    "title": "La Iglesia de Antioquía",
+    "description": "Una iglesia diversa se lanza en Antioquía. Por primera vez, los seguidores de Jesús son llamados 'cristianos.'",
+    "section": "Hechos",
+    "bibleRef": "Hechos 11",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "james-killed-peter-escapes",
+    "title": "Jacobo Muerto, Pedro Escapa",
+    "description": "El rey Herodes ejecuta a Jacobo. Arresta a Pedro también, pero un ángel lo saca de la prisión en medio de la noche.",
+    "section": "Hechos",
+    "bibleRef": "Hechos 12",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "pauls-first-journey",
+    "title": "El Primer Viaje Misionero de Pablo",
+    "description": "Pablo y Bernabé se lanzan a la aventura. Nuevas iglesias surgen, viejos hábitos resisten, y el evangelio llega a donde nunca antes había estado.",
+    "section": "Hechos",
+    "bibleRef": "Hechos 13-14",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-jerusalem-council",
+    "title": "El Concilio de Jerusalén",
+    "description": "La iglesia primitiva debate la gran pregunta: ¿los no judíos deben seguir la ley judía? Deciden que todo es por gracia.",
+    "section": "Hechos",
+    "bibleRef": "Hechos 15",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "earthquake-at-philippi",
+    "title": "Terremoto en Filipos",
+    "description": "Pablo y Silas están en prisión, cantando himnos a medianoche. Un terremoto abre las puertas. El carcelero se convierte.",
+    "section": "Hechos",
+    "bibleRef": "Hechos 16",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "thessalonica-riot-and-berea",
+    "title": "Disturbio en Tesalónica y Eruditos de Berea",
+    "description": "Una ciudad se amotina, la siguiente verifica las Escrituras a diario. Dos recepciones muy diferentes para el mismo mensaje.",
+    "section": "Hechos",
+    "bibleRef": "Hechos 17:1-14",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "athens-the-unknown-god",
+    "title": "Atenas: El Dios Desconocido",
+    "description": "Pablo encuentra un altar etiquetado 'Al Dios Desconocido'. Él dice 'déjenme presentarlo'. La filosofía se encuentra con la revelación.",
+    "section": "Hechos",
+    "bibleRef": "Hechos 17:15-34",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "riot-in-ephesus",
+    "title": "Disturbio en Éfeso y la Hoguera",
+    "description": "Los creyentes queman sus libros de magia valorados en millones. Los plateros se amotinan porque están perdiendo dinero. El poder enfrenta al lucro.",
+    "section": "Hechos",
+    "bibleRef": "Hechos 19",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "eutychus-falls-out-a-window",
+    "title": "Eutico Se Cae de una Ventana",
+    "description": "Pablo predica tanto que un joven se duerme, se cae de una ventana del tercer piso y muere. Pablo lo revive.",
+    "section": "Hechos",
+    "bibleRef": "Hechos 20:7-12",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "farewell-at-miletus",
+    "title": "Despedida en Mileto",
+    "description": "Pablo se despide de los líderes de la iglesia en Mileto. Hay lágrimas en la orilla. Sabe que no los verá de nuevo.",
+    "section": "Hechos",
+    "bibleRef": "Hechos 20:17-38",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "arrested-at-the-temple",
+    "title": "Arrestado en el Templo",
+    "description": "Pablo visita el templo en Jerusalén y una multitud lo arrastra afuera. Los soldados romanos le salvan la vida. Comienzan los juicios.",
+    "section": "Hechos",
+    "bibleRef": "Hechos 21",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "trials-before-governors",
+    "title": "Juicios Ante Gobernadores",
+    "description": "Pablo es pasado de un oficial romano a otro. Cada uno no encuentra culpa, pero nadie lo libera. Apela a César.",
+    "section": "Hechos",
+    "bibleRef": "Hechos 24-26",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "shipwreck-and-malta",
+    "title": "Naufragio y Malta",
+    "description": "Una tormenta brutal, 14 días perdidos en el mar, el barco se rompe. Todos llegan a la orilla. Una serpiente muerde a Pablo. Él la sacude.",
+    "section": "Hechos",
+    "bibleRef": "Hechos 27-28",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "paul-under-house-arrest",
+    "title": "Pablo Bajo Arresto Domiciliario",
+    "description": "Encadenado a un guardia romano en una habitación alquilada, Pablo sigue predicando. Las cadenas no pueden detener la palabra.",
+    "section": "Hechos",
+    "bibleRef": "Hechos 28:16-31",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "james-writes-to-the-church",
+    "title": "Santiago Escribe a la Iglesia",
+    "description": "Sabiduría práctica para creyentes dispersos. La fe sin acción está muerta. Controla tu lengua. Ayuda a los pobres. Sin excusas.",
+    "section": "Epístolas",
+    "bibleRef": "Santiago",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "peters-final-letter",
+    "title": "La Última Carta de Pedro",
+    "description": "Un apóstol envejecido advierte sobre falsos maestros y recuerda a la iglesia: él VIO a Jesús transfigurado en esa montaña. Esto no es ficción.",
+    "section": "Epístolas",
+    "bibleRef": "2 Pedro",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "pauls-last-letter",
+    "title": "La Última Carta de Pablo",
+    "description": "Desde una prisión romana, Pablo escribe a Timoteo una última vez. 'He peleado la buena batalla. He terminado la carrera.'",
+    "section": "Epístolas",
+    "bibleRef": "2 Timoteo",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "johns-exile-and-revelation",
+    "title": "El Exilio de Juan y la Revelación",
+    "description": "Exiliado en una isla, el último apóstol vivo recibe una visión del cielo, el juicio y el fin de todas las cosas.",
+    "section": "Apocalipsis",
+    "bibleRef": "Apocalipsis 1",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-new-heaven-and-new-earth",
+    "title": "El Nuevo Cielo y la Nueva Tierra",
+    "description": "Dios seca cada lágrima. No más muerte, dolor ni llanto. Todo es hecho nuevo. La historia termina donde comenzó: Dios con su pueblo.",
+    "section": "Apocalipsis",
+    "bibleRef": "Apocalipsis 21-22",
+    "inSeed": false,
+    "seedId": null
+  }
+]

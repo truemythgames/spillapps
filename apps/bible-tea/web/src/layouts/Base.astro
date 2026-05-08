@@ -1,5 +1,6 @@
 ---
 import { APP_STORE_URL, PLAY_STORE_URL } from "../lib/stories";
+import { getLocale, localePath, alternateLocale, getAlternates, t, type Locale } from "../lib/i18n";
 
 interface Props {
   title: string;
@@ -10,15 +11,25 @@ interface Props {
 }
 
 const { title, description, ogImage = "https://bibletea.app/icon.png", canonicalPath, jsonLd } = Astro.props;
-const canonical = canonicalPath ? `https://bibletea.app${canonicalPath}` : undefined;
+const locale = getLocale(Astro.currentLocale);
+const canonical = canonicalPath
+  ? `https://bibletea.app${locale === "en" ? canonicalPath : `/es${canonicalPath === "/" ? "" : canonicalPath}`}`
+  : undefined;
+const alternates = canonicalPath ? getAlternates(canonicalPath) : [];
+const otherLocale = alternateLocale(locale);
+const switchUrl = canonicalPath ? localePath(canonicalPath, otherLocale) : (locale === "en" ? "/es" : "/");
+const switchLabel = otherLocale === "es" ? "ES" : "EN";
 const pageJsonLd = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+
+const langCode = locale === "es" ? "es" : "en";
+const inLanguage = locale === "es" ? "es" : "en-US";
 
 const siteLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   name: "Bible Tea",
   url: "https://bibletea.app",
-  description: "Listen to every Bible story as immersive audio. Professional narration from Genesis to Revelation.",
+  description: t(locale, "schema.siteDescription"),
   potentialAction: {
     "@type": "SearchAction",
     target: { "@type": "EntryPoint", urlTemplate: "https://bibletea.app/stories?q={search_term_string}" },
@@ -42,18 +53,18 @@ const podcastLd = {
   "@context": "https://schema.org",
   "@type": "PodcastSeries",
   name: "Bible Tea — Bible Storycast",
-  description: "Every Bible story retold as immersive audio. From Genesis to Revelation.",
+  description: t(locale, "schema.podcastDescription"),
   url: "https://bibletea.app",
   image: "https://bibletea.app/icon.png",
   author: { "@type": "Organization", name: "Bible Tea" },
-  inLanguage: "en-US",
+  inLanguage,
 };
 
 const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang={langCode}>
 <head>
   <!-- Google Tag Manager (production only) -->
   <script is:inline>if(location.hostname!=='localhost'){(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -68,6 +79,10 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
   <meta name="description" content={description} />
   <meta name="theme-color" content="#0A0A0F" />
   {canonical && <link rel="canonical" href={canonical} />}
+  {alternates.map((alt) => (
+    <link rel="alternate" hreflang={alt.locale} href={alt.href} />
+  ))}
+  {alternates.length > 0 && <link rel="alternate" hreflang="x-default" href={alternates[0].href} />}
 
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
@@ -190,6 +205,38 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
       box-shadow: 0 4px 20px rgba(200, 162, 255, 0.3);
     }
 
+    .nav-lang {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--surface-border);
+      color: var(--text);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .nav-lang:hover {
+      transform: translateY(-1px);
+      background: var(--primary);
+      color: #000;
+    }
+
+    .mobile-lang {
+      font-family: 'Inter', sans-serif !important;
+      font-size: 1rem !important;
+      font-weight: 500 !important;
+      color: var(--primary) !important;
+      padding: 0.5rem 1.5rem;
+      border: 1px solid var(--primary);
+      border-radius: 999px;
+    }
+
     .nav-stores { display: inline-flex; align-items: center; gap: 0.5rem; }
 
     .nav-store-icon {
@@ -295,6 +342,7 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
     @media (max-width: 640px) {
       nav { padding: 0.75rem 1rem; }
       .nav-links .nav-stories-link { display: none; }
+      .nav-lang { width: 32px; height: 32px; font-size: 0.7rem; }
       .nav-cta { padding: 0.5rem 1rem; font-size: 0.75rem; }
       .nav-stores { gap: 0.35rem; }
       .nav-store-icon { width: 32px; height: 32px; }
@@ -309,20 +357,21 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <nav>
-    <a href="/" class="nav-brand">
+    <a href={localePath("/", locale)} class="nav-brand">
       <img src="/icon-nav.png" alt="Bible Tea" width="36" height="36" />
       <span class="heading">Bible Tea</span>
     </a>
     <div class="nav-links">
-      <a href="/stories" class="nav-stories-link">Stories</a>
-      <a href="/playlists" class="nav-stories-link">Playlists</a>
-      <a href="/characters" class="nav-stories-link">Characters</a>
-      <a href="/books" class="nav-stories-link">Books</a>
+      <a href={localePath("/stories", locale)} class="nav-stories-link">{t(locale, "nav.stories")}</a>
+      <a href={localePath("/playlists", locale)} class="nav-stories-link">{t(locale, "nav.playlists")}</a>
+      <a href={localePath("/characters", locale)} class="nav-stories-link">{t(locale, "nav.characters")}</a>
+      <a href={localePath("/books", locale)} class="nav-stories-link">{t(locale, "nav.books")}</a>
+      <a href={switchUrl} class="nav-lang" aria-label={`Switch to ${otherLocale === "es" ? "Spanish" : "English"}`}>{switchLabel}</a>
       <div class="nav-stores">
-        <a href={APP_STORE_URL} class="nav-store-icon" aria-label="Download on the App Store">
+        <a href={APP_STORE_URL} class="nav-store-icon" aria-label={t(locale, "nav.appStore")}>
           <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
         </a>
-        <a href={PLAY_STORE_URL} class="nav-store-icon" aria-label="Get it on Google Play">
+        <a href={PLAY_STORE_URL} class="nav-store-icon" aria-label={t(locale, "nav.googlePlay")}>
           <svg viewBox="0 0 24 24" width="16" height="16">
             <path fill="#00D7C6" d="M3.609 1.814L13.792 12 3.609 22.186a.996.996 0 0 1-.61-.92V2.734c0-.378.231-.707.61-.92z"/>
             <path fill="#FFCE00" d="M16.81 15.015L6.051 21.344l8.805-8.805 1.954 2.476z"/>
@@ -331,20 +380,21 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
           </svg>
         </a>
       </div>
-      <button class="menu-btn" aria-label="Open menu">
+      <button class="menu-btn" aria-label={t(locale, "nav.openMenu")}>
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       </button>
     </div>
   </nav>
 
   <div id="mobile-menu" class="mobile-menu">
-    <button class="menu-close" aria-label="Close menu">
+    <button class="menu-close" aria-label={t(locale, "nav.closeMenu")}>
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
-    <a href="/stories">Stories</a>
-    <a href="/playlists">Playlists</a>
-    <a href="/characters">Characters</a>
-    <a href="/books">Books</a>
+    <a href={localePath("/stories", locale)}>{t(locale, "nav.stories")}</a>
+    <a href={localePath("/playlists", locale)}>{t(locale, "nav.playlists")}</a>
+    <a href={localePath("/characters", locale)}>{t(locale, "nav.characters")}</a>
+    <a href={localePath("/books", locale)}>{t(locale, "nav.books")}</a>
+    <a href={switchUrl} class="mobile-lang">{switchLabel === "ES" ? "🇪🇸 Español" : "🇺🇸 English"}</a>
     <div class="mobile-stores">
       <a href={APP_STORE_URL} class="nav-cta">
         <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
@@ -377,15 +427,15 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
 
   <footer>
     <div class="footer-links">
-      <a href="/stories">Stories</a>
-      <a href="/playlists">Playlists</a>
-      <a href="/characters">Characters</a>
-      <a href="/books">Books</a>
-      <a href="/privacy">Privacy</a>
-      <a href="/terms">Terms</a>
-      <a href="mailto:contact@bibletea.app">Contact</a>
+      <a href={localePath("/stories", locale)}>{t(locale, "nav.stories")}</a>
+      <a href={localePath("/playlists", locale)}>{t(locale, "nav.playlists")}</a>
+      <a href={localePath("/characters", locale)}>{t(locale, "nav.characters")}</a>
+      <a href={localePath("/books", locale)}>{t(locale, "nav.books")}</a>
+      <a href="/privacy">{t(locale, "nav.privacy")}</a>
+      <a href="/terms">{t(locale, "nav.terms")}</a>
+      <a href="mailto:contact@bibletea.app">{t(locale, "nav.contact")}</a>
     </div>
-    <p>&copy; 2026 Bible Tea. All rights reserved.</p>
+    <p>{t(locale, "footer.rights")}</p>
   </footer>
 </body>
 </html>

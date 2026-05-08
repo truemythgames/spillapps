@@ -15,6 +15,7 @@ import {
   type Season,
   type Character,
 } from "../../lib/stories";
+import { getLocale, localePath, t } from "../../lib/i18n";
 
 export async function getStaticPaths() {
   const catalog = getCatalog();
@@ -75,8 +76,9 @@ interface Props {
 }
 
 const { story, catalog, storyPlaylist, playlistSiblings, storySeason, storyCharacters } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
 
-const transcript = getTranscript(story.id);
+const transcript = getTranscript(story.id, locale);
 const hasImage = hasCover(story.id);
 const cover = coverUrl(story.id);
 
@@ -126,29 +128,28 @@ const prev = idx > 0 ? catalog[idx - 1] : null;
 const next = idx < catalog.length - 1 ? catalog[idx + 1] : null;
 
 const pageTitle = `${story.title} — ${story.bibleRef} | Bible Tea`;
-const pageDesc = `${story.description} Listen to ${story.title} (${story.bibleRef}) as immersive audio on Bible Tea.`;
+const pageDesc = locale === "es"
+  ? `${story.description} Escucha ${story.title} (${story.bibleRef}) como audio inmersivo en Bible Tea.`
+  : `${story.description} Listen to ${story.title} (${story.bibleRef}) as immersive audio on Bible Tea.`;
 const pageUrl = `https://bibletea.app/stories/${story.id}`;
 
-// Generate contextual FAQs for "People Also Ask" rich results
+function faqT(key: string): string {
+  return t(locale, key as any)
+    .replace(/\{title\}/g, story.title)
+    .replace(/\{description\}/g, story.description)
+    .replace(/\{ref\}/g, story.bibleRef)
+    .replace(/\{count\}/g, String(catalog.length - 1));
+}
 const faqs = [
+  { q: faqT("story.faqQ1"), a: faqT("story.faqA1") },
+  { q: faqT("story.faqQ2"), a: faqT("story.faqA2") },
   {
-    q: `What is the story of ${story.title} in the Bible?`,
-    a: `${story.description} This story is found in ${story.bibleRef}. Bible Tea retells it as an immersive audio experience with modern narration so you can listen anywhere.`,
-  },
-  {
-    q: `What is ${story.bibleRef} about?`,
-    a: `${story.bibleRef} tells the story of ${story.title}. ${story.description} You can listen to the full retelling with immersive narration on the Bible Tea app.`,
-  },
-  {
-    q: `What is the lesson of ${story.title}?`,
+    q: faqT("story.faqQ3"),
     a: takeawayItems.length > 0
-      ? `Key takeaways from ${story.title}: ${takeawayItems.slice(0, 3).join(". ")}. Listen to the full breakdown on Bible Tea.`
-      : `${story.title} (${story.bibleRef}) carries timeless lessons about faith, obedience, and God's character. Download Bible Tea to hear the full story and its takeaways.`,
+      ? `${t(locale, "story.keyTakeaways")}: ${takeawayItems.slice(0, 3).join(". ")}. ${locale === "es" ? "Escucha el desglose completo en Bible Tea." : "Listen to the full breakdown on Bible Tea."}`
+      : faqT("story.faqA3"),
   },
-  {
-    q: `Can I listen to ${story.title} as audio?`,
-    a: `Yes! Bible Tea offers ${story.title} as an immersive audio story with professional narration. Download the free app on iOS or Android to listen to this and ${catalog.length - 1}+ other Bible stories.`,
-  },
+  { q: faqT("story.faqQ4"), a: faqT("story.faqA4") },
 ];
 
 // Structured data: Article + FAQPage + BreadcrumbList + AudioObject
@@ -170,7 +171,7 @@ const articleLd = {
   mainEntityOfPage: { "@type": "WebPage", "@id": pageUrl },
   about: { "@type": "Thing", name: story.bibleRef },
   isPartOf: { "@type": "WebSite", name: "Bible Tea", url: "https://bibletea.app" },
-  inLanguage: "en-US",
+  inLanguage: locale === "es" ? "es" : "en-US",
 };
 
 const faqLd = {
@@ -701,13 +702,13 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
   <main>
     <div class="story-page">
       <div class="breadcrumbs">
-        <a href="/">Home</a>
+        <a href={localePath("/", locale)}>{t(locale, "story.breadcrumbHome")}</a>
         <span class="sep">/</span>
-        <a href="/stories">Stories</a>
+        <a href={localePath("/stories", locale)}>{t(locale, "story.breadcrumbStories")}</a>
         {storyPlaylist && (
           <>
             <span class="sep">/</span>
-            <a href={`/playlists/${storyPlaylist.id}`}>{storyPlaylist.name}</a>
+            <a href={localePath(`/playlists/${storyPlaylist.id}`, locale)}>{storyPlaylist.name}</a>
           </>
         )}
         <span class="sep">/</span>
@@ -722,23 +723,23 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
         )}
         <div class="hero-info">
           {storyPlaylist ? (
-            <a href={`/playlists/${storyPlaylist.id}`} class="hero-section">{storyPlaylist.name}</a>
+            <a href={localePath(`/playlists/${storyPlaylist.id}`, locale)} class="hero-section">{storyPlaylist.name}</a>
           ) : (
             <div class="hero-section">{story.section}</div>
           )}
           <h1>{story.title}</h1>
           <div class="hero-meta">
             <span class="hero-ref">{story.bibleRef}</span>
-            {readingMinutes > 0 && <span class="hero-time">{readingMinutes} min read · {listeningMinutes} min listen</span>}
+            {readingMinutes > 0 && <span class="hero-time">{t(locale, "story.readTime").replace("{min}", String(readingMinutes))} · {t(locale, "story.listenTime").replace("{min}", String(listeningMinutes))}</span>}
           </div>
           <p class="hero-desc">{story.description}</p>
           {(storySeason || storyCharacters.length > 0) && (
             <div class="hero-tags">
               {storySeason && (
-                <a href={`/books/${storySeason.slug}`} class="hero-tag">{storySeason.name}</a>
+                <a href={localePath(`/books/${storySeason.slug}`, locale)} class="hero-tag">{storySeason.name}</a>
               )}
               {storyCharacters.map((ch) => (
-                <a href={`/characters/${ch.id}`} class="hero-tag hero-tag-char">{ch.name}</a>
+                <a href={localePath(`/characters/${ch.id}`, locale)} class="hero-tag hero-tag-char">{ch.name}</a>
               ))}
             </div>
           )}
@@ -749,7 +750,7 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
 
     {setupHtml && (
       <div class="setup-teaser">
-        <h2>The Setup</h2>
+        <h2>{t(locale, "story.theSetup")}</h2>
         <Fragment set:html={setupHtml} />
       </div>
     )}
@@ -758,12 +759,12 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
       {setupHtml && <div class="gate-fade" />}
       <div class="gate-card">
         <div class="gate-icon">🎧</div>
-        <h3>Hear the Full Story</h3>
-        <p>Listen to {story.title} with immersive narration, or read the full transcript in the app.</p>
+        <h3>{t(locale, "story.gateHeading")}</h3>
+        <p>{t(locale, "story.gateDesc").replace("{title}", story.title)}</p>
         <div class="gate-features">
-          <span class="gate-feature"><span class="check">✓</span> Full audio narration</span>
-          <span class="gate-feature"><span class="check">✓</span> Choose your narrator</span>
-          <span class="gate-feature"><span class="check">✓</span> Read the transcript</span>
+          <span class="gate-feature"><span class="check">✓</span> {t(locale, "story.gateAudio")}</span>
+          <span class="gate-feature"><span class="check">✓</span> {t(locale, "story.gateNarrator")}</span>
+          <span class="gate-feature"><span class="check">✓</span> {t(locale, "story.gateTranscript")}</span>
         </div>
         <StoreButtons variant="hero" />
       </div>
@@ -771,7 +772,7 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
 
     {takeawayItems.length > 0 && (
       <div class="takeaways">
-        <h2>Key Takeaways</h2>
+        <h2>{t(locale, "story.keyTakeaways")}</h2>
         <ul class="takeaway-list">
           {takeawayItems.map((item) => (
             <li>
@@ -784,7 +785,7 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
     )}
 
     <section class="faq-section">
-      <h2>Frequently Asked Questions</h2>
+      <h2>{t(locale, "story.faqTitle")}</h2>
       {faqs.map((f) => (
         <details class="faq-item">
           <summary>{f.q}</summary>
@@ -796,14 +797,14 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
     {(prev || next) && (
       <div class="story-nav">
         {prev ? (
-          <a href={`/stories/${prev.id}`}>
-            <span class="label">Previous</span>
+          <a href={localePath(`/stories/${prev.id}`, locale)}>
+            <span class="label">{t(locale, "story.navPrev")}</span>
             <span class="name">{prev.title}</span>
           </a>
         ) : <div />}
         {next ? (
-          <a href={`/stories/${next.id}`} class="next-link">
-            <span class="label">Next</span>
+          <a href={localePath(`/stories/${next.id}`, locale)} class="next-link">
+            <span class="label">{t(locale, "story.navNext")}</span>
             <span class="name">{next.title}</span>
           </a>
         ) : <div />}
@@ -812,10 +813,10 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
 
     {related.length > 0 && (
       <section class="related">
-        <h2>More from {storyPlaylist ? storyPlaylist.name : story.section}</h2>
+        <h2>{t(locale, "story.moreStories")}</h2>
         <div class="related-row">
           {related.map((r) => (
-            <a href={`/stories/${r.id}`} class="related-card">
+            <a href={localePath(`/stories/${r.id}`, locale)} class="related-card">
               <div class="related-cover">
                 {hasCover(r.id) ? (
                   <img src={coverUrl(r.id)} alt={r.title} loading="lazy" />

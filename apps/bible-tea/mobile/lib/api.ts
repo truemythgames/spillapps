@@ -1,5 +1,6 @@
 import * as SecureStore from "expo-secure-store";
 import Constants from "expo-constants";
+import { Platform, NativeModules } from "react-native";
 
 const debuggerHost =
   Constants.expoConfig?.hostUri ?? Constants.manifest2?.extra?.expoGo?.debuggerHost;
@@ -29,6 +30,21 @@ async function getToken(): Promise<string | null> {
   }
 }
 
+function getDeviceLanguage(): string {
+  try {
+    if (Platform.OS === "ios") {
+      const settings = NativeModules.SettingsManager?.settings;
+      const langs: string[] | undefined =
+        settings?.AppleLanguages ?? settings?.AppleLocale;
+      if (Array.isArray(langs) && langs.length > 0) return langs[0];
+    } else if (Platform.OS === "android") {
+      const locale = NativeModules.I18nManager?.localeIdentifier;
+      if (locale) return locale.replace("_", "-");
+    }
+  } catch {}
+  return "en";
+}
+
 async function request<T>(
   path: string,
   options: RequestInit = {}
@@ -37,6 +53,7 @@ async function request<T>(
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
+    "Accept-Language": getDeviceLanguage(),
     ...(options.headers as Record<string, string>),
   };
 
@@ -179,7 +196,10 @@ export const api = {
     onDone: () => void,
   ) => {
     const token = await getToken();
-    const headers: Record<string, string> = { "Content-Type": "application/json" };
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+      "Accept-Language": getDeviceLanguage(),
+    };
     if (token) headers["Authorization"] = `Bearer ${token}`;
 
     const res = await fetch(`${API_BASE}/v1/chat/stream`, {

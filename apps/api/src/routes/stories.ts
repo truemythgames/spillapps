@@ -2,11 +2,13 @@ import { Hono } from "hono";
 import type { Env } from "../types";
 import { mediaUrl } from "../lib/media";
 import { resolvePublicAppId } from "../lib/request-app";
+import { resolveLocale, overlayTranslations, overlayTranslation } from "../lib/locale";
 
 export const storiesRoutes = new Hono<{ Bindings: Env }>();
 
 storiesRoutes.get("/", async (c) => {
   const appId = resolvePublicAppId(c);
+  const locale = resolveLocale(c);
   const seasonId = c.req.query("season_id");
   const testament = c.req.query("testament");
   const limit = parseInt(c.req.query("limit") || "50");
@@ -37,8 +39,15 @@ storiesRoutes.get("/", async (c) => {
     .bind(...params)
     .all();
 
+  const stories = await overlayTranslations(c.env.DB, result.results as any[], {
+    entityType: "story",
+    appId,
+    locale,
+    fields: ["title", "description"],
+  });
+
   return c.json({
-    stories: result.results.map((s: any) => ({
+    stories: stories.map((s: any) => ({
       ...s,
       cover_image_url: mediaUrl(c.env, s.cover_image_key, appId),
     })),
@@ -47,6 +56,7 @@ storiesRoutes.get("/", async (c) => {
 
 storiesRoutes.get("/recently-added", async (c) => {
   const appId = resolvePublicAppId(c);
+  const locale = resolveLocale(c);
   const limit = parseInt(c.req.query("limit") || "10");
 
   const result = await c.env.DB.prepare(
@@ -60,8 +70,15 @@ storiesRoutes.get("/recently-added", async (c) => {
     .bind(appId, limit)
     .all();
 
+  const stories = await overlayTranslations(c.env.DB, result.results as any[], {
+    entityType: "story",
+    appId,
+    locale,
+    fields: ["title", "description"],
+  });
+
   return c.json({
-    stories: result.results.map((s: any) => ({
+    stories: stories.map((s: any) => ({
       ...s,
       cover_image_url: mediaUrl(c.env, s.cover_image_key, appId),
     })),
@@ -70,7 +87,8 @@ storiesRoutes.get("/recently-added", async (c) => {
 
 storiesRoutes.get("/popular", async (c) => {
   const appId = resolvePublicAppId(c);
-  const cacheKey = `popular-stories:${appId}`;
+  const locale = resolveLocale(c);
+  const cacheKey = `popular-stories:${appId}:${locale}`;
   const cached = await c.env.CACHE.get(cacheKey);
   if (cached) {
     return c.json(JSON.parse(cached));
@@ -90,8 +108,15 @@ storiesRoutes.get("/popular", async (c) => {
     .bind(appId)
     .all();
 
+  const stories = await overlayTranslations(c.env.DB, result.results as any[], {
+    entityType: "story",
+    appId,
+    locale,
+    fields: ["title", "description"],
+  });
+
   const data = {
-    stories: result.results.map((s: any) => ({
+    stories: stories.map((s: any) => ({
       ...s,
       cover_image_url: mediaUrl(c.env, s.cover_image_key, appId),
     })),
@@ -106,6 +131,7 @@ storiesRoutes.get("/popular", async (c) => {
 
 storiesRoutes.get("/:id", async (c) => {
   const appId = resolvePublicAppId(c);
+  const locale = resolveLocale(c);
   const id = c.req.param("id");
 
   let story = await c.env.DB.prepare(
@@ -132,6 +158,13 @@ storiesRoutes.get("/:id", async (c) => {
     return c.json({ error: "Story not found" }, 404);
   }
 
+  story = await overlayTranslation(c.env.DB, story as any, {
+    entityType: "story",
+    appId,
+    locale,
+    fields: ["title", "description", "transcript"],
+  });
+
   const storyId = (story as any).id;
 
   const audioVersions = await c.env.DB.prepare(
@@ -151,6 +184,13 @@ storiesRoutes.get("/:id", async (c) => {
     .bind(storyId, appId)
     .all();
 
+  const translatedChars = await overlayTranslations(c.env.DB, characters.results as any[], {
+    entityType: "character",
+    appId,
+    locale,
+    fields: ["name", "description"],
+  });
+
   return c.json({
     story: {
       ...(story as any),
@@ -161,7 +201,7 @@ storiesRoutes.get("/:id", async (c) => {
       audio_url: mediaUrl(c.env, a.audio_key, appId) ?? "",
       speaker_avatar_url: mediaUrl(c.env, a.speaker_avatar, appId),
     })),
-    characters: characters.results.map((ch: any) => ({
+    characters: translatedChars.map((ch: any) => ({
       ...ch,
       cover_image_url: mediaUrl(c.env, ch.cover_image_key, appId),
     })),

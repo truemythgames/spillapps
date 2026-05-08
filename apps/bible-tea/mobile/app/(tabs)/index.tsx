@@ -13,6 +13,7 @@ import { Image } from "expo-image";
 import { useNetInfo } from "@react-native-community/netinfo";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
 import { useAppStore } from "@/stores/app";
 import { useGate } from "@/lib/useGate";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
@@ -63,6 +64,7 @@ function SkeletonCard() {
 }
 
 function OfflineScreen({ paddingTop, onRetry }: { paddingTop: number; onRetry: () => void }) {
+  const { t } = useTranslation();
   const [retrying, setRetrying] = useState(false);
 
   const handleRetry = useCallback(async () => {
@@ -78,10 +80,10 @@ function OfflineScreen({ paddingTop, onRetry }: { paddingTop: number; onRetry: (
     <View style={[styles.container, { paddingTop, justifyContent: "center", alignItems: "center" }]}>
       <Text style={{ fontSize: 48, marginBottom: spacing.md }}>{'📡'}</Text>
       <Text style={[styles.headerTitle, { textAlign: "center", marginBottom: spacing.sm }]}>
-        No connection
+        {t("home.noConnection")}
       </Text>
       <Text style={{ fontFamily: fonts.body, fontSize: fontSize.md, color: colors.textSecondary, textAlign: "center", paddingHorizontal: spacing.xl, marginBottom: spacing.xl }}>
-        Check your internet and try again
+        {t("home.noConnectionDesc")}
       </Text>
       <Pressable
         style={{ backgroundColor: colors.accent, paddingHorizontal: 32, paddingVertical: 14, borderRadius: radius.lg, opacity: retrying ? 0.7 : 1 }}
@@ -91,7 +93,7 @@ function OfflineScreen({ paddingTop, onRetry }: { paddingTop: number; onRetry: (
         {retrying ? (
           <ActivityIndicator color={colors.background} />
         ) : (
-          <Text style={{ fontFamily: fonts.bodySemiBold, fontSize: fontSize.md, color: colors.background }}>Retry</Text>
+          <Text style={{ fontFamily: fonts.bodySemiBold, fontSize: fontSize.md, color: colors.background }}>{t("common.retry")}</Text>
         )}
       </Pressable>
     </View>
@@ -99,6 +101,7 @@ function OfflineScreen({ paddingTop, onRetry }: { paddingTop: number; onRetry: (
 }
 
 function SkeletonHome({ paddingTop }: { paddingTop: number }) {
+  const { t } = useTranslation();
   return (
     <ScrollView
       style={styles.container}
@@ -106,7 +109,7 @@ function SkeletonHome({ paddingTop }: { paddingTop: number }) {
       showsVerticalScrollIndicator={false}
     >
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Bible Tea</Text>
+        <Text style={styles.headerTitle}>{t("home.title")}</Text>
         <Text style={styles.headerTeaIcon}>🍵</Text>
       </View>
 
@@ -144,6 +147,7 @@ const UNLOCK_TAP_COUNT = 7;
 const UNLOCK_TAP_WINDOW_MS = 3000;
 
 export default function HomeScreen() {
+  const { t } = useTranslation();
   const { guardedPush } = useGate();
   const insets = useSafeAreaInsets();
   const router = useRouter();
@@ -213,7 +217,7 @@ export default function HomeScreen() {
     >
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Bible Tea</Text>
+        <Text style={styles.headerTitle}>{t("home.title")}</Text>
         <Pressable onPress={handleTeaTap} hitSlop={10}>
           <Text style={styles.headerTeaIcon}>🍵</Text>
         </Pressable>
@@ -235,7 +239,7 @@ export default function HomeScreen() {
           )}
           <View style={styles.sotdOverlay} />
           <View style={styles.sotdContent}>
-            <Text style={styles.sotdLabel}>STORY OF THE DAY</Text>
+            <Text style={styles.sotdLabel}>{t("home.storyOfTheDay")}</Text>
             <Text style={styles.sotdTitle}>{storyOfTheDay.title}</Text>
             <Text style={styles.sotdRef}>{storyOfTheDay.bibleRef}</Text>
           </View>

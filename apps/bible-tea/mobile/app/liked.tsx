@@ -3,10 +3,12 @@ import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
 import { useAppStore } from "@/stores/app";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
 export default function LikedScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const likedStoryIds = useAppStore((s) => s.likedStoryIds);
@@ -23,19 +25,19 @@ export default function LikedScreen() {
         <Pressable style={styles.backBtn} onPress={() => router.back()}>
           <Ionicons name="chevron-back" size={24} color={colors.text} />
         </Pressable>
-        <Text style={styles.headerTitle}>My Likes</Text>
+        <Text style={styles.headerTitle}>{t("liked.title")}</Text>
         <View style={{ width: 40 }} />
       </View>
 
       {likedStories.length === 0 ? (
         <View style={styles.empty}>
           <Ionicons name="heart-outline" size={48} color={colors.textMuted} />
-          <Text style={styles.emptyTitle}>No liked stories yet</Text>
-          <Text style={styles.emptySub}>Tap the heart on any story to save it here.</Text>
+          <Text style={styles.emptyTitle}>{t("liked.emptyTitle")}</Text>
+          <Text style={styles.emptySub}>{t("liked.emptyDesc")}</Text>
         </View>
       ) : (
         <ScrollView contentContainerStyle={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
-          <Text style={styles.count}>{likedStories.length} {likedStories.length === 1 ? "story" : "stories"}</Text>
+          <Text style={styles.count}>{likedStories.length} {likedStories.length === 1 ? t("common.story") : t("common.stories")}</Text>
           {likedStories.map((story) => (
             <Pressable
               key={story.id}

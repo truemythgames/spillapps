@@ -1,4 +1,5 @@
 import Constants from "expo-constants";
+import { Platform, NativeModules } from "react-native";
 import catalog from "../../content/story-catalog.json";
 import characterCatalog from "../../content/character-catalog.json";
 
@@ -12,6 +13,23 @@ const APP_ID = extra?.appId || "bible-tea";
 const CONTENT_SERVER = __DEV__
   ? `http://${devHost}:3456`
   : `${MEDIA_BASE}/${APP_ID}`;
+
+function getDeviceLang(): string {
+  try {
+    if (Platform.OS === "ios") {
+      const settings = NativeModules.SettingsManager?.settings;
+      const langs: string[] | undefined =
+        settings?.AppleLanguages ?? settings?.AppleLocale;
+      if (Array.isArray(langs) && langs.length > 0) {
+        return langs[0].split("-")[0];
+      }
+    } else if (Platform.OS === "android") {
+      const locale = NativeModules.I18nManager?.localeIdentifier;
+      if (locale) return locale.split("_")[0];
+    }
+  } catch {}
+  return "en";
+}
 
 export interface CatalogStory {
   id: string;
@@ -53,6 +71,10 @@ export function coverUrl(storyId: string): string {
 }
 
 export function transcriptUrl(storyId: string): string {
+  const lang = getDeviceLang();
+  if (lang !== "en") {
+    return storyContentUrl(storyId, `transcript.${lang}.md`);
+  }
   return storyContentUrl(storyId, "transcript.md");
 }
 
@@ -75,4 +97,3 @@ export function getCharacterById(id: string): CharacterInfo | undefined {
 export function characterImageUrl(charId: string): string {
   return `${CONTENT_SERVER}/characters/${charId}.webp`;
 }
-

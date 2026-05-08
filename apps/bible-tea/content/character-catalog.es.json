@@ -1,0 +1,308 @@
+[
+  {
+    "id": "adam",
+    "name": "Adán",
+    "subtitle": "El primer hombre",
+    "overview": "El primer ser humano, formado del polvo y dotado del aliento de vida. Adán caminó con Dios en el paraíso, nombró a cada criatura viviente y lo tenía todo, hasta que una elección lo cambió todo. Su historia es el punto de partida de toda la narrativa bíblica.",
+    "imagePrompt": "Portrait of Adam, the first man, in the Garden of Eden, surrounded by lush vegetation, golden light, classical oil painting style, Renaissance master quality, warm tones, no text",
+    "storyIds": [
+      "creation",
+      "adam-and-eve"
+    ]
+  },
+  {
+    "id": "eve",
+    "name": "Eva",
+    "subtitle": "Madre de todos los vivientes",
+    "overview": "Creada como compañera igual de Adán, Eva fue la primera mujer y la madre de toda la humanidad. Curiosa y valiente, enfrentó la tentación de la serpiente en el Jardín, un momento que resonaría en cada generación después de ella.",
+    "imagePrompt": "Portrait of Eve, the first woman, in the Garden of Eden with flowers and fruit trees, soft golden light, classical oil painting style, Renaissance master quality, warm tones, no text",
+    "storyIds": [
+      "adam-and-eve",
+      "cain-and-abel"
+    ]
+  },
+  {
+    "id": "noah",
+    "name": "Noé",
+    "subtitle": "Constructor del arca",
+    "overview": "En un mundo ahogado en corrupción, Noé fue el único hombre justo que Dios encontró digno de salvar. Pasó décadas construyendo un enorme barco mientras todos se reían, hasta que llegó la lluvia. Su fe literalmente mantuvo viva a la humanidad.",
+    "imagePrompt": "Portrait of Noah, elderly bearded man, standing before a massive wooden ark under stormy skies, dramatic lighting, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": [
+      "noahs-ark"
+    ]
+  },
+  {
+    "id": "abraham",
+    "name": "Abrahán",
+    "subtitle": "Padre de naciones",
+    "overview": "Abrahán dejó todo: su hogar, su familia, su comodidad, porque Dios se lo pidió. Esperó décadas por un hijo prometido, mintió para salvar su propia piel más de una vez, y se le pidió sacrificar al hijo que más amaba. Imperfecto pero fiel, se convirtió en el padre de tres religiones mundiales.",
+    "imagePrompt": "Portrait of Abraham, wise elderly patriarch with long white beard, gazing at a starlit desert sky, warm golden tones, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": [
+      "abrahams-call",
+      "abrahams-sister-lie",
+      "gods-promise-of-a-son",
+      "birth-of-isaac",
+      "abraham-and-isaac"
+    ]
+  },
+  {
+    "id": "moses",
+    "name": "Moisés",
+    "subtitle": "Libertador de Israel",
+    "overview": "Nacido bajo sentencia de muerte, criado en el palacio del faraón, fugitivo en el desierto: Moisés tenía uno de los currículums más salvajes de la historia antes de que Dios siquiera lo llamara. Tartamudeaba, discutía con Dios, y aun así lideró a toda una nación fuera de la esclavitud. El héroe reacio por excelencia.",
+    "imagePrompt": "Portrait of Moses, powerful bearded figure holding a wooden staff, dramatic desert background with a pillar of fire, intense lighting, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": [
+      "baby-moses",
+      "the-burning-bush",
+      "the-ten-plagues",
+      "crossing-the-red-sea",
+      "the-ten-commandments",
+      "the-golden-calf",
+      "moses-farewell-address",
+      "moses-final-days"
+    ]
+  },
+  {
+    "id": "david",
+    "name": "David",
+    "subtitle": "Rey pastor",
+    "overview": "Un joven pastor que mató a un gigante, escribió salmos que aún resuenan 3,000 años después, y se convirtió en el mayor rey de Israel. Pero David también tuvo grandes fallas: adulterio, encubrimientos de asesinato, caos familiar. Su historia es prueba de que Dios usa a personas rotas para cosas extraordinarias.",
+    "imagePrompt": "Portrait of young King David, handsome shepherd with a crown and harp, standing on a hilltop overlooking Jerusalem, golden hour lighting, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": [
+      "david-and-goliath",
+      "david-becomes-king",
+      "david-dances-before-the-ark",
+      "gods-promise-to-david",
+      "kindness-to-mephibosheth",
+      "david-and-bathsheba",
+      "davids-last-battles",
+      "davids-final-mistake"
+    ]
+  },
+  {
+    "id": "jesus",
+    "name": "Jesús",
+    "subtitle": "Hijo de Dios",
+    "overview": "Nacido en un establo, criado como hijo de carpintero, ejecutado como criminal, y de alguna manera la persona más influyente que jamás haya vivido. Jesús sanó a los enfermos, desafió a los poderosos, se hizo amigo de marginados y afirmó ser Dios en forma humana. Su muerte y resurrección son el punto de inflexión de toda la historia.",
+    "imagePrompt": "Portrait of Jesus Christ, serene and compassionate face, white and golden robes, radiant divine light behind him, classical oil painting style, Renaissance master quality, warm ethereal tones, no text",
+    "storyIds": [
+      "birth-of-jesus",
+      "jesus-gets-baptized",
+      "water-to-wine",
+      "feeding-5000",
+      "walking-on-water",
+      "the-transfiguration",
+      "the-last-supper",
+      "the-crucifixion",
+      "the-resurrection",
+      "the-ascension"
+    ]
+  },
+  {
+    "id": "joseph",
+    "name": "José",
+    "subtitle": "Soñador de sueños",
+    "overview": "Vendido como esclavo por sus propios hermanos a los 17 años, falsamente acusado, arrojado a prisión, y de alguna manera terminó gobernando todo Egipto. La historia de José es el arco de regreso definitivo. Tenía todas las razones para estar amargado, pero eligió el perdón en su lugar.",
+    "imagePrompt": "Portrait of Joseph, young man wearing a colorful coat of many colors, Egyptian palace in background, warm golden light, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": [
+      "joseph-and-his-brothers",
+      "joseph-in-egypt",
+      "joseph-forgives-his-brothers",
+      "jacobs-family-moves-to-egypt"
+    ]
+  },
+  {
+    "id": "daniel",
+    "name": "Daniel",
+    "subtitle": "Hombre de visiones",
+    "overview": "Llevado de su tierra natal siendo un adolescente y dejado en el corazón del imperio babilónico, Daniel se negó a comprometer su fe, incluso cuando significó pasar una noche en un foso de leones hambrientos. Su valentía e integridad lo convirtieron en consejero de reyes.",
+    "imagePrompt": "Portrait of Daniel, calm dignified young man praying in a den of lions, divine light protecting him, dramatic atmosphere, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": [
+      "daniel-and-the-lions-den"
+    ]
+  },
+  {
+    "id": "esther",
+    "name": "Ester",
+    "subtitle": "Reina valiente",
+    "overview": "Una niña huérfana que se convirtió en reina de Persia y salvó a todo su pueblo del genocidio. Ester arriesgó su vida al acercarse al rey sin ser invitada, algo que podría haberla matado en el acto. Su valentía llegó en el momento exacto de la historia.",
+    "imagePrompt": "Portrait of Queen Esther, beautiful young woman in royal Persian robes and crown, standing in a grand palace, dramatic golden lighting, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": [
+      "esther-saves-her-people"
+    ]
+  },
+  {
+    "id": "ruth",
+    "name": "Rut",
+    "subtitle": "Hija leal",
+    "overview": "Una viuda extranjera que eligió la lealtad sobre la comodidad. Cuando su suegra Noemí lo perdió todo, Rut se negó a dejarla sola, alejándose de su propia tierra, sus propios dioses, su propio futuro. Esa fidelidad radical la llevó a la línea familiar de Jesús mismo.",
+    "imagePrompt": "Portrait of Ruth, humble young woman gleaning wheat in golden harvest fields, warm sunset light, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": [
+      "ruth-and-naomi"
+    ]
+  },
+  {
+    "id": "jonah",
+    "name": "Jonás",
+    "subtitle": "Profeta reacio",
+    "overview": "Dios le dijo que fuera al este. Él reservó un barco al oeste. Jonás es el profeta que huyó de su misión, fue tragado por un pez gigante, y aún tuvo la audacia de enojarse cuando su predicación realmente funcionó. Su historia es hilarante, honesta e incómodamente relatable.",
+    "imagePrompt": "Portrait of Jonah, drenched man emerging from the sea with a massive whale in the background, dramatic stormy ocean, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": [
+      "jonah-and-the-whale"
+    ]
+  },
+  {
+    "id": "samson",
+    "name": "Sansón",
+    "subtitle": "Juez poderoso",
+    "overview": "Sobrenaturalmente fuerte pero emocionalmente imprudente, Sansón desgarró leones con sus propias manos y derribó ejércitos, pero no pudo resistir a la mujer equivocada. Su historia es una advertencia sobre el potencial desperdiciado y un acto final de redención que literalmente derrumbó la casa.",
+    "imagePrompt": "Portrait of Samson, powerfully built man with long flowing hair, standing between two massive temple pillars, dramatic lighting, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": [
+      "samson-and-delilah"
+    ]
+  },
+  {
+    "id": "solomon",
+    "name": "Salomón",
+    "subtitle": "Rey más sabio",
+    "overview": "Cuando Dios le ofreció cualquier cosa, Salomón pidió sabiduría, y la obtuvo, junto con una riqueza y poder inimaginables. Construyó el templo más magnífico de la historia y escribió algunos de los poemas más bellos de la Biblia. Pero incluso el hombre más sabio no pudo mantener su propio corazón en orden.",
+    "imagePrompt": "Portrait of King Solomon, regal figure on a golden throne, wearing a magnificent crown, opulent temple interior, rich warm tones, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": [
+      "solomons-wisdom"
+    ]
+  },
+  {
+    "id": "joshua",
+    "name": "Josué",
+    "subtitle": "Conquistador de Canaán",
+    "overview": "El mano derecha de Moisés que tuvo que llenar los zapatos más grandes en la historia de Israel. Josué lideró a la nación a través del río Jordán, derribó los muros de Jericó y conquistó la Tierra Prometida. Un genio militar y un hombre de fe inquebrantable.",
+    "imagePrompt": "Portrait of Joshua, strong warrior leader holding a sword and shield, walls of Jericho crumbling in background, dramatic dust and light, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": [
+      "joshua-takes-command",
+      "crossing-the-jordan",
+      "joshua-and-jericho",
+      "conquering-the-land",
+      "joshuas-final-challenge"
+    ]
+  },
+  {
+    "id": "jacob",
+    "name": "Jacob",
+    "subtitle": "El tramposo que luchó con Dios",
+    "overview": "Un tramposo desde el nacimiento: engañó a su hermano para obtener la primogenitura y engañó a su padre ciego para recibir una bendición. Pero la vida de Jacob fue un largo viaje de estafador a patriarca. Luchó con Dios toda la noche y se fue cojeando con un nuevo nombre: Israel. Toda la nación lleva su historia.",
+    "imagePrompt": "Portrait of Jacob, rugged man wrestling with a mysterious luminous angelic figure at night by a river, dramatic moonlight, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": [
+      "jacob-and-esau",
+      "jacobs-ladder",
+      "jacob-rachel-and-leah",
+      "jacob-wrestles-god"
+    ]
+  },
+  {
+    "id": "isaac",
+    "name": "Isaac",
+    "subtitle": "Hijo de la promesa",
+    "overview": "El bebé milagroso nacido de padres que eran demasiado mayores para tener hijos. Isaac fue casi sacrificado por su propio padre en una montaña, luego creció para convertirse en un enlace tranquilo y constante entre Abrahán y la nación de Israel. No llamativo, pero esencial.",
+    "imagePrompt": "Portrait of Isaac, gentle bearded man in pastoral desert landscape with sheep, soft golden sunset, classical oil painting style, Renaissance master quality, warm tones, no text",
+    "storyIds": [
+      "birth-of-isaac",
+      "abraham-and-isaac",
+      "isaac-and-rebekah"
+    ]
+  },
+  {
+    "id": "sarah",
+    "name": "Sara",
+    "subtitle": "Madre de naciones",
+    "overview": "Se rió cuando Dios le prometió un bebé a los 90 años, y honestamente, ¿quién no lo haría? Sara esperó décadas por el hijo que se le prometió, luchó con la duda, tomó algunas decisiones desordenadas en el camino, y aun así se convirtió en la madre de una nación. Su risa se convirtió en el nombre de su hijo: Isaac significa \"él ríe\".",
+    "imagePrompt": "Portrait of Sarah, beautiful elderly woman laughing joyfully while holding a baby, desert tent in background, warm golden light, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": [
+      "gods-promise-of-a-son",
+      "birth-of-isaac"
+    ]
+  },
+  {
+    "id": "elijah",
+    "name": "Elías",
+    "subtitle": "Profeta de fuego",
+    "overview": "El profeta más dramático de la Biblia. Elías hizo descender fuego del cielo, superó a un carro y enfrentó solo a 450 falsos profetas en una montaña. Luego cayó en depresión y quiso morir. Su historia es una imagen cruda de los altibajos espirituales, y Dios apareciendo en ambos.",
+    "imagePrompt": "Portrait of Elijah, fierce wild-haired prophet with arms raised as fire falls from heaven onto a stone altar on Mount Carmel, dramatic storm clouds, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": [
+      "elijah-on-mount-carmel"
+    ]
+  },
+  {
+    "id": "peter",
+    "name": "Pedro",
+    "subtitle": "La roca de la iglesia",
+    "overview": "Ruidoso, impulsivo y completamente devoto, Pedro fue el discípulo que caminó sobre el agua y luego se hundió de inmediato, juró que moriría por Jesús y luego negó conocerlo tres veces antes del amanecer. Pero Jesús vio algo en este pescador y construyó toda su iglesia sobre él.",
+    "imagePrompt": "Portrait of Peter, weathered fisherman with strong hands and earnest face, standing on the shore of the Sea of Galilee at dawn, classical oil painting style, Renaissance master quality, warm tones, no text",
+    "storyIds": [
+      "peters-big-confession",
+      "peters-three-denials",
+      "peters-miracles",
+      "the-beautiful-gate-miracle"
+    ]
+  },
+  {
+    "id": "paul",
+    "name": "Pablo",
+    "subtitle": "Apóstol de las naciones",
+    "overview": "Comenzó como el enemigo más violento del cristianismo, persiguiendo a los creyentes y viendo cómo los ejecutaban. Luego Jesús se le apareció en un camino y lo dejó ciego. Pablo pasó de perseguidor a misionero más influyente de la historia, plantando iglesias por todo el Imperio Romano y escribiendo casi la mitad del Nuevo Testamento desde celdas de prisión.",
+    "imagePrompt": "Portrait of Paul the Apostle, intense scholarly man writing letters by candlelight in a Roman prison cell, dramatic chiaroscuro lighting, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": [
+      "saul-meets-jesus",
+      "pauls-first-journey",
+      "earthquake-at-philippi",
+      "athens-the-unknown-god",
+      "riot-in-ephesus",
+      "shipwreck-and-malta"
+    ]
+  },
+  {
+    "id": "mary",
+    "name": "María",
+    "subtitle": "Madre de Jesús",
+    "overview": "Una adolescente en un pequeño pueblo que dijo sí a lo más imposible que jamás se le haya pedido a un ser humano. María llevó y crió al Hijo de Dios, estuvo al pie de su cruz y lo vio morir. Su fuerza y fe silenciosas anclan toda la historia de Jesús.",
+    "imagePrompt": "Portrait of the Virgin Mary, young woman in blue robes with serene expression, soft divine glow, holding baby Jesus, classical oil painting style, Renaissance master quality, ethereal warm tones, no text",
+    "storyIds": [
+      "angel-visits-mary",
+      "birth-of-jesus"
+    ]
+  },
+  {
+    "id": "john-the-baptist",
+    "name": "Juan el Bautista",
+    "subtitle": "Voz en el desierto",
+    "overview": "De aspecto salvaje, comiendo langostas, brutalmente honesto, Juan el Bautista fue el acto de apertura para Jesús. Bautizaba a las personas en el río Jordán, enfrentaba a la élite religiosa en su cara y señalaba a todos hacia el Mesías. Su audacia le costó la cabeza, pero su mensaje lo cambió todo.",
+    "imagePrompt": "Portrait of John the Baptist, wild rugged man in animal skin garments standing in the Jordan River, intense prophetic gaze, desert wilderness background, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": [
+      "angel-visits-zechariah",
+      "birth-of-john-the-baptist",
+      "john-the-baptist-preaches",
+      "john-declares-the-lamb",
+      "john-the-baptists-last-words",
+      "john-the-baptist-beheaded"
+    ]
+  },
+  {
+    "id": "gideon",
+    "name": "Gedeón",
+    "subtitle": "Guerrero improbable",
+    "overview": "Dios lo llamó un guerrero poderoso mientras literalmente se escondía en un lagar. Gedeón necesitó múltiples señales solo para creer que Dios hablaba en serio, luego derrotó a un ejército de 135,000 con solo 300 hombres, algunas antorchas y jarras de barro. La historia de desvalido definitiva.",
+    "imagePrompt": "Portrait of Gideon, humble young farmer holding a torch and trumpet at night, army of 300 men behind him, dramatic moonlit battlefield, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": [
+      "gideon-vs-the-midianites"
+    ]
+  },
+  {
+    "id": "deborah",
+    "name": "Débora",
+    "subtitle": "Jueza y profetisa",
+    "overview": "En una era en la que las mujeres eran relegadas, Débora lideró a toda la nación. Fue jueza, profetisa y estratega militar que dirigió al ejército de Israel a la victoria. Cuando el general tuvo miedo de ir a la batalla sin ella, fue y proclamó la victoria antes de que sucediera.",
+    "imagePrompt": "Portrait of Deborah, powerful woman judge sitting under a palm tree, commanding presence, Israelite warriors gathered around her, warm golden light, classical oil painting style, Renaissance master quality, no text",
+    "storyIds": [
+      "deborah-and-jael"
+    ]
+  }
+]

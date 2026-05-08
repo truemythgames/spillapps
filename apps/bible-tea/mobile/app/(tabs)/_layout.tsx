@@ -1,21 +1,23 @@
 import { Tabs, useRouter } from "expo-router";
 import { View, StyleSheet, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 import { colors, fonts, fontSize, TAB_BAR_HEIGHT } from "@/lib/theme";
 import { useAppStore } from "@/stores/app";
-
-const TAB_ITEMS = [
-  { name: "index", label: "Home", icon: "home" as const, iconOutline: "home-outline" as const },
-  { name: "explore", label: "Stories", icon: "book" as const, iconOutline: "book-outline" as const },
-  { name: "playlists", label: "Discover", icon: "compass" as const, iconOutline: "compass-outline" as const },
-  { name: "profile", label: "Chat", icon: "sparkles" as const, iconOutline: "sparkles-outline" as const },
-] as const;
 
 const GATED_TABS = new Set(["explore", "playlists", "profile"]);
 
 export default function TabLayout() {
+  const { t } = useTranslation();
   const router = useRouter();
   const isSubscribed = useAppStore((s) => s.isSubscribed);
+
+  const TAB_ITEMS = [
+    { name: "index", label: t("tabs.home"), icon: "home" as const, iconOutline: "home-outline" as const },
+    { name: "explore", label: t("tabs.stories"), icon: "book" as const, iconOutline: "book-outline" as const },
+    { name: "playlists", label: t("tabs.discover"), icon: "compass" as const, iconOutline: "compass-outline" as const },
+    { name: "profile", label: t("tabs.chat"), icon: "sparkles" as const, iconOutline: "sparkles-outline" as const },
+  ] as const;
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>

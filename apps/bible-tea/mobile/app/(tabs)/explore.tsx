@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, ScrollView, Pressable, FlatList } from "react-n
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
 import { useAppStore } from "@/stores/app";
 import { usePlayerStore } from "@/stores/player";
 import { useGate } from "@/lib/useGate";
@@ -11,6 +12,7 @@ import { getLocalProgress } from "@/lib/storage";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
 export default function StoriesScreen() {
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const { guardedPush } = useGate();
@@ -43,19 +45,19 @@ export default function StoriesScreen() {
       contentContainerStyle={{ paddingBottom: 120 }}
       showsVerticalScrollIndicator={false}
     >
-      <Text style={styles.pageTitle}>Stories</Text>
+      <Text style={styles.pageTitle}>{t("explore.title")}</Text>
 
       {/* Overall progress */}
       <View style={styles.progressCard}>
         <View style={styles.progressTop}>
           <Text style={styles.progressPercent}>{percent}%</Text>
-          <Text style={styles.progressLabel}>completed</Text>
+          <Text style={styles.progressLabel}>{t("explore.completed")}</Text>
         </View>
         <View style={styles.progressBar}>
           <View style={[styles.progressFill, { width: `${percent}%` }]} />
         </View>
         <Text style={styles.progressSub}>
-          {completedCount} of {stories.length} stories
+          {t("common.of", { completed: completedCount, total: stories.length })}
         </Text>
       </View>
 
@@ -64,24 +66,24 @@ export default function StoriesScreen() {
         <View style={styles.statCard}>
           <Text style={styles.statEmoji}>🔥</Text>
           <Text style={styles.statNum}>{streak.current_streak}</Text>
-          <Text style={styles.statLabel}>Day Streak</Text>
+          <Text style={styles.statLabel}>{t("explore.dayStreak")}</Text>
         </View>
         <Pressable style={styles.statCard} onPress={() => router.push("/completed")}>
           <Text style={styles.statEmoji}>✅</Text>
           <Text style={styles.statNum}>{completedCount}</Text>
-          <Text style={styles.statLabel}>Completed</Text>
+          <Text style={styles.statLabel}>{t("explore.completedLabel")}</Text>
         </Pressable>
         <Pressable style={styles.statCard} onPress={() => router.push("/liked")}>
           <Text style={styles.statEmoji}>❤️</Text>
           <Text style={styles.statNum}>{likedCount}</Text>
-          <Text style={styles.statLabel}>Liked</Text>
+          <Text style={styles.statLabel}>{t("explore.liked")}</Text>
         </Pressable>
       </View>
 
       {/* Currently listening */}
       {currentStory && (
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Now Playing</Text>
+          <Text style={styles.sectionTitle}>{t("explore.nowPlaying")}</Text>
           <Pressable
             style={styles.nowPlaying}
             onPress={() => guardedPush(`/story/${currentStory.id}`)}
@@ -89,7 +91,7 @@ export default function StoriesScreen() {
             <Image source={{ uri: currentStory.cover_image_url ?? undefined }} style={styles.npThumb} contentFit="cover" transition={300} />
             <View style={styles.npInfo}>
               <Text style={styles.npTitle} numberOfLines={1}>{currentStory.title}</Text>
-              <Text style={styles.npSub}>Tap to continue</Text>
+              <Text style={styles.npSub}>{t("explore.tapToContinue")}</Text>
             </View>
           </Pressable>
         </View>
@@ -98,7 +100,7 @@ export default function StoriesScreen() {
       {/* Continue Listening */}
       {continueListening.length > 0 && (
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Continue Listening</Text>
+          <Text style={styles.sectionTitle}>{t("explore.continueListening")}</Text>
           <FlatList
             horizontal
             data={continueListening}
@@ -113,7 +115,7 @@ export default function StoriesScreen() {
                   </View>
                 </View>
                 <Text style={styles.clTitle} numberOfLines={1}>{item.title}</Text>
-                <Text style={styles.clSub}>{item.progressPercent}% done</Text>
+                <Text style={styles.clSub}>{t("common.done", { percent: item.progressPercent })}</Text>
               </Pressable>
             )}
           />
@@ -122,20 +124,20 @@ export default function StoriesScreen() {
 
       {/* OT / NT cards */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Browse</Text>
+        <Text style={styles.sectionTitle}>{t("explore.browse")}</Text>
         <View style={styles.testamentRow}>
           <Pressable style={styles.testamentCard} onPress={() => router.push("/testament/old")}>
             <Image source={{ uri: storyMap["crossing-the-red-sea"]?.cover_image_url ?? coverUrl("crossing-the-red-sea") }} style={styles.testamentImg} contentFit="cover" transition={300} />
             <View style={styles.testamentOverlay} />
             <View style={styles.testamentContent}>
-              <Text style={styles.testamentLabel}>Old Testament</Text>
+              <Text style={styles.testamentLabel}>{t("explore.oldTestament")}</Text>
             </View>
           </Pressable>
           <Pressable style={styles.testamentCard} onPress={() => router.push("/testament/new")}>
             <Image source={{ uri: storyMap["the-resurrection"]?.cover_image_url ?? coverUrl("the-resurrection") }} style={styles.testamentImg} contentFit="cover" transition={300} />
             <View style={styles.testamentOverlay} />
             <View style={styles.testamentContent}>
-              <Text style={styles.testamentLabel}>New Testament</Text>
+              <Text style={styles.testamentLabel}>{t("explore.newTestament")}</Text>
             </View>
           </Pressable>
         </View>
