@@ -22,10 +22,17 @@ export function getCatalog(): CatalogStory[] {
   return JSON.parse(readFileSync(CATALOG_PATH, "utf8"));
 }
 
-export function getTranscript(id: string): string | null {
-  const path = join(CONTENT_DIR, "stories", id, "transcript.md");
-  if (!existsSync(path)) return null;
-  return readFileSync(path, "utf8");
+export async function getTranscript(id: string): Promise<string | null> {
+  try {
+    const res = await fetch(`${API_BASE}/stories/${id}`, {
+      headers: { "x-app-id": APP_ID },
+    });
+    if (!res.ok) return null;
+    const { story } = (await res.json()) as any;
+    return story?.transcript ?? null;
+  } catch {
+    return null;
+  }
 }
 
 export function hasCover(id: string): boolean {

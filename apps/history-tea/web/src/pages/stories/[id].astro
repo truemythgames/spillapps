@@ -76,7 +76,7 @@ interface Props {
 
 const { story, catalog, storyPlaylist, playlistSiblings, storySeason, storyCharacters } = Astro.props;
 
-const transcript = getTranscript(story.id);
+const transcript = await getTranscript(story.id);
 const hasImage = hasCover(story.id);
 const cover = coverUrl(story.id);
 
