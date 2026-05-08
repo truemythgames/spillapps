@@ -174,14 +174,25 @@ storiesRoutes.get("/:id", async (c) => {
 
   const storyId = (story as any).id;
 
-  const audioVersions = await c.env.DB.prepare(
+  let audioVersions = await c.env.DB.prepare(
     `SELECT sa.*, sp.name as speaker_name, sp.avatar_key as speaker_avatar
      FROM story_audio sa
      JOIN speakers sp ON sa.speaker_id = sp.id AND sp.app_id = ?
-     WHERE sa.story_id = ?`
+     WHERE sa.story_id = ? AND (sa.locale = ? OR sa.locale IS NULL)`
   )
-    .bind(appId, storyId)
+    .bind(appId, storyId, locale)
     .all();
+
+  if (audioVersions.results.length === 0 && locale !== "en") {
+    audioVersions = await c.env.DB.prepare(
+      `SELECT sa.*, sp.name as speaker_name, sp.avatar_key as speaker_avatar
+       FROM story_audio sa
+       JOIN speakers sp ON sa.speaker_id = sp.id AND sp.app_id = ?
+       WHERE sa.story_id = ? AND (sa.locale = 'en' OR sa.locale IS NULL)`
+    )
+      .bind(appId, storyId)
+      .all();
+  }
 
   const characters = await c.env.DB.prepare(
     `SELECT ch.* FROM characters ch

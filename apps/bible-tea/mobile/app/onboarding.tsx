@@ -9,6 +9,7 @@ import {
   FlatList,
   ViewToken,
 } from "react-native";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
@@ -20,12 +21,8 @@ import Animated, {
   withTiming,
   withSpring,
   withSequence,
-  interpolate,
-  Extrapolation,
   runOnJS,
   Easing,
-  FadeIn,
-  SlideInUp,
 } from "react-native-reanimated";
 let StoreReview: any = null;
 try { StoreReview = require("expo-store-review"); } catch {}
@@ -154,7 +151,6 @@ export default function OnboardingScreen() {
   const showcaseRef = useRef<FlatList>(null);
 
   const fadeAnim = useSharedValue(1);
-  const slideAnim = useSharedValue(0);
   const ctaScale = useSharedValue(1);
   const reviewPrompted = useRef(false);
   const step = STEP_ORDER[stepIdx];
@@ -176,17 +172,10 @@ export default function OnboardingScreen() {
   }
 
   function animateTransition(next: () => void) {
-    const OUT = 180;
-    const IN = 260;
-    const EASE_OUT = Easing.out(Easing.cubic);
-    const EASE_IN = Easing.out(Easing.cubic);
-    fadeAnim.value = withTiming(0, { duration: OUT, easing: EASE_OUT });
-    slideAnim.value = withTiming(-18, { duration: OUT, easing: EASE_OUT }, (finished) => {
+    fadeAnim.value = withTiming(0, { duration: 200, easing: Easing.out(Easing.quad) }, (finished) => {
       if (!finished) return;
       runOnJS(next)();
-      slideAnim.value = 24;
-      fadeAnim.value = withTiming(1, { duration: IN, easing: EASE_IN });
-      slideAnim.value = withTiming(0, { duration: IN, easing: EASE_IN });
+      fadeAnim.value = withTiming(1, { duration: 300, easing: Easing.in(Easing.quad) });
     });
   }
 
@@ -240,12 +229,21 @@ export default function OnboardingScreen() {
 
   const contentStyle = useAnimatedStyle(() => ({
     opacity: fadeAnim.value,
-    transform: [{ translateY: slideAnim.value }],
   }));
 
   const ctaAnimStyle = useAnimatedStyle(() => ({
     transform: [{ scale: ctaScale.value }],
   }));
+
+  const swipeGesture = Gesture.Pan()
+    .activeOffsetX([-30, 30])
+    .onEnd((e) => {
+      if (e.translationX < -50) {
+        runOnJS(goNext)();
+      } else if (e.translationX > 50) {
+        runOnJS(goBack)();
+      }
+    });
 
   function renderShowcasePage(pageStep: Step) {
     switch (pageStep) {
@@ -412,7 +410,7 @@ export default function OnboardingScreen() {
         style={StyleSheet.absoluteFill}
         contentFit={currentStep === "welcome" ? "contain" : "cover"}
         contentPosition={currentStep === "welcome" ? "center" : "center"}
-        transition={420}
+        transition={300}
       />
       <LinearGradient
         colors={
@@ -489,33 +487,35 @@ export default function OnboardingScreen() {
           </View>
         </View>
       ) : (
-        <Animated.View
-          style={[
-            styles.content,
-            {
-              paddingTop: insets.top + 56,
-              paddingBottom: insets.bottom + spacing.lg,
-            },
-            contentStyle,
-          ]}
-        >
-          <View style={styles.contentInner}>{renderContent()}</View>
+        <GestureDetector gesture={swipeGesture}>
+          <Animated.View
+            style={[
+              styles.content,
+              {
+                paddingTop: insets.top + 56,
+                paddingBottom: insets.bottom + spacing.lg,
+              },
+              contentStyle,
+            ]}
+          >
+            <View style={styles.contentInner}>{renderContent()}</View>
 
-          <View style={styles.bottomArea}>
-            <Animated.View style={ctaAnimStyle}>
-              <Pressable
-                style={[styles.ctaBtn, isDisabled && styles.ctaBtnDisabled]}
-                onPress={() => {
-                  bumpCta();
-                  goNext();
-                }}
-                disabled={isDisabled}
-              >
-                <Text style={styles.ctaBtnText}>{btnLabel}</Text>
-              </Pressable>
-            </Animated.View>
-          </View>
-        </Animated.View>
+            <View style={styles.bottomArea}>
+              <Animated.View style={ctaAnimStyle}>
+                <Pressable
+                  style={[styles.ctaBtn, isDisabled && styles.ctaBtnDisabled]}
+                  onPress={() => {
+                    bumpCta();
+                    goNext();
+                  }}
+                  disabled={isDisabled}
+                >
+                  <Text style={styles.ctaBtnText}>{btnLabel}</Text>
+                </Pressable>
+              </Animated.View>
+            </View>
+          </Animated.View>
+        </GestureDetector>
       )}
     </View>
   );
