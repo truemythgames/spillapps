@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { getSeedStories, type CatalogStory } from "@/lib/content";
 import { storage, StorageKeys, getLocalProgress, getStreakData, setLocalProgress } from "@/lib/storage";
 import { api } from "@/lib/api";
 import { checkSubscription } from "@/lib/purchases";
@@ -8,9 +7,16 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const CACHE_KEY = "app_data_cache_v2_history";
 const CACHE_TTL_MS = 5 * 60 * 1000; // 5 min — background refresh if stale
 
-const DEMO_MODE = false;
+const DEMO_MODE = true;
 
-export interface StoryWithCover extends CatalogStory {
+export interface StoryWithCover {
+  id: string;
+  title: string;
+  description: string;
+  section: string;
+  bibleRef: string;
+  testament?: string;
+  order?: number;
   cover_image_url: string | null;
   apiId?: string;
 }
@@ -74,15 +80,9 @@ interface AppState {
   refreshSubscription: () => Promise<void>;
 }
 
-const seedIdToLocalId: Record<string, string> = {};
-for (const s of getSeedStories()) {
-  if (s.seedId) seedIdToLocalId[s.seedId] = s.id;
-}
-
 function apiStoryToCover(s: any): StoryWithCover {
-  const localId = seedIdToLocalId[s.id] ?? s.slug ?? s.id;
   return {
-    id: localId,
+    id: s.slug ?? s.id,
     apiId: s.id,
     title: s.title,
     description: s.description ?? "",
@@ -185,7 +185,7 @@ export const useAppStore = create<AppState>((set, get) => ({
           return mapped;
         }
         return null;
-      }).catch(() => null);
+      }).catch((e) => { console.error("[loadRemoteData] stories error:", e); return null; });
 
       const sotdP = api.getStoryOfTheDay().then((res) => {
         if (res.story) {
@@ -194,7 +194,7 @@ export const useAppStore = create<AppState>((set, get) => ({
           return mapped;
         }
         return null;
-      }).catch(() => null);
+      }).catch((e) => { console.error("[loadRemoteData] sotd error:", e); return null; });
 
       const playlistsP = api.getPlaylists().then(async (res) => {
         if (!res.playlists?.length) return null;
@@ -218,22 +218,22 @@ export const useAppStore = create<AppState>((set, get) => ({
           return apiPlaylists;
         }
         return null;
-      }).catch(() => null);
+      }).catch((e) => { console.error("[loadRemoteData] playlists error:", e); return null; });
 
       const seasonsP = api.getSeasons().then((res) => {
         if (res.seasons?.length) { set({ seasons: res.seasons }); return res.seasons; }
         return null;
-      }).catch(() => null);
+      }).catch((e) => { console.error("[loadRemoteData] seasons error:", e); return null; });
 
       const speakersP = api.getSpeakers().then((res) => {
         if (res.speakers?.length) { set({ speakers: res.speakers }); return res.speakers; }
         return null;
-      }).catch(() => null);
+      }).catch((e) => { console.error("[loadRemoteData] speakers error:", e); return null; });
 
       const charsP = api.getCharacters().then((res) => {
         if (res.characters?.length) { set({ characters: res.characters }); return res.characters; }
         return null;
-      }).catch(() => null);
+      }).catch((e) => { console.error("[loadRemoteData] characters error:", e); return null; });
 
       const recentP = api.getRecentStories().then((res) => {
         if (res.stories?.length) {
@@ -242,7 +242,7 @@ export const useAppStore = create<AppState>((set, get) => ({
           return mapped;
         }
         return null;
-      }).catch(() => null);
+      }).catch((e) => { console.error("[loadRemoteData] recent error:", e); return null; });
 
       const [stories, sotd, playlists, seasons, speakers, chars, recent] =
         await Promise.all([storiesP, sotdP, playlistsP, seasonsP, speakersP, charsP, recentP]);
@@ -253,9 +253,9 @@ export const useAppStore = create<AppState>((set, get) => ({
         const allStories = stories ?? get().stories;
         if (allStories.length > 0) {
           const ids = allStories.map((s: StoryWithCover) => s.id);
-          const completedIds = ids.slice(0, Math.min(18, ids.length));
-          const likedIds = ids.slice(0, Math.min(12, ids.length));
-          const inProgressIds = ids.slice(completedIds.length, completedIds.length + 4);
+          const completedIds = ids.slice(0, Math.min(47, ids.length));
+          const likedIds = ids.slice(0, Math.min(23, ids.length));
+          const inProgressIds = ids.slice(completedIds.length, completedIds.length + 5);
           const progressEntries: Record<string, ProgressEntry> = {};
           for (const id of completedIds) {
             progressEntries[id] = { story_id: id, position_seconds: 300, completed: 1 };
@@ -266,7 +266,7 @@ export const useAppStore = create<AppState>((set, get) => ({
           for (const id of completedIds) {
             setLocalProgress(id, 300, true, 300);
           }
-          const percentages = [0.65, 0.40, 0.80, 0.25];
+          const percentages = [0.72, 0.45, 0.83, 0.30, 0.60];
           inProgressIds.forEach((id: string, i: number) => {
             const dur = 300;
             const pos = Math.round(dur * percentages[i % percentages.length]);
@@ -276,7 +276,7 @@ export const useAppStore = create<AppState>((set, get) => ({
             completedStoryIds: completedIds,
             likedStoryIds: likedIds,
             progressMap: progressEntries,
-            streak: { current_streak: 12, max_streak: 24, last_listen_date: new Date().toISOString().split("T")[0] },
+            streak: { current_streak: 34, max_streak: 34, last_listen_date: new Date().toISOString().split("T")[0] },
             isSubscribed: true,
           });
         }

@@ -4,7 +4,6 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
-import { getAllCharacters, characterImageUrl } from "@/lib/content";
 import { useAppStore } from "@/stores/app";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
@@ -13,17 +12,16 @@ export default function CharacterScreen() {
   const { name } = useLocalSearchParams<{ name: string }>();
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const allStories = useAppStore((s) => s.stories);
+  const { characters: apiCharacters } = useAppStore();
 
-  const char = getAllCharacters().find((c) => c.name === name);
-  if (!char) return null;
+  const apiChar = apiCharacters.find((c: any) => c.name === name);
+  if (!apiChar) return null;
 
-  const storyMap = Object.fromEntries(allStories.map((s) => [s.id, s]));
-  const stories = char.storyIds
-    .map((id) => storyMap[id])
-    .filter(Boolean);
-
-  const heroImage = characterImageUrl(char.id);
+  const displayName = apiChar.name;
+  const displaySubtitle = (apiChar as any).description || "";
+  const displayOverview = (apiChar as any).overview || "";
+  const heroImage = (apiChar as any).image_url || "";
+  const stories = (apiChar as any).stories || [];
 
   return (
     <View style={styles.container}>
@@ -38,22 +36,22 @@ export default function CharacterScreen() {
           <Image source={{ uri: heroImage }} style={styles.heroImage} contentFit="cover" />
           <View style={styles.heroOverlay} />
           <View style={styles.heroContent}>
-            <Text style={styles.heroName}>{name}</Text>
-            <Text style={styles.heroSub}>{char.subtitle}</Text>
+            <Text style={styles.heroName}>{displayName}</Text>
+            <Text style={styles.heroSub}>{displaySubtitle}</Text>
           </View>
         </View>
 
-        {char.overview ? (
-          <Text style={styles.overview}>{char.overview}</Text>
+        {displayOverview ? (
+          <Text style={styles.overview}>{displayOverview}</Text>
         ) : null}
 
         <Text style={styles.count}>{stories.length} {stories.length === 1 ? t("common.story") : t("common.stories")}</Text>
 
-        {stories.map((story) => (
+        {stories.map((story: any) => (
           <Pressable
             key={story.id}
             style={styles.row}
-            onPress={() => router.push(`/story/${story.id}` as any)}
+            onPress={() => router.push(`/story/${story.slug ?? story.id}` as any)}
           >
             <Image source={{ uri: story.cover_image_url }} style={styles.thumb} contentFit="cover" />
             <View style={styles.info}>

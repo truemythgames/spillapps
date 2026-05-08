@@ -4,19 +4,20 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 import { useAppStore } from "@/stores/app";
 import { Skeleton, SkeletonText } from "@/components/Skeleton";
-import { characterImageUrl, getAllCharacters } from "@/lib/content";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
 function SkeletonDiscover({ paddingTop }: { paddingTop: number }) {
+  const { t } = useTranslation();
   return (
     <ScrollView
       style={[styles.container, { paddingTop }]}
       contentContainerStyle={{ paddingBottom: 120 }}
       showsVerticalScrollIndicator={false}
     >
-      <Text style={styles.pageTitle}>Discover</Text>
+      <Text style={styles.pageTitle}>{t("discover.title")}</Text>
       <View style={styles.searchWrap}>
         <Ionicons name="search" size={18} color={colors.textMuted} />
         <View style={{ flex: 1, paddingVertical: 16, marginLeft: 8 }}>
@@ -49,6 +50,7 @@ function SkeletonDiscover({ paddingTop }: { paddingTop: number }) {
 }
 
 export default function DiscoverScreen() {
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const { stories, characters, recentStories } = useAppStore();
@@ -72,14 +74,7 @@ export default function DiscoverScreen() {
     : null;
 
   const characterList = useMemo(() => {
-    if (characters && characters.length > 0) return characters;
-    return getAllCharacters().map((c) => ({
-      id: c.id,
-      name: c.name,
-      subtitle: c.subtitle,
-      image_url: characterImageUrl(c.id),
-      stories: [],
-    }));
+    return characters || [];
   }, [characters]);
 
   const seasonList = useMemo(() => {
@@ -105,14 +100,14 @@ export default function DiscoverScreen() {
       contentContainerStyle={{ paddingBottom: 120 }}
       showsVerticalScrollIndicator={false}
     >
-      <Text style={styles.pageTitle}>Discover</Text>
+      <Text style={styles.pageTitle}>{t("discover.title")}</Text>
 
       {/* Search */}
       <View style={styles.searchWrap}>
         <Ionicons name="search" size={18} color={colors.textMuted} />
         <TextInput
           style={styles.searchInput}
-          placeholder="Search stories, topics or characters"
+          placeholder={t("discover.searchPlaceholder")}
           placeholderTextColor={colors.textMuted}
           value={query}
           onChangeText={setQuery}
@@ -123,9 +118,9 @@ export default function DiscoverScreen() {
 
       {filtered ? (
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Results</Text>
+          <Text style={styles.sectionTitle}>{t("discover.results")}</Text>
           {filtered.length === 0 && (
-            <Text style={styles.emptyText}>No stories found for "{query}"</Text>
+            <Text style={styles.emptyText}>{t("discover.noResults", { query })}</Text>
           )}
           {filtered.map((s) => (
             <Pressable key={s.id} style={styles.resultRow} onPress={() => router.push(`/story/${s.id}` as any)}>
@@ -143,9 +138,9 @@ export default function DiscoverScreen() {
           {characterList.length > 0 && (
             <View style={styles.section}>
               <View style={styles.sectionRow}>
-                <Text style={styles.sectionTitle}>Historical Figures</Text>
+                <Text style={styles.sectionTitle}>{t("discover.historicalFigures")}</Text>
                 <Pressable onPress={() => router.push("/characters")}>
-                  <Text style={styles.seeAll}>See all</Text>
+                  <Text style={styles.seeAll}>{t("common.seeAll")}</Text>
                 </Pressable>
               </View>
               <FlatList
@@ -154,14 +149,7 @@ export default function DiscoverScreen() {
                 keyExtractor={(item) => item.id}
                 showsHorizontalScrollIndicator={false}
                 renderItem={({ item }) => {
-                  const localChar = getAllCharacters().find(
-                    (c) => c.name.toLowerCase() === String(item.name ?? "").toLowerCase(),
-                  );
-                  const charCover =
-                    item.image_url ??
-                    (localChar ? characterImageUrl(localChar.id) : null) ??
-                    item.stories?.[0]?.cover_image_url ??
-                    null;
+                  const charCover = item.image_url ?? item.stories?.[0]?.cover_image_url ?? null;
                   return (
                     <Pressable style={styles.charCard} onPress={() => router.push(`/character/${item.name}` as any)}>
                       <Image
@@ -183,7 +171,7 @@ export default function DiscoverScreen() {
           {/* Browse by Season */}
           {seasonList.length > 0 && (
             <View style={[styles.section, { paddingTop: spacing.md }]}>
-              <Text style={styles.sectionTitle}>Browse by Season</Text>
+              <Text style={styles.sectionTitle}>{t("discover.browseBySeason")}</Text>
               <View style={styles.seasonGrid}>
                 {seasonList.map((season) => (
                   <Pressable
@@ -200,7 +188,7 @@ export default function DiscoverScreen() {
                     <View style={styles.seasonOverlay} />
                     <View style={styles.seasonContent}>
                       <Text style={styles.seasonName}>{season.name}</Text>
-                      <Text style={styles.seasonCount}>{season.count} stories</Text>
+                      <Text style={styles.seasonCount}>{t("common.storiesCount", { count: season.count })}</Text>
                     </View>
                   </Pressable>
                 ))}
@@ -212,9 +200,9 @@ export default function DiscoverScreen() {
           {recentStories.length > 0 && (
             <View style={styles.section}>
               <View style={styles.sectionRow}>
-                <Text style={styles.sectionTitle}>Recently Added</Text>
+                <Text style={styles.sectionTitle}>{t("discover.recentlyAdded")}</Text>
                 <Pressable onPress={() => router.push("/collection?type=recent" as any)}>
-                  <Text style={styles.seeAll}>See all</Text>
+                  <Text style={styles.seeAll}>{t("common.seeAll")}</Text>
                 </Pressable>
               </View>
               <FlatList

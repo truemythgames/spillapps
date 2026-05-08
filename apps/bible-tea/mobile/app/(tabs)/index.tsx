@@ -199,10 +199,10 @@ export default function HomeScreen() {
   const { isConnected } = useNetInfo();
 
   if (!hasData) {
-    if (isConnected === false || !isLoading) {
-      return <OfflineScreen paddingTop={insets.top} onRetry={loadInitialData} />;
+    if (isLoading) {
+      return <SkeletonHome paddingTop={insets.top} />;
     }
-    return <SkeletonHome paddingTop={insets.top} />;
+    return <OfflineScreen paddingTop={insets.top} onRetry={loadInitialData} />;
   }
 
   return (

@@ -7,7 +7,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import { useAppStore } from "@/stores/app";
 import { Skeleton, SkeletonText } from "@/components/Skeleton";
-import { characterImageUrl, getAllCharacters } from "@/lib/content";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
 function SkeletonDiscover({ paddingTop }: { paddingTop: number }) {
@@ -75,14 +74,7 @@ export default function DiscoverScreen() {
     : null;
 
   const characterList = useMemo(() => {
-    if (characters && characters.length > 0) return characters;
-    return getAllCharacters().map((c) => ({
-      id: c.id,
-      name: c.name,
-      subtitle: c.subtitle,
-      image_url: characterImageUrl(c.id),
-      stories: [],
-    }));
+    return characters || [];
   }, [characters]);
 
   const seasonList = useMemo(() => {
@@ -157,14 +149,7 @@ export default function DiscoverScreen() {
                 keyExtractor={(item) => item.id}
                 showsHorizontalScrollIndicator={false}
                 renderItem={({ item }) => {
-                  const localChar = getAllCharacters().find(
-                    (c) => c.name.toLowerCase() === String(item.name ?? "").toLowerCase(),
-                  );
-                  const charCover =
-                    item.image_url ??
-                    (localChar ? characterImageUrl(localChar.id) : null) ??
-                    item.stories?.[0]?.cover_image_url ??
-                    null;
+                  const charCover = item.image_url ?? item.stories?.[0]?.cover_image_url ?? null;
                   return (
                     <Pressable style={styles.charCard} onPress={() => router.push(`/character/${item.name}` as any)}>
                       <Image

@@ -7,18 +7,20 @@ import { useAppStore, type StoryWithCover } from "@/stores/app";
 import { useGate } from "@/lib/useGate";
 import { getLocalProgress } from "@/lib/storage";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
+import { useTranslation } from "react-i18next";
 
 export default function TestamentScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { guardedPush } = useGate();
   const { stories } = useAppStore();
   const progress = getLocalProgress();
 
   const isOT = id === "old";
-  const title = isOT ? "Ancient & Medieval" : "Modern Era";
-  const eraSubtitle = isOT ? "pre-1500" : "post-1500";
+  const title = isOT ? t("testament.old") : t("testament.new");
+  const eraSubtitle = isOT ? t("explore.pre1500") : t("explore.post1500");
 
   const testamentStories = stories.filter((s) =>
     isOT ? s.testament === "old" : s.testament === "new",
@@ -45,7 +47,7 @@ export default function TestamentScreen() {
         <View style={{ width: 40 }} />
       </View>
 
-      <Text style={styles.subtitle}>{eraSubtitle} · {totalStories} stories</Text>
+      <Text style={styles.subtitle}>{eraSubtitle} · {t("common.storiesCount", { count: totalStories })}</Text>
 
       <ScrollView
         contentContainerStyle={{ paddingBottom: 100 }}
@@ -60,7 +62,7 @@ export default function TestamentScreen() {
             <View key={name} style={styles.seasonBlock}>
               <View style={styles.seasonHeader}>
                 <Text style={styles.seasonName}>{name}</Text>
-                <Text style={styles.seasonMeta}>{sectionStories.length} stories · {pct}% done</Text>
+                <Text style={styles.seasonMeta}>{t("testament.progressLabel", { count: sectionStories.length, percent: pct })}</Text>
                 <View style={styles.seasonBar}>
                   <View style={[styles.seasonBarFill, { width: `${pct}%` }]} />
                 </View>

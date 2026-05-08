@@ -29,6 +29,15 @@ async function getToken(): Promise<string | null> {
   }
 }
 
+function getLanguage(): string {
+  try {
+    const i18n = require("./i18n").default;
+    return i18n.language || "en";
+  } catch {
+    return "en";
+  }
+}
+
 async function request<T>(
   path: string,
   options: RequestInit = {}
@@ -37,6 +46,7 @@ async function request<T>(
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
+    "Accept-Language": getLanguage(),
     "X-App-Id": APP_ID,
     ...(options.headers as Record<string, string>),
   };
@@ -182,6 +192,7 @@ export const api = {
     const token = await getToken();
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
+      "Accept-Language": getLanguage(),
       "X-App-Id": APP_ID,
     };
     if (token) headers["Authorization"] = `Bearer ${token}`;

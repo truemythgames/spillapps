@@ -1,17 +1,27 @@
+import { useMemo } from "react";
 import { View, Text, StyleSheet, ScrollView, Pressable } from "react-native";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
-import { getAllCharacters, characterImageUrl } from "@/lib/content";
+import { useAppStore } from "@/stores/app";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
 export default function CharactersScreen() {
   const { t } = useTranslation();
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const characters = getAllCharacters();
+  const apiCharacters = useAppStore((s) => s.characters);
+
+  const characters = useMemo(() => {
+    return apiCharacters.map((ac: any) => ({
+      id: ac.id?.replace(/^ch-/, "") || ac.id,
+      name: ac.name,
+      subtitle: ac.description || "",
+      imageUrl: ac.image_url || "",
+    }));
+  }, [apiCharacters]);
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -31,7 +41,7 @@ export default function CharactersScreen() {
             onPress={() => router.push(`/character/${char.name}` as any)}
           >
             <Image
-              source={{ uri: characterImageUrl(char.id) }}
+              source={{ uri: char.imageUrl }}
               placeholder={undefined}
               style={styles.avatar}
               contentFit="cover"

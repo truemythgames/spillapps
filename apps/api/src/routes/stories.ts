@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import type { Env } from "../types";
 import { mediaUrl } from "../lib/media";
 import { resolvePublicAppId } from "../lib/request-app";
-import { resolveLocale, overlayTranslations, overlayTranslation } from "../lib/locale";
+import { resolveLocale, overlayTranslations, overlayTranslation, overlaySeasonNames } from "../lib/locale";
 
 export const storiesRoutes = new Hono<{ Bindings: Env }>();
 
@@ -40,12 +40,13 @@ storiesRoutes.get("/", async (c) => {
     .bind(...params)
     .all();
 
-  const stories = await overlayTranslations(c.env.DB, result.results as any[], {
+  let stories = await overlayTranslations(c.env.DB, result.results as any[], {
     entityType: "story",
     appId,
     locale,
     fields: ["title", "description"],
   });
+  stories = await overlaySeasonNames(c.env.DB, stories, appId, locale);
 
   return c.json({
     stories: stories.map((s: any) => ({
@@ -71,12 +72,13 @@ storiesRoutes.get("/recently-added", async (c) => {
     .bind(appId, limit)
     .all();
 
-  const stories = await overlayTranslations(c.env.DB, result.results as any[], {
+  let stories = await overlayTranslations(c.env.DB, result.results as any[], {
     entityType: "story",
     appId,
     locale,
     fields: ["title", "description"],
   });
+  stories = await overlaySeasonNames(c.env.DB, stories, appId, locale);
 
   return c.json({
     stories: stories.map((s: any) => ({
@@ -109,12 +111,13 @@ storiesRoutes.get("/popular", async (c) => {
     .bind(appId)
     .all();
 
-  const stories = await overlayTranslations(c.env.DB, result.results as any[], {
+  let stories = await overlayTranslations(c.env.DB, result.results as any[], {
     entityType: "story",
     appId,
     locale,
     fields: ["title", "description"],
   });
+  stories = await overlaySeasonNames(c.env.DB, stories, appId, locale);
 
   const data = {
     stories: stories.map((s: any) => ({
@@ -164,7 +167,10 @@ storiesRoutes.get("/:id", async (c) => {
     appId,
     locale,
     fields: ["title", "description", "transcript"],
+    nullIfMissing: ["transcript"],
   });
+  const [translatedStory] = await overlaySeasonNames(c.env.DB, [story as any], appId, locale);
+  story = translatedStory;
 
   const storyId = (story as any).id;
 

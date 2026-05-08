@@ -14,11 +14,13 @@ import { api } from "@/lib/api";
 import { useAppStore } from "@/stores/app";
 import { getLocalProgress } from "@/lib/storage";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
+import { useTranslation } from "react-i18next";
 
 export default function SeasonScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
   const { isSubscribed } = useAppStore();
 
   const [season, setSeason] = useState<any>(null);
@@ -54,7 +56,7 @@ export default function SeasonScreen() {
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <Pressable style={styles.backBtn} onPress={() => router.back()}>
-        <Text style={styles.backText}>← Back</Text>
+        <Text style={styles.backText}>{t("common.back")}</Text>
       </Pressable>
 
       <FlatList
@@ -66,13 +68,13 @@ export default function SeasonScreen() {
           <View style={styles.header}>
             <Text style={styles.testament}>
               {season?.testament === "old"
-                ? "ANCIENT & MEDIEVAL · PRE-1500"
-                : "MODERN ERA · POST-1500"}
+                ? t("testament.oldEraLabel")
+                : t("testament.newEraLabel")}
             </Text>
             <Text style={styles.seasonTitle}>{season?.name}</Text>
             <Text style={styles.seasonDesc}>{season?.description}</Text>
             <Text style={styles.storyCount}>
-              {stories.length} stories
+              {t("season.storiesCount", { count: stories.length })}
             </Text>
           </View>
         }
@@ -98,11 +100,11 @@ export default function SeasonScreen() {
               <View style={styles.storyInfo}>
                 <Text style={styles.storyTitle}>{item.title}</Text>
                 <Text style={styles.storyMeta}>
-                  {Math.ceil(item.duration_seconds / 60)} min
+                  {t("common.min", { count: Math.ceil(item.duration_seconds / 60) })}
                   {item.is_free
-                    ? "  •  Free"
+                    ? `  •  ${t("common.free")}`
                     : !isSubscribed
-                      ? "  •  Premium"
+                      ? `  •  ${t("common.premium")}`
                       : ""}
                 </Text>
               </View>

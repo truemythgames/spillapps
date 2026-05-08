@@ -13,6 +13,7 @@ import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAppStore } from "@/stores/app";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
+import { useTranslation } from "react-i18next";
 
 // Reviewer access code. Provided to Google Play / App Store reviewers via the
 // "App access" / "Notes for reviewer" sections of the respective consoles.
@@ -22,6 +23,7 @@ const REVIEWER_CODE = "Reviewer2026";
 export default function UnlockScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
   const setSubscribed = useAppStore((s) => s.setSubscribed);
   const [code, setCode] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -37,21 +39,21 @@ export default function UnlockScreen() {
   function submit() {
     const entered = code.trim();
     if (!entered) {
-      setError("Enter a code to continue.");
+      setError(t("unlock.errorEmpty"));
       return;
     }
 
     if (entered === REVIEWER_CODE) {
       setSubscribed(true);
       Alert.alert(
-        "Unlocked",
-        "All content is now available on this device.",
-        [{ text: "OK", onPress: close }]
+        t("unlock.unlocked"),
+        t("unlock.unlockedDesc"),
+        [{ text: t("common.ok"), onPress: close }]
       );
       return;
     }
 
-    setError("That code didn’t work.");
+    setError(t("unlock.errorWrong"));
   }
 
   return (
@@ -88,7 +90,7 @@ export default function UnlockScreen() {
               setCode(v);
               if (error) setError(null);
             }}
-            placeholder="Access code"
+            placeholder={t("unlock.placeholder")}
             placeholderTextColor={colors.textMuted}
             autoCapitalize="none"
             autoCorrect={false}
@@ -100,7 +102,7 @@ export default function UnlockScreen() {
           {error && <Text style={styles.errorText}>{error}</Text>}
 
           <Pressable style={styles.submitBtn} onPress={submit}>
-            <Text style={styles.submitText}>Unlock</Text>
+            <Text style={styles.submitText}>{t("unlock.submit")}</Text>
           </Pressable>
         </View>
       </View>

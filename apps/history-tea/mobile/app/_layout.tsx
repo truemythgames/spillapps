@@ -25,6 +25,7 @@ import { storage, StorageKeys } from "@/lib/storage";
 import { initPurchases } from "@/lib/purchases";
 import { initAnalytics } from "@/lib/analytics";
 import { UpdatePrompt } from "@/components/UpdatePrompt";
+import "@/lib/i18n";
 
 SplashScreen.preventAutoHideAsync();
 

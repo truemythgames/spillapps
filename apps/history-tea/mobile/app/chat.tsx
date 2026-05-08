@@ -15,6 +15,7 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { api } from "@/lib/api";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
+import { useTranslation } from "react-i18next";
 
 interface Message {
   id: string;
@@ -22,51 +23,53 @@ interface Message {
   text: string;
 }
 
-const TOPIC_CONFIG: Record<string, { title: string; placeholder: string; greeting: string }> = {
-  verse: {
-    title: "Find a Story",
-    placeholder: "Tell me what's on your mind...",
-    greeting: "What are you in the mood for? Tell me what you're going through or curious about, and I'll point you to a slice of history that fits.",
-  },
-  advice: {
-    title: "Lessons from History",
-    placeholder: "What's the situation?",
-    greeting: "Spill the tea — what's going on? I'll show you how figures from history navigated something similar, and what we can learn from them.",
-  },
-  explain: {
-    title: "Break It Down",
-    placeholder: "Which event, era, or person?",
-    greeting: "Drop an event, era, person, or even a confusing thing you read — I'll break it down so it actually makes sense.",
-  },
-  story: {
-    title: "Story Chat",
-    placeholder: "Ask anything about this story...",
-    greeting: "",
-  },
-  free: {
-    title: "Ask a Historian",
-    placeholder: "Ask me anything...",
-    greeting: "Hey! Ask me literally anything about world history — wars, empires, mysteries, weird people, lost civilizations. I'm here for all of it.",
-  },
-};
-
 export default function ChatConversation() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
   const { topic, storyId, storyTitle, storyRef } = useLocalSearchParams<{
     topic: string;
     storyId?: string;
     storyTitle?: string;
     storyRef?: string;
   }>();
-  const config = TOPIC_CONFIG[topic ?? "free"] ?? TOPIC_CONFIG.free;
+
+  const topicConfig: Record<string, { title: string; placeholder: string; greeting: string }> = {
+    verse: {
+      title: t("chat.titleVerse"),
+      placeholder: t("chat.placeholderVerse"),
+      greeting: t("chat.greetingVerse"),
+    },
+    advice: {
+      title: t("chat.titleAdvice"),
+      placeholder: t("chat.placeholderAdvice"),
+      greeting: t("chat.greetingAdvice"),
+    },
+    explain: {
+      title: t("chat.titleExplain"),
+      placeholder: t("chat.placeholderExplain"),
+      greeting: t("chat.greetingExplain"),
+    },
+    story: {
+      title: t("chat.titleStory"),
+      placeholder: t("chat.placeholderStory"),
+      greeting: "",
+    },
+    free: {
+      title: t("chat.titleFree"),
+      placeholder: t("chat.placeholderFree"),
+      greeting: t("chat.greetingFree"),
+    },
+  };
+
+  const config = topicConfig[topic ?? "free"] ?? topicConfig.free;
 
   const storyContext = topic === "story" && storyTitle
     ? `I'm listening to "${storyTitle}" (${storyRef || ""}). `
     : "";
 
   const greeting = topic === "story" && storyTitle
-    ? `You're on "${storyTitle}" (${storyRef}). Ask me anything — what really happened, the context behind it, the people involved, or how it shaped what came next.`
+    ? t("chat.greetingStory", { title: storyTitle })
     : config.greeting;
 
   const [conversationId, setConversationId] = useState<string | null>(null);
@@ -113,7 +116,7 @@ export default function ChatConversation() {
       setMessages((prev) =>
         prev.map((m) =>
           m.id === streamingId
-            ? { ...m, text: "Sorry, I couldn't connect. Please try again." }
+            ? { ...m, text: t("chat.errorMessage") }
             : m,
         ),
       );

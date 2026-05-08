@@ -27,13 +27,15 @@ import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { usePlayerStore } from "@/stores/player";
 import { useAppStore } from "@/stores/app";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
-import {
-  getStoryById,
-  transcriptUrl,
-  type Speaker,
-} from "@/lib/content";
 import { api } from "@/lib/api";
 import { storage } from "@/lib/storage";
+
+interface Speaker {
+  key: string;
+  name: string;
+  audioUrl: string;
+}
+import { useTranslation } from "react-i18next";
 
 const { width } = Dimensions.get("window");
 const COVER_HEIGHT = 420;
@@ -42,6 +44,7 @@ export default function StoryScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
 
   const {
     currentStory,
@@ -58,7 +61,6 @@ export default function StoryScreen() {
   const toggleLike = useAppStore((s) => s.toggleLike);
   const isLiked = likedStoryIds.includes(id);
 
-  const story = getStoryById(id);
   const storeStory = useAppStore((s) => s.stories.find((st) => st.id === id));
   const [speakers, setSpeakers] = useState<Speaker[]>([]);
   const [activeSpeaker, setActiveSpeaker] = useState<Speaker | null>(null);
@@ -66,6 +68,7 @@ export default function StoryScreen() {
 
   const coverImageUrl = storyDetail?.cover_image_url ?? storeStory?.cover_image_url ?? null;
   const apiStoryId = storeStory?.apiId ?? id;
+  const story = storeStory || storyDetail;
 
   useEffect(() => {
     let cancelled = false;
@@ -166,35 +169,11 @@ export default function StoryScreen() {
       return;
     }
 
-    const urlsToTry: string[] = [];
-    if (coverImageUrl) {
-      const derived = coverImageUrl.replace(/\/cover\.webp(\?.*)?$/, "/transcript.md");
-      if (derived !== coverImageUrl) urlsToTry.push(derived);
-    }
-    urlsToTry.push(transcriptUrl(id));
+    setTranscript(null);
+    setLoadingTranscript(false);
+  }, [id, storyDetail?.transcript]);
 
-    let cancelled = false;
-    (async () => {
-      for (const url of urlsToTry) {
-        try {
-          const r = await fetch(url);
-          if (r.ok) {
-            const text = await r.text();
-            if (cancelled) return;
-            const stripped = text.replace(/^#\s+.*\n+\*.*\*\n*/m, "");
-            setTranscript(stripped);
-            setLoadingTranscript(false);
-            return;
-          }
-        } catch {}
-      }
-      if (!cancelled) {
-        setTranscript(null);
-        setLoadingTranscript(false);
-      }
-    })();
-    return () => { cancelled = true; };
-  }, [id, coverImageUrl, storyDetail?.transcript]);
+  const displayTitle = storyDetail?.title ?? storeStory?.title ?? "";
 
   const handlePlayPause = useCallback(async () => {
     if (!story || !activeSpeaker) return;
@@ -202,13 +181,13 @@ export default function StoryScreen() {
       isPlaying ? await pause() : await resume();
     } else {
       play(
-        { id: story.id, title: story.title, cover_image_url: coverImageUrl },
+        { id, title: displayTitle, cover_image_url: coverImageUrl },
         { id: activeSpeaker.key, name: activeSpeaker.name },
         activeSpeaker.audioUrl
       );
       router.push("/player");
     }
-  }, [story, activeSpeaker, isThisLoaded, isPlaying]);
+  }, [story, activeSpeaker, isThisLoaded, isPlaying, displayTitle]);
 
   const handleSpeakerSelect = useCallback(
     async (speaker: Speaker) => {
@@ -217,20 +196,20 @@ export default function StoryScreen() {
       closeSheet();
       if (!story) return;
       await play(
-        { id: story.id, title: story.title, cover_image_url: coverImageUrl },
+        { id, title: displayTitle, cover_image_url: coverImageUrl },
         { id: speaker.key, name: speaker.name },
         speaker.audioUrl
       );
     },
-    [story, id]
+    [story, id, displayTitle]
   );
 
   if (!story) {
     return (
       <View style={[styles.center, { paddingTop: insets.top }]}>
-        <Text style={styles.errorText}>Story not found</Text>
+        <Text style={styles.errorText}>{t("story.notFound")}</Text>
         <Pressable onPress={() => router.back()} style={{ marginTop: 16 }}>
-          <Text style={{ fontFamily: fonts.bodyMedium, fontSize: fontSize.md, color: colors.primary }}>Go back</Text>
+          <Text style={{ fontFamily: fonts.bodyMedium, fontSize: fontSize.md, color: colors.primary }}>{t("story.goBack")}</Text>
         </Pressable>
       </View>
     );
@@ -280,8 +259,8 @@ export default function StoryScreen() {
 
           {/* Title + meta overlaid at bottom */}
           <View style={styles.coverContent}>
-            <Text style={styles.heroTitle}>{story.title}</Text>
-            <Text style={styles.heroRef}>{story.bibleRef}</Text>
+            <Text style={styles.heroTitle}>{displayTitle}</Text>
+            <Text style={styles.heroRef}>{storyDetail?.bible_ref ?? storeStory?.bibleRef ?? ""}</Text>
 
             {/* Speaker + Length row */}
             {hasAudio && (
@@ -290,17 +269,17 @@ export default function StoryScreen() {
                   style={styles.metaItem}
                   onPress={openSheet}
                 >
-                  <Text style={styles.metaLabel}>Speaker</Text>
+                  <Text style={styles.metaLabel}>{t("story.speaker")}</Text>
                   <View style={styles.metaValueRow}>
                     <Text style={styles.metaValue}>
-                      {isBuffering && isThisLoaded ? "Loading..." : activeSpeaker?.name ?? "—"}
+                      {isBuffering && isThisLoaded ? t("story.loading") : activeSpeaker?.name ?? "—"}
                     </Text>
                     <Ionicons name="chevron-down" size={14} color="#fff" />
                   </View>
                 </Pressable>
                 <View style={styles.metaDivider} />
                 <View style={styles.metaItem}>
-                  <Text style={styles.metaLabel}>Length</Text>
+                  <Text style={styles.metaLabel}>{t("story.length")}</Text>
                   <Text style={styles.metaValue}>
                     {estimatedMinutes ? `${estimatedMinutes} min` : "—"}
                   </Text>
@@ -320,16 +299,16 @@ export default function StoryScreen() {
                 color={colors.background}
               />
               <Text style={styles.playSessionText}>
-                {isThisPlaying ? "Pause" : "Play Session"}
+                {isThisPlaying ? t("story.pause") : t("story.playSession")}
               </Text>
             </Pressable>
           )}
           <Pressable
             style={styles.askBtn}
-            onPress={() => router.push(`/chat?topic=story&storyId=${id}&storyTitle=${encodeURIComponent(story.title)}&storyRef=${encodeURIComponent(story.bibleRef)}` as any)}
+            onPress={() => router.push(`/chat?topic=story&storyId=${id}&storyTitle=${encodeURIComponent(displayTitle)}&storyRef=${encodeURIComponent(storyDetail?.bible_ref ?? storeStory?.bibleRef ?? "")}` as any)}
           >
             <Ionicons name="sparkles" size={18} color={colors.text} />
-            <Text style={styles.askBtnText}>Ask a question</Text>
+            <Text style={styles.askBtnText}>{t("story.askQuestion")}</Text>
           </Pressable>
         </View>
 
@@ -341,7 +320,7 @@ export default function StoryScreen() {
             <Markdown style={markdownStyles}>{transcript}</Markdown>
           ) : (
             <Text style={styles.noTranscript}>
-              Transcript not yet generated.
+              {t("story.noTranscript")}
             </Text>
           )}
         </View>
@@ -365,7 +344,7 @@ export default function StoryScreen() {
               ]}
             >
               <View style={styles.sheetHandle} />
-              <Text style={styles.sheetTitle}>Choose a voice</Text>
+              <Text style={styles.sheetTitle}>{t("story.chooseVoice")}</Text>
               {speakers.map((s) => (
                 <Pressable
                   key={s.key}

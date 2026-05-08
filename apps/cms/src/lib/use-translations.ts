@@ -88,11 +88,11 @@ export function useTranslations(entityType: string) {
 export function translatedFields(entityType: string): string[] {
   switch (entityType) {
     case "story":
-      return ["title", "description"];
+      return ["title", "description", "transcript"];
     case "season":
       return ["name", "description"];
     case "character":
-      return ["name", "description"];
+      return ["name", "description", "overview"];
     case "playlist":
       return ["name", "description"];
     default:

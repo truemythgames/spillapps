@@ -3,13 +3,25 @@ import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { getAllCharacters, characterImageUrl } from "@/lib/content";
+import { useMemo } from "react";
+import { useAppStore } from "@/stores/app";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
+import { useTranslation } from "react-i18next";
 
 export default function CharactersScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const characters = getAllCharacters();
+  const { t } = useTranslation();
+  const apiCharacters = useAppStore((s) => s.characters);
+
+  const characters = useMemo(() => {
+    return apiCharacters.map((ac: any) => ({
+      id: ac.id?.replace(/^ch-/, "") || ac.id,
+      name: ac.name,
+      subtitle: ac.description || "",
+      imageUrl: ac.image_url || "",
+    }));
+  }, [apiCharacters]);
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -17,7 +29,7 @@ export default function CharactersScreen() {
         <Pressable style={styles.backBtn} onPress={() => router.back()}>
           <Ionicons name="chevron-back" size={24} color={colors.text} />
         </Pressable>
-        <Text style={styles.headerTitle}>Historical Figures</Text>
+        <Text style={styles.headerTitle}>{t("characters.title")}</Text>
         <View style={{ width: 40 }} />
       </View>
 
@@ -29,7 +41,7 @@ export default function CharactersScreen() {
             onPress={() => router.push(`/character/${char.name}` as any)}
           >
             <Image
-              source={{ uri: characterImageUrl(char.id) }}
+              source={{ uri: char.imageUrl }}
               placeholder={undefined}
               style={styles.avatar}
               contentFit="cover"

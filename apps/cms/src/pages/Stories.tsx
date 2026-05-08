@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 import { adminApi } from "../lib/api";
 import { useTranslations } from "../lib/use-translations";
 import { InlineEditor } from "../components/InlineEditor";
+import { useCmsApp } from "../lib/cms-app-context";
 
-type Filter = "all" | "old" | "new" | "untranslated" | "no_audio";
+type Filter = string;
 
 interface ApiStory {
   id: string;
@@ -33,6 +34,9 @@ export function Stories() {
   const [seasons, setSeasons] = useState<any[]>([]);
   const [addForm, setAddForm] = useState({ title: "", slug: "", season_id: "", description: "" });
   const [adding, setAdding] = useState(false);
+
+  const { categoryLabels } = useCmsApp();
+  const hasCategories = !!categoryLabels;
 
   const { locale, translations, loading: tLoading, saving: tSaving, saveTranslation, getTranslated, hasTranslation, isTranslating } =
     useTranslations("story");
@@ -83,19 +87,25 @@ export function Stories() {
     setEditingId(null);
   }
 
+  const categoryCounts = useMemo(() => {
+    if (!hasCategories) return {};
+    const counts: Record<string, number> = {};
+    for (const key of Object.keys(categoryLabels)) {
+      counts[key] = stories.filter((s) => s.testament === key).length;
+    }
+    return counts;
+  }, [stories, categoryLabels, hasCategories]);
+
   const filtered = useMemo(() => {
     let list = stories;
-    if (filter === "old") list = list.filter((s) => s.testament === "old");
-    if (filter === "new") list = list.filter((s) => s.testament === "new");
+    if (hasCategories && categoryLabels[filter]) {
+      list = list.filter((s) => s.testament === filter);
+    }
     if (filter === "untranslated" && isTranslating) {
-      list = list.filter((s) => !hasTranslation(s.id, "title"));
+      list = list.filter((s) => !hasTranslation(s.id, "title") || !hasTranslation(s.id, "transcript"));
     }
     if (filter === "no_audio") {
-      if (isTranslating) {
-        list = list.filter((s) => !hasTranslation(s.id, "transcript"));
-      } else {
-        list = list.filter((s) => !s.audio_count);
-      }
+      list = isTranslating ? list : list.filter((s) => !s.audio_count);
     }
     if (search) {
       const q = search.toLowerCase();
@@ -108,15 +118,11 @@ export function Stories() {
       );
     }
     return list;
-  }, [stories, filter, search, translations, isTranslating, getTranslated, hasTranslation]);
+  }, [stories, filter, search, translations, isTranslating, getTranslated, hasTranslation, categoryLabels, hasCategories]);
 
-  const oldCount = stories.filter((s) => s.testament === "old").length;
-  const newCount = stories.filter((s) => s.testament === "new").length;
-  const noAudioCount = isTranslating
-    ? stories.filter((s) => !hasTranslation(s.id, "transcript")).length
-    : stories.filter((s) => !s.audio_count).length;
+  const noAudioCount = isTranslating ? stories.length : stories.filter((s) => !s.audio_count).length;
   const untranslatedCount = isTranslating
-    ? stories.filter((s) => !hasTranslation(s.id, "title")).length
+    ? stories.filter((s) => !hasTranslation(s.id, "title") || !hasTranslation(s.id, "transcript")).length
     : 0;
   const translatedCount = stories.length - untranslatedCount;
 
@@ -126,7 +132,10 @@ export function Stories() {
         <div>
           <h2 className="text-2xl font-bold">Stories</h2>
           <p className="text-gray-500 text-sm mt-1">
-            {stories.length} total · {oldCount} Old Testament · {newCount} New Testament
+            {stories.length} total
+            {hasCategories && Object.entries(categoryLabels).map(([key, label]) => (
+              <span key={key}> · {categoryCounts[key] || 0} {label}</span>
+            ))}
             {isTranslating && !tLoading && (
               <span className="ml-2">
                 · <span className="text-green-400">{translatedCount}</span> translated ·{" "}
@@ -196,10 +205,12 @@ export function Stories() {
       <div className="flex items-center gap-3 mb-6 flex-wrap">
         {([
           { key: "all" as Filter, label: `All (${stories.length})` },
-          { key: "old" as Filter, label: `Old Testament (${oldCount})` },
-          { key: "new" as Filter, label: `New Testament (${newCount})` },
-          { key: "no_audio" as Filter, label: isTranslating ? `No Transcript (${noAudioCount})` : `No Audio (${noAudioCount})` },
-          ...(isTranslating
+          ...(hasCategories ? Object.entries(categoryLabels).map(([key, label]) => ({
+            key: key as Filter,
+            label: `${label} (${categoryCounts[key] || 0})`,
+          })) : []),
+          ...(noAudioCount > 0 ? [{ key: "no_audio" as Filter, label: `No Audio (${noAudioCount})` }] : []),
+          ...(isTranslating && untranslatedCount > 0
             ? [{ key: "untranslated" as Filter, label: `Missing (${untranslatedCount})` }]
             : []),
         ]).map((f) => (
@@ -254,9 +265,14 @@ export function Stories() {
                     </p>
                   </Link>
                   <div className="flex items-center gap-2 flex-shrink-0">
-                    {!story.audio_count && (
+                    {(isTranslating || !story.audio_count) && (
                       <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-red-500/15 text-red-400">
                         NO AUDIO
+                      </span>
+                    )}
+                    {isTranslating && !hasTranslation(story.id, "transcript") && (
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-red-500/15 text-red-400">
+                        NO TRANSCRIPT
                       </span>
                     )}
                     {isTranslating && (
@@ -268,13 +284,11 @@ export function Stories() {
                         {locale.toUpperCase()}
                       </span>
                     )}
-                    <span
-                      className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
-                        story.testament === "old" ? "bg-orange-500/10 text-orange-400" : "bg-green-500/10 text-green-400"
-                      }`}
-                    >
-                      {story.testament === "old" ? "OT" : "NT"}
-                    </span>
+                    {hasCategories && story.testament && categoryLabels[story.testament] && (
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-white/5 text-gray-400">
+                        {categoryLabels[story.testament]}
+                      </span>
+                    )}
                     <button
                       onClick={() => setEditingId(isEditing ? null : story.id)}
                       className="text-xs text-primary hover:text-primary/80 transition-colors px-2 py-1"

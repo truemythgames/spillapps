@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { View, Text, StyleSheet, Pressable, Dimensions, Alert, ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
 import { LinearGradient } from "expo-linear-gradient";
 import { Image } from "expo-image";
 import Animated, {
@@ -28,6 +29,7 @@ let YEARLY_OFFER_SHOWN_THIS_SESSION = false;
 export default function PaywallScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
   const setSubscribed = useAppStore((s) => s.setSubscribed);
   const isSubscribed = useAppStore((s) => s.isSubscribed);
 
@@ -150,8 +152,8 @@ export default function PaywallScreen() {
 
     if (!pkg) {
       Alert.alert(
-        "Subscription unavailable",
-        "We couldn't load this plan right now. Please check your connection and try again.",
+        t("paywall.purchaseFailed"),
+        t("paywall.purchaseError"),
       );
       return;
     }
@@ -164,7 +166,7 @@ export default function PaywallScreen() {
         router.replace("/post-purchase" as any);
       }
     } catch (e: any) {
-      Alert.alert("Purchase failed", e?.message ?? "Something went wrong. Please try again.");
+      Alert.alert(t("paywall.purchaseFailed"), e?.message ?? t("paywall.purchaseError"));
     } finally {
       setPurchasing(false);
     }
@@ -177,13 +179,13 @@ export default function PaywallScreen() {
       const success = await restorePurchases();
       if (success) {
         setSubscribed(true);
-        Alert.alert("Restored!", "Your subscription has been restored.");
+        Alert.alert(t("paywall.restored"), t("paywall.restoredDesc"));
         goBack();
       } else {
-        Alert.alert("Nothing to restore", "No active subscription found for this account.");
+        Alert.alert(t("paywall.nothingToRestore"), t("paywall.nothingToRestoreDesc"));
       }
     } catch {
-      Alert.alert("Restore failed", "Please try again later.");
+      Alert.alert(t("paywall.restoreFailed"), t("paywall.restoreFailedDesc"));
     } finally {
       setRestoring(false);
     }
@@ -201,8 +203,8 @@ export default function PaywallScreen() {
         <XBtn onPress={dismiss} disabled={busy || purchasing} top={insets.top + 8} />
 
         <View style={[styles.body, { paddingBottom: insets.bottom + 16 }]}>
-          <Text style={styles.title}>Unlock History Tea</Text>
-          <Text style={styles.sub}>3-day free trial.</Text>
+          <Text style={styles.title}>{t("paywall.title")}</Text>
+          <Text style={styles.sub}>{t("paywall.trialSubtitle")}</Text>
 
           {returning ? (
             <>
@@ -248,11 +250,11 @@ export default function PaywallScreen() {
                   {plan === "weekly" && <View style={styles.radioDot} />}
                 </View>
                 <View style={{ flex: 1 }}>
-                  <Text style={styles.planName}>Weekly Access</Text>
+                  <Text style={styles.planName}>{t("paywall.weeklyAccess")}</Text>
                   <Text style={styles.planPrice}>
                     {weeklyFullPrice
-                      ? `3 days free then ${weeklyFullPrice}/week`
-                      : "3 days free"}
+                      ? t("paywall.threeDaysFreeThen", { price: weeklyFullPrice })
+                      : t("paywall.threeDaysFree")}
                   </Text>
                 </View>
               </Pressable>
@@ -266,16 +268,16 @@ export default function PaywallScreen() {
                   {plan === "quarterly" && <View style={styles.radioDot} />}
                 </View>
                 <View style={{ flex: 1 }}>
-                  <Text style={styles.planName}>3 Month Access</Text>
+                  <Text style={styles.planName}>{t("paywall.threeMonthAccess")}</Text>
                   <Text style={styles.planPrice}>
                     {quarterlyFullPriceReturning
-                      ? `3 days free then ${quarterlyFullPriceReturning}/3 mo`
-                      : "3 days free"}
+                      ? t("paywall.threeDaysFreeThenQuarterly", { price: quarterlyFullPriceReturning })
+                      : t("paywall.threeDaysFree")}
                   </Text>
                 </View>
                 {!showYearlyOffer && (
                   <View style={styles.discountBadge}>
-                    <Text style={styles.discountBadgeText}>50% off</Text>
+                    <Text style={styles.discountBadgeText}>{t("paywall.fiftyOff")}</Text>
                   </View>
                 )}
               </Pressable>
@@ -293,16 +295,16 @@ export default function PaywallScreen() {
                       ? yearlyOfferPrice
                         ? `Subscribe — ${yearlyOfferPrice}/year`
                         : "Subscribe"
-                      : "Try for FREE"}
+                      : t("paywall.tryForFree")}
                   </Text>
                 )}
               </Pressable>
               {plan === "offer" && yearlyOfferPrice ? (
                 <Text style={styles.pricingNote}>
-                  Auto-renews yearly at {yearlyOfferPrice}.{"\n"}Cancel anytime.
+                  Auto-renews yearly at {yearlyOfferPrice}.{"\n"}{t("paywall.cancelAnytime")}
                 </Text>
               ) : null}
-              <Legal onRestore={handleRestore} restoring={restoring} disabled={purchasing} />
+              <Legal onRestore={handleRestore} restoring={restoring} disabled={purchasing} t={t} />
             </>
           ) : (
             <>
@@ -310,8 +312,8 @@ export default function PaywallScreen() {
                 <Text style={styles.noPayCheck}>✓</Text>
                 <Text style={styles.noPayText}>
                   {plan === "weekly"
-                    ? "No Payment Due Now"
-                    : "No commitment, cancel anytime"}
+                    ? t("paywall.noPaymentDue")
+                    : t("paywall.noCommitment")}
                 </Text>
               </View>
 
@@ -321,8 +323,8 @@ export default function PaywallScreen() {
                 disabled={purchasing}
               >
                 <View style={{ flex: 1 }}>
-                  <Text style={styles.planName}>Free</Text>
-                  <Text style={styles.planPrice}>3 day trial</Text>
+                  <Text style={styles.planName}>{t("paywall.freePlan")}</Text>
+                  <Text style={styles.planPrice}>{t("paywall.threeDayTrial")}</Text>
                 </View>
                 <View style={styles.radio}>
                   {plan === "weekly" && <View style={styles.radioDot} />}
@@ -336,7 +338,7 @@ export default function PaywallScreen() {
               >
                 <View style={{ flex: 1 }}>
                   <Text style={styles.planName}>{quarterly30dayIntroPrice || "—"}</Text>
-                  <Text style={styles.planPrice}>30-Day trial</Text>
+                  <Text style={styles.planPrice}>{t("paywall.thirtyDayTrial")}</Text>
                 </View>
                 <View style={styles.radio}>
                   {plan === "quarterly" && <View style={styles.radioDot} />}
@@ -371,11 +373,11 @@ export default function PaywallScreen() {
                 ) : (
                   <Text style={styles.ctaText}>
                     {plan === "weekly"
-                      ? "Try for free"
+                      ? t("paywall.tryForFreeLower")
                       : plan === "quarterly"
                         ? quarterly30dayIntroPrice
-                          ? `Redeem 30 days for ${quarterly30dayIntroPrice}`
-                          : "Redeem 30 days"
+                          ? t("paywall.redeemThirtyDaysFor", { price: quarterly30dayIntroPrice })
+                          : t("paywall.redeemThirtyDays")
                         : weeklyOfferPrice
                           ? `Subscribe — ${weeklyOfferPrice}/week`
                           : "Subscribe"}
@@ -385,17 +387,17 @@ export default function PaywallScreen() {
               <Text style={styles.pricingNote}>
                 {plan === "weekly"
                   ? quarterlyFullPriceOnboarding
-                    ? `3 days free, then ${quarterlyFullPriceOnboarding}/quarterly\nCancel anytime`
-                    : "3 days free\nCancel anytime"
+                    ? t("paywall.pricingFreeTrial", { price: quarterlyFullPriceOnboarding })
+                    : t("paywall.pricingFreeTrialShort")
                   : plan === "quarterly"
                     ? quarterly30dayIntroPrice && quarterly30dayFullPrice
-                      ? `30 days for ${quarterly30dayIntroPrice}, then ${quarterly30dayFullPrice}/quarterly\nCancel anytime`
-                      : "Cancel anytime"
+                      ? t("paywall.pricingThirtyDay", { introPrice: quarterly30dayIntroPrice, price: quarterly30dayFullPrice })
+                      : t("paywall.cancelAnytime")
                     : weeklyOfferPrice
-                      ? `Auto-renews weekly at ${weeklyOfferPrice}.\nCancel anytime.`
-                      : "Cancel anytime"}
+                      ? `Auto-renews weekly at ${weeklyOfferPrice}.\n${t("paywall.cancelAnytime")}`
+                      : t("paywall.cancelAnytime")}
               </Text>
-              <Legal onRestore={handleRestore} restoring={restoring} disabled={purchasing} />
+              <Legal onRestore={handleRestore} restoring={restoring} disabled={purchasing} t={t} />
             </>
           )}
         </View>
@@ -426,10 +428,11 @@ function XBtn({ onPress, disabled, top }: { onPress: () => void; disabled: boole
 }
 
 function NoPay() {
+  const { t } = useTranslation();
   return (
     <View style={styles.noPay}>
       <Text style={styles.noPayCheck}>✓</Text>
-      <Text style={styles.noPayText}>No Payment Due Now</Text>
+      <Text style={styles.noPayText}>{t("paywall.noPaymentDue")}</Text>
     </View>
   );
 }
@@ -438,22 +441,24 @@ function Legal({
   onRestore,
   restoring,
   disabled,
+  t,
 }: {
   onRestore?: () => void;
   restoring?: boolean;
   disabled?: boolean;
+  t: (key: string) => string;
 }) {
   return (
     <View style={styles.legalRow}>
-      <Text style={styles.legalLink}>Terms</Text>
+      <Text style={styles.legalLink}>{t("paywall.terms")}</Text>
       <Text style={styles.legalDot}>·</Text>
-      <Text style={styles.legalLink}>Privacy Policy</Text>
+      <Text style={styles.legalLink}>{t("paywall.privacyPolicy")}</Text>
       <Text style={styles.legalDot}>·</Text>
       <Pressable onPress={onRestore} hitSlop={8} disabled={disabled || restoring}>
         {restoring ? (
           <ActivityIndicator size="small" color={colors.textMuted} />
         ) : (
-          <Text style={styles.legalLink}>Restore</Text>
+          <Text style={styles.legalLink}>{t("paywall.restore")}</Text>
         )}
       </Pressable>
     </View>

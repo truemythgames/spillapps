@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, {
@@ -71,75 +72,6 @@ const BACKGROUNDS = [
   LOCAL_COVERS["moon-landing"],                // rate
 ];
 
-const Q1_OPTIONS = [
-  "Barely paid attention in class",
-  "I know the highlights",
-  "I read history for fun",
-  "Don't test me, I'll win",
-];
-
-const Q1_COMMENTS: Record<string, string> = {
-  "Barely paid attention in class":
-    "Perfect — History Tea makes it easy to jump in. No textbooks, no dates to memorize, just press play.",
-  "I know the highlights":
-    "Great start! You'll hear the stories behind the stories you already know.",
-  "I read history for fun":
-    "You're going to love how we tell these. Same events, none of the dry textbook energy.",
-  "Don't test me, I'll win":
-    "Then you already know history is the best soap opera ever written. Welcome home.",
-};
-
-const Q2_OPTIONS = [
-  "Listen to history stories",
-  "Meet the wildest characters",
-  "Build a daily habit",
-  "Sound smart at dinner parties",
-  "Just curious",
-];
-
-const Q2_COMMENTS: Record<string, string> = {
-  "Listen to history stories":
-    "You're in the right place — short audio stories you can listen to anytime, anywhere.",
-  "Meet the wildest characters":
-    "From Cleopatra to Genghis Khan to Napoleon — history's most chaotic personalities, all in one place.",
-  "Build a daily habit":
-    "One story a day. Track your streak, build consistency, become the most interesting person in any room.",
-  "Sound smart at dinner parties":
-    "Honestly the most respectable use of an app. You'll have a wild fact for every occasion.",
-  "Just curious":
-    "Curiosity is how every great historian started. Let's show you what History Tea is all about.",
-};
-
-interface FeatureSlide {
-  title: string;
-  image: number;
-}
-
-const FEATURE_SLIDES: FeatureSlide[] = [
-  {
-    title: "History like you've\nnever heard it told",
-    image: SCREENSHOTS.home,
-  },
-  {
-    title: "Every era, every legend —\nall in one place",
-    image: SCREENSHOTS.stories,
-  },
-  {
-    title: "The past, finally\nin your language",
-    image: SCREENSHOTS.chat,
-  },
-];
-
-const REVIEWS = [
-  {
-    text: "I never thought I'd binge history on my commute. This app changed that.",
-    name: "Mia R.",
-  },
-  {
-    text: "The narrators actually make you feel like you're IN the room when Caesar gets stabbed. Obsessed.",
-    name: "Daniel P.",
-  },
-];
 
 type Step =
   | "welcome"
@@ -172,11 +104,38 @@ const SHOWCASE_START_IDX = STEP_ORDER.indexOf("feature1");
 export default function OnboardingScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
   const [stepIdx, setStepIdx] = useState(0);
   const [q1Answer, setQ1Answer] = useState<string | null>(null);
   const [q2Answer, setQ2Answer] = useState<string | null>(null);
   const [showcaseIdx, setShowcaseIdx] = useState(0);
   const showcaseRef = useRef<FlatList>(null);
+
+  const Q1_ITEMS = [
+    { key: "q1Opt1", label: t("onboarding.q1Opt1"), comment: t("onboarding.q1Comment1") },
+    { key: "q1Opt2", label: t("onboarding.q1Opt2"), comment: t("onboarding.q1Comment2") },
+    { key: "q1Opt3", label: t("onboarding.q1Opt3"), comment: t("onboarding.q1Comment3") },
+    { key: "q1Opt4", label: t("onboarding.q1Opt4"), comment: t("onboarding.q1Comment4") },
+  ];
+
+  const Q2_ITEMS = [
+    { key: "q2Opt1", label: t("onboarding.q2Opt1"), comment: t("onboarding.q2Comment1") },
+    { key: "q2Opt2", label: t("onboarding.q2Opt2"), comment: t("onboarding.q2Comment2") },
+    { key: "q2Opt3", label: t("onboarding.q2Opt3"), comment: t("onboarding.q2Comment3") },
+    { key: "q2Opt4", label: t("onboarding.q2Opt4"), comment: t("onboarding.q2Comment4") },
+    { key: "q2Opt5", label: t("onboarding.q2Opt5"), comment: t("onboarding.q2Comment5") },
+  ];
+
+  const FEATURE_SLIDES = [
+    { title: t("onboarding.feature1"), image: SCREENSHOTS.home },
+    { title: t("onboarding.feature2"), image: SCREENSHOTS.stories },
+    { title: t("onboarding.feature3"), image: SCREENSHOTS.chat },
+  ];
+
+  const REVIEWS = [
+    { text: t("onboarding.review1"), name: t("onboarding.review1Name") },
+    { text: t("onboarding.review2"), name: t("onboarding.review2Name") },
+  ];
 
   const fadeAnim = useSharedValue(1);
   const slideAnim = useSharedValue(0);
@@ -295,7 +254,7 @@ export default function OnboardingScreen() {
       case "reviews":
         return (
           <View style={styles.reviewsContent}>
-            <Text style={styles.reviewsTitle}>Don't just take our word for it</Text>
+            <Text style={styles.reviewsTitle}>{t("onboarding.reviewsTitle")}</Text>
             <Text style={styles.starsRow}>⭐⭐⭐⭐⭐</Text>
             {REVIEWS.map((r, i) => (
               <View key={i} style={styles.reviewCard}>
@@ -308,14 +267,13 @@ export default function OnboardingScreen() {
       case "rate":
         return (
           <View style={styles.rateContent}>
-            <Text style={styles.rateTitle}>Rate the App</Text>
+            <Text style={styles.rateTitle}>{t("onboarding.rateTitle")}</Text>
             <Text style={styles.starsRowLarge}>⭐⭐⭐⭐⭐</Text>
             <View style={styles.rateCard}>
               <Text style={styles.reviewText}>
-                "I put this on during my morning walk and now I know more about
-                Genghis Khan than I ever needed to. Worth it."
+                "{t("onboarding.rateReview")}"
               </Text>
-              <Text style={styles.reviewName}>— Priya S.</Text>
+              <Text style={styles.reviewName}>— {t("onboarding.rateReviewName")}</Text>
             </View>
           </View>
         );
@@ -331,7 +289,7 @@ export default function OnboardingScreen() {
           <View style={styles.welcomeContent}>
             <View style={styles.welcomeSpacer} />
             <Text style={styles.welcomeSub}>
-              Spill the tea.{"\n"}Learn the history.
+              {t("onboarding.welcome")}
             </Text>
           </View>
         );
@@ -339,27 +297,27 @@ export default function OnboardingScreen() {
       case "q1":
         return (
           <View style={styles.questionContent}>
-            <Text style={styles.stepLabel}>Question 1 of 2</Text>
+            <Text style={styles.stepLabel}>{t("onboarding.q1Label")}</Text>
             <Text style={styles.questionTitle}>
-              How much history{"\n"}do you actually know?
+              {t("onboarding.q1Title")}
             </Text>
             <View style={styles.optionsContainer}>
-              {Q1_OPTIONS.map((opt) => (
+              {Q1_ITEMS.map((item) => (
                 <Pressable
-                  key={opt}
+                  key={item.key}
                   style={[
                     styles.optionPill,
-                    q1Answer === opt && styles.optionPillSelected,
+                    q1Answer === item.key && styles.optionPillSelected,
                   ]}
-                  onPress={() => setQ1Answer(opt)}
+                  onPress={() => setQ1Answer(item.key)}
                 >
                   <Text
                     style={[
                       styles.optionText,
-                      q1Answer === opt && styles.optionTextSelected,
+                      q1Answer === item.key && styles.optionTextSelected,
                     ]}
                   >
-                    {opt}
+                    {item.label}
                   </Text>
                 </Pressable>
               ))}
@@ -371,7 +329,7 @@ export default function OnboardingScreen() {
         return (
           <View style={styles.commentContent}>
             <Text style={styles.commentText}>
-              {Q1_COMMENTS[q1Answer!] ?? Q1_COMMENTS["Barely paid attention in class"]}
+              {Q1_ITEMS.find((i) => i.key === q1Answer)?.comment ?? Q1_ITEMS[0].comment}
             </Text>
           </View>
         );
@@ -379,27 +337,27 @@ export default function OnboardingScreen() {
       case "q2":
         return (
           <View style={styles.questionContent}>
-            <Text style={styles.stepLabel}>Question 2 of 2</Text>
+            <Text style={styles.stepLabel}>{t("onboarding.q2Label")}</Text>
             <Text style={styles.questionTitle}>
-              What brings you to{"\n"}History Tea?
+              {t("onboarding.q2Title")}
             </Text>
             <View style={styles.optionsContainer}>
-              {Q2_OPTIONS.map((opt) => (
+              {Q2_ITEMS.map((item) => (
                 <Pressable
-                  key={opt}
+                  key={item.key}
                   style={[
                     styles.optionPill,
-                    q2Answer === opt && styles.optionPillSelected,
+                    q2Answer === item.key && styles.optionPillSelected,
                   ]}
-                  onPress={() => setQ2Answer(opt)}
+                  onPress={() => setQ2Answer(item.key)}
                 >
                   <Text
                     style={[
                       styles.optionText,
-                      q2Answer === opt && styles.optionTextSelected,
+                      q2Answer === item.key && styles.optionTextSelected,
                     ]}
                   >
-                    {opt}
+                    {item.label}
                   </Text>
                 </Pressable>
               ))}
@@ -411,7 +369,7 @@ export default function OnboardingScreen() {
         return (
           <View style={styles.commentContentTop}>
             <Text style={styles.commentText}>
-              {Q2_COMMENTS[q2Answer!] ?? Q2_COMMENTS["Just curious"]}
+              {Q2_ITEMS.find((i) => i.key === q2Answer)?.comment ?? Q2_ITEMS[4].comment}
             </Text>
           </View>
         );
@@ -426,10 +384,10 @@ export default function OnboardingScreen() {
   const isLastShowcase = showcaseIdx === SHOWCASE_STEPS.length - 1;
   const showBack = inShowcase ? true : stepIdx > 0;
   const btnLabel = step === "welcome"
-    ? "Get Started"
+    ? t("onboarding.getStarted")
     : inShowcase && isLastShowcase
-      ? "Continue"
-      : "Next";
+      ? t("onboarding.continue")
+      : t("onboarding.next");
 
   return (
     <View style={styles.root}>

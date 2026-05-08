@@ -7,10 +7,12 @@ import { useAppStore } from "@/stores/app";
 import { useAuthStore } from "@/stores/auth";
 import { usePlayerStore } from "@/stores/player";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
+import { useTranslation } from "react-i18next";
 
 export default function SettingsScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
   const user = useAuthStore((s) => s.user);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const signOut = useAuthStore((s) => s.signOut);
@@ -31,7 +33,7 @@ export default function SettingsScreen() {
         <Pressable style={styles.backBtn} onPress={() => router.back()}>
           <Ionicons name="chevron-back" size={24} color={colors.text} />
         </Pressable>
-        <Text style={styles.headerTitle}>Settings</Text>
+        <Text style={styles.headerTitle}>{t("settings.title")}</Text>
         <View style={{ width: 40 }} />
       </View>
 
@@ -48,7 +50,7 @@ export default function SettingsScreen() {
             </View>
           )}
           <View style={styles.userInfo}>
-            <Text style={styles.userName}>{user.name ?? "Friend"}</Text>
+            <Text style={styles.userName}>{user.name ?? t("settings.friend")}</Text>
             <Text style={styles.userEmail}>{user.email}</Text>
           </View>
         </View>
@@ -58,9 +60,9 @@ export default function SettingsScreen() {
             <Ionicons name="person-circle-outline" size={28} color={colors.primary} />
           </View>
           <View style={{ flex: 1 }}>
-            <Text style={styles.signInTitle}>Sign in to sync</Text>
+            <Text style={styles.signInTitle}>{t("settings.signInToSync")}</Text>
             <Text style={styles.signInDesc}>
-              Save your progress, streaks, and likes across devices
+              {t("settings.signInDesc")}
             </Text>
           </View>
           <Ionicons name="chevron-forward" size={20} color={colors.textMuted} />
@@ -71,34 +73,34 @@ export default function SettingsScreen() {
       <View style={styles.statsRow}>
         <View style={styles.statCard}>
           <Text style={styles.statNumber}>{streak.current_streak}</Text>
-          <Text style={styles.statLabel}>Day Streak</Text>
+          <Text style={styles.statLabel}>{t("settings.dayStreak")}</Text>
         </View>
         <View style={styles.statCard}>
           <Text style={styles.statNumber}>{completedCount}</Text>
-          <Text style={styles.statLabel}>Completed</Text>
+          <Text style={styles.statLabel}>{t("settings.completed")}</Text>
         </View>
         <View style={styles.statCard}>
           <Text style={styles.statNumber}>{startedCount}</Text>
-          <Text style={styles.statLabel}>Started</Text>
+          <Text style={styles.statLabel}>{t("settings.started")}</Text>
         </View>
         <View style={styles.statCard}>
           <Text style={styles.statNumber}>{likedStoryIds.length}</Text>
-          <Text style={styles.statLabel}>Liked</Text>
+          <Text style={styles.statLabel}>{t("settings.liked")}</Text>
         </View>
       </View>
 
       {/* Subscription */}
       {!isSubscribed && (
         <Pressable style={styles.subCard} onPress={() => router.push("/paywall")}>
-          <Text style={styles.subTitle}>Go Premium</Text>
-          <Text style={styles.subDesc}>Unlock all 40+ stories and new ones every week</Text>
+          <Text style={styles.subTitle}>{t("settings.goPremium")}</Text>
+          <Text style={styles.subDesc}>{t("settings.goPremiumDesc")}</Text>
         </Pressable>
       )}
 
       {/* Speaker selection */}
       {speakers.length > 0 && (
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Your Narrator</Text>
+          <Text style={styles.sectionTitle}>{t("settings.yourNarrator")}</Text>
           <View style={styles.speakerList}>
             {speakers.map((speaker: any) => (
               <Pressable
@@ -113,7 +115,7 @@ export default function SettingsScreen() {
                 <Text style={styles.speakerBio}>{speaker.bio}</Text>
                 {selectedSpeaker?.id === speaker.id && (
                   <View style={styles.selectedBadge}>
-                    <Text style={styles.selectedText}>Selected</Text>
+                    <Text style={styles.selectedText}>{t("settings.selected")}</Text>
                   </View>
                 )}
               </Pressable>
@@ -124,7 +126,7 @@ export default function SettingsScreen() {
 
       {/* Playback speed */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Playback Speed</Text>
+        <Text style={styles.sectionTitle}>{t("settings.playbackSpeed")}</Text>
         <View style={styles.speedRow}>
           {[0.75, 1.0, 1.25, 1.5, 2.0].map((speed) => {
             const current = usePlayerStore.getState().playbackSpeed;
@@ -147,7 +149,7 @@ export default function SettingsScreen() {
       {isAuthenticated && (
         <View style={styles.section}>
           <Pressable style={styles.signOutBtn} onPress={() => signOut()}>
-            <Text style={styles.signOutText}>Sign Out</Text>
+            <Text style={styles.signOutText}>{t("settings.signOut")}</Text>
           </Pressable>
         </View>
       )}

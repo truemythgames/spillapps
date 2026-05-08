@@ -19,7 +19,7 @@ charactersRoutes.get("/", async (c) => {
     entityType: "character",
     appId,
     locale,
-    fields: ["name", "description"],
+    fields: ["name", "description", "overview"],
   });
 
   const enriched = await Promise.all(
@@ -71,7 +71,7 @@ charactersRoutes.get("/:id", async (c) => {
     entityType: "character",
     appId,
     locale,
-    fields: ["name", "description"],
+    fields: ["name", "description", "overview"],
   });
 
   const { results: stories } = await c.env.DB.prepare(

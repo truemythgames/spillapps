@@ -1,19 +1,28 @@
 import { Tabs, useRouter } from "expo-router";
 import { View, StyleSheet, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 import { colors, fonts, fontSize, TAB_BAR_HEIGHT } from "@/lib/theme";
 import { useAppStore } from "@/stores/app";
 
 const TAB_ITEMS = [
-  { name: "index", label: "Home", icon: "home" as const, iconOutline: "home-outline" as const },
-  { name: "explore", label: "Stories", icon: "book" as const, iconOutline: "book-outline" as const },
-  { name: "playlists", label: "Discover", icon: "compass" as const, iconOutline: "compass-outline" as const },
-  { name: "profile", label: "Chat", icon: "sparkles" as const, iconOutline: "sparkles-outline" as const },
+  { name: "index", icon: "home" as const, iconOutline: "home-outline" as const },
+  { name: "explore", icon: "book" as const, iconOutline: "book-outline" as const },
+  { name: "playlists", icon: "compass" as const, iconOutline: "compass-outline" as const },
+  { name: "profile", icon: "sparkles" as const, iconOutline: "sparkles-outline" as const },
 ] as const;
+
+const TAB_LABEL_KEYS: Record<string, string> = {
+  index: "tabs.home",
+  explore: "tabs.stories",
+  playlists: "tabs.discover",
+  profile: "tabs.chat",
+};
 
 const GATED_TABS = new Set(["explore", "playlists", "profile"]);
 
 export default function TabLayout() {
+  const { t } = useTranslation();
   const router = useRouter();
   const isSubscribed = useAppStore((s) => s.isSubscribed);
 
@@ -50,7 +59,7 @@ export default function TabLayout() {
                       },
                     ]}
                   >
-                    {tab.label}
+                    {t(TAB_LABEL_KEYS[tab.name])}
                   </Text>
                 </View>
               ),

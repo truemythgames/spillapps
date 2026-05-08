@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { getSeedStories, type CatalogStory } from "@/lib/content";
 import { storage, StorageKeys, getLocalProgress, getStreakData, setLocalProgress } from "@/lib/storage";
 import { api } from "@/lib/api";
 import { checkSubscription } from "@/lib/purchases";
@@ -10,7 +9,14 @@ const CACHE_TTL_MS = 5 * 60 * 1000; // 5 min — background refresh if stale
 
 const DEMO_MODE = false;
 
-export interface StoryWithCover extends CatalogStory {
+export interface StoryWithCover {
+  id: string;
+  title: string;
+  description: string;
+  section: string;
+  bibleRef: string;
+  testament?: string;
+  order?: number;
   cover_image_url: string | null;
   apiId?: string;
 }
@@ -74,15 +80,10 @@ interface AppState {
   refreshSubscription: () => Promise<void>;
 }
 
-const seedIdToLocalId: Record<string, string> = {};
-for (const s of getSeedStories()) {
-  if (s.seedId) seedIdToLocalId[s.seedId] = s.id;
-}
 
 function apiStoryToCover(s: any): StoryWithCover {
-  const localId = seedIdToLocalId[s.id] ?? s.slug ?? s.id;
   return {
-    id: localId,
+    id: s.slug ?? s.id,
     apiId: s.id,
     title: s.title,
     description: s.description ?? "",
@@ -130,6 +131,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   progressVersion: 0,
 
   loadInitialData: async () => {
+    console.log("[App] loadInitialData started");
     const subscribed = storage.getBoolean(StorageKeys.IS_SUBSCRIBED) ?? false;
 
     let localLikes: string[] = [];
@@ -185,7 +187,7 @@ export const useAppStore = create<AppState>((set, get) => ({
           return mapped;
         }
         return null;
-      }).catch(() => null);
+      }).catch((e) => { console.error("[API] getStories failed:", e.message); return null; });
 
       const sotdP = api.getStoryOfTheDay().then((res) => {
         if (res.story) {
@@ -194,7 +196,7 @@ export const useAppStore = create<AppState>((set, get) => ({
           return mapped;
         }
         return null;
-      }).catch(() => null);
+      }).catch((e) => { console.error("[API] getStoryOfTheDay failed:", e.message); return null; });
 
       const playlistsP = api.getPlaylists().then(async (res) => {
         if (!res.playlists?.length) return null;
@@ -218,22 +220,22 @@ export const useAppStore = create<AppState>((set, get) => ({
           return apiPlaylists;
         }
         return null;
-      }).catch(() => null);
+      }).catch((e) => { console.error("[API] getPlaylists failed:", e.message); return null; });
 
       const seasonsP = api.getSeasons().then((res) => {
         if (res.seasons?.length) { set({ seasons: res.seasons }); return res.seasons; }
         return null;
-      }).catch(() => null);
+      }).catch((e) => { console.error("[API] getSeasons failed:", e.message); return null; });
 
       const speakersP = api.getSpeakers().then((res) => {
         if (res.speakers?.length) { set({ speakers: res.speakers }); return res.speakers; }
         return null;
-      }).catch(() => null);
+      }).catch((e) => { console.error("[API] getSpeakers failed:", e.message); return null; });
 
       const charsP = api.getCharacters().then((res) => {
         if (res.characters?.length) { set({ characters: res.characters }); return res.characters; }
         return null;
-      }).catch(() => null);
+      }).catch((e) => { console.error("[API] getCharacters failed:", e.message); return null; });
 
       const recentP = api.getRecentStories().then((res) => {
         if (res.stories?.length) {
@@ -242,7 +244,7 @@ export const useAppStore = create<AppState>((set, get) => ({
           return mapped;
         }
         return null;
-      }).catch(() => null);
+      }).catch((e) => { console.error("[API] getRecentStories failed:", e.message); return null; });
 
       const [stories, sotd, playlists, seasons, speakers, chars, recent] =
         await Promise.all([storiesP, sotdP, playlistsP, seasonsP, speakersP, charsP, recentP]);

@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import type { Env } from "../types";
 import { mediaUrl } from "../lib/media";
 import { resolvePublicAppId } from "../lib/request-app";
-import { resolveLocale, overlayTranslations, overlayTranslation } from "../lib/locale";
+import { resolveLocale, overlayTranslations, overlayTranslation, overlaySeasonNames } from "../lib/locale";
 
 export const playlistsRoutes = new Hono<{ Bindings: Env }>();
 
@@ -63,12 +63,13 @@ playlistsRoutes.get("/:id", async (c) => {
     .bind(appId, id)
     .all();
 
-  const translatedStories = await overlayTranslations(c.env.DB, stories.results as any[], {
+  let translatedStories = await overlayTranslations(c.env.DB, stories.results as any[], {
     entityType: "story",
     appId,
     locale,
     fields: ["title", "description"],
   });
+  translatedStories = await overlaySeasonNames(c.env.DB, translatedStories, appId, locale);
 
   return c.json({
     playlist: {

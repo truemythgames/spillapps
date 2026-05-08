@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { adminApi } from "../lib/api";
 import { useTranslations } from "../lib/use-translations";
 import { InlineEditor } from "../components/InlineEditor";
+import { useCmsApp } from "../lib/cms-app-context";
 
 function toSlug(str: string) {
   return str.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
@@ -14,6 +15,9 @@ export function Seasons() {
   const [showAdd, setShowAdd] = useState(false);
   const [addForm, setAddForm] = useState({ name: "", slug: "", testament: "old", description: "" });
   const [adding, setAdding] = useState(false);
+
+  const { categoryLabels } = useCmsApp();
+  const hasCategories = !!categoryLabels;
 
   const { locale, translations, loading: tLoading, saving: tSaving, saveTranslation, getTranslated, hasTranslation, isTranslating } =
     useTranslations("season");
@@ -56,8 +60,6 @@ export function Seasons() {
     }
   }
 
-  const oldCount = seasons.filter((s) => s.testament === "old").length;
-  const newCount = seasons.filter((s) => s.testament === "new").length;
   const untranslatedCount = isTranslating
     ? seasons.filter((s) => !hasTranslation(s.id, "name")).length
     : 0;
@@ -66,9 +68,9 @@ export function Seasons() {
     <div>
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h2 className="text-2xl font-bold">Seasons (Books)</h2>
+          <h2 className="text-2xl font-bold">Seasons</h2>
           <p className="text-gray-500 text-sm mt-1">
-            {seasons.length} total · {oldCount} Old Testament · {newCount} New Testament
+            {seasons.length} total
             {isTranslating && !tLoading && (
               <span className="ml-2">
                 · <span className="text-green-400">{seasons.length - untranslatedCount}</span> translated ·{" "}
@@ -99,17 +101,20 @@ export function Seasons() {
                 placeholder="Season name"
               />
             </div>
-            <div>
-              <label className="block text-xs text-gray-400 mb-1">Testament</label>
-              <select
-                value={addForm.testament}
-                onChange={(e) => setAddForm({ ...addForm, testament: e.target.value })}
-                className="w-full bg-surface border border-white/10 rounded-lg px-4 py-2 text-sm text-white"
-              >
-                <option value="old">Old Testament</option>
-                <option value="new">New Testament</option>
-              </select>
-            </div>
+            {hasCategories && (
+              <div>
+                <label className="block text-xs text-gray-400 mb-1">Category</label>
+                <select
+                  value={addForm.testament}
+                  onChange={(e) => setAddForm({ ...addForm, testament: e.target.value })}
+                  className="w-full bg-surface border border-white/10 rounded-lg px-4 py-2 text-sm text-white"
+                >
+                  {Object.entries(categoryLabels).map(([key, label]) => (
+                    <option key={key} value={key}>{label}</option>
+                  ))}
+                </select>
+              </div>
+            )}
             <div className="col-span-2">
               <label className="block text-xs text-gray-400 mb-1">Description</label>
               <textarea
@@ -140,15 +145,11 @@ export function Seasons() {
           return (
             <div key={season.id} className="bg-surface border border-white/5 rounded-xl p-6">
               <div className="flex items-center gap-2 mb-2">
-                <span
-                  className={`text-xs font-semibold px-2 py-0.5 rounded ${
-                    season.testament === "old"
-                      ? "bg-orange-500/10 text-orange-400"
-                      : "bg-green-500/10 text-green-400"
-                  }`}
-                >
-                  {season.testament === "old" ? "OLD" : "NEW"}
-                </span>
+                {hasCategories && season.testament && categoryLabels[season.testament] && (
+                  <span className="text-xs font-semibold px-2 py-0.5 rounded bg-white/5 text-gray-400">
+                    {categoryLabels[season.testament]}
+                  </span>
+                )}
                 {isTranslating && (
                   <span
                     className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${

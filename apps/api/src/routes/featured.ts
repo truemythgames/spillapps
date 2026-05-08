@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import type { Env } from "../types";
 import { mediaUrl } from "../lib/media";
 import { resolvePublicAppId } from "../lib/request-app";
-import { resolveLocale, overlayTranslation } from "../lib/locale";
+import { resolveLocale, overlayTranslation, overlaySeasonNames } from "../lib/locale";
 
 export const featuredRoutes = new Hono<{ Bindings: Env }>();
 
@@ -67,6 +67,8 @@ featuredRoutes.get("/story-of-the-day", async (c) => {
       locale,
       fields: ["title", "description"],
     });
+    const [translated] = await overlaySeasonNames(c.env.DB, [storyRow as any], appId, locale);
+    storyRow = translated;
   }
 
   const response = {

@@ -5,11 +5,13 @@ import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAppStore } from "@/stores/app";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
+import { useTranslation } from "react-i18next";
 
 export default function CollectionScreen() {
   const { type, id, name } = useLocalSearchParams<{ type: string; id?: string; name?: string }>();
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
   const { playlists, recentStories, stories: allStories } = useAppStore();
 
   let title = "";
@@ -17,10 +19,10 @@ export default function CollectionScreen() {
 
   if (type === "playlist" && id) {
     const pl = playlists.find((p) => p.id === id);
-    title = pl?.name ?? "Playlist";
+    title = pl?.name ?? t("collection.fallbackTitle");
     stories = pl?.stories ?? [];
   } else if (type === "recent") {
-    title = "Recently Added";
+    title = t("collection.recentlyAdded");
     stories = recentStories;
   } else if (type === "season" && name) {
     title = name;
@@ -38,7 +40,7 @@ export default function CollectionScreen() {
       </View>
 
       <ScrollView contentContainerStyle={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
-        <Text style={styles.count}>{stories.length} {stories.length === 1 ? "story" : "stories"}</Text>
+        <Text style={styles.count}>{t("common.storiesCount", { count: stories.length })}</Text>
         {stories.map((story) => (
           <Pressable
             key={story.id}

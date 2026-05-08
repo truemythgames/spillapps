@@ -4,6 +4,7 @@ import { marked } from "marked";
 import { adminApi } from "../lib/api";
 import { useTranslations } from "../lib/use-translations";
 import { InlineEditor } from "../components/InlineEditor";
+import { useCmsApp } from "../lib/cms-app-context";
 
 type Tab = "preview" | "edit" | "details";
 
@@ -28,6 +29,8 @@ export function StoryEditor() {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const { categoryLabels } = useCmsApp();
+  const hasCategories = !!categoryLabels;
   const [story, setStory] = useState<ApiStory | null>(null);
   const [audioVersions, setAudioVersions] = useState<AudioVersion[]>([]);
   const [characters, setCharacters] = useState<any[]>([]);
@@ -129,7 +132,8 @@ export function StoryEditor() {
 
   const displayTitle = getTranslated(story.id, "title", story.title);
   const displayDesc = getTranslated(story.id, "description", story.description);
-  const html = story.transcript ? marked.parse(story.transcript) : "";
+  const displayTranscript = getTranslated(story.id, "transcript", story.transcript || "");
+  const html = displayTranscript ? marked.parse(displayTranscript) : "";
 
   const TABS: { id: Tab; label: string }[] = [
     { id: "preview", label: "Preview" },
@@ -162,15 +166,11 @@ export function StoryEditor() {
           <h1 className="text-3xl font-bold mb-2">{displayTitle}</h1>
           <p className="text-gray-400 leading-relaxed text-sm">{displayDesc}</p>
           <div className="flex items-center gap-2 mt-3">
-            <span
-              className={`text-xs font-bold px-2 py-0.5 rounded-full ${
-                story.testament === "old"
-                  ? "bg-orange-500/10 text-orange-400"
-                  : "bg-green-500/10 text-green-400"
-              }`}
-            >
-              {story.testament === "old" ? "Old Testament" : "New Testament"}
-            </span>
+            {hasCategories && story.testament && categoryLabels[story.testament] && (
+              <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-white/5 text-gray-400">
+                {categoryLabels[story.testament]}
+              </span>
+            )}
             {isTranslating && (
               <span className="text-xs text-gray-500">
                 Editing: {locale.toUpperCase()}
@@ -278,7 +278,7 @@ export function StoryEditor() {
                 },
                 {
                   key: "transcript",
-                  label: "Transcript (Markdown)",
+                  label: "Transcript",
                   value: isTranslating ? (translations[story.id]?.transcript ?? "") : (story.transcript || ""),
                   multiline: true,
                 },

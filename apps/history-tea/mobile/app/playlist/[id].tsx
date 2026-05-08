@@ -12,11 +12,13 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { api } from "@/lib/api";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
+import { useTranslation } from "react-i18next";
 
 export default function PlaylistScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
 
   const [playlist, setPlaylist] = useState<any>(null);
   const [stories, setStories] = useState<any[]>([]);
@@ -49,7 +51,7 @@ export default function PlaylistScreen() {
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <Pressable style={styles.backBtn} onPress={() => router.back()}>
-        <Text style={styles.backText}>← Back</Text>
+        <Text style={styles.backText}>{t("common.back")}</Text>
       </Pressable>
 
       <FlatList
@@ -75,7 +77,7 @@ export default function PlaylistScreen() {
             )}
             <Text style={styles.playlistTitle}>{playlist?.name}</Text>
             <Text style={styles.playlistDesc}>{playlist?.description}</Text>
-            <Text style={styles.storyCount}>{stories.length} stories</Text>
+            <Text style={styles.storyCount}>{t("common.storiesCount", { count: stories.length })}</Text>
           </View>
         }
         renderItem={({ item, index }) => (

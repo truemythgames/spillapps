@@ -5,10 +5,12 @@ import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAppStore } from "@/stores/app";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
+import { useTranslation } from "react-i18next";
 
 export default function CompletedScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
   const completedIds = useAppStore((s) => s.completedStoryIds);
   const stories = useAppStore((s) => s.stories);
 
@@ -23,19 +25,19 @@ export default function CompletedScreen() {
         <Pressable style={styles.backBtn} onPress={() => router.back()}>
           <Ionicons name="chevron-back" size={24} color={colors.text} />
         </Pressable>
-        <Text style={styles.headerTitle}>Completed</Text>
+        <Text style={styles.headerTitle}>{t("completedScreen.title")}</Text>
         <View style={{ width: 40 }} />
       </View>
 
       {completedStories.length === 0 ? (
         <View style={styles.empty}>
           <Ionicons name="checkmark-circle-outline" size={48} color={colors.textMuted} />
-          <Text style={styles.emptyTitle}>No completed stories yet</Text>
-          <Text style={styles.emptySub}>Finish listening to a story and it will appear here.</Text>
+          <Text style={styles.emptyTitle}>{t("completedScreen.emptyTitle")}</Text>
+          <Text style={styles.emptySub}>{t("completedScreen.emptyDesc")}</Text>
         </View>
       ) : (
         <ScrollView contentContainerStyle={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
-          <Text style={styles.count}>{completedStories.length} {completedStories.length === 1 ? "story" : "stories"}</Text>
+          <Text style={styles.count}>{t("common.storiesCount", { count: completedStories.length })}</Text>
           {completedStories.map((story) => (
             <Pressable
               key={story.id}

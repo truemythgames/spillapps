@@ -54,17 +54,19 @@ export function Settings() {
       <div className="space-y-6">
         <div className="bg-surface border border-white/5 rounded-xl p-6">
           <h3 className="text-lg font-semibold mb-1">Version Control</h3>
-          <p className="text-gray-500 text-sm mb-4">Users on versions below the minimum will see an update prompt.</p>
+          <p className="text-gray-500 text-sm mb-4">Set minimum to the latest version. Anyone on an older version sees the update prompt.</p>
           <div className="space-y-4">
             <div>
-              <label className="block text-xs text-gray-400 mb-1">Minimum App Version</label>
+              <label className="block text-xs text-gray-400 mb-1">Minimum Required Version</label>
               <input
                 value={settings.min_app_version || ""}
                 onChange={(e) => update("min_app_version", e.target.value)}
                 className="w-64 bg-surface border border-white/10 rounded-lg px-4 py-2 text-sm text-white placeholder:text-gray-600"
                 placeholder="e.g. 1.0.3"
               />
-              <p className="text-[11px] text-gray-600 mt-1">Semver format. Users below this version see an update prompt.</p>
+              <p className="text-[11px] text-gray-600 mt-1">
+                Set this to the latest published version. Current latest: <span className="text-white font-medium">Bible Tea 1.0.3 · History Tea 1.0.1</span>
+              </p>
             </div>
             <div>
               <label className="block text-xs text-gray-400 mb-2">Update Type</label>
