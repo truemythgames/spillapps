@@ -178,7 +178,8 @@ storiesRoutes.get("/:id", async (c) => {
     `SELECT sa.*, sp.name as speaker_name, sp.avatar_key as speaker_avatar
      FROM story_audio sa
      JOIN speakers sp ON sa.speaker_id = sp.id AND sp.app_id = ?
-     WHERE sa.story_id = ? AND (sa.locale = ? OR sa.locale IS NULL)`
+     WHERE sa.story_id = ? AND (sa.locale = ? OR sa.locale IS NULL)
+     ORDER BY sp.is_default DESC, sp.name ASC`
   )
     .bind(appId, storyId, locale)
     .all();
@@ -188,7 +189,8 @@ storiesRoutes.get("/:id", async (c) => {
       `SELECT sa.*, sp.name as speaker_name, sp.avatar_key as speaker_avatar
        FROM story_audio sa
        JOIN speakers sp ON sa.speaker_id = sp.id AND sp.app_id = ?
-       WHERE sa.story_id = ? AND (sa.locale = 'en' OR sa.locale IS NULL)`
+       WHERE sa.story_id = ? AND (sa.locale = 'en' OR sa.locale IS NULL)
+       ORDER BY sp.is_default DESC, sp.name ASC`
     )
       .bind(appId, storyId)
       .all();

@@ -117,7 +117,14 @@ export default function PlayerScreen() {
   }));
 
   const translateY = useSharedValue(0);
-  const closePlayer = () => router.back();
+  const stop = usePlayerStore((s) => s.stop);
+  const completedStoryIds = useAppStore((s) => s.completedStoryIds);
+  const isCompleted = currentStory && (completedStoryIds.includes(currentStory.id) || (duration > 0 && position / duration >= 0.97));
+
+  const closePlayer = () => {
+    if (isCompleted) stop();
+    router.back();
+  };
 
   const dismissGesture = Gesture.Pan()
     .enabled(Platform.OS === "android")
@@ -163,7 +170,7 @@ export default function PlayerScreen() {
       <View style={styles.handleRow}>
         <View style={styles.handle} />
       </View>
-      <Pressable style={[styles.closeBtn, { top: (Platform.OS === "android" ? insets.top : 0) + 8 }]} onPress={() => router.back()}>
+      <Pressable style={[styles.closeBtn, { top: (Platform.OS === "android" ? insets.top : 0) + 8 }]} onPress={closePlayer}>
         <Ionicons name="close" size={22} color={colors.textSecondary} />
       </Pressable>
 
