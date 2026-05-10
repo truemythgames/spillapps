@@ -87,7 +87,11 @@ export const api = {
       media_base: string;
       app_id?: string;
       min_app_version: string;
+      min_ios_version?: string;
+      min_android_version?: string;
       force_update: boolean;
+      force_update_ios?: boolean;
+      force_update_android?: boolean;
       maintenance: boolean;
       feature_flags: Record<string, boolean>;
     }>("/v1/config"),

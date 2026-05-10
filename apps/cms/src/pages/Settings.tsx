@@ -53,51 +53,79 @@ export function Settings() {
 
       <div className="space-y-6">
         <div className="bg-surface border border-white/5 rounded-xl p-6">
-          <h3 className="text-lg font-semibold mb-1">Version Control</h3>
-          <p className="text-gray-500 text-sm mb-4">Set minimum to the latest version. Anyone on an older version sees the update prompt.</p>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-xs text-gray-400 mb-1">Minimum Required Version</label>
-              <input
-                value={settings.min_app_version || ""}
-                onChange={(e) => update("min_app_version", e.target.value)}
-                className="w-64 bg-surface border border-white/10 rounded-lg px-4 py-2 text-sm text-white placeholder:text-gray-600"
-                placeholder="e.g. 1.0.3"
-              />
-              <p className="text-[11px] text-gray-600 mt-1">
-                Set this to the latest published version. Current latest: <span className="text-white font-medium">Bible Tea 1.0.3 · History Tea 1.0.1</span>
-              </p>
-            </div>
-            <div>
-              <label className="block text-xs text-gray-400 mb-2">Update Type</label>
-              <div className="flex gap-3">
+          <h3 className="text-lg font-semibold mb-4">Version Control</h3>
+          <div className="grid grid-cols-2 gap-6">
+            <div className="border border-white/5 rounded-xl p-5 space-y-4">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-base"></span>
+                <span className="font-semibold text-white">iOS</span>
+              </div>
+              <div>
+                <label className="block text-xs text-gray-400 mb-1">Minimum Version</label>
+                <input
+                  value={settings.min_ios_version || ""}
+                  onChange={(e) => update("min_ios_version", e.target.value)}
+                  className="w-full bg-surface border border-white/10 rounded-lg px-4 py-2 text-sm text-white placeholder:text-gray-600"
+                  placeholder="e.g. 1.0.3"
+                />
+              </div>
+              <div className="flex gap-2">
                 <button
-                  onClick={() => update("force_update", "false")}
-                  className={`flex-1 max-w-xs border rounded-xl p-4 text-left transition-all ${
-                    settings.force_update !== "true"
-                      ? "border-primary bg-primary/10"
-                      : "border-white/10 hover:border-white/20"
+                  onClick={() => update("force_update_ios", "false")}
+                  className={`flex-1 border rounded-lg px-3 py-2.5 text-center transition-all text-sm font-medium ${
+                    settings.force_update_ios !== "true"
+                      ? "border-primary bg-primary/10 text-white"
+                      : "border-white/10 text-gray-500 hover:border-white/20"
                   }`}
                 >
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-lg">✕</span>
-                    <span className="font-semibold text-sm text-white">Soft Update</span>
-                  </div>
-                  <p className="text-[11px] text-gray-500">Users see a popup but can dismiss it with the X button and keep using the app.</p>
+                  Soft Update
                 </button>
                 <button
-                  onClick={() => update("force_update", "true")}
-                  className={`flex-1 max-w-xs border rounded-xl p-4 text-left transition-all ${
-                    settings.force_update === "true"
-                      ? "border-red-500 bg-red-500/10"
-                      : "border-white/10 hover:border-white/20"
+                  onClick={() => update("force_update_ios", "true")}
+                  className={`flex-1 border rounded-lg px-3 py-2.5 text-center transition-all text-sm font-medium ${
+                    settings.force_update_ios === "true"
+                      ? "border-red-500 bg-red-500/10 text-white"
+                      : "border-white/10 text-gray-500 hover:border-white/20"
                   }`}
                 >
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-lg">🔒</span>
-                    <span className="font-semibold text-sm text-white">Hard Update</span>
-                  </div>
-                  <p className="text-[11px] text-gray-500">No X button. Users must update to continue using the app.</p>
+                  Hard Update
+                </button>
+              </div>
+            </div>
+            <div className="border border-white/5 rounded-xl p-5 space-y-4">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-base"></span>
+                <span className="font-semibold text-white">Android</span>
+              </div>
+              <div>
+                <label className="block text-xs text-gray-400 mb-1">Minimum Version</label>
+                <input
+                  value={settings.min_android_version || ""}
+                  onChange={(e) => update("min_android_version", e.target.value)}
+                  className="w-full bg-surface border border-white/10 rounded-lg px-4 py-2 text-sm text-white placeholder:text-gray-600"
+                  placeholder="e.g. 1.0.3"
+                />
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => update("force_update_android", "false")}
+                  className={`flex-1 border rounded-lg px-3 py-2.5 text-center transition-all text-sm font-medium ${
+                    settings.force_update_android !== "true"
+                      ? "border-primary bg-primary/10 text-white"
+                      : "border-white/10 text-gray-500 hover:border-white/20"
+                  }`}
+                >
+                  Soft Update
+                </button>
+                <button
+                  onClick={() => update("force_update_android", "true")}
+                  className={`flex-1 border rounded-lg px-3 py-2.5 text-center transition-all text-sm font-medium ${
+                    settings.force_update_android === "true"
+                      ? "border-red-500 bg-red-500/10 text-white"
+                      : "border-white/10 text-gray-500 hover:border-white/20"
+                  }`}
+                >
+                  Hard Update
                 </button>
               </div>
             </div>

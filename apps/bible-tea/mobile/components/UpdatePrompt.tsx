@@ -33,9 +33,14 @@ export function UpdatePrompt() {
   useEffect(() => {
     api.getConfig().then((config) => {
       const currentVersion = Constants.expoConfig?.version || "0.0.0";
-      const needsUpdate = compareVersions(currentVersion, config.min_app_version);
+      const isIOS = Platform.OS === "ios";
+      const minVersion = isIOS
+        ? (config.min_ios_version || config.min_app_version)
+        : (config.min_android_version || config.min_app_version);
+      const needsUpdate = compareVersions(currentVersion, minVersion);
       if (needsUpdate) {
-        setForceUpdate(config.force_update);
+        const platformForce = isIOS ? config.force_update_ios : config.force_update_android;
+        setForceUpdate(platformForce ?? config.force_update);
         setVisible(true);
       }
     }).catch(() => {});
