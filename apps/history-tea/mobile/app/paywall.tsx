@@ -410,7 +410,7 @@ export default function PaywallScreen() {
 function Hero({ source }: { source: number }) {
   return (
     <View style={styles.heroWrap} pointerEvents="none">
-      <Image source={source} style={styles.heroImg} contentFit="cover" />
+      <Image source={source} style={styles.heroImg} contentFit="cover" transition={0} priority="high" cachePolicy="memory-disk" />
       <LinearGradient
         colors={["transparent", colors.background + "DD", colors.background]}
         style={styles.heroFade}

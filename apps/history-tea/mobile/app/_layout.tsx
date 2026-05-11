@@ -25,6 +25,7 @@ import { storage, StorageKeys } from "@/lib/storage";
 import { initPurchases } from "@/lib/purchases";
 import { initAnalytics } from "@/lib/analytics";
 import { UpdatePrompt } from "@/components/UpdatePrompt";
+import { Image as ExpoImage } from "expo-image";
 import "@/lib/i18n";
 
 SplashScreen.preventAutoHideAsync();
@@ -59,6 +60,7 @@ export default function RootLayout() {
   useEffect(() => {
     async function init() {
       loadInitialData();
+      ExpoImage.prefetch(require("@/assets/onboarding/building-the-pyramids.webp"));
       await Promise.all([
         setupPlayer(),
         hydrateAuth(),

@@ -41,13 +41,14 @@ export default function SpecialOfferScreen() {
 
   const yearly = packages.find(
     (p) =>
+      p.identifier === "$rc_annual" ||
       p.identifier === "yearly_offer" ||
-      p.product?.identifier === PRODUCT_IDS.yearlyOffer
+      p.product?.identifier?.startsWith(PRODUCT_IDS.yearlyOffer)
   );
   const weekly = packages.find(
     (p) =>
       p.identifier === "weekly_offer" ||
-      p.product?.identifier === PRODUCT_IDS.weeklyOffer
+      p.product?.identifier?.startsWith(PRODUCT_IDS.weeklyOffer)
   );
 
   const pricePerWeek = yearly?.product?.pricePerWeekString;

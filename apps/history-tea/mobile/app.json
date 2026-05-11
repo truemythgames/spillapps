@@ -13,7 +13,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#06080F"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "app.historytea",
@@ -21,7 +23,9 @@
       "usesAppleSignIn": true,
       "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
-        "UIBackgroundModes": ["audio"],
+        "UIBackgroundModes": [
+          "audio"
+        ],
         "NSUserTrackingUsageDescription": "This identifier will be used to deliver personalized ads to you."
       }
     },
@@ -51,7 +55,21 @@
       "@react-native-firebase/crashlytics",
       "./plugins/firebase-modular-headers",
       "./plugins/hermes-dsym-plugin",
-      "./plugins/now-playing-plugin"
+      "./plugins/now-playing-plugin",
+      [
+        "react-native-fbsdk-next",
+        {
+          "appID": "966567709090316",
+          "clientToken": "2ff9b2c68c0cebc6f3fe6704d6383a65",
+          "displayName": "History Tea",
+          "scheme": "fb966567709090316",
+          "advertiserIDCollectionEnabled": true,
+          "autoLogAppEventsEnabled": true,
+          "isAutoInitEnabled": true,
+          "iosUserTrackingPermission": "This identifier will be used to deliver personalized ads to you."
+        }
+      ],
+      "expo-tracking-transparency"
     ],
     "experiments": {
       "typedRoutes": true
