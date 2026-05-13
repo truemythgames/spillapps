@@ -3,7 +3,7 @@ import { defineConfig } from "astro/config";
 export default defineConfig({
   output: "static",
   site: "https://bibletea.app",
-  trailingSlash: "always",
+  trailingSlash: "never",
   i18n: {
     defaultLocale: "en",
     locales: ["en", "es"],

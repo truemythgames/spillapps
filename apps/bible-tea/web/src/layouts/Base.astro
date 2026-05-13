@@ -12,9 +12,8 @@ interface Props {
 
 const { title, description, ogImage = "https://bibletea.app/icon.png", canonicalPath, jsonLd } = Astro.props;
 const locale = getLocale(Astro.currentLocale);
-const trailingCanonical = canonicalPath ? (canonicalPath.endsWith("/") ? canonicalPath : `${canonicalPath}/`) : undefined;
-const canonical = trailingCanonical
-  ? `https://bibletea.app${locale === "en" ? trailingCanonical : `/es${trailingCanonical === "/" ? "/" : trailingCanonical}`}`
+const canonical = canonicalPath
+  ? `https://bibletea.app${locale === "en" ? canonicalPath : `/es${canonicalPath === "/" ? "" : canonicalPath}`}`
   : undefined;
 const alternates = canonicalPath ? getAlternates(canonicalPath) : [];
 const otherLocale = alternateLocale(locale);
