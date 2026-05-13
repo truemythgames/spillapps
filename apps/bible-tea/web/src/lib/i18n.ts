@@ -7,8 +7,9 @@ export function getLocale(astroLocale: string | undefined): Locale {
 }
 
 export function localePath(path: string, locale: Locale): string {
-  if (locale === "en") return path;
-  return `/es${path === "/" ? "" : path}`;
+  const trailing = path.endsWith("/") ? path : `${path}/`;
+  if (locale === "en") return trailing;
+  return `/es${trailing === "/" ? "/" : trailing}`;
 }
 
 export function alternateLocale(locale: Locale): Locale {
@@ -405,8 +406,9 @@ export function t(locale: Locale, key: TranslationKey): string {
 }
 
 export function getAlternates(path: string): { locale: Locale; href: string }[] {
+  const trailing = path.endsWith("/") ? path : `${path}/`;
   return [
-    { locale: "en", href: `https://bibletea.app${path}` },
-    { locale: "es", href: `https://bibletea.app/es${path === "/" ? "" : path}` },
+    { locale: "en", href: `https://bibletea.app${trailing}` },
+    { locale: "es", href: `https://bibletea.app/es${trailing === "/" ? "/" : trailing}` },
   ];
 }

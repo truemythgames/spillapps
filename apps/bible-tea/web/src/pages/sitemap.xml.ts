@@ -55,9 +55,10 @@ export const GET: APIRoute = async () => {
   const urls: string[] = [];
   for (const e of entries) {
     const hasLocales = !NO_LOCALE_PAGES.has(e.path);
-    urls.push(url(`${SITE}${e.path}`, e.lastmod, e.changefreq, e.priority));
+    const trailing = e.path.endsWith("/") ? e.path : `${e.path}/`;
+    urls.push(url(`${SITE}${trailing}`, e.lastmod, e.changefreq, e.priority));
     if (hasLocales) {
-      const esPath = e.path === "/" ? "/es" : `/es${e.path}`;
+      const esPath = trailing === "/" ? "/es/" : `/es${trailing}`;
       urls.push(url(`${SITE}${esPath}`, e.lastmod, e.changefreq, e.priority));
     }
   }
