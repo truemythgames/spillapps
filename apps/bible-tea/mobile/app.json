@@ -2,7 +2,7 @@
   "expo": {
     "name": "Bible Tea",
     "slug": "bibletea",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
@@ -13,15 +13,19 @@
       "resizeMode": "contain",
       "backgroundColor": "#0A0A0F"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "app.bibletea",
-      "buildNumber": "17",
+      "buildNumber": "18",
       "usesAppleSignIn": true,
       "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
-        "UIBackgroundModes": ["audio"],
+        "UIBackgroundModes": [
+          "audio"
+        ],
         "NSUserTrackingUsageDescription": "This identifier will be used to deliver personalized ads to you."
       }
     },
@@ -64,7 +68,8 @@
       "@react-native-firebase/crashlytics",
       "./plugins/firebase-modular-headers",
       "./plugins/hermes-dsym-plugin",
-      "./plugins/now-playing-plugin"
+      "./plugins/now-playing-plugin",
+      "expo-tracking-transparency"
     ],
     "experiments": {
       "typedRoutes": true

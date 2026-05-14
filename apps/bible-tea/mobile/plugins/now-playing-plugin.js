@@ -141,24 +141,15 @@ RCT_EXTERN_METHOD(ping:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectB
 @end
 `;
 
-const ANDROID_MODULE_KT = fs.readFileSync(
-  path.join(__dirname, "..", "android/app/src/main/java/app/bibletea/NowPlayingBridgeModule.kt"),
-  "utf8",
-);
-const ANDROID_SERVICE_KT = fs.readFileSync(
-  path.join(__dirname, "..", "android/app/src/main/java/app/bibletea/PlaybackService.kt"),
-  "utf8",
-);
-const ANDROID_PACKAGE_KT = fs.readFileSync(
-  path.join(__dirname, "..", "android/app/src/main/java/app/bibletea/NowPlayingBridgePackage.kt"),
-  "utf8",
-);
-
 module.exports = function withNowPlaying(config) {
   // ANDROID: write Kotlin sources during prebuild
   config = withDangerousMod(config, [
     "android",
     (config) => {
+      const srcDir = path.join(__dirname, "..", "android/app/src/main/java/app/bibletea");
+      const ANDROID_MODULE_KT = fs.readFileSync(path.join(srcDir, "NowPlayingBridgeModule.kt"), "utf8");
+      const ANDROID_SERVICE_KT = fs.readFileSync(path.join(srcDir, "PlaybackService.kt"), "utf8");
+      const ANDROID_PACKAGE_KT = fs.readFileSync(path.join(srcDir, "NowPlayingBridgePackage.kt"), "utf8");
       const pkgDir = path.join(
         config.modRequest.platformProjectRoot,
         "app/src/main/java/app/bibletea",

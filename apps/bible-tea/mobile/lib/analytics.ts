@@ -1,3 +1,6 @@
+import { Platform } from "react-native";
+import { requestTrackingPermissionsAsync } from "expo-tracking-transparency";
+
 let Settings: any = null;
 let AppEventsLogger: any = null;
 let analyticsModule: any = null;
@@ -23,8 +26,14 @@ export async function initAnalytics() {
   if (initialized) return;
 
   try {
-    Settings?.initializeSDK();
-    Settings?.setAdvertiserTrackingEnabled(true);
+    if (Platform.OS === "ios") {
+      const { status } = await requestTrackingPermissionsAsync();
+      Settings?.initializeSDK();
+      Settings?.setAdvertiserTrackingEnabled(status === "granted");
+    } else {
+      Settings?.initializeSDK();
+      Settings?.setAdvertiserTrackingEnabled(true);
+    }
   } catch (e) {
     console.warn("[Analytics] Facebook SDK init failed:", e);
   }

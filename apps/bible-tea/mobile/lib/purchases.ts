@@ -39,6 +39,8 @@ export const PRODUCT_IDS = {
 
 let initialized = false;
 let cachedAppUserId: string | null = null;
+let cachedOffering: PurchasesOffering | null = null;
+let offeringPromise: Promise<PurchasesOffering | null> | null = null;
 
 async function getOrCreateAppUserId(): Promise<string> {
   if (cachedAppUserId) return cachedAppUserId;
@@ -88,17 +90,30 @@ export async function initPurchases(userId?: string): Promise<void> {
   } catch (e) {
     console.warn("[Purchases] logIn with stable id failed:", e);
   }
+
+  // Pre-fetch offerings so paywall opens instantly
+  getOfferings();
 }
 
 export async function getOfferings(): Promise<PurchasesOffering | null> {
   if (!Purchases) return null;
-  try {
-    const offerings = await Purchases.getOfferings();
-    return offerings.current;
-  } catch (e) {
-    console.warn("[Purchases] Failed to fetch offerings:", e);
-    return null;
-  }
+  if (cachedOffering) return cachedOffering;
+  if (offeringPromise) return offeringPromise;
+
+  offeringPromise = (async () => {
+    try {
+      const offerings = await Purchases.getOfferings();
+      cachedOffering = offerings.current;
+      return cachedOffering;
+    } catch (e) {
+      console.warn("[Purchases] Failed to fetch offerings:", e);
+      return null;
+    } finally {
+      offeringPromise = null;
+    }
+  })();
+
+  return offeringPromise;
 }
 
 export async function purchasePackage(pkg: PurchasesPackage): Promise<boolean> {
