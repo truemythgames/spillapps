@@ -198,7 +198,11 @@
   },
   "paywall": {
     "title": "Unlock History Tea",
-    "trialSubtitle": "3-day free trial.",
+    "trialSubtitle": "Get unlimited access to all premium features",
+    "benefit1": "200+ narrated history stories",
+    "benefit2": "Deep-dive character profiles",
+    "benefit3": "Curated playlists & collections",
+    "benefit4": "AI chat companion",
     "noPaymentDue": "No Payment Due Now",
     "noCommitment": "No commitment, cancel anytime",
     "weeklyAccess": "Weekly Access",

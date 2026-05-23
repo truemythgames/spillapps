@@ -8,10 +8,6 @@ export function publicMediaBase(env: Env): string {
 
 /**
  * Public URL for an R2 object key (per-app prefix applied), or null if no key.
- *
- * Pass the request-resolved appId so multi-tenant routes generate URLs under
- * the correct prefix (e.g. `history-tea/...`). Falls back to the worker's
- * default `env.APP_ID` for legacy callers.
  */
 export function mediaUrl(
   env: Env,
@@ -20,5 +16,22 @@ export function mediaUrl(
 ): string | null {
   if (!key?.trim()) return null;
   const canonical = normalizeStorageKeyForApp(key.trim(), appId || env.APP_ID);
+  return `${publicMediaBase(env)}/${canonical}`;
+}
+
+/**
+ * Thumbnail URL for cover images (400x400). Falls back to full-size if key
+ * doesn't look like a cover path.
+ */
+export function thumbUrl(
+  env: Env,
+  key: string | null | undefined,
+  appId?: string,
+): string | null {
+  if (!key?.trim()) return null;
+  const k = key.trim();
+  const thumbKey = k.replace(/\/cover\.webp$/, "/cover-thumb.webp");
+  if (thumbKey === k) return mediaUrl(env, key, appId);
+  const canonical = normalizeStorageKeyForApp(thumbKey, appId || env.APP_ID);
   return `${publicMediaBase(env)}/${canonical}`;
 }

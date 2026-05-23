@@ -1,0 +1,11 @@
+name = "spill-media-worker"
+main = "src/index.ts"
+compatibility_date = "2025-04-01"
+account_id = "c34e072d06363120d0fedf55fc673661"
+
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "spill-media"
+
+# After deploy: Workers → spill-media-worker → Settings → Triggers → Custom Domains → media.spillapps.com
+# This replaces the R2 public access custom domain with this Worker.

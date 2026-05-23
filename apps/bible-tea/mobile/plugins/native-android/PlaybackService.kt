@@ -1,4 +1,4 @@
-package app.historytea
+package app.bibletea
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -24,17 +24,17 @@ import kotlin.concurrent.thread
 class PlaybackService : Service() {
 
   companion object {
-    const val ACTION_UPDATE = "app.historytea.playback.UPDATE"
-    const val ACTION_STOP = "app.historytea.playback.STOP"
-    const val CHANNEL_ID = "historytea_playback"
+    const val ACTION_UPDATE = "app.bibletea.playback.UPDATE"
+    const val ACTION_STOP = "app.bibletea.playback.STOP"
+    const val CHANNEL_ID = "bibletea_playback"
     const val NOTIFICATION_ID = 1138
   }
 
   private lateinit var mediaSession: MediaSessionCompat
   private var currentArtworkUrl: String? = null
   private var currentArtwork: Bitmap? = null
-  private var currentTitle: String = "History Tea"
-  private var currentArtist: String = "History Tea"
+  private var currentTitle: String = "Bible Tea"
+  private var currentArtist: String = "Bible Tea"
   private var currentDurationSec: Double = 0.0
   private var currentPositionSec: Double = 0.0
   private var currentRate: Double = 1.0
@@ -45,7 +45,7 @@ class PlaybackService : Service() {
   override fun onCreate() {
     super.onCreate()
     createChannel()
-    mediaSession = MediaSessionCompat(this, "HistoryTeaSession").apply {
+    mediaSession = MediaSessionCompat(this, "BibleTeaSession").apply {
       setFlags(
         MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or
           MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS
@@ -227,7 +227,7 @@ class PlaybackService : Service() {
   }
 
   private fun loadArtworkAsync(url: String) {
-    thread(start = true, isDaemon = true, name = "historytea-artwork") {
+    thread(start = true, isDaemon = true, name = "bibletea-artwork") {
       try {
         val conn = URL(url).openConnection()
         conn.connectTimeout = 10_000
@@ -236,7 +236,6 @@ class PlaybackService : Service() {
           val bmp = BitmapFactory.decodeStream(stream)
           if (bmp != null) {
             currentArtwork = bmp
-            // Refresh metadata and notification on main thread
             android.os.Handler(mainLooper).post {
               updateMediaSessionMetadata()
               val nm = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
@@ -244,9 +243,7 @@ class PlaybackService : Service() {
             }
           }
         }
-      } catch (_: Throwable) {
-        // Ignore artwork failures
-      }
+      } catch (_: Throwable) {}
     }
   }
 

@@ -146,7 +146,7 @@ module.exports = function withNowPlaying(config) {
   config = withDangerousMod(config, [
     "android",
     (config) => {
-      const srcDir = path.join(__dirname, "..", "android/app/src/main/java/app/bibletea");
+      const srcDir = path.join(__dirname, "native-android");
       const ANDROID_MODULE_KT = fs.readFileSync(path.join(srcDir, "NowPlayingBridgeModule.kt"), "utf8");
       const ANDROID_SERVICE_KT = fs.readFileSync(path.join(srcDir, "PlaybackService.kt"), "utf8");
       const ANDROID_PACKAGE_KT = fs.readFileSync(path.join(srcDir, "NowPlayingBridgePackage.kt"), "utf8");

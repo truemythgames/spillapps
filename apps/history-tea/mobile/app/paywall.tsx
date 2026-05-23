@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { View, Text, StyleSheet, Pressable, Dimensions, Alert, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, Pressable, Dimensions, Alert, ActivityIndicator, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
@@ -199,16 +199,24 @@ export default function PaywallScreen() {
 
       {/* STEP 1 */}
       <Animated.View style={[styles.page, s1Style]}>
-        <Hero source={require("@/assets/onboarding/building-the-pyramids.webp")} />
         <XBtn onPress={dismiss} disabled={busy || purchasing} top={insets.top + 8} />
 
-        <View style={[styles.body, { paddingBottom: insets.bottom + 16 }]}>
+        <ScrollView style={styles.body} contentContainerStyle={[styles.bodyContent, { paddingBottom: insets.bottom + 16 }]} bounces={false} showsVerticalScrollIndicator={false}>
+          <Hero source={require("@/assets/onboarding/building-the-pyramids.webp")} />
+          <View style={styles.bodyInner}>
           <Text style={styles.title}>{t("paywall.title")}</Text>
           <Text style={styles.sub}>{t("paywall.trialSubtitle")}</Text>
 
+          <View style={styles.benefits}>
+            <BenefitRow text={t("paywall.benefit1")} />
+            <BenefitRow text={t("paywall.benefit2")} />
+            <BenefitRow text={t("paywall.benefit3")} />
+            <BenefitRow text={t("paywall.benefit4")} />
+          </View>
+
           {returning ? (
             <>
-              <NoPay />
+              <View style={styles.noPaySpacer} />
               {showYearlyOffer && yearlyOffer && yearlyOfferPrice ? (
                 <Pressable
                   style={[styles.offerPlan, plan === "offer" && styles.offerPlanOn]}
@@ -299,23 +307,11 @@ export default function PaywallScreen() {
                   </Text>
                 )}
               </Pressable>
-              {plan === "offer" && yearlyOfferPrice ? (
-                <Text style={styles.pricingNote}>
-                  Auto-renews yearly at {yearlyOfferPrice}.{"\n"}{t("paywall.cancelAnytime")}
-                </Text>
-              ) : null}
               <Legal onRestore={handleRestore} restoring={restoring} disabled={purchasing} t={t} />
             </>
           ) : (
             <>
-              <View style={styles.noPay}>
-                <Text style={styles.noPayCheck}>✓</Text>
-                <Text style={styles.noPayText}>
-                  {plan === "weekly"
-                    ? t("paywall.noPaymentDue")
-                    : t("paywall.noCommitment")}
-                </Text>
-              </View>
+              <View style={styles.noPaySpacer} />
 
               <Pressable
                 style={[styles.plan, plan === "weekly" && styles.planOn]}
@@ -400,7 +396,8 @@ export default function PaywallScreen() {
               <Legal onRestore={handleRestore} restoring={restoring} disabled={purchasing} t={t} />
             </>
           )}
-        </View>
+          </View>
+        </ScrollView>
       </Animated.View>
 
     </View>
@@ -433,6 +430,15 @@ function NoPay() {
     <View style={styles.noPay}>
       <Text style={styles.noPayCheck}>✓</Text>
       <Text style={styles.noPayText}>{t("paywall.noPaymentDue")}</Text>
+    </View>
+  );
+}
+
+function BenefitRow({ text }: { text: string }) {
+  return (
+    <View style={styles.benefitRow}>
+      <Text style={styles.benefitCheck}>✓</Text>
+      <Text style={styles.benefitText}>{text}</Text>
     </View>
   );
 }
@@ -488,15 +494,18 @@ const styles = StyleSheet.create({
 
   body: {
     flex: 1,
+  },
+  bodyContent: {
+  },
+  bodyInner: {
     paddingHorizontal: 28,
-    justifyContent: "flex-start",
-    paddingTop: 4,
   },
   title: {
     fontFamily: fonts.heading,
     fontSize: 30,
     color: colors.text,
     textAlign: "center",
+    marginTop: -50,
   },
   sub: {
     fontFamily: fonts.body,
@@ -504,6 +513,26 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     textAlign: "center",
     marginTop: 4,
+  },
+  benefits: {
+    marginTop: 14,
+    marginBottom: 4,
+    gap: 8,
+  },
+  benefitRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  benefitCheck: {
+    fontSize: 15,
+    color: colors.primary,
+    fontWeight: "700",
+  },
+  benefitText: {
+    fontFamily: fonts.bodyMedium,
+    fontSize: fontSize.sm,
+    color: colors.text,
   },
   offerBadge: {
     fontFamily: fonts.bodySemiBold,
@@ -521,6 +550,9 @@ const styles = StyleSheet.create({
     gap: 6,
     marginTop: 18,
     marginBottom: 18,
+  },
+  noPaySpacer: {
+    height: 36,
   },
   noPayCheck: { fontSize: 16, color: colors.success, fontWeight: "700" },
   noPayText: { fontFamily: fonts.bodyMedium, fontSize: fontSize.sm, color: colors.textSecondary },
@@ -582,7 +614,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderRadius: 16,
     paddingHorizontal: 14,
-    paddingVertical: 14,
+    paddingVertical: 10,
     marginBottom: 10,
   },
   offerPlanOn: {
@@ -598,7 +630,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexWrap: "wrap",
     gap: 8,
-    marginBottom: 6,
+    marginBottom: 2,
   },
   offerStar: {
     fontSize: 16,
@@ -628,7 +660,7 @@ const styles = StyleSheet.create({
   },
   offerPriceMain: {
     fontFamily: fonts.heading,
-    fontSize: 26,
+    fontSize: 20,
     fontWeight: "800",
     color: colors.text,
     marginTop: 2,
@@ -643,7 +675,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.bodyMedium,
     fontSize: 12,
     color: colors.primary,
-    marginTop: 8,
+    marginTop: 4,
     letterSpacing: 0.2,
   },
 

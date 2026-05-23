@@ -198,7 +198,11 @@
   },
   "paywall": {
     "title": "Desbloquea History Tea",
-    "trialSubtitle": "3 días de prueba gratis.",
+    "trialSubtitle": "Accede sin límites a todas las funciones premium",
+    "benefit1": "Más de 200 historias narradas",
+    "benefit2": "Perfiles detallados de personajes",
+    "benefit3": "Listas y colecciones seleccionadas",
+    "benefit4": "Compañero de chat con IA",
     "noPaymentDue": "Sin pago por ahora",
     "noCommitment": "Sin compromiso, cancela cuando quieras",
     "weeklyAccess": "Acceso Semanal",
