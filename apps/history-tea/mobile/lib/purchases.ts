@@ -3,6 +3,11 @@ import * as SecureStore from "expo-secure-store";
 import * as Crypto from "expo-crypto";
 import { trackSubscription, trackEvent } from "@/lib/analytics";
 
+let AppEventsLogger: any = null;
+try {
+  AppEventsLogger = require("react-native-fbsdk-next").AppEventsLogger;
+} catch {}
+
 let Purchases: any = null;
 let LOG_LEVEL: any = {};
 
@@ -89,6 +94,16 @@ export async function initPurchases(userId?: string): Promise<void> {
     await Purchases.logIn(stableId);
   } catch (e) {
     console.warn("[Purchases] logIn with stable id failed:", e);
+  }
+
+  // Pass Facebook Anonymous ID so RevenueCat can forward events via Conversions API
+  try {
+    const fbAnonId = await AppEventsLogger?.getAnonymousID();
+    if (fbAnonId) {
+      Purchases.setFBAnonymousID(fbAnonId);
+    }
+  } catch (e) {
+    console.warn("[Purchases] setFBAnonymousID failed:", e);
   }
 
   // Pre-fetch offerings so paywall opens instantly

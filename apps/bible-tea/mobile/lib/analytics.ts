@@ -21,15 +21,14 @@ try {
 } catch {}
 
 let initialized = false;
+let attRequested = false;
 
 export async function initAnalytics() {
   if (initialized) return;
 
   try {
     if (Platform.OS === "ios") {
-      const { status } = await requestTrackingPermissionsAsync();
       Settings?.initializeSDK();
-      Settings?.setAdvertiserTrackingEnabled(status === "granted");
     } else {
       Settings?.initializeSDK();
       Settings?.setAdvertiserTrackingEnabled(true);
@@ -45,6 +44,23 @@ export async function initAnalytics() {
   }
 
   initialized = true;
+}
+
+export async function requestATT(): Promise<boolean> {
+  if (attRequested) return false;
+  attRequested = true;
+
+  if (Platform.OS !== "ios") return true;
+
+  try {
+    const { status } = await requestTrackingPermissionsAsync();
+    const granted = status === "granted";
+    Settings?.setAdvertiserTrackingEnabled(granted);
+    return granted;
+  } catch (e) {
+    console.warn("[Analytics] ATT request failed:", e);
+    return false;
+  }
 }
 
 export function trackEvent(name: string, params?: Record<string, any>) {

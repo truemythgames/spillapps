@@ -28,6 +28,7 @@ let StoreReview: any = null;
 try { StoreReview = require("expo-store-review"); } catch {}
 import { storage, StorageKeys } from "@/lib/storage";
 import { colors, fonts, fontSize, spacing } from "@/lib/theme";
+import { requestATT } from "@/lib/analytics";
 
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get("window");
 
@@ -186,7 +187,10 @@ export default function OnboardingScreen() {
     );
   }
 
-  function goNext() {
+  async function goNext() {
+    if (step === "welcome") {
+      await requestATT();
+    }
     if (inShowcase) {
       if (showcaseIdx < SHOWCASE_STEPS.length - 1) {
         showcaseRef.current?.scrollToIndex({ index: showcaseIdx + 1, animated: true });
