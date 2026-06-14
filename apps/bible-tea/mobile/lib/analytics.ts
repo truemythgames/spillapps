@@ -1,5 +1,5 @@
 import { Platform } from "react-native";
-import { requestTrackingPermissionsAsync } from "expo-tracking-transparency";
+import { requestTrackingPermissionsAsync, getTrackingPermissionsAsync } from "expo-tracking-transparency";
 
 let Settings: any = null;
 let AppEventsLogger: any = null;
@@ -29,6 +29,8 @@ export async function initAnalytics() {
   try {
     if (Platform.OS === "ios") {
       Settings?.initializeSDK();
+      const { granted } = await getTrackingPermissionsAsync();
+      Settings?.setAdvertiserTrackingEnabled(granted);
     } else {
       Settings?.initializeSDK();
       Settings?.setAdvertiserTrackingEnabled(true);
