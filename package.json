@@ -42,7 +42,9 @@
     "generate:history": "CONTENT_APP_ID=history-tea R2_APP_PREFIX=history-tea npx tsx scripts/generate.ts",
     "sync:r2": "npx tsx scripts/sync-to-r2.ts",
     "sync:r2:history": "CONTENT_APP_ID=history-tea R2_APP_PREFIX=history-tea npx tsx scripts/sync-to-r2.ts",
-    "serve:content": "npx tsx scripts/content-server.ts"
+    "serve:content": "npx tsx scripts/content-server.ts",
+    "android": "expo run:android",
+    "ios": "expo run:ios"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
@@ -70,6 +72,9 @@
     "expo-store-review": "~8.1.5",
     "express": "^5.2.1",
     "openai": "^6.33.0",
-    "replicate": "^1.4.0"
+    "replicate": "^1.4.0",
+    "expo": "~53.0.27",
+    "react": "19.0.0",
+    "react-native": "0.79.6"
   }
 }

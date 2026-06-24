@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
-    "newArchEnabled": false,
+    "newArchEnabled": true,
     "scheme": "bibletea",
     "splash": {
       "image": "./assets/splash.png",
@@ -19,7 +19,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "app.bibletea",
-      "buildNumber": "26",
+      "buildNumber": "28",
       "usesAppleSignIn": true,
       "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
@@ -35,6 +35,7 @@
         "backgroundColor": "#0A0A0F"
       },
       "package": "app.bibletea",
+      "versionCode": 28,
       "googleServicesFile": "./google-services.json"
     },
     "plugins": [

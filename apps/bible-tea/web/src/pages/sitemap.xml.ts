@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { getCatalog, getPlaylists, getSeasons, getCharacters } from "../lib/stories";
+import { getCatalog, getPlaylists, getSeasons, getCharacters, getPrayers } from "../lib/stories";
 
 const SITE = "https://bibletea.app";
 const NO_LOCALE_PAGES = new Set(["/privacy", "/terms"]);
@@ -21,10 +21,11 @@ function url(loc: string, lastmod: string, changefreq?: string, priority?: numbe
 
 export const GET: APIRoute = async () => {
   const catalog = getCatalog();
-  const [playlists, seasons, characters] = await Promise.all([
+  const [playlists, seasons, characters, prayers] = await Promise.all([
     getPlaylists(catalog),
     getSeasons(),
     getCharacters(),
+    getPrayers(),
   ]);
 
   const today = new Date().toISOString();
@@ -34,6 +35,7 @@ export const GET: APIRoute = async () => {
     { path: "/stories", lastmod: today, changefreq: "weekly", priority: 0.9 },
     { path: "/playlists", lastmod: today, changefreq: "weekly", priority: 0.9 },
     { path: "/characters", lastmod: today, changefreq: "weekly", priority: 0.8 },
+    { path: "/prayers", lastmod: today, changefreq: "weekly", priority: 0.8 },
     { path: "/books", lastmod: today, changefreq: "weekly", priority: 0.8 },
     { path: "/privacy", lastmod: "2026-03-26T00:00:00.000Z", changefreq: "yearly", priority: 0.3 },
     { path: "/terms", lastmod: "2026-04-13T00:00:00.000Z", changefreq: "yearly", priority: 0.3 },
@@ -50,6 +52,9 @@ export const GET: APIRoute = async () => {
   }
   for (const season of seasons) {
     entries.push({ path: `/books/${season.slug}`, lastmod: today, changefreq: "monthly", priority: 0.6 });
+  }
+  for (const prayer of prayers) {
+    entries.push({ path: `/prayers/${prayer.slug}`, lastmod: today, changefreq: "monthly", priority: 0.6 });
   }
 
   const urls: string[] = [];

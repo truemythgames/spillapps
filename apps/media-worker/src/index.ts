@@ -11,11 +11,20 @@ export default {
       return new Response("Not Found", { status: 404 });
     }
 
-    // Check edge cache first
     const cache = (caches as any).default as Cache;
-    const cacheKey = new Request(url.toString(), request);
-    let response = await cache.match(cacheKey);
-    if (response) return response;
+    const cacheUrl = new URL(url.toString());
+    cacheUrl.search = "";
+    const cacheKey = new Request(cacheUrl.toString());
+
+    // Allow cache refresh via ?purge=1 — deletes old cache, fetches fresh from R2
+    const shouldPurge = url.searchParams.has("purge");
+
+    if (!shouldPurge) {
+      const cached = await cache.match(cacheKey);
+      if (cached) return cached;
+    } else {
+      await cache.delete(cacheKey);
+    }
 
     // Fetch from R2
     const object = await env.MEDIA.get(key);
@@ -31,9 +40,9 @@ export default {
     if (object.uploaded) headers.set("Last-Modified", object.uploaded.toUTCString());
     headers.set("Access-Control-Allow-Origin", "*");
 
-    response = new Response(object.body, { status: 200, headers });
+    const response = new Response(object.body, { status: 200, headers });
 
-    // Store in edge cache (non-blocking)
+    // Store fresh version in edge cache
     ctx.waitUntil(cache.put(cacheKey, response.clone()));
 
     return response;

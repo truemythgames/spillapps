@@ -7,19 +7,21 @@ import { prepareForSpeech, SPEAKERS } from "./lib/generate-core";
 const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY!;
 const R2_BUCKET = "spill-media";
 const APP_PREFIX = "bible-tea";
-const SPEAKER_KEYS: (keyof typeof SPEAKERS)[] = ["grace"];
+const SPEAKER_KEYS: (keyof typeof SPEAKERS)[] = ["elijah", "grace"];
 const SPEAKER_DB_IDS: Record<string, string> = {
   elijah: "spk-elijah",
   grace: "spk-grace",
 };
 
+const MODEL_ID = "eleven_turbo_v2_5";
+const LOCALE = "es";
 const CONCURRENCY = 2;
 const RETRY_ATTEMPTS = 3;
 const RETRY_DELAY_MS = 5000;
 
-const OUTPUT_DIR = join(__dirname, "narration-output");
+const OUTPUT_DIR = join(__dirname, "narration-output-es");
 const PROGRESS_FILE = join(OUTPUT_DIR, "progress.json");
-const SQL_FILE = join(OUTPUT_DIR, "insert-audio.sql");
+const SQL_FILE = join(OUTPUT_DIR, "insert-audio-es.sql");
 
 interface StoryRow {
   id: string;
@@ -52,7 +54,7 @@ async function generateNarration(text: string, speakerKey: keyof typeof SPEAKERS
       },
       body: JSON.stringify({
         text: speechText,
-        model_id: "eleven_multilingual_v2",
+        model_id: MODEL_ID,
         voice_settings: { ...speaker.voiceSettings },
       }),
     }
@@ -75,7 +77,7 @@ async function processStory(story: StoryRow, speakerKey: keyof typeof SPEAKERS, 
   if (done.has(key)) return;
 
   const mp3Dir = join(OUTPUT_DIR, story.slug);
-  const mp3Path = join(mp3Dir, `narration-${speakerKey}.mp3`);
+  const mp3Path = join(mp3Dir, `narration-${speakerKey}-${LOCALE}.mp3`);
 
   mkdirSync(mp3Dir, { recursive: true });
 
@@ -107,10 +109,10 @@ async function processStory(story: StoryRow, speakerKey: keyof typeof SPEAKERS, 
 }
 
 async function uploadToR2(story: StoryRow, speakerKey: string) {
-  const mp3Path = join(OUTPUT_DIR, story.slug, `narration-${speakerKey}.mp3`);
+  const mp3Path = join(OUTPUT_DIR, story.slug, `narration-${speakerKey}-${LOCALE}.mp3`);
   if (!existsSync(mp3Path)) return false;
 
-  const r2Key = `${APP_PREFIX}/stories/${story.slug}/narration-${speakerKey}.mp3`;
+  const r2Key = `${APP_PREFIX}/stories/${story.slug}/narration-${speakerKey}-${LOCALE}.mp3`;
   try {
     execSync(
       `npx wrangler r2 object put "${R2_BUCKET}/${r2Key}" --file="${mp3Path}" --content-type="audio/mpeg" --remote`,
@@ -124,15 +126,14 @@ async function uploadToR2(story: StoryRow, speakerKey: string) {
 }
 
 async function main() {
-  const stories: StoryRow[] = JSON.parse(
-    readFileSync(join(__dirname, "missing-audio-stories.json"), "utf8")
-  );
+  const inputFile = process.argv.find((a) => a.endsWith(".json")) || join(__dirname, "stories-es.json");
+  const stories: StoryRow[] = JSON.parse(readFileSync(inputFile, "utf8"));
 
   mkdirSync(OUTPUT_DIR, { recursive: true });
   const done = loadProgress();
 
   const total = stories.length * SPEAKER_KEYS.length;
-  console.log(`\n=== Bible Tea Batch Narration ===`);
+  console.log(`\n=== Bible Tea Spanish Narration (Turbo v2.5) ===`);
   console.log(`Stories: ${stories.length} | Speakers: ${SPEAKER_KEYS.join(", ")} | Total: ${total}`);
   console.log(`Already done: ${done.size} | Remaining: ${total - done.size}\n`);
 
@@ -145,7 +146,7 @@ async function main() {
     for (let i = 0; i < stories.length; i++) {
       const story = stories[i];
       for (const speakerKey of SPEAKER_KEYS) {
-        const mp3Path = join(OUTPUT_DIR, story.slug, `narration-${speakerKey}.mp3`);
+        const mp3Path = join(OUTPUT_DIR, story.slug, `narration-${speakerKey}-${LOCALE}.mp3`);
         if (!existsSync(mp3Path)) {
           console.log(`  [skip] ${story.slug}:${speakerKey} — no file`);
           continue;
@@ -154,11 +155,11 @@ async function main() {
         console.log(`  [upload] ${story.slug}:${speakerKey} (${i + 1}/${stories.length})...`);
         const ok = await uploadToR2(story, speakerKey);
         if (ok) {
-          const audioId = `sa-${story.slug}-${speakerKey}`;
-          const audioKey = `${APP_PREFIX}/stories/${story.slug}/narration-${speakerKey}.mp3`;
+          const audioId = `sa-${story.slug}-${speakerKey}-${LOCALE}`;
+          const audioKey = `${APP_PREFIX}/stories/${story.slug}/narration-${speakerKey}-${LOCALE}.mp3`;
           const speakerId = SPEAKER_DB_IDS[speakerKey];
           sqlLines.push(
-            `INSERT OR IGNORE INTO story_audio (id, story_id, speaker_id, audio_key, duration_seconds) VALUES ('${audioId}', '${story.id}', '${speakerId}', '${audioKey}', 0);`
+            `INSERT OR IGNORE INTO story_audio (id, story_id, speaker_id, audio_key, duration_seconds, locale) VALUES ('${audioId}', '${story.id}', '${speakerId}', '${audioKey}', 0, '${LOCALE}');`
           );
         }
       }

@@ -2131,5 +2131,581 @@
     "bibleRef": "Revelation 21-22",
     "inSeed": false,
     "seedId": null
+  },
+  {
+    "id": "hannahs-prayer",
+    "title": "Hannah's Prayer",
+    "description": "A childless woman weeps at the temple and makes a deal with God. He delivers, and she gives her miracle baby right back.",
+    "section": "1 Samuel",
+    "bibleRef": "1 Samuel 1-2",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "samuel-anoints-saul",
+    "title": "Samuel Anoints Saul",
+    "description": "Israel demands a king. God gives them a tall, shy dude hiding behind luggage. What could go wrong?",
+    "section": "1 Samuel",
+    "bibleRef": "1 Samuel 9-10",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "sauls-downfall",
+    "title": "Saul's Downfall",
+    "description": "The king who couldn't wait, couldn't obey, and couldn't let go. God moves on. Saul spirals.",
+    "section": "1 Samuel",
+    "bibleRef": "1 Samuel 13-15",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "samuel-anoints-david",
+    "title": "Samuel Anoints David",
+    "description": "God sends Samuel to a random farm family. Seven sons pass by. Then the runt with a guitar gets picked.",
+    "section": "1 Samuel",
+    "bibleRef": "1 Samuel 16",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "david-and-jonathan",
+    "title": "David & Jonathan",
+    "description": "The prince loves the shepherd. A friendship so deep it threatens the throne. Jonathan chooses loyalty over legacy.",
+    "section": "1 Samuel",
+    "bibleRef": "1 Samuel 18-20",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "david-spares-saul",
+    "title": "David Spares Saul",
+    "description": "Saul hunts David. David finds Saul sleeping. One slash could end it all. He cuts the robe instead.",
+    "section": "1 Samuel",
+    "bibleRef": "1 Samuel 24, 26",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-witch-of-endor",
+    "title": "The Witch of Endor",
+    "description": "A desperate king visits a medium the night before battle. The dead prophet rises with a terrifying message.",
+    "section": "1 Samuel",
+    "bibleRef": "1 Samuel 28",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "solomon-builds-the-temple",
+    "title": "Solomon Builds the Temple",
+    "description": "Seven years. 180,000 workers. Gold everywhere. God finally gets a permanent address.",
+    "section": "1 Kings",
+    "bibleRef": "1 Kings 5-8",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "queen-of-sheba",
+    "title": "Queen of Sheba Visits",
+    "description": "She came to test Solomon. She left breathless. 'Not even half was told to me.'",
+    "section": "1 Kings",
+    "bibleRef": "1 Kings 10",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "solomons-downfall",
+    "title": "Solomon's Downfall",
+    "description": "700 wives. 300 concubines. Altars to foreign gods. The wisest man on earth makes the dumbest choices.",
+    "section": "1 Kings",
+    "bibleRef": "1 Kings 11",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "elijah-fed-by-ravens",
+    "title": "Elijah Fed by Ravens",
+    "description": "A lone prophet declares drought, then hides in a canyon while birds bring him takeout twice a day.",
+    "section": "1 Kings",
+    "bibleRef": "1 Kings 17:1-7",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "elijah-and-the-widow",
+    "title": "Elijah & the Widow",
+    "description": "A starving widow with her last handful of flour. A prophet shows up asking for lunch. The jar never empties.",
+    "section": "1 Kings",
+    "bibleRef": "1 Kings 17:8-24",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "elijah-runs-from-jezebel",
+    "title": "Elijah Runs from Jezebel",
+    "description": "Fresh off his greatest victory, Elijah crumbles. He begs God to kill him. Then hears the still small voice.",
+    "section": "1 Kings",
+    "bibleRef": "1 Kings 19",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "naboths-vineyard",
+    "title": "Naboth's Vineyard",
+    "description": "A king pouts because a farmer won't sell. His wife frames the man for blasphemy. Blood stains the throne.",
+    "section": "1 Kings",
+    "bibleRef": "1 Kings 21",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "elijah-taken-to-heaven",
+    "title": "Elijah Taken to Heaven",
+    "description": "A chariot of fire splits the sky. Elijah goes up in a whirlwind. Elisha picks up the mantle.",
+    "section": "2 Kings",
+    "bibleRef": "2 Kings 2",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "nebuchadnezzars-dream",
+    "title": "Nebuchadnezzar's Dream",
+    "description": "The king has a nightmare. No one can interpret it. A Jewish teenager walks in and reads empires like a timeline.",
+    "section": "Daniel",
+    "bibleRef": "Daniel 2",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-fiery-furnace",
+    "title": "The Fiery Furnace",
+    "description": "Bow or burn. Three men choose burn. The king sees four figures in the flames. Not a hair singed.",
+    "section": "Daniel",
+    "bibleRef": "Daniel 3",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-writing-on-the-wall",
+    "title": "The Writing on the Wall",
+    "description": "A drunken feast. A floating hand. Words on plaster. 'You have been weighed and found wanting.' Babylon falls that night.",
+    "section": "Daniel",
+    "bibleRef": "Daniel 5",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "daniels-visions",
+    "title": "Daniel's Visions",
+    "description": "Four beasts. A ram and a goat. Seventy weeks. Daniel sees empires rise and fall like dominoes across centuries.",
+    "section": "Daniel",
+    "bibleRef": "Daniel 7-9",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "esther-becomes-queen",
+    "title": "Esther Becomes Queen",
+    "description": "An orphan Jewish girl wins a beauty contest and becomes queen of Persia. She has no idea what's coming.",
+    "section": "Esther",
+    "bibleRef": "Esther 1-2",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "hamans-plot",
+    "title": "Haman's Plot",
+    "description": "One man's ego gets bruised. His solution? Genocide. He rolls dice to pick the date. The clock starts ticking.",
+    "section": "Esther",
+    "bibleRef": "Esther 3-4",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "esthers-banquet",
+    "title": "Esther's Banquet",
+    "description": "'If I perish, I perish.' Esther risks death to expose the plot. Haman hangs on his own gallows.",
+    "section": "Esther",
+    "bibleRef": "Esther 5-7",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "david-writes-psalm-23",
+    "title": "David Writes Psalm 23",
+    "description": "A shepherd becomes a king and writes six verses that have comforted billions. The Lord is my shepherd.",
+    "section": "Psalms",
+    "bibleRef": "Psalm 23",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "songs-in-the-night",
+    "title": "Songs in the Night",
+    "description": "When everything falls apart, David writes. Raw pain, desperate faith, and worship from the pit.",
+    "section": "Psalms",
+    "bibleRef": "Psalms 42, 51, 88",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "jobs-suffering",
+    "title": "Job's Suffering",
+    "description": "The best man alive loses everything in one day. His friends blame him. God stays silent. Until He doesn't.",
+    "section": "Job",
+    "bibleRef": "Job 1-2, 38-42",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "solomons-proverbs",
+    "title": "Solomon's Proverbs",
+    "description": "The wisest king distills life into one-liners. Money, friendships, work, sex, and the fear of the Lord.",
+    "section": "Proverbs",
+    "bibleRef": "Proverbs 1-9",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "isaiahs-vision",
+    "title": "Isaiah's Vision",
+    "description": "The temple shakes. Seraphim cover their faces. 'Holy, holy, holy.' Isaiah's lips are burned clean. 'Here am I — send me.'",
+    "section": "Isaiah",
+    "bibleRef": "Isaiah 6",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "jeremiah-the-weeping-prophet",
+    "title": "Jeremiah the Weeping Prophet",
+    "description": "God calls a teenager to deliver bad news to an entire nation. Nobody listens. He weeps anyway.",
+    "section": "Jeremiah",
+    "bibleRef": "Jeremiah 1, 20, 38",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "valley-of-dry-bones",
+    "title": "Valley of Dry Bones",
+    "description": "A field of skeletons. God asks: 'Can these bones live?' Ezekiel speaks. Bones rattle. Flesh forms. An army rises.",
+    "section": "Ezekiel",
+    "bibleRef": "Ezekiel 37",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "hosea-and-gomer",
+    "title": "Hosea & Gomer",
+    "description": "God tells a prophet to marry a prostitute. She leaves. He buys her back. It's a love story about Israel.",
+    "section": "Hosea",
+    "bibleRef": "Hosea 1-3",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "jonahs-anger",
+    "title": "Jonah's Anger",
+    "description": "Nineveh repents. Jonah fumes. 'I knew you'd forgive them!' God schools him with a dying plant.",
+    "section": "Jonah",
+    "bibleRef": "Jonah 3-4",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "letters-to-seven-churches",
+    "title": "Letters to Seven Churches",
+    "description": "Seven churches get personal notes from Jesus. Some get praise. Some get roasted. All get a warning.",
+    "section": "Revelation",
+    "bibleRef": "Revelation 2-3",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-four-horsemen",
+    "title": "The Four Horsemen",
+    "description": "Conquest. War. Famine. Death. Four seals broken. Four riders unleashed. The end begins.",
+    "section": "Revelation",
+    "bibleRef": "Revelation 6",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-fall-of-babylon",
+    "title": "The Fall of Babylon",
+    "description": "The great city that seduced the world crashes in one hour. Kings weep. Heaven celebrates.",
+    "section": "Revelation",
+    "bibleRef": "Revelation 17-18",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "love-is",
+    "title": "Love Is...",
+    "description": "Paul writes 13 verses that get read at every wedding. But the context? A church tearing itself apart.",
+    "section": "Epistles",
+    "bibleRef": "1 Corinthians 13",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "armor-of-god",
+    "title": "Armor of God",
+    "description": "Belt. Breastplate. Shoes. Shield. Helmet. Sword. Paul describes spiritual warfare like a Roman soldier suiting up.",
+    "section": "Epistles",
+    "bibleRef": "Ephesians 6:10-20",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "paul-and-timothy",
+    "title": "Paul & Timothy",
+    "description": "A spiritual father and his young protégé. Tears at goodbye. 'Fan into flame the gift that is in you.'",
+    "section": "Epistles",
+    "bibleRef": "1 Timothy 1, 2 Timothy 1",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "pauls-letter-to-rome",
+    "title": "Paul's Letter to Rome",
+    "description": "The most theological letter ever written. Justification, grace, and the famous 'nothing can separate us.'",
+    "section": "Epistles",
+    "bibleRef": "Romans 1-8",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "ruth-and-boaz",
+    "title": "Ruth & Boaz",
+    "description": "A foreign widow follows her mother-in-law. A wealthy farmer notices her gleaning his fields. An unlikely love story.",
+    "section": "Ruth",
+    "bibleRef": "Ruth 1-4",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "psalm-51-a-broken-king",
+    "title": "Psalm 51: A Broken King",
+    "description": "David's gut-wrenching prayer after his worst sin. 'Create in me a clean heart.' The most honest confession ever written.",
+    "section": "Psalms",
+    "bibleRef": "Psalm 51",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "psalm-91-gods-protection",
+    "title": "Psalm 91: God's Protection",
+    "description": "A thousand fall at your side, ten thousand at your right hand — but it won't come near you. The ultimate shelter promise.",
+    "section": "Psalms",
+    "bibleRef": "Psalm 91",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "psalm-139-fully-known",
+    "title": "Psalm 139: Fully Known",
+    "description": "You knit me together in my mother's womb. You know when I sit, rise, and every word before I speak. Nowhere to hide.",
+    "section": "Psalms",
+    "bibleRef": "Psalm 139",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "psalm-150-everything-praise",
+    "title": "Psalm 150: Everything That Breathes",
+    "description": "The final psalm. Every instrument, every creature, one command: PRAISE. The Bible's closing worship anthem.",
+    "section": "Psalms",
+    "bibleRef": "Psalm 150",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "jobs-friends-speak",
+    "title": "Job's Friends Speak",
+    "description": "Three friends show up after Job loses everything. They start well — then open their mouths and make it worse.",
+    "section": "Job",
+    "bibleRef": "Job 2-31",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "god-answers-job",
+    "title": "God Answers Job",
+    "description": "After 30+ chapters of debate, God finally speaks — from a whirlwind. 'Where were you when I laid the earth's foundations?'",
+    "section": "Job",
+    "bibleRef": "Job 38-41",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "job-restored",
+    "title": "Job Restored",
+    "description": "Job prays for his terrible friends, and God gives him back double everything. But the real reward? He saw God.",
+    "section": "Job",
+    "bibleRef": "Job 42",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-wise-and-the-foolish",
+    "title": "The Wise & The Foolish",
+    "description": "Two paths, two outcomes. Proverbs lays it bare: wisdom leads to life, foolishness to destruction. Choose wisely.",
+    "section": "Proverbs",
+    "bibleRef": "Proverbs 1-9",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-proverbs-31-woman",
+    "title": "The Proverbs 31 Woman",
+    "description": "She's not a checklist — she's a portrait of strength, wisdom, and hustle. Her husband and kids call her blessed.",
+    "section": "Proverbs",
+    "bibleRef": "Proverbs 31:10-31",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "isaiahs-call",
+    "title": "Isaiah's Call",
+    "description": "A vision of God on his throne, angels crying 'Holy!' Isaiah's lips are burned clean. 'Here I am — send me.'",
+    "section": "Isaiah",
+    "bibleRef": "Isaiah 6",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "immanuel-prophecy",
+    "title": "The Immanuel Prophecy",
+    "description": "A virgin will conceive. A child called Wonderful Counselor, Mighty God. 700 years before Bethlehem — Isaiah saw it.",
+    "section": "Isaiah",
+    "bibleRef": "Isaiah 7, 9",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "new-heavens-new-earth-isaiah",
+    "title": "New Heavens & New Earth",
+    "description": "No more weeping. The wolf and lamb lie together. God makes everything new. Isaiah's stunning vision of the final restoration.",
+    "section": "Isaiah",
+    "bibleRef": "Isaiah 65-66",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-potters-clay",
+    "title": "The Potter's Clay",
+    "description": "God sends Jeremiah to a pottery shop. A ruined pot gets reshaped. The message: I can rebuild you, Israel — if you let me.",
+    "section": "Jeremiah",
+    "bibleRef": "Jeremiah 18-19",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "jeremiah-in-the-cistern",
+    "title": "Jeremiah in the Cistern",
+    "description": "They throw the prophet into a muddy pit to die. One foreigner risks everything to pull him out. Truth has a cost.",
+    "section": "Jeremiah",
+    "bibleRef": "Jeremiah 38",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-new-covenant",
+    "title": "The New Covenant",
+    "description": "No more stone tablets. God writes his law on hearts. 'I will forgive their sin and remember it no more.' Game-changer.",
+    "section": "Jeremiah",
+    "bibleRef": "Jeremiah 31:31-34",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "ezekiels-call-and-the-wheel",
+    "title": "Ezekiel's Call & The Wheel",
+    "description": "Four living creatures, wheels within wheels, eyes everywhere. The wildest vision in the Bible — and Ezekiel's mission starts.",
+    "section": "Ezekiel",
+    "bibleRef": "Ezekiel 1-3",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "the-restored-temple",
+    "title": "The Restored Temple",
+    "description": "Ezekiel sees a future temple with water flowing from it — a river that heals everything it touches. A glimpse of paradise.",
+    "section": "Ezekiel",
+    "bibleRef": "Ezekiel 47",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "israels-unfaithfulness",
+    "title": "Israel's Unfaithfulness",
+    "description": "God compares Israel to Hosea's cheating wife. She runs to other lovers. But God keeps pursuing. The pain is real.",
+    "section": "Hosea",
+    "bibleRef": "Hosea 2-3",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "gods-love-wins",
+    "title": "God's Love Wins",
+    "description": "After all the betrayal, God can't let go. 'How can I give you up?' His compassion overpowers his anger. Love wins.",
+    "section": "Hosea",
+    "bibleRef": "Hosea 11, 14",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "solomons-temple-dedication",
+    "title": "Solomon's Temple Dedication",
+    "description": "The temple is finished. Solomon prays. Fire falls from heaven. God's glory fills the house so thick priests can't stand.",
+    "section": "2 Chronicles",
+    "bibleRef": "2 Chronicles 5-7",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "hezekiahs-revival",
+    "title": "Hezekiah's Revival",
+    "description": "A young king reopens the temple, smashes idols, and throws the biggest Passover in centuries. Judah breathes again.",
+    "section": "2 Chronicles",
+    "bibleRef": "2 Chronicles 29-30",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "taming-the-tongue",
+    "title": "Taming the Tongue",
+    "description": "A tiny spark burns a forest. James says the tongue is the same — small but deadly. Nobody can tame it. So now what?",
+    "section": "Epistles",
+    "bibleRef": "James 3",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "faith-without-works",
+    "title": "Faith Without Works",
+    "description": "You say you believe? Show me. Faith without action is dead. James doesn't sugarcoat it — put your money where your mouth is.",
+    "section": "Epistles",
+    "bibleRef": "James 2:14-26",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "guard-the-truth",
+    "title": "Guard the Truth",
+    "description": "Peter's final warning: false teachers are coming. They'll twist Scripture. Stay anchored. Grow in grace. Don't get swept away.",
+    "section": "Epistles",
+    "bibleRef": "2 Peter 2-3",
+    "inSeed": false,
+    "seedId": null
+  },
+  {
+    "id": "finish-the-race",
+    "title": "Finish the Race",
+    "description": "Paul's last letter from death row. 'I have fought the good fight, finished the race, kept the faith.' A warrior's goodbye.",
+    "section": "Epistles",
+    "bibleRef": "2 Timothy 4",
+    "inSeed": false,
+    "seedId": null
   }
 ]

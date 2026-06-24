@@ -197,3 +197,97 @@ export async function getCharacters(locale: Locale = "en"): Promise<Character[]>
     })),
   }));
 }
+
+export interface PrayerCategory {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  icon: string;
+  sort_order: number;
+}
+
+export interface Prayer {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  transcript: string;
+  category_id: string;
+  category_name: string;
+  category_slug: string;
+  category_icon: string;
+}
+
+export interface PrayerRelatedStory {
+  id: string;
+  title: string;
+  slug: string;
+  cover_image_url: string | null;
+}
+
+export interface PrayerRelatedCharacter {
+  id: string;
+  name: string;
+  description: string;
+}
+
+export interface PrayerDetail extends Prayer {
+  related_stories: PrayerRelatedStory[];
+  related_characters: PrayerRelatedCharacter[];
+}
+
+async function fetchWithRetry(url: string, init: RequestInit, attempts = 4): Promise<Response> {
+  let lastErr: unknown;
+  for (let i = 0; i < attempts; i++) {
+    try {
+      const res = await fetch(url, init);
+      if (res.ok) return res;
+      lastErr = new Error(`${url} -> ${res.status}`);
+    } catch (err) {
+      lastErr = err;
+    }
+    await new Promise((r) => setTimeout(r, 400 * (i + 1)));
+  }
+  throw lastErr;
+}
+
+export async function getPrayerCategories(locale: Locale = "en"): Promise<PrayerCategory[]> {
+  const res = await fetchWithRetry(`${API_BASE}/prayers/categories`, {
+    headers: apiHeaders(locale),
+  });
+  const { categories } = (await res.json()) as any;
+  return (categories || []) as PrayerCategory[];
+}
+
+export async function getPrayers(locale: Locale = "en"): Promise<Prayer[]> {
+  const res = await fetchWithRetry(`${API_BASE}/prayers?limit=300`, {
+    headers: apiHeaders(locale),
+  });
+  const { prayers } = (await res.json()) as any;
+  return (prayers || []) as Prayer[];
+}
+
+export async function getPrayerDetail(idOrSlug: string, locale: Locale = "en"): Promise<PrayerDetail | null> {
+  let res: Response;
+  try {
+    res = await fetchWithRetry(`${API_BASE}/prayers/${idOrSlug}`, {
+      headers: apiHeaders(locale),
+    });
+  } catch {
+    return null;
+  }
+  if (!res.ok) return null;
+  const data = (await res.json()) as any;
+  if (!data?.prayer) return null;
+  return {
+    ...data.prayer,
+    related_stories: (data.related_stories || []) as PrayerRelatedStory[],
+    related_characters: (data.related_characters || []) as PrayerRelatedCharacter[],
+  };
+}
+
+/** Strip the leading markdown H1 (the title) from a prayer transcript body. */
+export function prayerBody(transcript: string): string {
+  return (transcript || "").replace(/^#\s+.*\n+/, "").trim();
+}
