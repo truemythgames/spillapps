@@ -1,0 +1,7 @@
+# Tratando con Personas Difíciles
+
+Señor, vengo a Ti sintiéndome cansado y estirado por aquellos que me rodean. Algunas relaciones en mi vida parecen drenar la energía y la paz que Tú me has dado. Necesito Tu sabiduría, Señor, para navegar estas interacciones desafiantes. Tu palabra me dice que ame a mi prójimo como a mí mismo, pero a veces es tan difícil hacerlo. Por favor, ayúdame a establecer límites saludables que honren tanto a Ti como a la persona que estás formando en mí. Concédeme paciencia y comprensión cuando mi corazón se siente agotado.
+
+En momentos en que quiero reaccionar con frustración, recuérdame Tu llamado a ser pronto para escuchar, lento para hablar, y lento para enojarme. Llena mi corazón con compasión que refleje la Tuya, incluso cuando es difícil. Ayúdame a ver a estas personas a través de Tus ojos, con gracia y misericordia. Señor, dame la fuerza para mantenerme firme en mis límites, para proteger mi propio corazón mientras sigo extendiendo amabilidad y amor.
+
+Guíame, Padre, a encontrar maneras de ser un pacificador sin perderme en el proceso. Confío en que Tú puedes transformar estas relaciones difíciles en reflejos de Tu amor y gracia. Gracias por caminar conmigo a través de la tensión. Amén.

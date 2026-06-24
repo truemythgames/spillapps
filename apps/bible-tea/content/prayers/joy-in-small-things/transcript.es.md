@@ -1,0 +1,7 @@
+# Alegría en las Pequeñas Cosas
+
+Padre, vengo a Ti con un corazón lleno de gratitud por las innumerables pequeñas misericordias que llenan mis días. A veces me pierdo esperando los grandes milagros y paso por alto los suaves susurros de Tu bondad en los momentos cotidianos. Abre mis ojos para ver la belleza en las cosas simples: una taza de café caliente, una palabra amable de un amigo, la risa de un niño. Estas son las bendiciones que me recuerdan Tu amor constante.
+
+Señor, Tu Palabra nos dice que todo buen regalo y todo don perfecto descienden de lo alto, del Padre de las luces celestiales. Cuán a menudo olvido que estos regalos me rodean diariamente, esperando silenciosamente mi reconocimiento. Ayúdame a reconocer y apreciar estos momentos, sabiendo que son evidencia de Tu cuidado inquebrantable.
+
+Enséñame a encontrar alegría en las pequeñas cosas, a apreciar el sol de la mañana en mi rostro y la brisa fresca que lleva Tu paz. Que mi corazón esté afinado para cantar Tu alabanza por estas misericordias diarias, pues son reflejos de Tu fidelidad. Que mi gratitud por estas pequeñas alegrías me acerque más a Ti, profundizando mi confianza y amor por Ti cada día. Gracias por llenar mi vida con Tu gracia sutil pero profunda. Amén.

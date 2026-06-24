@@ -142,6 +142,20 @@ export const api = {
   getCharacters: () =>
     request<{ characters: any[] }>("/v1/characters"),
 
+  // Prayers
+  getPrayerCategories: () =>
+    request<{ categories: any[] }>("/v1/prayers/categories"),
+
+  getPrayers: (categoryId?: string) => {
+    const q = categoryId ? `?category_id=${categoryId}&limit=50` : "?limit=50";
+    return request<{ prayers: any[] }>(`/v1/prayers${q}`);
+  },
+
+  getPrayer: (id: string) =>
+    request<{ prayer: any; audio_versions: any[]; related_stories: any[]; related_characters: any[] }>(
+      `/v1/prayers/${id}`
+    ),
+
   // Progress
   getProgress: () =>
     request<{ progress: any[] }>("/v1/me/progress"),

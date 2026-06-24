@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { colors, fonts, fontSize, TAB_BAR_HEIGHT } from "@/lib/theme";
 import { useAppStore } from "@/stores/app";
 
-const GATED_TABS = new Set(["explore", "playlists", "profile"]);
+const GATED_TABS = new Set(["explore", "playlists", "prayers", "profile"]);
 
 export default function TabLayout() {
   const { t } = useTranslation();
@@ -15,6 +15,7 @@ export default function TabLayout() {
   const TAB_ITEMS = [
     { name: "index", label: t("tabs.home"), icon: "home" as const, iconOutline: "home-outline" as const },
     { name: "explore", label: t("tabs.stories"), icon: "book" as const, iconOutline: "book-outline" as const },
+    { name: "prayers", label: t("tabs.prayers"), icon: "heart" as const, iconOutline: "heart-outline" as const },
     { name: "playlists", label: t("tabs.discover"), icon: "compass" as const, iconOutline: "compass-outline" as const },
     { name: "profile", label: t("tabs.chat"), icon: "sparkles" as const, iconOutline: "sparkles-outline" as const },
   ] as const;

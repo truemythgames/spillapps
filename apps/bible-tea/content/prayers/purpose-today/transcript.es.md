@@ -1,0 +1,7 @@
+# Caminando en Propósito
+
+Padre Celestial, al romper el alba y comenzar un nuevo día, vengo ante Ti buscando Tu guía. Sé que cada día es un regalo Tuyo, lleno de oportunidades para servir y glorificar Tu nombre. Ayúdame a caminar intencionalmente en el propósito que has puesto delante de mí. Tu Palabra me dice que "muchos son los planes en el corazón del hombre, pero es el propósito del Señor el que prevalece." Enséñame a alinear mi corazón con Tu voluntad, para que no esté simplemente ocupado, sino intencional en todo lo que hago.
+
+Concédeme sabiduría para discernir las tareas que realmente importan y el valor para dejar de lado las distracciones. Que Tu Espíritu me guíe hacia aquellos que necesitan un toque de Tu amor y bondad hoy. Abre mis ojos para ver las necesidades a mi alrededor y dame la fortaleza para satisfacerlas con gracia y humildad.
+
+Padre, confío en que has preparado buenas obras para que camine en ellas hoy. Que mis acciones reflejen Tu amor y mis palabras traigan vida y aliento a quienes encuentre. Al avanzar, que mi vida sea un testimonio de Tu bondad y misericordia. Mantén mi corazón sintonizado con Tu voz y mis pies firmes en el camino que has trazado para mí. Amén.

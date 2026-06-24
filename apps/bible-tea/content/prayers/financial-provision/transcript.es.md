@@ -1,0 +1,7 @@
+# Oración por la Provisión
+
+Querido Señor, vengo ante Ti con el corazón pesado por el peso de las cargas financieras. Tú conoces las facturas que están por vencer y el vacío de mi cuenta bancaria. Me siento tan abrumado y ansioso sobre cómo llegaré a fin de mes. Padre, recuerdo Tu promesa en Filipenses 4:19, que suplirás todas mis necesidades conforme a Tus riquezas en gloria por Cristo Jesús. Ayúdame a confiar en esa promesa, incluso cuando mis circunstancias parezcan insuperables.
+
+Deposito mis miedos y preocupaciones a Tus pies, Señor, y pido Tu provisión sobrenatural. Tú eres el Dios que alimentó a las multitudes con solo unos pocos panes y peces, y creo que también puedes multiplicar mis recursos. Por favor, guíame con sabiduría para manejar lo que tengo con gracia y discernimiento. Muéstrame oportunidades que quizás no vea y abre puertas que parecen firmemente cerradas.
+
+En este tiempo de necesidad, recuérdame que mi valor no está ligado a mi riqueza, y que Tú eres mi proveedor supremo. Fortalece mi fe, para que pueda permanecer firme, sabiendo que tienes mi futuro en Tus manos. Que pueda encontrar paz en Tu presencia, incluso en medio de tormentas financieras. Gracias por escuchar mis clamores y por Tu amor inquebrantable. Amén.

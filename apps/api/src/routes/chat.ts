@@ -37,7 +37,7 @@ async function getChatContext(c: {
 const sendMessageSchema = z.object({
   conversation_id: z.string().optional(),
   topic: z
-    .enum(["verse", "advice", "explain", "story", "free"])
+    .enum(["verse", "advice", "explain", "story", "free", "prayer"])
     .default("free"),
   message: z.string().min(1).max(2000),
 });

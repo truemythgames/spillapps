@@ -20,6 +20,7 @@
     "home": "Home",
     "stories": "Stories",
     "discover": "Discover",
+    "prayers": "Prayers",
     "chat": "Chat"
   },
   "home": {
@@ -40,6 +41,17 @@
     "browse": "Browse",
     "oldTestament": "Old Testament",
     "newTestament": "New Testament"
+  },
+  "prayers": {
+    "title": "Prayers",
+    "categories": "Categories",
+    "allPrayers": "All Prayers",
+    "relatedStories": "Related Stories",
+    "relatedCharacters": "Related Characters",
+    "startPrayer": "Start Prayer",
+    "free": "Free",
+    "createTitle": "Create Your Prayer",
+    "createSubtitle": "Tell me what's on your heart and I'll help you find the words"
   },
   "discover": {
     "title": "Discover",
@@ -74,6 +86,9 @@
     "greetingExplain": "Drop a passage, verse, or topic and I'll break it down so it actually makes sense.",
     "greetingFree": "Hey! Ask me literally anything about the Bible — I'm here for all of it.",
     "greetingStory": "You're reading \"{{title}}\" ({{ref}}). Ask me anything — what it means, historical context, how it applies to your life, or anything else!",
+    "titlePrayer": "Create a Prayer",
+    "placeholderPrayer": "What would you like to pray about?",
+    "greetingPrayer": "What's on your heart right now? Tell me what you're going through, what you're thankful for, or what you need — and I'll help you put it into a prayer.",
     "errorMessage": "Sorry, I couldn't connect. Please try again."
   },
   "story": {

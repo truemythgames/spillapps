@@ -1,0 +1,5 @@
+# Courage to Act
+
+Lord, I come before You feeling the weight of fear that holds me back from stepping into the path You have set before me. You know my heart and the battles I face within. I feel the pull of Your call, yet the shadows of doubt loom large. Help me, God, to trust in Your promise that You will never leave me nor forsake me. You have said, "Be strong and courageous; do not be frightened, and do not be dismayed, for the Lord your God is with you wherever you go." Father, I cling to this promise as I stand at the crossroads of decision.  
+
+Give me the strength to act, even when my heart trembles. Fill me with the courage that comes from knowing You are my refuge and strength, an ever-present help in trouble. When my knees are weak and my spirit falters, remind me that Your power is made perfect in my weakness. I ask for the boldness to step forward, trusting that You have equipped me for this moment. I lay my fears at Your feet, Lord, and ask for Your peace to guard my heart and mind. Thank You for being my constant guide and protector. Amen.

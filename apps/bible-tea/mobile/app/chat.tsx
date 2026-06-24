@@ -39,6 +39,7 @@ export default function ChatConversation() {
     advice: { title: t("chat.titleAdvice"), placeholder: t("chat.placeholderAdvice"), greeting: t("chat.greetingAdvice") },
     explain: { title: t("chat.titleExplain"), placeholder: t("chat.placeholderExplain"), greeting: t("chat.greetingExplain") },
     story: { title: t("chat.titleStory"), placeholder: t("chat.placeholderStory"), greeting: "" },
+    prayer: { title: t("chat.titlePrayer"), placeholder: t("chat.placeholderPrayer"), greeting: t("chat.greetingPrayer") },
     free: { title: t("chat.titleFree"), placeholder: t("chat.placeholderFree"), greeting: t("chat.greetingFree") },
   };
 

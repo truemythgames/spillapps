@@ -1,0 +1,7 @@
+# Confiando en Dios Durante la Noche
+
+Querido Señor, mientras me acuesto esta noche, me encuentro rodeado de oscuridad, tanto afuera como dentro de mí. El sueño parece esquivo, y mi mente corre con preocupaciones y miedos que parecen hacerse más fuertes en el silencio de la noche. Tú conoces mi corazón, Señor, y cuánto anhelo descansar. Me recuerdas en Tu palabra que das sueño a aquellos que amas. Ayúdame a aferrarme a esa promesa ahora.
+
+Padre, me cuesta soltar las cargas del día. Cada pensamiento y preocupación los pongo ante Ti, sabiendo que eres más grande que cualquier cosa que enfrente. Tú, que creaste las estrellas y las llamas a cada una por su nombre, seguramente puedes manejar lo que me inquieta. Confío en que Tu ojo vigilante está sobre mí incluso ahora, que nunca duermes ni descansas.
+
+Por favor, envuélveme en Tu paz, una paz que trasciende todo entendimiento. Guarda mi corazón y mi mente mientras descanso en Ti. Como dijo el salmista, "Me acuesto y duermo; me despierto de nuevo, porque el Señor me sostiene." Sosténme durante esta noche, Señor, y permíteme despertar renovado, listo para encontrar las nuevas misericordias que has preparado para mí. Gracias por ser mi refugio y fortaleza, una ayuda siempre presente en tiempos de dificultad. Pongo mi confianza en Ti esta noche, creyendo que la mañana traerá nueva esperanza. Amén.

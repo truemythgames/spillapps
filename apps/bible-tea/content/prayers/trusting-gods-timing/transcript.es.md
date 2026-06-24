@@ -1,0 +1,7 @@
+# Confiando en el Tiempo de Dios
+
+Señor, vengo a Ti con un corazón lleno de preguntas, sintiendo el peso de decisiones que parecen prolongarse sin resolución. Confieso mi impaciencia, mi deseo de respuestas ahora, y mi lucha por esperar con fe. Sabes lo difícil que es para mí confiar cuando no puedo ver el camino por delante. Sin embargo, recuerdo Tu promesa de que "todo tiene su tiempo, y todo lo que se quiere debajo del cielo tiene su hora." Te pido que me ayudes a creer en Tu tiempo perfecto, incluso cuando siento que mis oraciones se encuentran con el silencio.
+
+Pongo mis planes ante Ti, reconociendo que Tus caminos son más altos que los míos. Te pido el valor para soltar lo que creo que debería suceder y cuándo. Dame paz en la espera, y ayúdame a ver la belleza en el proceso, no solo en el destino. Guía mis pasos, Señor, y abre mi corazón a Tu sabiduría. Que no me apoye en mi propio entendimiento, sino que confíe en Tu amor y guía infalibles.
+
+Fortalece mi fe para descansar en el conocimiento de que Tú estás obrando, incluso cuando no puedo verlo. Enséñame a abrazar Tu tiempo, sabiendo que harás todas las cosas hermosas a su debido tiempo. Gracias por ser mi constante, mi guía y mi esperanza inquebrantable. Amén.

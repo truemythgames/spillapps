@@ -20,6 +20,7 @@
     "home": "Inicio",
     "stories": "Historias",
     "discover": "Explorar",
+    "prayers": "Oraciones",
     "chat": "Chat"
   },
   "home": {
@@ -40,6 +41,17 @@
     "browse": "Explorar",
     "oldTestament": "Antiguo Testamento",
     "newTestament": "Nuevo Testamento"
+  },
+  "prayers": {
+    "title": "Oraciones",
+    "categories": "Categorías",
+    "allPrayers": "Todas las oraciones",
+    "relatedStories": "Historias relacionadas",
+    "relatedCharacters": "Personajes relacionados",
+    "startPrayer": "Iniciar oración",
+    "free": "Gratis",
+    "createTitle": "Crea Tu Oración",
+    "createSubtitle": "Dime qué hay en tu corazón y te ayudo a encontrar las palabras"
   },
   "discover": {
     "title": "Explorar",
@@ -74,6 +86,9 @@
     "greetingExplain": "Dime un pasaje, versículo o tema y te lo explico de forma que tenga sentido.",
     "greetingFree": "¡Hola! Pregúntame lo que quieras sobre la Biblia — estoy para todo.",
     "greetingStory": "Estás leyendo \"{{title}}\" ({{ref}}). Pregúntame lo que quieras — qué significa, contexto histórico, cómo aplicarlo a tu vida, ¡lo que sea!",
+    "titlePrayer": "Crea una oración",
+    "placeholderPrayer": "¿Por qué quieres orar?",
+    "greetingPrayer": "¿Qué hay en tu corazón ahora mismo? Cuéntame por lo que estás pasando, por lo que estás agradecido, o lo que necesitas — y te ayudo a ponerlo en una oración.",
     "errorMessage": "Lo siento, no pude conectar. Por favor intenta de nuevo."
   },
   "story": {

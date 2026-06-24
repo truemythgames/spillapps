@@ -16,6 +16,7 @@ import { adminRoutes } from "./routes/admin";
 import { configRoute } from "./routes/config";
 import { chatRoutes } from "./routes/chat";
 import { charactersRoutes } from "./routes/characters";
+import { prayersRoutes } from "./routes/prayers";
 import { parseAllowedAppIds } from "./middleware/auth";
 
 const app = new Hono<{ Bindings: Env }>();
@@ -46,6 +47,7 @@ app.route("/v1/featured", featuredRoutes);
 app.route("/v1/media", mediaRoutes);
 app.route("/v1/chat", chatRoutes);
 app.route("/v1/characters", charactersRoutes);
+app.route("/v1/prayers", prayersRoutes);
 app.route("/admin", adminRoutes);
 
 app.get("/", (c) =>

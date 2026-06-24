@@ -1,0 +1,5 @@
+# Coraje para Actuar
+
+Señor, vengo ante Ti sintiendo el peso del miedo que me impide avanzar en el camino que has trazado para mí. Conoces mi corazón y las batallas que enfrento internamente. Siento el llamado que me haces, pero las sombras de la duda son grandes. Ayúdame, Dios, a confiar en Tu promesa de que nunca me dejarás ni me abandonarás. Has dicho: "Sé fuerte y valiente; no temas ni te desanimes, porque el Señor tu Dios estará contigo dondequiera que vayas." Padre, me aferro a esta promesa mientras me encuentro en la encrucijada de la decisión.
+
+Dame la fuerza para actuar, incluso cuando mi corazón tiembla. Llena mi ser con el coraje que proviene de saber que Tú eres mi refugio y fortaleza, una ayuda siempre presente en los problemas. Cuando mis rodillas estén débiles y mi espíritu flaquee, recuérdame que Tu poder se perfecciona en mi debilidad. Te pido la valentía para avanzar, confiando en que me has equipado para este momento. Dejo mis miedos a Tus pies, Señor, y pido que Tu paz guarde mi corazón y mi mente. Gracias por ser mi guía constante y protector. Amén.

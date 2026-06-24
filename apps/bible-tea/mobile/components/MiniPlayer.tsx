@@ -49,7 +49,9 @@ export function MiniPlayer() {
             contentFit="cover"
           />
         ) : (
-          <View style={[styles.thumb, { backgroundColor: colors.surfaceLight }]} />
+          <View style={[styles.thumb, { backgroundColor: colors.surfaceLight, alignItems: "center", justifyContent: "center" }]}>
+            <Ionicons name="heart" size={20} color={colors.primary} />
+          </View>
         )}
 
         <Text style={styles.title} numberOfLines={1}>

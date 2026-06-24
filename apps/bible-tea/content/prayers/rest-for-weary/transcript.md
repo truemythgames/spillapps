@@ -1,0 +1,5 @@
+# Rest for the Weary
+
+Dear Lord, I come to You in my exhaustion, seeking the rest only You can provide. My body feels heavy and my mind is cluttered with worries that steal my peace. I am weary, Lord, and in need of Your comfort. You promise in Your word, "Come to me, all you who are weary and burdened, and I will give you rest." I cling to this promise now, trusting that You will ease my burdens and renew my strength. Quiet my racing thoughts and calm the storm within me. I lay down my anxieties at Your feet, knowing that You care for me more deeply than I can comprehend. 
+
+Help me to release control and trust in Your plan, for You know what is best for me. As I close my eyes, let Your peace wash over me, a peace that surpasses all understanding. Remind me that I am not alone, that You are with me every step of the way, even in my dreams. Restore my soul, Lord, and let my sleep be sweet. I surrender my fatigue to You, knowing that You are my refuge and strength. Thank You for being my place of rest. Amen.

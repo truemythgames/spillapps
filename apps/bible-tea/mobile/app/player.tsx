@@ -183,7 +183,9 @@ export default function PlayerScreen() {
             contentFit="cover"
           />
         ) : (
-          <View style={[styles.coverImage, { backgroundColor: colors.surfaceLight }]} />
+          <View style={[styles.coverImage, { backgroundColor: colors.surfaceLight, alignItems: "center", justifyContent: "center" }]}>
+            <Ionicons name="heart" size={64} color={colors.primary} />
+          </View>
         )}
       </View>
 

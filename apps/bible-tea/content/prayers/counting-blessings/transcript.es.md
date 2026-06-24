@@ -1,0 +1,7 @@
+# Contando Bendiciones
+
+Oh Señor, mi corazón desborda de gratitud al presentarme ante Ti. En el ajetreo de la vida, confieso que a menudo olvido las innumerables maneras en que me has bendecido. Hoy, me detengo para reflexionar sobre Tu bondad y darte gracias. Tus misericordias son nuevas cada mañana, y Tu fidelidad es grande más allá de toda medida. Recuerdo las veces en que me levantaste de las profundidades de la desesperación y pusiste mis pies sobre tierra firme. ¡Cuán preciosos son Tus pensamientos hacia mí, oh Dios, cuán vasto es el conjunto de ellos!
+
+Gracias por el don de la vida y el aliento que llena mis pulmones. Gracias por la belleza de la creación que me rodea, un recordatorio constante de Tu gloria. Has provisto para mis necesidades y has llenado mi copa hasta desbordar. Como declara el salmista, “Bendice al Señor, alma mía, y no olvides ninguno de Sus beneficios.” Sanas mis enfermedades, redimes mi vida del abismo y me coronas con amor constante y misericordia.
+
+En momentos de duda, ayúdame a recordar Tu fidelidad pasada. Que la gratitud sea mi canción y la acción de gracias mi himno. Con un corazón lleno de agradecimiento, te alabo, porque Tú eres bueno y Tu amor perdura para siempre. Amén.

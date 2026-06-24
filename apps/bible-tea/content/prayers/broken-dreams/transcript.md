@@ -1,0 +1,5 @@
+# Grieving a Broken Dream
+
+Oh Lord, I come to You with a heart heavy with sorrow, grappling with the fragments of dreams that will never be. The life I envisioned seems so far from the path I now walk. I feel the ache of what could have been, the plans I had so carefully laid now scattered like dust in the wind. God, You know every tear I shed, every silent cry of my spirit. You remind me through Your word that You are near to the brokenhearted and save those crushed in spirit. I hold onto that promise now, trusting that You see my pain and understand it fully.
+
+I confess, Lord, my struggle to let go of the dreams I held so tightly. I wanted them to flourish, to bear fruit, yet here I am, holding only the remnants. Help me to release these dreams to You, trusting that Your plans are higher than mine, even when they feel so distant and unclear. Guide me, Lord, as I navigate this new reality, for I feel lost and unsure of what steps to take. May Your love be my comfort, Your wisdom my guide, as I mourn what might have been. Teach me to find hope in Your promises, to see beauty in the new path You have for me. Amen.

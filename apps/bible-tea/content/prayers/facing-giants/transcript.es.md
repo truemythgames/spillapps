@@ -1,0 +1,7 @@
+# Enfrentando Tus Gigantes
+
+Dios, me siento tan pequeño frente a este desafío enorme. Se alza sobre mí como un gigante, y confieso que el miedo aprieta mi corazón. Sin embargo, recuerdo la historia de David y Goliat, cómo Tú entregaste la victoria a través de un joven pastor con nada más que una honda y fe. Sé que lo que parece imposible para mí es posible contigo. Tú eres mi fuerza y mi escudo; en Ti confía mi corazón, y soy ayudado. Cuando soy débil, Tú eres fuerte, y Tu poder se perfecciona en mi debilidad.
+
+Señor, dame el valor para mantenerme firme, sabiendo que la batalla te pertenece a Ti. Ayúdame a dejar a un lado mis dudas y preocupaciones, pues no me has dado un espíritu de temor, sino de poder, amor y una mente sana. Necesito que Tu paz inunde mi alma, calmando la tormenta dentro de mí. Recuérdame que nunca estoy solo, porque Tú estás conmigo, Tu vara y Tu cayado, ellos me confortan.
+
+Permíteme ver este desafío como una oportunidad para que Tu gloria brille. Usa mi pequeñez para magnificar Tu grandeza. Enséñame a apoyarme en Tu entendimiento y no en el mío, confiando en que estás obrando todas las cosas para mi bien. Concédeme la valentía para enfrentar mis gigantes, sabiendo que nada puede separarme de Tu amor. Amén.

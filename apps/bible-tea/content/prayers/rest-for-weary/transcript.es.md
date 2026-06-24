@@ -1,0 +1,5 @@
+# Descanso para el Cansado
+
+Querido Señor, vengo a Ti en mi agotamiento, buscando el descanso que solo Tú puedes proporcionar. Mi cuerpo se siente pesado y mi mente está llena de preocupaciones que roban mi paz. Estoy cansado, Señor, y necesito Tu consuelo. Tú prometes en Tu palabra: "Venid a mí, todos los que estáis trabajados y cargados, y yo os haré descansar." Me aferro a esta promesa ahora, confiando en que aliviarás mis cargas y renovarás mi fuerza. Silencia mis pensamientos acelerados y calma la tormenta dentro de mí. Dejo mis ansiedades a Tus pies, sabiendo que Te preocupas por mí más profundamente de lo que puedo comprender.
+
+Ayúdame a soltar el control y confiar en Tu plan, porque Tú sabes lo que es mejor para mí. Al cerrar mis ojos, deja que Tu paz me inunde, una paz que sobrepasa todo entendimiento. Recuérdame que no estoy solo, que Tú estás conmigo en cada paso del camino, incluso en mis sueños. Restaura mi alma, Señor, y que mi sueño sea dulce. Te entrego mi fatiga, sabiendo que Tú eres mi refugio y fortaleza. Gracias por ser mi lugar de descanso. Amén.

@@ -1,0 +1,122 @@
+[
+  {
+    "category": { "id": "cat-anxiety", "name": "Anxiety & Worry", "slug": "anxiety", "description": "When your mind won't stop racing and peace feels impossible.", "icon": "cloud-rain" },
+    "prayers": [
+      { "id": "pr-anxious-thoughts", "title": "When Anxious Thoughts Won't Stop", "description": "A prayer for when your mind spirals and you can't find the off switch.", "storyLinks": ["st-elijah-runs-away"], "characterLinks": ["ch-elijah"] },
+      { "id": "pr-overwhelmed", "title": "When You're Completely Overwhelmed", "description": "Everything is too much. This prayer helps you breathe and hand it over.", "storyLinks": ["st-hannahs-prayer"], "characterLinks": ["ch-moses"] },
+      { "id": "pr-fear-of-future", "title": "Fear of the Future", "description": "When tomorrow terrifies you. A prayer to trust the One who holds it.", "storyLinks": ["st-abraham-call"], "characterLinks": ["ch-abraham"] },
+      { "id": "pr-peace-in-chaos", "title": "Peace in the Chaos", "description": "The storm is raging but Jesus is in the boat. A prayer for supernatural calm.", "storyLinks": ["st-walks-water"], "characterLinks": ["ch-jesus"] },
+      { "id": "pr-letting-go-of-control", "title": "Letting Go of Control", "description": "You can't hold it all together. A prayer to release your grip and trust God's plan.", "storyLinks": ["st-tired-waiting"], "characterLinks": ["ch-abraham", "ch-sarah"] }
+    ]
+  },
+  {
+    "category": { "id": "cat-sleep", "name": "Sleep & Rest", "slug": "sleep", "description": "Wind down, let go, and rest in God's presence.", "icon": "moon" },
+    "prayers": [
+      { "id": "pr-cant-sleep", "title": "When You Can't Sleep", "description": "Your body is tired but your mind won't quit. Let this prayer carry you to rest.", "storyLinks": ["st-psalm-91-gods-protection"], "characterLinks": [] },
+      { "id": "pr-nighttime-peace", "title": "Nighttime Peace", "description": "A gentle prayer to close the day, release the weight, and sleep in God's arms.", "storyLinks": ["st-psalm-23"], "characterLinks": ["ch-david"] },
+      { "id": "pr-rest-for-weary", "title": "Rest for the Weary", "description": "Come to me, all who are weary. A prayer for the bone-tired and burnt out.", "storyLinks": ["st-bread-heaven"], "characterLinks": ["ch-jesus"] },
+      { "id": "pr-trusting-through-night", "title": "Trusting God Through the Night", "description": "Darkness feels heavy. But morning is coming. A prayer for faith in the dark hours.", "storyLinks": ["st-songs-in-the-night"], "characterLinks": ["ch-david"] },
+      { "id": "pr-surrender-before-sleep", "title": "Surrender Before Sleep", "description": "Hand over the day — the wins, the failures, the unknowns. Sleep free.", "storyLinks": [], "characterLinks": [] }
+    ]
+  },
+  {
+    "category": { "id": "cat-gratitude", "name": "Gratitude & Praise", "slug": "gratitude", "description": "Shift your focus from what's wrong to what's good.", "icon": "sun" },
+    "prayers": [
+      { "id": "pr-thankful-heart", "title": "A Thankful Heart", "description": "A prayer to notice the good, even in hard seasons. Gratitude changes everything.", "storyLinks": ["st-psalm-150-everything-praise"], "characterLinks": ["ch-david"] },
+      { "id": "pr-praise-in-storm", "title": "Praise in the Storm", "description": "Everything is falling apart but you choose worship anyway. A prayer of defiant praise.", "storyLinks": ["st-david-dances-before-the-ark"], "characterLinks": ["ch-david"] },
+      { "id": "pr-morning-gratitude", "title": "Morning Gratitude", "description": "Start the day with eyes wide open to God's goodness. A prayer for fresh mornings.", "storyLinks": ["st-creation"], "characterLinks": [] },
+      { "id": "pr-counting-blessings", "title": "Counting Blessings", "description": "When you forget how good God has been. A prayer to remember and give thanks.", "storyLinks": ["st-crossing-the-red-sea"], "characterLinks": ["ch-moses"] },
+      { "id": "pr-joy-in-small-things", "title": "Joy in Small Things", "description": "Big miracles are rare. Small mercies are daily. A prayer to see them.", "storyLinks": ["st-bread-from-heaven"], "characterLinks": [] }
+    ]
+  },
+  {
+    "category": { "id": "cat-healing", "name": "Healing & Sickness", "slug": "healing", "description": "When your body or heart needs God's healing touch.", "icon": "heart-pulse" },
+    "prayers": [
+      { "id": "pr-physical-healing", "title": "Prayer for Physical Healing", "description": "Your body is broken. Bring it to the Healer. A prayer for restoration.", "storyLinks": ["st-naaman-and-the-muddy-river"], "characterLinks": [] },
+      { "id": "pr-emotional-healing", "title": "Prayer for Emotional Healing", "description": "The wound isn't visible but it's real. A prayer for the scars inside.", "storyLinks": ["st-psalm-51-a-broken-king"], "characterLinks": ["ch-david"] },
+      { "id": "pr-healing-for-loved-one", "title": "Healing for a Loved One", "description": "Someone you love is suffering and you feel helpless. Pray anyway.", "storyLinks": ["st-hezekiahs-prayer"], "characterLinks": [] },
+      { "id": "pr-chronic-pain", "title": "When Healing Doesn't Come", "description": "You've prayed. Nothing changed. A prayer for endurance when God feels silent.", "storyLinks": ["st-job-loses-everything"], "characterLinks": ["ch-job"] },
+      { "id": "pr-mental-health", "title": "A Prayer for Your Mental Health", "description": "Depression, anxiety, numbness. God sees you in the pit. A prayer from the depths.", "storyLinks": ["st-songs-in-the-night", "st-elijah-runs-away"], "characterLinks": ["ch-elijah"] }
+    ]
+  },
+  {
+    "category": { "id": "cat-strength", "name": "Strength & Courage", "slug": "strength", "description": "When you need backbone for what's ahead.", "icon": "shield" },
+    "prayers": [
+      { "id": "pr-courage-to-act", "title": "Courage to Act", "description": "You know what to do but fear holds you back. A prayer for holy boldness.", "storyLinks": ["st-esther-saves-her-people"], "characterLinks": ["ch-esther"] },
+      { "id": "pr-facing-giants", "title": "Facing Your Giants", "description": "The problem is bigger than you. Good — that means God gets the glory.", "storyLinks": ["st-david-goliath"], "characterLinks": ["ch-david"] },
+      { "id": "pr-standing-alone", "title": "Standing Alone", "description": "Everyone else caved. You're the only one left standing. A prayer for the outnumbered.", "storyLinks": ["st-elijah-on-mount-carmel", "st-daniel-and-the-lions-den"], "characterLinks": ["ch-elijah", "ch-daniel"] },
+      { "id": "pr-endurance", "title": "Prayer for Endurance", "description": "The race is long and your legs are heavy. A prayer to keep going.", "storyLinks": ["st-finish-the-race"], "characterLinks": ["ch-paul"] },
+      { "id": "pr-armor-up", "title": "Armor Up", "description": "Put on the full armor of God. A prayer before you step into battle.", "storyLinks": ["st-armor-of-god"], "characterLinks": ["ch-paul"] }
+    ]
+  },
+  {
+    "category": { "id": "cat-forgiveness", "name": "Forgiveness", "slug": "forgiveness", "description": "Letting go of what was done to you — or what you've done.", "icon": "hand-heart" },
+    "prayers": [
+      { "id": "pr-forgiving-others", "title": "Forgiving Someone Who Hurt You", "description": "They don't deserve it. Neither did you. A prayer to release the bitterness.", "storyLinks": ["st-joseph-forgives"], "characterLinks": ["ch-joseph"] },
+      { "id": "pr-asking-forgiveness", "title": "Asking God for Forgiveness", "description": "You blew it. Badly. But God's mercy is bigger than your mess.", "storyLinks": ["st-psalm-51-a-broken-king", "st-david-and-bathsheba"], "characterLinks": ["ch-david"] },
+      { "id": "pr-forgiving-yourself", "title": "Forgiving Yourself", "description": "God forgave you. Why can't you? A prayer to stop carrying what's already paid for.", "storyLinks": ["st-prodigal-son"], "characterLinks": ["ch-peter"] },
+      { "id": "pr-broken-relationship", "title": "A Broken Relationship", "description": "The bridge burned. Can it be rebuilt? A prayer for what feels beyond repair.", "storyLinks": ["st-jacob-esau"], "characterLinks": ["ch-jacob"] },
+      { "id": "pr-letting-go-anger", "title": "Letting Go of Anger", "description": "The rage feels justified. But it's eating you alive. A prayer to release it.", "storyLinks": ["st-jonahs-anger"], "characterLinks": ["ch-jonah"] }
+    ]
+  },
+  {
+    "category": { "id": "cat-family", "name": "Family & Relationships", "slug": "family", "description": "Praying over the people you love most.", "icon": "users" },
+    "prayers": [
+      { "id": "pr-marriage", "title": "Prayer for Your Marriage", "description": "Love is a daily choice. A prayer for patience, grace, and staying committed.", "storyLinks": ["st-hosea-and-gomer"], "characterLinks": [] },
+      { "id": "pr-children", "title": "Prayer for Your Children", "description": "You can't protect them from everything. But you can cover them in prayer.", "storyLinks": ["st-hannahs-prayer"], "characterLinks": [] },
+      { "id": "pr-parents", "title": "Honoring Your Parents", "description": "They're not perfect. Neither are you. A prayer for gratitude and grace.", "storyLinks": ["st-ruth-and-naomi"], "characterLinks": ["ch-ruth"] },
+      { "id": "pr-lonely", "title": "When You Feel Alone", "description": "No one calls. No one sees. But God does. A prayer for the lonely.", "storyLinks": ["st-elijah-runs-away"], "characterLinks": ["ch-elijah"] },
+      { "id": "pr-toxic-people", "title": "Dealing with Difficult People", "description": "They drain you. A prayer for boundaries, wisdom, and not losing your mind.", "storyLinks": ["st-david-spares-saul"], "characterLinks": ["ch-david"] }
+    ]
+  },
+  {
+    "category": { "id": "cat-finances", "name": "Financial Stress", "slug": "finances", "description": "When money is tight and worry is loud.", "icon": "wallet" },
+    "prayers": [
+      { "id": "pr-financial-provision", "title": "Prayer for Provision", "description": "Bills are due. The account is empty. A prayer for God's supernatural supply.", "storyLinks": ["st-bread-from-heaven"], "characterLinks": ["ch-moses"] },
+      { "id": "pr-debt", "title": "Freedom from Debt", "description": "The weight of what you owe. A prayer for wisdom, discipline, and breakthrough.", "storyLinks": ["st-sabbath-jubilee-and-justice"], "characterLinks": [] },
+      { "id": "pr-generosity", "title": "A Heart of Generosity", "description": "Open hands, not clenched fists. A prayer to give freely and trust God for more.", "storyLinks": ["st-feeding-5000"], "characterLinks": ["ch-jesus"] },
+      { "id": "pr-contentment", "title": "Prayer for Contentment", "description": "Enough is enough. A prayer to stop chasing and start resting in what you have.", "storyLinks": ["st-the-wise-and-the-foolish"], "characterLinks": ["ch-solomon"] },
+      { "id": "pr-job-work", "title": "Prayer for Your Work", "description": "Monday dread or career confusion. A prayer for purpose and direction in your work.", "storyLinks": ["st-abrahams-call"], "characterLinks": ["ch-abraham"] }
+    ]
+  },
+  {
+    "category": { "id": "cat-morning", "name": "Morning Prayers", "slug": "morning", "description": "Start your day anchored before the noise begins.", "icon": "sunrise" },
+    "prayers": [
+      { "id": "pr-new-day", "title": "A New Day", "description": "Fresh mercies. Clean slate. A prayer to begin with intention and gratitude.", "storyLinks": ["st-creation"], "characterLinks": [] },
+      { "id": "pr-surrender-day", "title": "Surrendering This Day", "description": "Before the to-do list takes over — hand the day to God first.", "storyLinks": ["st-crossing-the-jordan"], "characterLinks": ["ch-joshua"] },
+      { "id": "pr-focus-and-clarity", "title": "Focus & Clarity", "description": "A clear mind, a steady heart. A prayer for wisdom before the chaos starts.", "storyLinks": ["st-solomons-wisdom"], "characterLinks": ["ch-solomon"] },
+      { "id": "pr-gods-presence-today", "title": "God's Presence Today", "description": "Don't leave home without it. A prayer to carry God's presence into every moment.", "storyLinks": ["st-burning-bush"], "characterLinks": ["ch-moses"] },
+      { "id": "pr-purpose-today", "title": "Walking in Purpose", "description": "Not just busy — intentional. A prayer to live today on purpose.", "storyLinks": ["st-isaiahs-call"], "characterLinks": [] }
+    ]
+  },
+  {
+    "category": { "id": "cat-evening", "name": "Evening Prayers", "slug": "evening", "description": "Close the day well. Release, reflect, rest.", "icon": "sunset" },
+    "prayers": [
+      { "id": "pr-end-of-day", "title": "End of Day", "description": "The day is done. A prayer to release what happened and rest in God's keeping.", "storyLinks": [], "characterLinks": [] },
+      { "id": "pr-reflect-and-release", "title": "Reflect & Release", "description": "What went well? What didn't? Hand it all back. Tomorrow is a new start.", "storyLinks": ["st-psalm-139-fully-known"], "characterLinks": ["ch-david"] },
+      { "id": "pr-gratitude-tonight", "title": "Gratitude Tonight", "description": "Before your head hits the pillow — name three good things. Thank the Giver.", "storyLinks": [], "characterLinks": [] },
+      { "id": "pr-protection-through-night", "title": "Protection Through the Night", "description": "Guardian angels and God's covering. A prayer for safety while you sleep.", "storyLinks": ["st-psalm-91-gods-protection"], "characterLinks": [] },
+      { "id": "pr-tomorrow-in-gods-hands", "title": "Tomorrow Is in God's Hands", "description": "Stop planning. Stop worrying. Tomorrow belongs to Him. A prayer to let go.", "storyLinks": ["st-abrahams-call"], "characterLinks": ["ch-abraham"] }
+    ]
+  },
+  {
+    "category": { "id": "cat-grief", "name": "Grief & Loss", "slug": "grief", "description": "When you've lost something or someone and the ache won't fade.", "icon": "cloud" },
+    "prayers": [
+      { "id": "pr-lost-someone", "title": "When You've Lost Someone", "description": "The chair is empty. The silence is loud. A prayer for the grief that won't let go.", "storyLinks": ["st-ruth-and-naomi"], "characterLinks": ["ch-ruth"] },
+      { "id": "pr-why-god", "title": "When You're Asking 'Why?'", "description": "No answers. Just pain. A prayer for when God feels cruel or absent.", "storyLinks": ["st-job-questions-god"], "characterLinks": ["ch-job"] },
+      { "id": "pr-broken-dreams", "title": "Grieving a Broken Dream", "description": "The life you planned isn't the life you got. A prayer to mourn what could have been.", "storyLinks": ["st-davids-broken-return"], "characterLinks": ["ch-david"] },
+      { "id": "pr-comfort-in-pain", "title": "Comfort in Pain", "description": "God doesn't always fix it. But He sits with you in it. A prayer for His presence.", "storyLinks": ["st-jobs-friends-speak", "st-god-answers-job"], "characterLinks": ["ch-job"] },
+      { "id": "pr-hope-after-loss", "title": "Hope After Loss", "description": "Weeping lasts for the night, but joy comes in the morning. A prayer to believe that.", "storyLinks": ["st-job-restored"], "characterLinks": ["ch-job"] }
+    ]
+  },
+  {
+    "category": { "id": "cat-decisions", "name": "Decisions & Direction", "slug": "decisions", "description": "When you don't know which way to go.", "icon": "compass" },
+    "prayers": [
+      { "id": "pr-big-decision", "title": "Facing a Big Decision", "description": "Left or right? Stay or go? A prayer for clarity when the path splits.", "storyLinks": ["st-abrahams-call"], "characterLinks": ["ch-abraham"] },
+      { "id": "pr-gods-will", "title": "Knowing God's Will", "description": "What does God want me to do? A prayer to hear His voice above the noise.", "storyLinks": ["st-samuel-anoints-david"], "characterLinks": ["ch-david"] },
+      { "id": "pr-patience-in-waiting", "title": "Patience in Waiting", "description": "The answer hasn't come yet. A prayer for the unbearable in-between.", "storyLinks": ["st-tired-of-waiting"], "characterLinks": ["ch-abraham", "ch-sarah"] },
+      { "id": "pr-new-beginning", "title": "Prayer for a New Beginning", "description": "Closing one chapter, opening another. A prayer for courage to step forward.", "storyLinks": ["st-crossing-the-jordan"], "characterLinks": ["ch-joshua"] },
+      { "id": "pr-trusting-gods-timing", "title": "Trusting God's Timing", "description": "It's taking too long. Or is it? A prayer to trust that God's clock is perfect.", "storyLinks": ["st-gods-promise-of-a-son"], "characterLinks": ["ch-abraham"] }
+    ]
+  }
+]

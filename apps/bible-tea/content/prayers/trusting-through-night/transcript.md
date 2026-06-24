@@ -1,0 +1,7 @@
+# Trusting God Through the Night
+
+Dear Lord, as I lay down tonight, I find myself surrounded by darkness, both outside and within. Sleep feels elusive, and my mind races with worries and fears that seem to grow louder in the quiet of the night. You know my heart, Lord, and how desperately I long for rest. You remind me in Your word that You grant sleep to those You love. Help me to hold onto that promise now.
+
+Father, I struggle to let go of the day's burdens. Every thought and concern I bring before You, knowing that You are greater than anything I face. You who created the stars and call them each by name can surely handle what troubles me. I trust that Your watchful eye is upon me even now, that You never slumber nor sleep.
+
+Please wrap me in Your peace—a peace that transcends all understanding. Guard my heart and my mind as I rest in You. As the psalmist said, "I lie down and sleep; I wake again, because the Lord sustains me." Sustain me through this night, Lord, and let me wake refreshed, ready to meet the new mercies You have prepared for me. Thank You for being my refuge and strength, an ever-present help in times of trouble. I place my trust in You tonight, believing morning will bring new hope. Amen.

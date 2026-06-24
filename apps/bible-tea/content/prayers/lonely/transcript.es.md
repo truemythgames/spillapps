@@ -1,0 +1,7 @@
+# Cuando Te Sientes Solo
+
+Oh Señor, vengo a Ti con un corazón pesado, sintiendo el peso de la soledad presionando sobre mí. En este espacio silencioso donde mi teléfono no suena y mi puerta permanece cerrada, me recuerda cuánto necesito Tu presencia. Padre, conoces mis pensamientos y mis miedos, y ves las lágrimas que caen cuando nadie está mirando. Prometes en el Salmo 34:18 que estás cerca de los quebrantados de corazón y salvas a los abatidos de espíritu. Me aferro a esta verdad, sabiendo que incluso en mi soledad, nunca estoy realmente solo con Tu presencia a mi lado.
+
+Dios, ayúdame a ver las conexiones que tengo, las amistades que pueden estar distantes pero siguen siendo reales. Abre mis ojos a nuevas oportunidades de comunidad y compañerismo. Concédeme el valor para acercarme cuando me sienta aislado, y la fortaleza para aceptar el amor que otros ofrecen. Enséñame paciencia y confianza en Tu tiempo perfecto, sabiendo que Tus planes para mí son para bien, para darme esperanza y un futuro.
+
+Deja que Tu amor llene los espacios vacíos dentro de mí, Señor. Recuérdame que soy visto, conocido y apreciado por Ti. Gracias por ser mi compañero constante, mi refugio y mi fortaleza. Amén.
