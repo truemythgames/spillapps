@@ -106,6 +106,19 @@ export async function initPurchases(userId?: string): Promise<void> {
     console.warn("[Purchases] setFBAnonymousID failed:", e);
   }
 
+  // Apple Ads (Search Ads) attribution: collect the AdServices token so
+  // RevenueCat can attribute installs/subscriptions to Apple Ads campaigns.
+  // iOS only, and must run after configure(). Yields campaign-level
+  // ("Standard") attribution when ATT is undetermined; upgrades to "Detailed"
+  // once the user has answered the ATT prompt.
+  if (Platform.OS === "ios") {
+    try {
+      await Purchases.enableAdServicesAttributionTokenCollection();
+    } catch (e) {
+      console.warn("[Purchases] AdServices attribution failed:", e);
+    }
+  }
+
   // Pre-fetch offerings so paywall opens instantly
   getOfferings();
 }
