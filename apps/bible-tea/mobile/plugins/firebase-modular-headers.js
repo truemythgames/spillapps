@@ -12,6 +12,10 @@ const PODS_TO_PATCH = [
   "FirebaseSessions",
   "FirebaseCoreInternal",
   "FirebaseCrashlytics",
+  // AppCheckCore (Swift) depends on RecaptchaInterop, which doesn't define
+  // modules; both need modular headers to link as static libraries.
+  "RecaptchaInterop",
+  "AppCheckCore",
 ];
 
 module.exports = function withFirebaseModularHeaders(config) {
