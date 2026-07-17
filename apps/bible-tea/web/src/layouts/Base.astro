@@ -8,16 +8,20 @@ interface Props {
   ogImage?: string;
   canonicalPath?: string;
   jsonLd?: object | object[];
+  /** Set to false for pages that only exist in English (no /es/ version). */
+  localized?: boolean;
 }
 
-const { title, description, ogImage = "https://bibletea.app/icon.png", canonicalPath, jsonLd } = Astro.props;
+const { title, description, ogImage = "https://bibletea.app/icon.png", canonicalPath, jsonLd, localized = true } = Astro.props;
 const locale = getLocale(Astro.currentLocale);
 const canonical = canonicalPath
   ? `https://bibletea.app${locale === "en" ? withTrailingSlash(canonicalPath) : (canonicalPath === "/" ? "/es/" : `/es${withTrailingSlash(canonicalPath)}`)}`
   : undefined;
-const alternates = canonicalPath ? getAlternates(canonicalPath) : [];
+const alternates = localized && canonicalPath ? getAlternates(canonicalPath) : [];
 const otherLocale = alternateLocale(locale);
-const switchUrl = canonicalPath ? localePath(canonicalPath, otherLocale) : (locale === "en" ? "/es/" : "/");
+const switchUrl = localized && canonicalPath
+  ? localePath(canonicalPath, otherLocale)
+  : (locale === "en" ? "/es/" : "/");
 const switchLabel = otherLocale === "es" ? "ES" : "EN";
 const pageJsonLd = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 
