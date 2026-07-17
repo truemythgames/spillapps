@@ -458,19 +458,24 @@ export const PLAYLIST_SEO: Record<string, LocalizedSeo> = {
     en: {
       title: "Love Stories in the Bible — The Greatest Romances | Bible Tea",
       description:
-        "The greatest love stories in the Bible — from Ruth & Boaz to Hosea & Gomer to the Song of Songs. Listen to each one as immersive audio on Bible Tea.",
+        "The greatest love stories in the Bible — Isaac & Rebekah, Jacob & Rachel, Ruth, the Prodigal Son and more. A guide to each one, plus immersive audio.",
     },
     es: {
       title: "Historias de Amor en la Biblia — Los Grandes Romances | Bible Tea",
       description:
-        "Las historias de amor más grandes de la Biblia — de Rut y Booz a Oseas y Gomer. Escucha cada una como audio inmersivo en Bible Tea.",
+        "Las historias de amor más grandes de la Biblia — Isaac y Rebeca, Jacob y Raquel, Rut y más. Una guía de cada una, con audio inmersivo en Bible Tea.",
     },
   },
   "pl-underdogs": {
     en: {
       title: "Underdog Stories in the Bible — Nobody Saw It Coming | Bible Tea",
       description:
-        "Underdogs in the Bible: David vs Goliath, Gideon's 300, and more. Nobody believed in them — they proved everyone wrong. Listen as immersive audio.",
+        "Underdogs in the Bible: David vs Goliath, Gideon's 300, Esther, Ruth and more. Nobody believed in them — they proved everyone wrong. A story-by-story guide.",
+    },
+    es: {
+      title: "Los Menospreciados de la Biblia — Nadie Lo Vio Venir | Bible Tea",
+      description:
+        "Los grandes menospreciados de la Biblia: David contra Goliat, los 300 de Gedeón, Ester, Rut y más. Una guía historia por historia, con audio inmersivo.",
     },
   },
   "pl-women": {
@@ -489,7 +494,36 @@ export const PLAYLIST_SEO: Record<string, LocalizedSeo> = {
     en: {
       title: "Miracles in the Bible — Every Wonder, Retold | Bible Tea",
       description:
-        "Seas splitting, fire from heaven, the dead raised. The Bible's greatest miracles retold as immersive audio — listen free on Bible Tea.",
+        "Seas splitting, fire from heaven, the dead raised. A guide to the Bible's greatest miracles in order, each retold as immersive audio on Bible Tea.",
+    },
+    es: {
+      title: "Milagros de la Biblia — Cada Prodigio, Narrado | Bible Tea",
+      description:
+        "Mares que se parten, fuego del cielo, muertos que resucitan. Una guía de los milagros más grandes de la Biblia en orden, con audio inmersivo.",
+    },
+  },
+  "pl-easter": {
+    en: {
+      title: "The Easter Story — Holy Week Day by Day | Bible Tea",
+      description:
+        "The complete Easter story in order: Palm Sunday, the Last Supper, the trial, the crucifixion and the resurrection. 16 episodes of immersive audio.",
+    },
+    es: {
+      title: "La Historia de la Pascua — Semana Santa Día a Día | Bible Tea",
+      description:
+        "La historia completa de la Semana Santa en orden: Domingo de Ramos, la Última Cena, el juicio, la crucifixión y la resurrección. 16 episodios en audio.",
+    },
+  },
+  "pl-jesus": {
+    en: {
+      title: "The Life of Jesus — Every Story in Order | Bible Tea",
+      description:
+        "The complete life of Jesus in 18 stories, from the manger to the ascension — birth, baptism, miracles, parables, cross and resurrection. Listen free.",
+    },
+    es: {
+      title: "La Vida de Jesús — Todas las Historias en Orden | Bible Tea",
+      description:
+        "La vida completa de Jesús en 18 historias, del pesebre a la ascensión — nacimiento, bautismo, milagros, parábolas, cruz y resurrección. Escucha gratis.",
     },
   },
 };
