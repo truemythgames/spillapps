@@ -17,6 +17,7 @@ import {
 } from "../../lib/stories";
 import { getLocale, localePath, t } from "../../lib/i18n";
 import { localizeBibleRef, storySeo } from "../../lib/seo";
+import { storyAnswer } from "../../lib/story-answers";
 
 export async function getStaticPaths() {
   const catalog = getCatalog();
@@ -143,6 +144,7 @@ function faqT(key: string): string {
     .replace(/\{ref\}/g, bibleRef)
     .replace(/\{count\}/g, String(catalog.length - 1));
 }
+const quickAnswer = storyAnswer(story.id, locale);
 const faqs = [
   { q: faqT("story.faqQ1"), a: faqT("story.faqA1") },
   { q: faqT("story.faqQ2"), a: faqT("story.faqA2") },
@@ -180,7 +182,10 @@ const articleLd = {
 const faqLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: faqs.map((f) => ({
+  mainEntity: [
+    ...(quickAnswer ? [{ q: quickAnswer.question, a: quickAnswer.answer }] : []),
+    ...faqs,
+  ].map((f) => ({
     "@type": "Question",
     name: f.q,
     acceptedAnswer: { "@type": "Answer", text: f.a },
@@ -253,6 +258,28 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
 
     .breadcrumbs a:hover { color: var(--primary); }
     .breadcrumbs .sep { opacity: 0.4; }
+
+    /* Quick answer (featured-snippet block) */
+    .quick-answer {
+      background: linear-gradient(135deg, rgba(200, 162, 255, 0.08), rgba(107, 92, 231, 0.08));
+      border: 1px solid rgba(200, 162, 255, 0.25);
+      border-radius: 16px;
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 3rem;
+    }
+
+    .quick-answer h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: var(--primary);
+      margin-bottom: 0.6rem;
+    }
+
+    .quick-answer p {
+      color: var(--text-secondary);
+      font-size: 0.98rem;
+      line-height: 1.75;
+    }
 
     /* Hero card */
     .story-hero-card {
@@ -749,6 +776,13 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
           <StoreButtons variant="hero" />
         </div>
       </div>
+
+      {quickAnswer && (
+        <section class="quick-answer">
+          <h2>{quickAnswer.question}</h2>
+          <p>{quickAnswer.answer}</p>
+        </section>
+      )}
     </div>
 
     {setupHtml && (
