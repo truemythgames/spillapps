@@ -9,6 +9,7 @@ import {
   type Playlist,
 } from "../../../lib/stories";
 import { getLocale, localePath, t } from "../../../lib/i18n";
+import { playlistSeo } from "../../../lib/seo";
 
 export async function getStaticPaths() {
   const catalog = getCatalog("es");
@@ -28,8 +29,9 @@ const { playlist, allPlaylists } = Astro.props;
 const locale = getLocale(Astro.currentLocale);
 const stories = playlist.stories;
 
-const pageTitle = t(locale, "playlist.pageTitle").replace("{name}", playlist.name);
-const pageDesc = t(locale, "playlist.pageDesc").replace(/\{description\}/g, playlist.description).replace(/\{count\}/g, String(stories.length)).replace(/\{name\}/g, playlist.name);
+const seoOverride = playlistSeo(playlist.id, locale);
+const pageTitle = seoOverride.title ?? t(locale, "playlist.pageTitle").replace("{name}", playlist.name);
+const pageDesc = seoOverride.description ?? t(locale, "playlist.pageDesc").replace(/\{description\}/g, playlist.description).replace(/\{count\}/g, String(stories.length)).replace(/\{name\}/g, playlist.name);
 const pageUrl = `https://bibletea.app/playlists/${playlist.id}`;
 
 const firstCover = stories.find((s) => hasCover(s.id));

@@ -25,7 +25,7 @@ const locale = getLocale(Astro.currentLocale);
 const stories = character.stories;
 
 const pageTitle = t(locale, "character.pageTitle").replace("{name}", character.name);
-const pageDesc = t(locale, "character.pageDesc").replace(/\{description\}/g, character.description).replace(/\{count\}/g, String(stories.length > 0 ? stories.length : "")).replace(/\{name\}/g, character.name);
+const pageDesc = t(locale, "character.pageDesc").replace(/\{description\}/g, character.description).replace(/\{count\}/g, String(stories.length > 1 ? stories.length : "")).replace(/\{name\}/g, character.name).replace(/\s{2,}/g, " ");
 const pageUrl = `https://bibletea.app/characters/${character.id}`;
 const ogImage = character.image_url || "https://bibletea.app/icon.png";
 

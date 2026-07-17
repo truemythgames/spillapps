@@ -16,6 +16,7 @@ import {
   type Character,
 } from "../../../lib/stories";
 import { getLocale, localePath, t } from "../../../lib/i18n";
+import { localizeBibleRef, storySeo } from "../../../lib/seo";
 
 export async function getStaticPaths() {
   const catalog = getCatalog("es");
@@ -127,10 +128,12 @@ const idx = catalog.findIndex((s) => s.id === story.id);
 const prev = idx > 0 ? catalog[idx - 1] : null;
 const next = idx < catalog.length - 1 ? catalog[idx + 1] : null;
 
-const pageTitle = `${story.title} — ${story.bibleRef} | Bible Tea`;
-const pageDesc = locale === "es"
-  ? `${story.description} Escucha ${story.title} (${story.bibleRef}) como audio inmersivo en Bible Tea.`
-  : `${story.description} Listen to ${story.title} (${story.bibleRef}) as immersive audio on Bible Tea.`;
+const bibleRef = localizeBibleRef(story.bibleRef, locale);
+const seoOverride = storySeo(story.id, locale);
+const pageTitle = seoOverride.title ?? `${story.title} — ${bibleRef} | Bible Tea`;
+const pageDesc = seoOverride.description ?? (locale === "es"
+  ? `${story.description} Escucha ${story.title} (${bibleRef}) como audio inmersivo en Bible Tea.`
+  : `${story.description} Listen to ${story.title} (${bibleRef}) as immersive audio on Bible Tea.`);
 const pageUrl = `https://bibletea.app/es/stories/${story.id}`;
 
 // Generate contextual FAQs for "People Also Ask" rich results
@@ -138,7 +141,7 @@ function faqT(key: string): string {
   return t(locale, key as any)
     .replace(/\{title\}/g, story.title)
     .replace(/\{description\}/g, story.description)
-    .replace(/\{ref\}/g, story.bibleRef)
+    .replace(/\{ref\}/g, bibleRef)
     .replace(/\{count\}/g, String(catalog.length - 1));
 }
 const faqs = [
@@ -170,7 +173,7 @@ const articleLd = {
     logo: { "@type": "ImageObject", url: "https://bibletea.app/icon.png" },
   },
   mainEntityOfPage: { "@type": "WebPage", "@id": pageUrl },
-  about: { "@type": "Thing", name: story.bibleRef },
+  about: { "@type": "Thing", name: bibleRef },
   isPartOf: { "@type": "WebSite", name: "Bible Tea", url: "https://bibletea.app" },
   inLanguage: locale === "es" ? "es" : "en-US",
 };
@@ -211,7 +214,7 @@ const audioLd = {
   "@context": "https://schema.org",
   "@type": "AudioObject",
   name: `${story.title} — Audio de Historia Bíblica`,
-  description: `Escucha ${story.title} (${story.bibleRef}) como narración de audio inmersiva en Bible Tea.`,
+  description: `Escucha ${story.title} (${bibleRef}) como narración de audio inmersiva en Bible Tea.`,
   encodingFormat: "audio/mpeg",
   isAccessibleForFree: true,
   requiresSubscription: false,
@@ -730,7 +733,7 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
           )}
           <h1>{story.title}</h1>
           <div class="hero-meta">
-            <span class="hero-ref">{story.bibleRef}</span>
+            <span class="hero-ref">{bibleRef}</span>
             {readingMinutes > 0 && <span class="hero-time">{t(locale, "story.readTime").replace("{min}", String(readingMinutes))} · {t(locale, "story.listenTime").replace("{min}", String(listeningMinutes))}</span>}
           </div>
           <p class="hero-desc">{story.description}</p>
@@ -826,7 +829,7 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
                 )}
               </div>
               <div class="rc-title">{r.title}</div>
-              <div class="rc-ref">{r.bibleRef}</div>
+              <div class="rc-ref">{localizeBibleRef(r.bibleRef, locale)}</div>
             </a>
           ))}
         </div>
