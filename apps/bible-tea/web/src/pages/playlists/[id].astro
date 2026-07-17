@@ -32,7 +32,7 @@ const stories = playlist.stories;
 const seoOverride = playlistSeo(playlist.id, locale);
 const pageTitle = seoOverride.title ?? t(locale, "playlist.pageTitle").replace("{name}", playlist.name);
 const pageDesc = seoOverride.description ?? t(locale, "playlist.pageDesc").replace(/\{description\}/g, playlist.description).replace(/\{count\}/g, String(stories.length)).replace(/\{name\}/g, playlist.name);
-const pageUrl = `https://bibletea.app/playlists/${playlist.id}`;
+const pageUrl = `https://bibletea.app/playlists/${playlist.id}/`;
 
 const firstCover = stories.find((s) => hasCover(s.id));
 const ogImage = firstCover ? coverUrl(firstCover.id) : "https://bibletea.app/icon.png";
@@ -433,7 +433,7 @@ const otherPlaylists = allPlaylists.filter((p) => p.id !== playlist.id).slice(0,
           <a href={localePath(`/stories/${s.id}`, locale)} class="story-card">
             <div class="card-cover">
               {hasCover(s.id) ? (
-                <img src={coverUrl(s.id)} alt={s.title} loading="lazy" />
+                <img src={coverUrl(s.id)} alt={s.title} loading="lazy" width="300" height="300" />
               ) : (
                 <div class="card-cover-placeholder">📖</div>
               )}

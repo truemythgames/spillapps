@@ -75,7 +75,7 @@ const description = t("en", "notFound.description");
     <p id="nf-text">{t("en", "notFound.text")}</p>
     <div class="not-found-links">
       <a id="nf-home" href="/" class="btn-primary">{t("en", "notFound.goHome")}</a>
-      <a id="nf-stories" href="/stories" class="btn-ghost">{t("en", "notFound.browseStories")}</a>
+      <a id="nf-stories" href="/stories/" class="btn-ghost">{t("en", "notFound.browseStories")}</a>
     </div>
   </div>
 
@@ -87,8 +87,8 @@ const description = t("en", "notFound.description");
       const home = document.getElementById("nf-home") as HTMLAnchorElement;
       const stories = document.getElementById("nf-stories") as HTMLAnchorElement;
       if (p) p.textContent = "Esta página no existe. Quizás la historia que buscas está en otro lugar.";
-      if (home) { home.textContent = "Ir al Inicio"; home.href = "/es"; }
-      if (stories) { stories.textContent = "Explorar Historias"; stories.href = "/es/stories"; }
+      if (home) { home.textContent = "Ir al Inicio"; home.href = "/es/"; }
+      if (stories) { stories.textContent = "Explorar Historias"; stories.href = "/es/stories/"; }
     }
   </script>
 </Base>

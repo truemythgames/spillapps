@@ -26,7 +26,7 @@ const bodyHtml = await marked.parse(prayerBody(detail.transcript));
 
 const pageTitle = t(locale, "prayer.pageTitle").replace(/\{title\}/g, detail.title);
 const pageDesc = t(locale, "prayer.pageDesc").replace(/\{description\}/g, detail.description);
-const pageUrl = `https://bibletea.app/prayers/${detail.slug}`;
+const pageUrl = `https://bibletea.app/prayers/${detail.slug}/`;
 
 const creativeWorkLd = {
   "@context": "https://schema.org",
@@ -185,7 +185,7 @@ const morePrayers = allPrayers.filter((p) => p.slug !== detail.slug).slice(0, 8)
               <a href={localePath(`/stories/${s.slug}`, locale)} class="story-card">
                 <div class="card-cover">
                   {s.cover_image_url ? (
-                    <img src={s.cover_image_url} alt={s.title} loading="lazy" />
+                    <img src={s.cover_image_url} alt={s.title} loading="lazy" width="300" height="300" />
                   ) : (
                     <div class="card-cover-placeholder">📖</div>
                   )}

@@ -134,7 +134,7 @@ const pageTitle = seoOverride.title ?? `${story.title} — ${bibleRef} | Bible T
 const pageDesc = seoOverride.description ?? (locale === "es"
   ? `${story.description} Escucha ${story.title} (${bibleRef}) como audio inmersivo en Bible Tea.`
   : `${story.description} Listen to ${story.title} (${bibleRef}) as immersive audio on Bible Tea.`);
-const pageUrl = `https://bibletea.app/es/stories/${story.id}`;
+const pageUrl = `https://bibletea.app/es/stories/${story.id}/`;
 
 // Generate contextual FAQs for "People Also Ask" rich results
 function faqT(key: string): string {
@@ -721,7 +721,7 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
 
       <div class="story-hero-card">
         {hasImage ? (
-          <img src={cover} alt={story.title} class="hero-cover" loading="eager" />
+          <img src={cover} alt={story.title} class="hero-cover" loading="eager" width="240" height="240" />
         ) : (
           <div class="hero-cover-placeholder">📖</div>
         )}
@@ -823,7 +823,7 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
             <a href={localePath(`/stories/${r.id}`, locale)} class="related-card">
               <div class="related-cover">
                 {hasCover(r.id) ? (
-                  <img src={coverUrl(r.id)} alt={r.title} loading="lazy" />
+                  <img src={coverUrl(r.id)} alt={r.title} loading="lazy" width="150" height="150" />
                 ) : (
                   <div class="related-cover-ph">📖</div>
                 )}

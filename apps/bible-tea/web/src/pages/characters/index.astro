@@ -211,7 +211,7 @@ const jsonLdArray = [collectionLd, itemListLd, breadcrumbLd, faqLd];
         {characters.map((ch) => (
           <a href={localePath(`/characters/${ch.id}`, locale)} class="char-card">
             {ch.image_url ? (
-              <img src={ch.image_url} alt={ch.name} class="char-avatar" loading="lazy" />
+              <img src={ch.image_url} alt={ch.name} class="char-avatar" loading="lazy" width="120" height="120" />
             ) : (
               <div class="char-avatar-ph">👤</div>
             )}

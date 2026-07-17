@@ -1,6 +1,6 @@
 ---
 import { APP_STORE_URL, PLAY_STORE_URL } from "../lib/stories";
-import { getLocale, localePath, alternateLocale, getAlternates, t, type Locale } from "../lib/i18n";
+import { getLocale, localePath, alternateLocale, getAlternates, withTrailingSlash, t, type Locale } from "../lib/i18n";
 
 interface Props {
   title: string;
@@ -13,11 +13,11 @@ interface Props {
 const { title, description, ogImage = "https://bibletea.app/icon.png", canonicalPath, jsonLd } = Astro.props;
 const locale = getLocale(Astro.currentLocale);
 const canonical = canonicalPath
-  ? `https://bibletea.app${locale === "en" ? canonicalPath : `/es${canonicalPath === "/" ? "" : canonicalPath}`}`
+  ? `https://bibletea.app${locale === "en" ? withTrailingSlash(canonicalPath) : (canonicalPath === "/" ? "/es/" : `/es${withTrailingSlash(canonicalPath)}`)}`
   : undefined;
 const alternates = canonicalPath ? getAlternates(canonicalPath) : [];
 const otherLocale = alternateLocale(locale);
-const switchUrl = canonicalPath ? localePath(canonicalPath, otherLocale) : (locale === "en" ? "/es" : "/");
+const switchUrl = canonicalPath ? localePath(canonicalPath, otherLocale) : (locale === "en" ? "/es/" : "/");
 const switchLabel = otherLocale === "es" ? "ES" : "EN";
 const pageJsonLd = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 
@@ -434,8 +434,8 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
       <a href={localePath("/characters", locale)}>{t(locale, "nav.characters")}</a>
       <a href={localePath("/prayers", locale)}>{t(locale, "nav.prayers")}</a>
       <a href={localePath("/books", locale)}>{t(locale, "nav.books")}</a>
-      <a href="/privacy">{t(locale, "nav.privacy")}</a>
-      <a href="/terms">{t(locale, "nav.terms")}</a>
+      <a href="/privacy/">{t(locale, "nav.privacy")}</a>
+      <a href="/terms/">{t(locale, "nav.terms")}</a>
       <a href="mailto:contact@bibletea.app">{t(locale, "nav.contact")}</a>
     </div>
     <p>{t(locale, "footer.rights")}</p>

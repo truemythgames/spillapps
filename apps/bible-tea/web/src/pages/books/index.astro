@@ -218,7 +218,7 @@ const jsonLdArray = [collectionLd, itemListLd, breadcrumbLd, faqLd];
         {seasons.map((s) => (
           <a href={localePath(`/books/${s.slug}`, locale)} class="book-card">
             {s.cover_image_url ? (
-              <img src={s.cover_image_url} alt={s.name} class="book-card-img" loading="lazy" />
+              <img src={s.cover_image_url} alt={s.name} class="book-card-img" loading="lazy" width="240" height="120" />
             ) : (
               <div class="book-card-ph">📖</div>
             )}

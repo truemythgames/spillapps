@@ -30,7 +30,7 @@ const pageTitle = t(locale, "book.pageTitle").replace("{name}", season.name);
 const pageDesc = season.description
   ? t(locale, "book.pageDesc").replace(/\{description\}/g, season.description).replace(/\{count\}/g, String(stories.length)).replace(/\{name\}/g, season.name)
   : t(locale, "book.pageDescFallback").replace(/\{count\}/g, String(stories.length)).replace(/\{name\}/g, season.name);
-const pageUrl = `https://bibletea.app/books/${season.slug}`;
+const pageUrl = `https://bibletea.app/books/${season.slug}/`;
 const ogImage = season.cover_image_url || "https://bibletea.app/icon.png";
 
 const collectionLd = {
@@ -322,7 +322,7 @@ const otherSeasons = allSeasons.filter((s) => s.id !== season.id);
 
       <div class="book-hero">
         {season.cover_image_url ? (
-          <img src={season.cover_image_url} alt={season.name} class="book-cover" loading="eager" />
+          <img src={season.cover_image_url} alt={season.name} class="book-cover" loading="eager" width="200" height="200" />
         ) : (
           <div class="book-cover-ph">📖</div>
         )}
@@ -340,7 +340,7 @@ const otherSeasons = allSeasons.filter((s) => s.id !== season.id);
           <a href={localePath(`/stories/${s.slug}`, locale)} class="story-card">
             <div class="card-cover">
               {s.cover_image_url ? (
-                <img src={s.cover_image_url} alt={s.title} loading="lazy" />
+                <img src={s.cover_image_url} alt={s.title} loading="lazy" width="300" height="300" />
               ) : (
                 <div class="card-cover-placeholder">📖</div>
               )}
@@ -372,7 +372,7 @@ const otherSeasons = allSeasons.filter((s) => s.id !== season.id);
           {otherSeasons.map((s) => (
             <a href={localePath(`/books/${s.slug}`, locale)} class="book-card">
               {s.cover_image_url ? (
-                <img src={s.cover_image_url} alt={s.name} class="book-card-img" loading="lazy" />
+                <img src={s.cover_image_url} alt={s.name} class="book-card-img" loading="lazy" width="240" height="120" />
               ) : (
                 <div class="book-card-img" style="background:var(--surface-light);display:flex;align-items:center;justify-content:center;font-size:2rem;">📖</div>
               )}

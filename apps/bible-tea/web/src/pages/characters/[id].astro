@@ -26,7 +26,7 @@ const stories = character.stories;
 
 const pageTitle = t(locale, "character.pageTitle").replace("{name}", character.name);
 const pageDesc = t(locale, "character.pageDesc").replace(/\{description\}/g, character.description).replace(/\{count\}/g, String(stories.length > 1 ? stories.length : "")).replace(/\{name\}/g, character.name).replace(/\s{2,}/g, " ");
-const pageUrl = `https://bibletea.app/characters/${character.id}`;
+const pageUrl = `https://bibletea.app/characters/${character.id}/`;
 const ogImage = character.image_url || "https://bibletea.app/icon.png";
 
 const personLd = {
@@ -274,7 +274,7 @@ const otherCharacters = allCharacters.filter((c) => c.id !== character.id).slice
 
       <div class="character-hero">
         {character.image_url ? (
-          <img src={character.image_url} alt={character.name} class="character-avatar" loading="eager" />
+          <img src={character.image_url} alt={character.name} class="character-avatar" loading="eager" width="200" height="200" />
         ) : (
           <div class="character-avatar-ph">👤</div>
         )}
@@ -293,7 +293,7 @@ const otherCharacters = allCharacters.filter((c) => c.id !== character.id).slice
             <a href={localePath(`/stories/${s.slug}`, locale)} class="story-card">
               <div class="card-cover">
                 {s.cover_image_url ? (
-                  <img src={s.cover_image_url} alt={s.title} loading="lazy" />
+                  <img src={s.cover_image_url} alt={s.title} loading="lazy" width="300" height="300" />
                 ) : (
                   <div class="card-cover-placeholder">📖</div>
                 )}
@@ -328,7 +328,7 @@ const otherCharacters = allCharacters.filter((c) => c.id !== character.id).slice
           {otherCharacters.map((c) => (
             <a href={localePath(`/characters/${c.id}`, locale)} class="char-card">
               {c.image_url ? (
-                <img src={c.image_url} alt={c.name} class="char-card-avatar" loading="lazy" />
+                <img src={c.image_url} alt={c.name} class="char-card-avatar" loading="lazy" width="100" height="100" />
               ) : (
                 <div class="char-card-ph">👤</div>
               )}
