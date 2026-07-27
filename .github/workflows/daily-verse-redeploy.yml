@@ -1,0 +1,30 @@
+name: Daily Verse Redeploy
+
+on:
+  schedule:
+    # Run at 5:00 AM UTC every day (8 AM Athens / 12 AM EST)
+    - cron: "0 5 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/bible-tea/web
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: .
+
+      - name: Build & Deploy
+        run: npx astro build && npx wrangler pages deploy dist --project-name=bibletea-web
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

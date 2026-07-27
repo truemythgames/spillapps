@@ -1,0 +1,265 @@
+---
+import Base from "../../../layouts/Base.astro";
+import StoreButtons from "../../../components/StoreButtons.astro";
+import { getLocale, localePath, t } from "../../../lib/i18n";
+
+const locale = getLocale(Astro.currentLocale);
+const title = t(locale, "widget.title");
+const description = t(locale, "widget.description");
+
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Inicio", item: "https://bibletea.app/es/" },
+    { "@type": "ListItem", position: 2, name: "Widget", item: "https://bibletea.app/es/widget/" },
+  ],
+};
+
+const appLd = {
+  "@context": "https://schema.org",
+  "@type": "MobileApplication",
+  name: "Bible Tea",
+  operatingSystem: "iOS, Android",
+  applicationCategory: "ReligionApplication",
+  url: "https://bibletea.app",
+  image: "https://bibletea.app/icon.png",
+  description: "Widget de versículo bíblico diario para tu pantalla de inicio. Disponible en iPhone y Android. 200+ historias bíblicas como audio inmersivo.",
+  aggregateRating: { "@type": "AggregateRating", ratingValue: "5", ratingCount: "50", bestRating: "5" },
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+};
+
+const howToLd = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "Cómo agregar un widget de versículo bíblico a tu teléfono",
+  description: "Agrega el widget gratuito de Bible Tea a tu pantalla de inicio en 3 pasos simples. Funciona en iPhone y Android.",
+  step: [
+    { "@type": "HowToStep", position: 1, name: t(locale, "widget.step1"), text: t(locale, "widget.step1Desc") },
+    { "@type": "HowToStep", position: 2, name: t(locale, "widget.step2"), text: t(locale, "widget.step2Desc") },
+    { "@type": "HowToStep", position: 3, name: t(locale, "widget.step3"), text: t(locale, "widget.step3Desc") },
+  ],
+};
+
+const faqs = [
+  { q: t(locale, "widget.faqQ1"), a: t(locale, "widget.faqA1") },
+  { q: t(locale, "widget.faqQ2"), a: t(locale, "widget.faqA2") },
+  { q: t(locale, "widget.faqQ3"), a: t(locale, "widget.faqA3") },
+  { q: t(locale, "widget.faqQ4"), a: t(locale, "widget.faqA4") },
+  { q: t(locale, "widget.faqQ5"), a: t(locale, "widget.faqA5") },
+];
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const webPageLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description,
+  url: "https://bibletea.app/es/widget/",
+  isPartOf: { "@type": "WebSite", name: "Bible Tea", url: "https://bibletea.app" },
+};
+
+const votdHref = locale === "es" ? "/es/versiculo-del-dia/" : "/verse-of-the-day/";
+---
+
+<Base title={title} description={description} canonicalPath="/widget" jsonLd={[breadcrumbLd, appLd, howToLd, faqLd, webPageLd]}>
+  <style>
+    .bc { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--text-muted); max-width: 1200px; margin: 0 auto; padding: 6.5rem 2rem 0; }
+    .bc a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .bc a:hover { color: var(--primary); }
+    .bc .sep { opacity: 0.4; }
+
+    .widget-hero {
+      padding: 2rem 2rem 2rem;
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .widget-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin-bottom: 0.75rem;
+      background: linear-gradient(135deg, var(--text) 0%, var(--primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .widget-hero p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+
+    .hero-proof { display: flex; align-items: center; justify-content: center; gap: 0.4rem; color: var(--accent); font-size: 0.9rem; font-weight: 600; margin-bottom: 1.5rem; }
+    .hero-proof svg { width: 16px; height: 16px; }
+
+    .widget-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 2rem 0;
+    }
+
+    .how-section { margin-bottom: 3rem; }
+    .how-section h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 1.5rem; }
+    .steps { display: flex; flex-direction: column; gap: 1.25rem; }
+    .step {
+      display: flex;
+      gap: 1.5rem;
+      align-items: flex-start;
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: border-color 0.2s;
+    }
+    .step:hover { border-color: var(--primary); }
+    .step-num {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .step-content { flex: 1; }
+    .step-title { font-weight: 700; font-size: 1.05rem; margin-bottom: 0.35rem; }
+    .step-desc { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; }
+
+    .cta-mid { text-align: center; margin-bottom: 3rem; }
+    .cta-mid p { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem; }
+
+    .features { margin-bottom: 3rem; }
+    .features h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 1.25rem; }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.25rem; }
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: transform 0.25s, border-color 0.2s;
+    }
+    .feature-card:hover { transform: translateY(-4px); border-color: var(--primary); }
+    .feature-card h3 { font-family: 'Playfair Display', serif; font-size: 1.05rem; margin-bottom: 0.4rem; }
+    .feature-card p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; }
+
+    .more-section {
+      text-align: center;
+      padding: 2.5rem;
+      background: linear-gradient(135deg, rgba(200, 162, 255, 0.08) 0%, rgba(107, 92, 231, 0.08) 100%);
+      border: 1px solid rgba(200, 162, 255, 0.2);
+      border-radius: 20px;
+      margin-bottom: 3rem;
+    }
+    .more-section h2 { font-family: 'Playfair Display', serif; font-size: 1.35rem; margin-bottom: 0.75rem; }
+    .more-section p { color: var(--text-secondary); font-size: 1rem; line-height: 1.7; max-width: 520px; margin: 0 auto 1rem; }
+    .more-link { color: var(--primary); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+    .more-link:hover { text-decoration: underline; }
+
+    .faq-section { max-width: 700px; margin: 0 auto; padding: 3rem 2rem; border-top: 1px solid var(--surface-border); }
+    .faq-section h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 1.25rem; }
+    .faq-item { background: var(--surface); border: 1px solid var(--surface-border); border-radius: 12px; margin-bottom: 0.6rem; overflow: hidden; transition: border-color 0.2s; }
+    .faq-item:hover { border-color: var(--primary); }
+    .faq-item[open] { border-color: rgba(200, 162, 255, 0.3); }
+    .faq-item summary { padding: 1rem 1.25rem; cursor: pointer; font-weight: 600; font-size: 0.95rem; color: var(--text); list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after { content: '+'; font-size: 1.25rem; color: var(--primary); flex-shrink: 0; }
+    .faq-item[open] summary::after { content: '−'; }
+    .faq-item p { padding: 0 1.25rem 1rem; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+
+    .bottom-cta { text-align: center; padding: 4rem 2rem 3rem; }
+    .bottom-cta h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.5rem, 3vw, 2rem); margin-bottom: 0.75rem; }
+    .bottom-cta p { color: var(--text-secondary); margin-bottom: 1.5rem; max-width: 450px; margin-left: auto; margin-right: auto; }
+
+    @media (max-width: 640px) {
+      .widget-hero { padding: 6rem 1.5rem 1.5rem; }
+      .widget-content { padding: 1.5rem 1.5rem 0; }
+      .features-grid { grid-template-columns: 1fr; }
+      .step { flex-direction: column; gap: 1rem; text-align: center; }
+      .more-section { padding: 2rem 1.5rem; }
+    }
+  </style>
+
+  <main>
+    <div class="bc" role="navigation" aria-label="Breadcrumb">
+      <a href={localePath("/", locale)}>{t(locale, "votd.breadcrumbHome")}</a>
+      <span class="sep">/</span>
+      <span>{t(locale, "widget.breadcrumbWidget")}</span>
+    </div>
+
+    <div class="widget-hero">
+      <h1>{t(locale, "widget.h1")}</h1>
+      <p>{t(locale, "widget.subtitle")}</p>
+      <div class="hero-proof">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/></svg>
+        {t(locale, "widget.proofStars")}
+      </div>
+      <StoreButtons variant="hero" />
+    </div>
+
+    <div class="widget-content">
+      <section class="how-section">
+        <h2>{t(locale, "widget.howTitle")}</h2>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content"><div class="step-title">{t(locale, "widget.step1")}</div><p class="step-desc">{t(locale, "widget.step1Desc")}</p></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content"><div class="step-title">{t(locale, "widget.step2")}</div><p class="step-desc">{t(locale, "widget.step2Desc")}</p></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content"><div class="step-title">{t(locale, "widget.step3")}</div><p class="step-desc">{t(locale, "widget.step3Desc")}</p></div></div>
+        </div>
+      </section>
+
+      <div class="cta-mid"><p>{t(locale, "widget.ctaDesc")}</p><StoreButtons variant="hero" /></div>
+
+      <section class="features">
+        <h2>{t(locale, "widget.featureTitle")}</h2>
+        <div class="features-grid">
+          <div class="feature-card"><h3>{t(locale, "widget.featureF1")}</h3><p>{t(locale, "widget.featureF1Desc")}</p></div>
+          <div class="feature-card"><h3>{t(locale, "widget.featureF2")}</h3><p>{t(locale, "widget.featureF2Desc")}</p></div>
+          <div class="feature-card"><h3>{t(locale, "widget.featureF3")}</h3><p>{t(locale, "widget.featureF3Desc")}</p></div>
+          <div class="feature-card"><h3>{t(locale, "widget.featureF4")}</h3><p>{t(locale, "widget.featureF4Desc")}</p></div>
+        </div>
+      </section>
+
+      <section class="more-section">
+        <h2>{t(locale, "widget.moreTitle")}</h2>
+        <p>{t(locale, "widget.moreDesc")}</p>
+        <a href={votdHref} class="more-link">{t(locale, "nav.verseOfTheDay")} →</a>
+      </section>
+    </div>
+
+    <section class="faq-section">
+      <h2>{t(locale, "widget.faqTitle")}</h2>
+      {faqs.map((f) => (
+        <details class="faq-item">
+          <summary>{f.q}</summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </section>
+
+    <section class="bottom-cta">
+      <h2>{t(locale, "widget.ctaTitle")}</h2>
+      <p>{t(locale, "widget.ctaDesc")}</p>
+      <StoreButtons variant="hero" />
+    </section>
+  </main>
+</Base>

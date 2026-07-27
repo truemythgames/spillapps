@@ -3,6 +3,7 @@ import Base from "../layouts/Base.astro";
 import StoreButtons from "../components/StoreButtons.astro";
 import { MEDIA_BASE, getCatalog, getPlaylists } from "../lib/stories";
 import { getLocale, localePath, t } from "../lib/i18n";
+import { getVerseOfTheDay } from "../lib/daily-verses";
 
 const locale = getLocale(Astro.currentLocale);
 
@@ -65,6 +66,9 @@ const reviews = [
   { text: "As someone who grew up with these stories, hearing them narrated with such care and emotion brought tears to my eyes. This is how scripture should be experienced.", name: "Robert P.", initial: "R", date: "May 2026" },
 ];
 
+const verse = getVerseOfTheDay(new Date(), locale === "es" ? "es" : "en");
+const votdHref = locale === "es" ? "/es/versiculo-del-dia/" : "/verse-of-the-day/";
+
 const starSvg = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/></svg>`;
 ---
 
@@ -72,13 +76,13 @@ const starSvg = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.0
   <style>
     /* Hero */
     .hero {
-      min-height: 100vh;
+      min-height: 80vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 8rem 2rem 4rem;
+      padding: 7rem 2rem 3rem;
       position: relative;
     }
     .hero::before {
@@ -249,7 +253,7 @@ const starSvg = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.0
     }
 
     /* Features */
-    .features { padding: 6rem 2rem; max-width: 1000px; margin: 0 auto; }
+    .features { padding: 6rem 2rem; max-width: 1200px; margin: 0 auto; }
     .features-title {
       text-align: center;
       font-size: clamp(1.5rem, 3vw, 2.25rem);
@@ -276,8 +280,67 @@ const starSvg = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.0
     }
     .feature-card p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
 
+    /* Verse of the Day */
+    .votd-home {
+      padding: 4rem 2rem;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .votd-inner {
+      text-align: center;
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 20px;
+      padding: 3rem 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .votd-inner::before {
+      content: '';
+      position: absolute;
+      top: -40%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(200, 162, 255, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .votd-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+    .votd-text {
+      font-size: clamp(1.25rem, 3vw, 1.75rem);
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 1rem;
+      color: var(--text);
+      border: none;
+      padding: 0;
+    }
+    .votd-ref {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+    }
+    .votd-link {
+      display: inline-block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .votd-link:hover { color: var(--primary); }
+
     /* Reviews */
-    .reviews { padding: 6rem 2rem; max-width: 1000px; margin: 0 auto; }
+    .reviews { padding: 6rem 2rem; max-width: 1200px; margin: 0 auto; }
     .reviews-title {
       text-align: center;
       font-size: clamp(1.5rem, 3vw, 2.25rem);
@@ -368,9 +431,11 @@ const starSvg = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.0
 
     /* Responsive */
     @media (max-width: 640px) {
-      .hero { padding: 7rem 1.5rem 3rem; }
-      .hero h1 { font-size: 2.25rem; }
-      .hero-icon { width: 88px; height: 88px; border-radius: 20px; }
+      .hero { min-height: auto; padding: 6rem 1.5rem 2rem; }
+      .hero h1 { font-size: 2rem; margin-bottom: 0.75rem; }
+      .hero-icon { width: 72px; height: 72px; border-radius: 18px; margin-bottom: 1.25rem; }
+      .hero-sub { font-size: 0.95rem; margin-bottom: 1.25rem; }
+      .hero-proof { font-size: 0.8rem; margin-bottom: 1.25rem; }
       .features { padding: 4rem 1.5rem; }
       .features-grid { grid-template-columns: 1fr; }
       .cta-section { padding: 4rem 1.5rem; }
@@ -438,6 +503,16 @@ const starSvg = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.0
       <div class="feature-card"><div class="feature-icon">🙏</div><h3>{t(locale, "home.feature7Title")}</h3><p>{t(locale, "home.feature7Desc")}</p></div>
       <div class="feature-card"><div class="feature-icon">💭</div><h3>{t(locale, "home.feature8Title")}</h3><p>{t(locale, "home.feature8Desc")}</p></div>
       <div class="feature-card"><div class="feature-icon">💬</div><h3>{t(locale, "home.feature9Title")}</h3><p>{t(locale, "home.feature9Desc")}</p></div>
+      <div class="feature-card"><div class="feature-icon">📱</div><h3>{t(locale, "home.feature10Title")}</h3><p>{t(locale, "home.feature10Desc")}</p></div>
+    </div>
+  </section>
+
+  <section class="votd-home">
+    <div class="votd-inner">
+      <div class="votd-label">{t(locale, "home.votdLabel")}</div>
+      <blockquote class="votd-text heading">"{verse.text}"</blockquote>
+      <p class="votd-ref">{verse.ref}</p>
+      <a href={votdHref} class="votd-link">{t(locale, "home.votdLink")} →</a>
     </div>
   </section>
 

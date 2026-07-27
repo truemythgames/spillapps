@@ -7,24 +7,33 @@ interface Props {
   description: string;
   ogImage?: string;
   canonicalPath?: string;
+  /** Override ES path when the Spanish slug differs from the English one (e.g. "/versiculo-del-dia"). */
+  esPath?: string;
   jsonLd?: object | object[];
   /** Set to false for pages that only exist in English (no /es/ version). */
   localized?: boolean;
 }
 
-const { title, description, ogImage = "https://bibletea.app/icon.png", canonicalPath, jsonLd, localized = true } = Astro.props;
+const { title, description, ogImage = "https://bibletea.app/icon.png", canonicalPath, esPath, jsonLd, localized = true } = Astro.props;
 const locale = getLocale(Astro.currentLocale);
+const resolvedEsPath = esPath || canonicalPath;
 const canonical = canonicalPath
-  ? `https://bibletea.app${locale === "en" ? withTrailingSlash(canonicalPath) : (canonicalPath === "/" ? "/es/" : `/es${withTrailingSlash(canonicalPath)}`)}`
+  ? `https://bibletea.app${locale === "en" ? withTrailingSlash(canonicalPath) : (resolvedEsPath === "/" ? "/es/" : `/es${withTrailingSlash(resolvedEsPath!)}`)}`
   : undefined;
-const alternates = localized && canonicalPath ? getAlternates(canonicalPath) : [];
+const alternates = localized && canonicalPath
+  ? [
+      { locale: "en" as Locale, href: `https://bibletea.app${withTrailingSlash(canonicalPath)}` },
+      { locale: "es" as Locale, href: `https://bibletea.app${canonicalPath === "/" && !esPath ? "/es/" : `/es${withTrailingSlash(resolvedEsPath!)}`}` },
+    ]
+  : [];
 const otherLocale = alternateLocale(locale);
 const switchUrl = localized && canonicalPath
-  ? localePath(canonicalPath, otherLocale)
+  ? (otherLocale === "es" ? `/es${withTrailingSlash(resolvedEsPath!)}` : withTrailingSlash(canonicalPath))
   : (locale === "en" ? "/es/" : "/");
 const switchLabel = otherLocale === "es" ? "ES" : "EN";
 const pageJsonLd = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 
+const votdHref = locale === "es" ? "/es/versiculo-del-dia/" : "/verse-of-the-day/";
 const langCode = locale === "es" ? "es" : "en";
 const inLanguage = locale === "es" ? "es" : "en-US";
 
@@ -438,6 +447,8 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
       <a href={localePath("/characters", locale)}>{t(locale, "nav.characters")}</a>
       <a href={localePath("/prayers", locale)}>{t(locale, "nav.prayers")}</a>
       <a href={localePath("/books", locale)}>{t(locale, "nav.books")}</a>
+      <a href={votdHref}>{t(locale, "nav.verseOfTheDay")}</a>
+      <a href={localePath("/widget", locale)}>Widget</a>
       <a href="/privacy/">{t(locale, "nav.privacy")}</a>
       <a href="/terms/">{t(locale, "nav.terms")}</a>
       <a href="mailto:contact@bibletea.app">{t(locale, "nav.contact")}</a>

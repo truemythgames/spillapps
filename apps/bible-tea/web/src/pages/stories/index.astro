@@ -111,8 +111,13 @@ const jsonLdArray = [collectionLd, itemListLd, appLd, faqLd, breadcrumbLd];
   jsonLd={jsonLdArray}
 >
   <style>
+    .bc { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--text-muted); max-width: 1200px; margin: 0 auto; padding: 6.5rem 2rem 0; }
+    .bc a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .bc a:hover { color: var(--primary); }
+    .bc .sep { opacity: 0.4; }
+
     .stories-hero {
-      padding: 7rem 2rem 2rem;
+      padding: 2rem 2rem 2rem;
       text-align: center;
       max-width: 700px;
       margin: 0 auto;
@@ -317,6 +322,10 @@ const jsonLdArray = [collectionLd, itemListLd, appLd, faqLd, breadcrumbLd];
   </style>
 
   <main>
+    <div class="bc" role="navigation" aria-label="Breadcrumb">
+      <a href={localePath("/", locale)}>{t(locale, "story.breadcrumbHome")}</a><span class="sep">/</span>
+      <span>{t(locale, "story.breadcrumbStories")}</span>
+    </div>
     <div class="stories-hero">
       <h1>{t(locale, "stories.h1")}</h1>
       <p>

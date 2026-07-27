@@ -258,6 +258,17 @@
     "purchaseFailed": "Error en la compra",
     "purchaseError": "Algo salió mal. Por favor intenta de nuevo."
   },
+  "widget": {
+    "cardTitle": "Añade un widget de versículos a tu inicio",
+    "cardSubtitle": "Recibe un versículo diario sin abrir la app",
+    "promptTitle": "Añade Bible Tea a tu\npantalla de inicio",
+    "promptSubtitle": "Recibe un versículo bíblico diario en tu pantalla — sin abrir la app.",
+    "step1": "Mantén presionada tu pantalla de inicio",
+    "step2": "Toca el botón \"+\" (arriba a la izquierda)",
+    "step3": "Busca \"Bible Tea\"",
+    "step4": "Elige un tamaño de widget y agrégalo",
+    "gotIt": "Entendido"
+  },
   "postPurchase": {
     "title": "¡Todo listo!",
     "subtitle": "Bienvenido a Bible Tea Premium",

@@ -36,9 +36,20 @@
       },
       "package": "app.bibletea",
       "versionCode": 29,
-      "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json",
+      "edgeToEdgeEnabled": true
     },
     "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 36,
+            "targetSdkVersion": 36,
+            "buildToolsVersion": "36.0.0"
+          }
+        }
+      ],
       "expo-dev-client",
       "expo-router",
       "expo-font",
@@ -70,7 +81,9 @@
       "./plugins/firebase-modular-headers",
       "./plugins/hermes-dsym-plugin",
       "./plugins/now-playing-plugin",
-      "expo-tracking-transparency"
+      "./plugins/verse-widget-plugin",
+      "expo-tracking-transparency",
+      "./plugins/android-16-compat"
     ],
     "experiments": {
       "typedRoutes": true

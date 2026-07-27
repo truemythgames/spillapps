@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { storage, StorageKeys, getLocalProgress, getStreakData, setLocalProgress } from "@/lib/storage";
 import { api } from "@/lib/api";
 import { checkSubscription } from "@/lib/purchases";
+import { syncWidgetData } from "@/lib/widget";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const CACHE_KEY = "app_data_cache";
@@ -172,6 +173,9 @@ export const useAppStore = create<AppState>((set, get) => ({
           speakers: cached.speakers,
           isLoading: false,
         });
+        if (cached.storyOfTheDay) {
+          syncWidgetData(cached.storyOfTheDay);
+        }
       }
     } catch {}
 
@@ -193,6 +197,7 @@ export const useAppStore = create<AppState>((set, get) => ({
         if (res.story) {
           const mapped = apiStoryToCover(res.story);
           set({ storyOfTheDay: mapped });
+          syncWidgetData(mapped);
           return mapped;
         }
         return null;

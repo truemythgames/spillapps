@@ -79,7 +79,7 @@ const morePrayers = allPrayers.filter((p) => p.slug !== detail.slug).slice(0, 8)
 
 <Base title={pageTitle} description={pageDesc} canonicalPath={`/prayers/${detail.slug}`} jsonLd={jsonLdArray}>
   <style>
-    .prayer-page { max-width: 760px; margin: 0 auto; padding: 7rem 2rem 0; }
+    .prayer-page { max-width: 1200px; margin: 0 auto; padding: 7rem 2rem 0; }
 
     .breadcrumbs { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 2rem; flex-wrap: wrap; }
     .breadcrumbs a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
@@ -133,7 +133,7 @@ const morePrayers = allPrayers.filter((p) => p.slug !== detail.slug).slice(0, 8)
     .faq-item[open] summary::after { content: '−'; }
     .faq-item p { padding: 0 1.25rem 1rem; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
 
-    .more-prayers { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem; border-top: 1px solid var(--surface-border); }
+    .more-prayers { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem; border-top: 1px solid var(--surface-border); }
     .more-prayers h2 { font-family: 'Playfair Display', serif; font-size: 1.35rem; margin-bottom: 1.25rem; }
     .more-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
     .more-card { display: block; text-decoration: none; background: var(--surface); border: 1px solid var(--surface-border); border-radius: 14px; padding: 1.1rem 1.25rem; transition: transform 0.2s, border-color 0.2s; }
@@ -143,7 +143,7 @@ const morePrayers = allPrayers.filter((p) => p.slug !== detail.slug).slice(0, 8)
 
     .bottom-cta { text-align: center; padding: 4rem 2rem 3rem; }
     .bottom-cta h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.5rem, 3vw, 2rem); margin-bottom: 0.75rem; }
-    .bottom-cta p { color: var(--text-secondary); margin-bottom: 1.5rem; max-width: 480px; margin-left: auto; margin-right: auto; }
+    .bottom-cta p { color: var(--text-secondary); margin-bottom: 1.5rem; max-width: 450px; margin-left: auto; margin-right: auto; }
 
     @media (max-width: 640px) {
       .prayer-page { padding: 6rem 1.5rem 0; }

@@ -31,7 +31,8 @@ const pageDesc = season.description
   ? t(locale, "book.pageDesc").replace(/\{description\}/g, season.description).replace(/\{count\}/g, String(stories.length)).replace(/\{name\}/g, season.name)
   : t(locale, "book.pageDescFallback").replace(/\{count\}/g, String(stories.length)).replace(/\{name\}/g, season.name);
 const pageUrl = `https://bibletea.app/books/${season.slug}/`;
-const ogImage = season.cover_image_url || "https://bibletea.app/icon.png";
+const seasonCover = season.cover_image_url || season.stories[0]?.cover_image_url;
+const ogImage = seasonCover || "https://bibletea.app/icon.png";
 
 const collectionLd = {
   "@context": "https://schema.org",
@@ -321,8 +322,8 @@ const otherSeasons = allSeasons.filter((s) => s.id !== season.id);
       </div>
 
       <div class="book-hero">
-        {season.cover_image_url ? (
-          <img src={season.cover_image_url} alt={season.name} class="book-cover" loading="eager" width="200" height="200" />
+        {seasonCover ? (
+          <img src={seasonCover} alt={season.name} class="book-cover" loading="eager" width="200" height="200" />
         ) : (
           <div class="book-cover-ph">📖</div>
         )}
@@ -371,11 +372,14 @@ const otherSeasons = allSeasons.filter((s) => s.id !== season.id);
         <div class="books-row">
           {otherSeasons.map((s) => (
             <a href={localePath(`/books/${s.slug}`, locale)} class="book-card">
-              {s.cover_image_url ? (
-                <img src={s.cover_image_url} alt={s.name} class="book-card-img" loading="lazy" width="240" height="120" />
-              ) : (
-                <div class="book-card-img" style="background:var(--surface-light);display:flex;align-items:center;justify-content:center;font-size:2rem;">📖</div>
-              )}
+              {(() => {
+                const img = s.cover_image_url || s.stories[0]?.cover_image_url;
+                return img ? (
+                  <img src={img} alt={s.name} class="book-card-img" loading="lazy" width="240" height="120" />
+                ) : (
+                  <div class="book-card-img" style="background:var(--surface-light);display:flex;align-items:center;justify-content:center;font-size:2rem;">📖</div>
+                );
+              })()}
               <div class="book-card-body">
                 <div class="book-card-name">{s.name}</div>
                 <div class="book-card-count">{s.stories.length} {t(locale, "books.storyCount")}</div>

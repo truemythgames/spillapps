@@ -4,6 +4,11 @@ import { getCatalog, getPlaylists, getSeasons, getCharacters, getPrayers } from 
 const SITE = "https://bibletea.app";
 const NO_LOCALE_PAGES = new Set(["/privacy", "/terms"]);
 
+/** Pages where the Spanish slug differs from the English one. */
+const ES_SLUG_OVERRIDES: Record<string, string> = {
+  "/verse-of-the-day": "/versiculo-del-dia",
+};
+
 interface SitemapEntry {
   path: string;
   lastmod: string;
@@ -37,6 +42,8 @@ export const GET: APIRoute = async () => {
     { path: "/characters", lastmod: today, changefreq: "weekly", priority: 0.8 },
     { path: "/prayers", lastmod: today, changefreq: "weekly", priority: 0.8 },
     { path: "/books", lastmod: today, changefreq: "weekly", priority: 0.8 },
+    { path: "/verse-of-the-day", lastmod: today, changefreq: "daily", priority: 0.9 },
+    { path: "/widget", lastmod: today, changefreq: "monthly", priority: 0.8 },
     { path: "/privacy", lastmod: "2026-03-26T00:00:00.000Z", changefreq: "yearly", priority: 0.3 },
     { path: "/terms", lastmod: "2026-04-13T00:00:00.000Z", changefreq: "yearly", priority: 0.3 },
   ];
@@ -63,7 +70,8 @@ export const GET: APIRoute = async () => {
     const hasLocales = !NO_LOCALE_PAGES.has(e.path);
     urls.push(url(`${SITE}${slash(e.path)}`, e.lastmod, e.changefreq, e.priority));
     if (hasLocales) {
-      const esPath = e.path === "/" ? "/es/" : `/es${slash(e.path)}`;
+      const esSlug = ES_SLUG_OVERRIDES[e.path] || e.path;
+      const esPath = e.path === "/" ? "/es/" : `/es${slash(esSlug)}`;
       urls.push(url(`${SITE}${esPath}`, e.lastmod, e.changefreq, e.priority));
     }
   }
