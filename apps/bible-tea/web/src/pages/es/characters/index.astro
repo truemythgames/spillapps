@@ -86,6 +86,9 @@ const jsonLdArray = [collectionLd, itemListLd, breadcrumbLd, faqLd];
     .bc a:hover { color: var(--primary); }
     .bc .sep { opacity: 0.4; }
 
+    .hero-stars { display: flex; justify-content: center; gap: 0.25rem; margin-bottom: 0.5rem; font-size: 1.25rem; color: var(--accent); }
+    .hero-proof { text-align: center; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; margin-bottom: 1.5rem; }
+
     .characters-hero {
       padding: 2rem 2rem 2rem;
       text-align: center;
@@ -212,6 +215,8 @@ const jsonLdArray = [collectionLd, itemListLd, breadcrumbLd, faqLd];
     <div class="characters-hero">
       <h1>{t(locale, "characters.h1")}</h1>
       <p>{t(locale, "characters.subtitle")}</p>
+      <div class="hero-stars">★★★★★</div>
+      <div class="hero-proof">{t(locale, "home.stars")}</div>
       <StoreButtons variant="hero" />
     </div>
 

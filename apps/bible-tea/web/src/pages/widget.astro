@@ -104,8 +104,8 @@ const votdHref = locale === "es" ? "/es/versiculo-del-dia/" : "/verse-of-the-day
       margin-bottom: 1rem;
     }
 
-    .hero-proof { display: flex; align-items: center; justify-content: center; gap: 0.4rem; color: var(--accent); font-size: 0.9rem; font-weight: 600; margin-bottom: 1.5rem; }
-    .hero-proof svg { width: 16px; height: 16px; }
+    .hero-stars { display: flex; justify-content: center; gap: 0.25rem; margin-bottom: 0.5rem; font-size: 1.25rem; color: var(--accent); }
+    .hero-proof { text-align: center; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; margin-bottom: 1.5rem; }
 
     .widget-content {
       max-width: 1200px;
@@ -208,14 +208,8 @@ const votdHref = locale === "es" ? "/es/versiculo-del-dia/" : "/verse-of-the-day
     <div class="widget-hero">
       <h1>{t(locale, "widget.h1")}</h1>
       <p>{t(locale, "widget.subtitle")}</p>
-      <div class="hero-proof">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/></svg>
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/></svg>
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/></svg>
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/></svg>
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/></svg>
-        {t(locale, "widget.proofStars")}
-      </div>
+      <div class="hero-stars">★★★★★</div>
+      <div class="hero-proof">{t(locale, "widget.proofStars")}</div>
       <StoreButtons variant="hero" />
     </div>
 

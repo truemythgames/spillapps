@@ -123,17 +123,8 @@ const starSvg = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.0
       margin: 0 auto 2rem;
       line-height: 1.7;
     }
-    .hero-proof {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      color: var(--accent);
-      font-size: 0.9rem;
-      font-weight: 600;
-      margin-bottom: 2rem;
-      letter-spacing: 0.02em;
-    }
-    .hero-proof :global(svg) { width: 16px; height: 16px; flex-shrink: 0; }
+    .hero-stars { display: flex; justify-content: center; gap: 0.25rem; margin-bottom: 0.5rem; font-size: 1.25rem; color: var(--accent); }
+    .hero-proof { text-align: center; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; margin-bottom: 2rem; letter-spacing: 0.02em; }
     .hero-cta {
       display: inline-flex;
       align-items: center;
@@ -447,14 +438,8 @@ const starSvg = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.0
     <img src="/icon-sm.png" alt="Ícono de Bible Tea" class="hero-icon" width="120" height="120" />
     <h1 class="heading">{t(locale, "home.h1a")}<br/>{t(locale, "home.h1b")}</h1>
     <p class="hero-sub">{t(locale, "home.subtitle")}</p>
-    <div class="hero-proof">
-      <Fragment set:html={starSvg} />
-      <Fragment set:html={starSvg} />
-      <Fragment set:html={starSvg} />
-      <Fragment set:html={starSvg} />
-      <Fragment set:html={starSvg} />
-      {t(locale, "home.stars")}
-    </div>
+    <div class="hero-stars">★★★★★</div>
+    <div class="hero-proof">{t(locale, "home.stars")}</div>
     <StoreButtons variant="hero" />
   </section>
 
