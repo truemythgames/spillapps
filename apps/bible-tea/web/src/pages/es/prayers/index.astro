@@ -47,7 +47,7 @@ const collectionLd = {
   "@type": "CollectionPage",
   name: "Oraciones Guiadas",
   description,
-  url: "https://bibletea.app/es/prayers",
+  url: "https://bibletea.app/es/prayers/",
   publisher: {
     "@type": "Organization",
     name: "Bible Tea",
@@ -64,7 +64,7 @@ const itemListLd = {
     "@type": "ListItem",
     position: i + 1,
     name: p.title,
-    url: `https://bibletea.app/es/prayers/${p.slug}`,
+    url: `https://bibletea.app/es/prayers/${p.slug}/`,
     description: p.description,
   })),
 };
@@ -73,8 +73,8 @@ const breadcrumbLd = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Inicio", item: "https://bibletea.app/es" },
-    { "@type": "ListItem", position: 2, name: "Oraciones", item: "https://bibletea.app/es/prayers" },
+    { "@type": "ListItem", position: 1, name: "Inicio", item: "https://bibletea.app/es/" },
+    { "@type": "ListItem", position: 2, name: "Oraciones", item: "https://bibletea.app/es/prayers/" },
   ],
 };
 

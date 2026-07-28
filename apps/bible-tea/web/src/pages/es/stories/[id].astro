@@ -194,15 +194,15 @@ const faqLd = {
 };
 
 const breadcrumbItems = [
-  { "@type": "ListItem" as const, position: 1, name: "Inicio", item: "https://bibletea.app/es" },
-  { "@type": "ListItem" as const, position: 2, name: "Historias Bíblicas", item: "https://bibletea.app/es/stories" },
+  { "@type": "ListItem" as const, position: 1, name: "Inicio", item: "https://bibletea.app/es/" },
+  { "@type": "ListItem" as const, position: 2, name: "Historias Bíblicas", item: "https://bibletea.app/es/stories/" },
 ];
 if (storyPlaylist) {
   breadcrumbItems.push({
     "@type": "ListItem",
     position: 3,
     name: storyPlaylist.name,
-    item: `https://bibletea.app/es/playlists/${storyPlaylist.id}`,
+    item: `https://bibletea.app/es/playlists/${storyPlaylist.id}/`,
   });
   breadcrumbItems.push({ "@type": "ListItem", position: 4, name: story.title, item: pageUrl });
 } else {

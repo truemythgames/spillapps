@@ -62,7 +62,7 @@ const itemListLd = {
     "@type": "ListItem",
     position: i + 1,
     name: s.title,
-    url: `https://bibletea.app/stories/${s.id}`,
+    url: `https://bibletea.app/stories/${s.id}/`,
     description: s.description,
   })),
 };
@@ -72,7 +72,7 @@ const breadcrumbLd = {
   "@type": "BreadcrumbList",
   itemListElement: [
     { "@type": "ListItem", position: 1, name: "Home", item: "https://bibletea.app" },
-    { "@type": "ListItem", position: 2, name: "Playlists", item: "https://bibletea.app/playlists" },
+    { "@type": "ListItem", position: 2, name: "Playlists", item: "https://bibletea.app/playlists/" },
     { "@type": "ListItem", position: 3, name: playlist.name, item: pageUrl },
   ],
 };

@@ -47,7 +47,7 @@ const collectionLd = {
   "@type": "CollectionPage",
   name: "Guided Prayers",
   description,
-  url: "https://bibletea.app/prayers",
+  url: "https://bibletea.app/prayers/",
   publisher: {
     "@type": "Organization",
     name: "Bible Tea",
@@ -64,7 +64,7 @@ const itemListLd = {
     "@type": "ListItem",
     position: i + 1,
     name: p.title,
-    url: `https://bibletea.app/prayers/${p.slug}`,
+    url: `https://bibletea.app/prayers/${p.slug}/`,
     description: p.description,
   })),
 };
@@ -74,7 +74,7 @@ const breadcrumbLd = {
   "@type": "BreadcrumbList",
   itemListElement: [
     { "@type": "ListItem", position: 1, name: "Home", item: "https://bibletea.app" },
-    { "@type": "ListItem", position: 2, name: "Prayers", item: "https://bibletea.app/prayers" },
+    { "@type": "ListItem", position: 2, name: "Prayers", item: "https://bibletea.app/prayers/" },
   ],
 };
 
