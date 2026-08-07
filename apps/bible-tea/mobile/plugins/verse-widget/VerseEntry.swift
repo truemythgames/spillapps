@@ -1,5 +1,6 @@
 import WidgetKit
 import SwiftUI
+import UIKit
 
 struct VerseEntry: TimelineEntry {
     let date: Date
@@ -14,13 +15,7 @@ struct VerseProvider: TimelineProvider {
     private static let verseKey = "widget_verse_data"
 
     func placeholder(in context: Context) -> VerseEntry {
-        VerseEntry(
-            date: Date(),
-            verseText: "Trust in the Lord with all your heart.",
-            verseRef: "Proverbs 3:5",
-            storyId: nil,
-            coverImage: nil
-        )
+        defaultEntry()
     }
 
     func getSnapshot(in context: Context, completion: @escaping (VerseEntry) -> Void) {
@@ -35,11 +30,21 @@ struct VerseProvider: TimelineProvider {
         completion(timeline)
     }
 
+    private func defaultEntry() -> VerseEntry {
+        VerseEntry(
+            date: Date(),
+            verseText: "Trust in the Lord with all your heart.",
+            verseRef: "Proverbs 3:5",
+            storyId: nil,
+            coverImage: nil
+        )
+    }
+
     private func loadEntry() -> VerseEntry {
         guard let defaults = UserDefaults(suiteName: VerseProvider.appGroupId),
               let data = defaults.data(forKey: VerseProvider.verseKey),
               let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
-            return placeholder(in: .init(family: .systemSmall, isPreview: false))
+            return defaultEntry()
         }
 
         let text = json["text"] as? String ?? "Trust in the Lord with all your heart."

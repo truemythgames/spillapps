@@ -1,12 +1,13 @@
-import { View, Text, StyleSheet, ScrollView, Pressable, FlatList, TextInput, Animated as RNAnimated } from "react-native";
-import { Image } from "expo-image";
-import { useState, useEffect, useRef, useMemo } from "react";
+import { View, Text, StyleSheet, ScrollView, Pressable, FlatList, TextInput, Animated as RNAnimated, RefreshControl } from "react-native";
+import { Image, Image as ExpoImage } from "expo-image";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import { useAppStore } from "@/stores/app";
 import { Skeleton, SkeletonText } from "@/components/Skeleton";
+import { CoverImage } from "@/components/CoverImage";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
 function SkeletonDiscover({ paddingTop }: { paddingTop: number }) {
@@ -53,8 +54,18 @@ export default function DiscoverScreen() {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const { stories, characters, recentStories } = useAppStore();
+  const { stories, characters, recentStories, loadRemoteData } = useAppStore();
   const [query, setQuery] = useState("");
+  const [refreshing, setRefreshing] = useState(false);
+
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await ExpoImage.clearDiskCache();
+      await ExpoImage.clearMemoryCache();
+      await loadRemoteData();
+    } finally { setRefreshing(false); }
+  }, [loadRemoteData]);
 
   const fadeAnim = useRef(new RNAnimated.Value(0)).current;
   const hasData = stories.length > 0;
@@ -99,6 +110,14 @@ export default function DiscoverScreen() {
       style={[styles.container, { paddingTop: insets.top }]}
       contentContainerStyle={{ paddingBottom: 120 }}
       showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+          tintColor={colors.primary}
+          progressViewOffset={insets.top}
+        />
+      }
     >
       <Text style={styles.pageTitle}>{t("discover.title")}</Text>
 
@@ -124,7 +143,7 @@ export default function DiscoverScreen() {
           )}
           {filtered.map((s) => (
             <Pressable key={s.id} style={styles.resultRow} onPress={() => router.push(`/story/${s.id}` as any)}>
-              <Image source={{ uri: s.cover_image_url ?? undefined }} style={styles.resultThumb} contentFit="cover" transition={300} />
+              <CoverImage uri={s.cover_image_url} storyId={s.id} style={styles.resultThumb} contentFit="cover" transition={300} />
               <View style={styles.resultInfo}>
                 <Text style={styles.resultTitle} numberOfLines={1}>{s.title}</Text>
                 <Text style={styles.resultSub} numberOfLines={2}>{s.description}</Text>
@@ -212,7 +231,7 @@ export default function DiscoverScreen() {
                 showsHorizontalScrollIndicator={false}
                 renderItem={({ item }) => (
                   <Pressable style={styles.recentCard} onPress={() => router.push(`/story/${item.id}` as any)}>
-                    <Image source={{ uri: item.cover_image_url ?? undefined }} style={styles.recentImg} contentFit="cover" transition={300} />
+                    <CoverImage uri={item.cover_image_url} storyId={item.id} style={styles.recentImg} contentFit="cover" transition={300} />
                     <Text style={styles.recentTitle} numberOfLines={1}>{item.title}</Text>
                     <Text style={styles.recentSub} numberOfLines={2}>{item.description}</Text>
                   </Pressable>

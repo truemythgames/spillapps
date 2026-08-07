@@ -1,11 +1,11 @@
 import { View, Text, StyleSheet, ScrollView, Pressable } from "react-native";
-import { Image } from "expo-image";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import { useAppStore, type StoryWithCover } from "@/stores/app";
 import { useGate } from "@/lib/useGate";
+import { CoverImage } from "@/components/CoverImage";
 import { getLocalProgress } from "@/lib/storage";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
@@ -75,7 +75,7 @@ export default function TestamentScreen() {
                     style={styles.storyRow}
                     onPress={() => guardedPush(`/story/${story.id}`)}
                   >
-                    <Image source={{ uri: story.cover_image_url ?? undefined }} style={styles.storyThumb} contentFit="cover" transition={300} />
+                    <CoverImage uri={story.cover_image_url} storyId={story.id} style={styles.storyThumb} contentFit="cover" transition={300} />
                     <View style={styles.storyInfo}>
                       <Text style={styles.storyTitle} numberOfLines={1}>{story.title}</Text>
                       <Text style={styles.storySub} numberOfLines={1}>{story.description}</Text>

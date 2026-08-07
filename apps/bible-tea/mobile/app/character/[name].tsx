@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import { useAppStore } from "@/stores/app";
+import { CoverImage } from "@/components/CoverImage";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
 export default function CharacterScreen() {
@@ -53,7 +54,7 @@ export default function CharacterScreen() {
             style={styles.row}
             onPress={() => router.push(`/story/${story.slug ?? story.id}` as any)}
           >
-            <Image source={{ uri: story.cover_image_url }} style={styles.thumb} contentFit="cover" />
+            <CoverImage uri={story.cover_image_url} storyId={story.slug ?? story.id} style={styles.thumb} contentFit="cover" />
             <View style={styles.info}>
               <Text style={styles.title} numberOfLines={1}>{story.title}</Text>
               <Text style={styles.sub} numberOfLines={2}>{story.description}</Text>

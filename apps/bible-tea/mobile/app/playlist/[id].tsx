@@ -12,6 +12,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import { api } from "@/lib/api";
+import { CoverImage } from "@/components/CoverImage";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
 export default function PlaylistScreen() {
@@ -75,6 +76,7 @@ export default function PlaylistScreen() {
                 ]}
               />
             )}
+
             <Text style={styles.playlistTitle}>{playlist?.name}</Text>
             <Text style={styles.playlistDesc}>{playlist?.description}</Text>
             <Text style={styles.storyCount}>{t("common.storiesCount", { count: stories.length })}</Text>
@@ -86,20 +88,12 @@ export default function PlaylistScreen() {
             onPress={() => router.push(`/story/${item.id}`)}
           >
             <Text style={styles.indexText}>{index + 1}</Text>
-            {item.cover_image_url ? (
-              <Image
-                source={{ uri: item.cover_image_url }}
-                style={styles.storyThumb}
-                contentFit="cover"
-              />
-            ) : (
-              <View
-                style={[
-                  styles.storyThumb,
-                  { backgroundColor: colors.surfaceLight },
-                ]}
-              />
-            )}
+            <CoverImage
+              uri={item.cover_image_url}
+              storyId={item.slug ?? item.id}
+              style={styles.storyThumb}
+              contentFit="cover"
+            />
             <View style={styles.storyInfo}>
               <Text style={styles.storyTitle}>{item.title}</Text>
               <Text style={styles.storyMeta}>

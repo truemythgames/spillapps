@@ -7,6 +7,7 @@ import {
   Pressable,
   FlatList,
   ActivityIndicator,
+  RefreshControl,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -59,6 +60,7 @@ export default function PrayersScreen() {
   const [prayers, setPrayers] = useState<Prayer[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   const loadData = useCallback(async () => {
     try {
@@ -74,6 +76,11 @@ export default function PrayersScreen() {
       setLoading(false);
     }
   }, []);
+
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true);
+    try { await loadData(); } finally { setRefreshing(false); }
+  }, [loadData]);
 
   useEffect(() => {
     loadData();
@@ -108,6 +115,14 @@ export default function PrayersScreen() {
       style={[styles.container, { paddingTop: insets.top }]}
       contentContainerStyle={{ paddingBottom: 120 }}
       showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+          tintColor={colors.primary}
+          progressViewOffset={insets.top}
+        />
+      }
     >
       <Text style={styles.pageTitle}>{t("prayers.title")}</Text>
 

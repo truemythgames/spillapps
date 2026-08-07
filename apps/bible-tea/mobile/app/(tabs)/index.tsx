@@ -8,8 +8,9 @@ import {
   FlatList,
   Animated,
   ActivityIndicator,
+  RefreshControl,
 } from "react-native";
-import { Image } from "expo-image";
+import { Image as ExpoImage } from "expo-image";
 import { useNetInfo } from "@react-native-community/netinfo";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
@@ -19,6 +20,7 @@ import { useGate } from "@/lib/useGate";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 import { Skeleton, SkeletonText } from "@/components/Skeleton";
 import { WidgetCard } from "@/components/WidgetPrompt";
+import { CoverImage } from "@/components/CoverImage";
 
 const CARD_WIDTH = 150;
 const CARD_IMAGE_HEIGHT = 150;
@@ -35,14 +37,13 @@ function StoryCard({ story, onPress }: { story: any; onPress: () => void }) {
   return (
     <Pressable style={styles.storyCard} onPress={onPress}>
       <View style={[styles.cardImageWrap, { backgroundColor: colors.surfaceLight, borderRadius: radius.md }]}>
-        {story.cover_image_url ? (
-          <Image
-            source={{ uri: story.cover_image_url }}
-            style={styles.cardImage}
-            contentFit="cover"
-            transition={300}
-          />
-        ) : null}
+        <CoverImage
+          uri={story.cover_image_url}
+          storyId={story.id}
+          style={styles.cardImage}
+          contentFit="cover"
+          transition={300}
+        />
       </View>
       <Text style={styles.cardTitle} numberOfLines={2}>
         {story.title}
@@ -152,8 +153,18 @@ export default function HomeScreen() {
   const { guardedPush } = useGate();
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const { storyOfTheDay, playlists, stories, loadInitialData, isLoading } =
+  const { storyOfTheDay, playlists, stories, loadInitialData, loadRemoteData, isLoading } =
     useAppStore();
+  const [refreshing, setRefreshing] = useState(false);
+
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await ExpoImage.clearDiskCache();
+      await ExpoImage.clearMemoryCache();
+      await loadRemoteData();
+    } finally { setRefreshing(false); }
+  }, [loadRemoteData]);
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const hasData = stories.length > 0;
@@ -215,6 +226,14 @@ export default function HomeScreen() {
         paddingTop: insets.top,
       }}
       showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+          tintColor={colors.primary}
+          progressViewOffset={insets.top}
+        />
+      }
     >
       {/* Header */}
       <View style={styles.header}>
@@ -230,14 +249,13 @@ export default function HomeScreen() {
           style={styles.sotdCard}
           onPress={() => guardedPush(`/story/${storyOfTheDay.id}`)}
         >
-          {storyOfTheDay.cover_image_url && (
-            <Image
-              source={{ uri: storyOfTheDay.cover_image_url }}
-              style={styles.sotdImage}
-              contentFit="cover"
-              transition={400}
-            />
-          )}
+          <CoverImage
+            uri={storyOfTheDay.cover_image_url}
+            storyId={storyOfTheDay.id}
+            style={styles.sotdImage}
+            contentFit="cover"
+            transition={400}
+          />
           <View style={styles.sotdOverlay} />
           <View style={styles.sotdContent}>
             <Text style={styles.sotdLabel}>{t("home.storyOfTheDay")}</Text>

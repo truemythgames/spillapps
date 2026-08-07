@@ -153,11 +153,16 @@ module.exports = function withVerseWidget(config) {
     }
 
     const bundleId = config.ios?.bundleIdentifier + WIDGET_BUNDLE_ID_SUFFIX;
-    const teamId = project.getFirstTarget()?.firstTarget?.buildConfigurationList
-      ? undefined
-      : undefined;
 
-    // Add the widget target as an app extension
+    // xcode's addTargetDependency no-ops unless these sections exist
+    if (!project.hash.project.objects.PBXTargetDependency) {
+      project.hash.project.objects.PBXTargetDependency = {};
+    }
+    if (!project.hash.project.objects.PBXContainerItemProxy) {
+      project.hash.project.objects.PBXContainerItemProxy = {};
+    }
+
+    // Add the widget target as an app extension (also embeds + adds target dependency)
     const widgetTarget = project.addTarget(
       WIDGET_NAME,
       "app_extension",
@@ -165,67 +170,63 @@ module.exports = function withVerseWidget(config) {
       bundleId
     );
 
-    // Add source files to the widget target
+    // addTarget does not create a Sources phase — without this the appex has no binary
+    project.addBuildPhase([], "PBXSourcesBuildPhase", "Sources", widgetTarget.uuid);
+    project.addBuildPhase([], "PBXFrameworksBuildPhase", "Frameworks", widgetTarget.uuid);
+    project.addBuildPhase([], "PBXResourcesBuildPhase", "Resources", widgetTarget.uuid);
+
+    // Empty group first — do NOT pass file paths to addPbxGroup, or hasFile()
+    // makes subsequent addSourceFile calls no-op and Sources stays empty.
+    const widgetGroup = project.addPbxGroup([], WIDGET_NAME, WIDGET_NAME);
+    const mainGroupId = project.getFirstProject().firstProject.mainGroup;
+    const mainGroup = project.getPBXGroupByKey(mainGroupId);
+    if (mainGroup && !mainGroup.children.some((c) => c.comment === WIDGET_NAME)) {
+      mainGroup.children.push({ value: widgetGroup.uuid, comment: WIDGET_NAME });
+    }
+
     for (const file of SWIFT_SOURCES) {
-      project.addSourceFile(
-        `${WIDGET_NAME}/${file}`,
-        { target: widgetTarget.uuid },
-        project.findPBXGroupKey({ name: WIDGET_NAME }) ||
-          project.addPbxGroup(
-            SWIFT_SOURCES.map((f) => `${WIDGET_NAME}/${f}`),
-            WIDGET_NAME,
-            WIDGET_NAME
-          ).uuid
-      );
+      // Basename only — group.path is already VerseWidgetExtension/
+      const added = project.addSourceFile(file, { target: widgetTarget.uuid }, widgetGroup.uuid);
+      if (!added) {
+        console.warn(`[verse-widget] Failed to add ${file} to ${WIDGET_NAME} Sources`);
+      }
     }
 
     // Configure build settings for the widget target
+    let developmentTeam;
     const configs = project.pbxXCBuildConfigurationSection();
+    for (const key in configs) {
+      const cfg = configs[key];
+      if (typeof cfg === "object" && cfg.buildSettings?.DEVELOPMENT_TEAM) {
+        developmentTeam = cfg.buildSettings.DEVELOPMENT_TEAM;
+        break;
+      }
+    }
+
     for (const key in configs) {
       const cfg = configs[key];
       if (typeof cfg !== "object" || !cfg.buildSettings) continue;
 
-      // Find configs belonging to the widget target
       const name = cfg.buildSettings.PRODUCT_NAME;
       if (name === `"${WIDGET_NAME}"` || name === WIDGET_NAME) {
         cfg.buildSettings.SWIFT_VERSION = "5.0";
+        cfg.buildSettings.CLANG_ENABLE_MODULES = "YES";
         cfg.buildSettings.IPHONEOS_DEPLOYMENT_TARGET = "16.0";
         cfg.buildSettings.CODE_SIGN_ENTITLEMENTS = `${WIDGET_NAME}/${WIDGET_NAME}.entitlements`;
         cfg.buildSettings.INFOPLIST_FILE = `${WIDGET_NAME}/Info.plist`;
+        // We ship a full Info.plist — don't also auto-generate (breaks CFBundleExecutable)
+        cfg.buildSettings.GENERATE_INFOPLIST_FILE = "NO";
         cfg.buildSettings.PRODUCT_BUNDLE_IDENTIFIER = `"${bundleId}"`;
+        cfg.buildSettings.PRODUCT_BUNDLE_PACKAGE_TYPE = `"XPC!"`;
         cfg.buildSettings.TARGETED_DEVICE_FAMILY = `"1,2"`;
-        cfg.buildSettings.ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = `"AccentColor"`;
-        cfg.buildSettings.ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = `"WidgetBackground"`;
-        cfg.buildSettings.GENERATE_INFOPLIST_FILE = "YES";
         cfg.buildSettings.MARKETING_VERSION = config.version || "1.0.0";
         cfg.buildSettings.CURRENT_PROJECT_VERSION = config.ios?.buildNumber || "1";
-        cfg.buildSettings.SWIFT_EMIT_LOC_STRINGS = "YES";
         cfg.buildSettings.LD_RUNPATH_SEARCH_PATHS = `"$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks"`;
-
-        // Copy the development team from main target if available
-        const mainTarget = project.getFirstTarget();
-        if (mainTarget) {
-          const mainConfigs = project.pbxXCBuildConfigurationSection();
-          for (const mk in mainConfigs) {
-            const mcfg = mainConfigs[mk];
-            if (typeof mcfg === "object" && mcfg.buildSettings?.DEVELOPMENT_TEAM) {
-              cfg.buildSettings.DEVELOPMENT_TEAM = mcfg.buildSettings.DEVELOPMENT_TEAM;
-              break;
-            }
-          }
+        if (developmentTeam) {
+          cfg.buildSettings.DEVELOPMENT_TEAM = developmentTeam;
         }
       }
     }
-
-    // Embed the extension in the main app
-    const mainTargetKey = project.getFirstTarget().uuid;
-    project.addBuildPhase(
-      [],
-      "PBXCopyFilesBuildPhase",
-      "Embed App Extensions",
-      mainTargetKey,
-      "app_extension"
-    );
 
     return config;
   });

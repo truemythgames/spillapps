@@ -1,5 +1,6 @@
-import { View, Text, StyleSheet, ScrollView, Pressable, FlatList } from "react-native";
-import { Image } from "expo-image";
+import { useState, useCallback } from "react";
+import { View, Text, StyleSheet, ScrollView, Pressable, FlatList, RefreshControl } from "react-native";
+import { Image, Image as ExpoImage } from "expo-image";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
@@ -7,6 +8,7 @@ import { useAppStore } from "@/stores/app";
 import { usePlayerStore } from "@/stores/player";
 import { useGate } from "@/lib/useGate";
 import { coverUrl } from "@/lib/content";
+import { CoverImage } from "@/components/CoverImage";
 
 import { getLocalProgress } from "@/lib/storage";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
@@ -16,8 +18,18 @@ export default function StoriesScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const { guardedPush } = useGate();
-  const { stories, likedStoryIds, completedStoryIds, streak, progressVersion } = useAppStore();
+  const { stories, likedStoryIds, completedStoryIds, streak, progressVersion, loadRemoteData } = useAppStore();
   const currentStory = usePlayerStore((s) => s.currentStory);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await ExpoImage.clearDiskCache();
+      await ExpoImage.clearMemoryCache();
+      await loadRemoteData();
+    } finally { setRefreshing(false); }
+  }, [loadRemoteData]);
 
   const likedCount = likedStoryIds.length;
   const completedCount = completedStoryIds.length;
@@ -44,6 +56,14 @@ export default function StoriesScreen() {
       style={[styles.container, { paddingTop: insets.top }]}
       contentContainerStyle={{ paddingBottom: 120 }}
       showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+          tintColor={colors.primary}
+          progressViewOffset={insets.top}
+        />
+      }
     >
       <Text style={styles.pageTitle}>{t("explore.title")}</Text>
 
@@ -88,7 +108,7 @@ export default function StoriesScreen() {
             style={styles.nowPlaying}
             onPress={() => guardedPush(`/story/${currentStory.id}`)}
           >
-            <Image source={{ uri: currentStory.cover_image_url ?? undefined }} style={styles.npThumb} contentFit="cover" transition={300} />
+            <CoverImage uri={currentStory.cover_image_url} storyId={currentStory.id} style={styles.npThumb} contentFit="cover" transition={300} />
             <View style={styles.npInfo}>
               <Text style={styles.npTitle} numberOfLines={1}>{currentStory.title}</Text>
               <Text style={styles.npSub}>{t("explore.tapToContinue")}</Text>
@@ -109,7 +129,7 @@ export default function StoriesScreen() {
             renderItem={({ item }) => (
               <Pressable style={styles.clCard} onPress={() => guardedPush(`/story/${item.id}`)}>
                 <View>
-                  <Image source={{ uri: item.cover_image_url ?? undefined }} style={styles.clImg} contentFit="cover" transition={300} />
+                  <CoverImage uri={item.cover_image_url} storyId={item.id} style={styles.clImg} contentFit="cover" transition={300} />
                   <View style={styles.clBarBg}>
                     <View style={[styles.clBarFill, { width: `${item.progressPercent}%` }]} />
                   </View>

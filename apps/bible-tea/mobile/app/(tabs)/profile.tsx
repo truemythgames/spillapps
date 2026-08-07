@@ -1,10 +1,12 @@
-import { View, Text, StyleSheet, ScrollView, Pressable } from "react-native";
-import { Image } from "expo-image";
+import { useState, useCallback } from "react";
+import { View, Text, StyleSheet, ScrollView, Pressable, RefreshControl } from "react-native";
+import { Image, Image as ExpoImage } from "expo-image";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import { useAppStore } from "@/stores/app";
 import { coverUrl } from "@/lib/content";
+import { CoverImage } from "@/components/CoverImage";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -13,7 +15,18 @@ export default function ChatScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const stories = useAppStore((s) => s.stories);
+  const loadRemoteData = useAppStore((s) => s.loadRemoteData);
   const storyMap = Object.fromEntries(stories.map((s) => [s.id, s]));
+  const [refreshing, setRefreshing] = useState(false);
+
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await ExpoImage.clearDiskCache();
+      await ExpoImage.clearMemoryCache();
+      await loadRemoteData();
+    } finally { setRefreshing(false); }
+  }, [loadRemoteData]);
 
   const CHAT_TOPIC_DEFS = [
     { id: "verse", title: t("chatTab.topicVerse"), storyId: "the-good-samaritan" },
@@ -39,6 +52,14 @@ export default function ChatScreen() {
       style={[styles.container, { paddingTop: insets.top }]}
       contentContainerStyle={{ paddingBottom: 120 }}
       showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+          tintColor={colors.primary}
+          progressViewOffset={insets.top}
+        />
+      }
     >
       <Text style={styles.pageTitle}>{t("chatTab.title")}</Text>
 
@@ -48,7 +69,7 @@ export default function ChatScreen() {
       <View style={styles.cards}>
         {CHAT_TOPICS.map((topic) => (
           <Pressable key={topic.id} style={styles.card} onPress={() => handleTopic(topic.id)}>
-            <Image source={{ uri: topic.image ?? undefined }} style={styles.cardImage} contentFit="cover" />
+            <CoverImage uri={topic.image} storyId={topic.storyId} style={styles.cardImage} contentFit="cover" />
             <LinearGradient
               colors={["transparent", "rgba(0,0,0,0.7)"]}
               style={styles.cardGradient}

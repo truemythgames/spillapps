@@ -8,9 +8,9 @@ import {
   ActivityIndicator,
   Dimensions,
 } from "react-native";
-import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { CoverImage } from "@/components/CoverImage";
+import { useLocalSearchParams, useRouter, useNavigation } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Markdown from "react-native-markdown-display";
 import { Ionicons } from "@expo/vector-icons";
@@ -44,7 +44,16 @@ export default function StoryScreen() {
   const { t } = useTranslation();
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
+  const navigation = useNavigation();
   const insets = useSafeAreaInsets();
+
+  const handleBack = useCallback(() => {
+    if (navigation.canGoBack()) {
+      router.back();
+    } else {
+      router.replace("/");
+    }
+  }, [navigation, router]);
 
   const {
     currentStory,
@@ -208,7 +217,7 @@ export default function StoryScreen() {
     return (
       <View style={[styles.center, { paddingTop: insets.top }]}>
         <Text style={styles.errorText}>{t("story.notFound")}</Text>
-        <Pressable onPress={() => router.back()} style={{ marginTop: 16 }}>
+        <Pressable onPress={handleBack} style={{ marginTop: 16 }}>
           <Text style={{ fontFamily: fonts.bodyMedium, fontSize: fontSize.md, color: colors.primary }}>{t("story.goBack")}</Text>
         </Pressable>
       </View>
@@ -229,8 +238,9 @@ export default function StoryScreen() {
       >
         {/* Hero cover with overlay content */}
         <View style={styles.coverWrap}>
-          <Image
-            source={{ uri: coverImageUrl }}
+          <CoverImage
+            uri={coverImageUrl}
+            storyId={id}
             style={styles.coverImage}
             contentFit="cover"
           />
@@ -242,7 +252,7 @@ export default function StoryScreen() {
           {/* Back + Like buttons */}
           <Pressable
             style={[styles.navBtn, styles.backBtn, { top: insets.top + spacing.xs }]}
-            onPress={() => router.back()}
+            onPress={handleBack}
           >
             <Ionicons name="arrow-back" size={20} color="#fff" />
           </Pressable>
