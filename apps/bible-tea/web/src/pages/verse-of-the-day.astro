@@ -38,6 +38,12 @@ const faqLd = {
     { "@type": "Question", name: t(locale, "votd.faqQ2"), acceptedAnswer: { "@type": "Answer", text: t(locale, "votd.faqA2") } },
     { "@type": "Question", name: t(locale, "votd.faqQ3"), acceptedAnswer: { "@type": "Answer", text: t(locale, "votd.faqA3") } },
     { "@type": "Question", name: t(locale, "votd.faqQ4"), acceptedAnswer: { "@type": "Answer", text: t(locale, "votd.faqA4") } },
+    { "@type": "Question", name: t(locale, "votd.faqQ5"), acceptedAnswer: { "@type": "Answer", text: t(locale, "votd.faqA5") } },
+    { "@type": "Question", name: t(locale, "votd.faqQ6"), acceptedAnswer: { "@type": "Answer", text: t(locale, "votd.faqA6") } },
+    { "@type": "Question", name: t(locale, "votd.faqQ7"), acceptedAnswer: { "@type": "Answer", text: t(locale, "votd.faqA7") } },
+    { "@type": "Question", name: t(locale, "votd.faqQ8"), acceptedAnswer: { "@type": "Answer", text: t(locale, "votd.faqA8") } },
+    { "@type": "Question", name: t(locale, "votd.faqQ9"), acceptedAnswer: { "@type": "Answer", text: t(locale, "votd.faqA9") } },
+    { "@type": "Question", name: t(locale, "votd.faqQ10"), acceptedAnswer: { "@type": "Answer", text: t(locale, "votd.faqA10") } },
   ],
 };
 
@@ -251,6 +257,24 @@ const webPageLd = {
     .final-cta-stars { display: flex; justify-content: center; gap: 0.25rem; margin-bottom: 0.4rem; font-size: 1.1rem; color: var(--accent); }
     .final-cta-proof { text-align: center; color: var(--text-muted); font-size: 0.8rem; font-weight: 600; margin-bottom: 1.5rem; }
 
+    .reflection { margin-bottom: 3rem; }
+    .reflection h2 { font-size: 1.35rem; margin-bottom: 1.25rem; }
+    .reflection-list { display: flex; flex-direction: column; gap: 1rem; }
+    .reflection-item {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      font-size: 1rem;
+      color: var(--text);
+      line-height: 1.6;
+      font-style: italic;
+    }
+
+    .why-section { margin-bottom: 4rem; }
+    .why-section h2 { font-size: 1.5rem; margin-bottom: 1rem; }
+    .why-section p { color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem; font-size: 1rem; }
+
     @media (max-width: 640px) {
       .votd-page { padding: 6rem 1.5rem 3rem; }
       .verse-card { padding: 2rem 1.5rem; }
@@ -283,6 +307,15 @@ const webPageLd = {
       </blockquote>
       <p class="verse-ref">{verse.ref}</p>
     </div>
+
+    <section class="reflection">
+      <h2 class="heading">{t(locale, "votd.reflectionTitle")}</h2>
+      <div class="reflection-list">
+        <div class="reflection-item">{t(locale, "votd.reflectionQ1")}</div>
+        <div class="reflection-item">{t(locale, "votd.reflectionQ2")}</div>
+        <div class="reflection-item">{t(locale, "votd.reflectionQ3")}</div>
+      </div>
+    </section>
 
     <div class="verse-cta">
       <p class="verse-cta-text">{t(locale, "votd.listenCta")}</p>
@@ -329,12 +362,25 @@ const webPageLd = {
       <p>{t(locale, "votd.aboutP3")}</p>
     </section>
 
+    <section class="why-section">
+      <h2 class="heading">{t(locale, "votd.whyTitle")}</h2>
+      <p>{t(locale, "votd.whyP1")}</p>
+      <p>{t(locale, "votd.whyP2")}</p>
+      <p>{t(locale, "votd.whyP3")}</p>
+    </section>
+
     <section class="faq">
       <h2 class="heading">{t(locale, "votd.faqTitle")}</h2>
       <div class="faq-item"><h3>{t(locale, "votd.faqQ1")}</h3><p>{t(locale, "votd.faqA1")}</p></div>
       <div class="faq-item"><h3>{t(locale, "votd.faqQ2")}</h3><p>{t(locale, "votd.faqA2")}</p></div>
       <div class="faq-item"><h3>{t(locale, "votd.faqQ3")}</h3><p>{t(locale, "votd.faqA3")}</p></div>
       <div class="faq-item"><h3>{t(locale, "votd.faqQ4")}</h3><p>{t(locale, "votd.faqA4")}</p></div>
+      <div class="faq-item"><h3>{t(locale, "votd.faqQ5")}</h3><p>{t(locale, "votd.faqA5")}</p></div>
+      <div class="faq-item"><h3>{t(locale, "votd.faqQ6")}</h3><p>{t(locale, "votd.faqA6")}</p></div>
+      <div class="faq-item"><h3>{t(locale, "votd.faqQ7")}</h3><p>{t(locale, "votd.faqA7")}</p></div>
+      <div class="faq-item"><h3>{t(locale, "votd.faqQ8")}</h3><p>{t(locale, "votd.faqA8")}</p></div>
+      <div class="faq-item"><h3>{t(locale, "votd.faqQ9")}</h3><p>{t(locale, "votd.faqA9")}</p></div>
+      <div class="faq-item"><h3>{t(locale, "votd.faqQ10")}</h3><p>{t(locale, "votd.faqA10")}</p></div>
     </section>
 
     <section class="final-cta">

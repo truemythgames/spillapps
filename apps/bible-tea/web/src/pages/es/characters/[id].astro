@@ -208,6 +208,41 @@ const otherCharacters = allCharacters.filter((c) => c.id !== character.id).slice
     .card-title { font-family: 'Playfair Display', serif; font-size: 0.9rem; font-weight: 700; color: var(--text); line-height: 1.25; margin-top: 0.2rem; }
     .card-desc { font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-top: 0.2rem; }
 
+    .key-facts {
+      max-width: 700px; margin: 0 auto 3rem;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    .key-fact {
+      background: var(--surface); border: 1px solid var(--surface-border);
+      border-radius: 12px; padding: 1.25rem; transition: border-color 0.2s;
+    }
+    .key-fact:hover { border-color: var(--primary); }
+    .key-fact-label {
+      font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.2px;
+      font-weight: 600; color: var(--accent); margin-bottom: 0.4rem;
+    }
+    .key-fact-value { font-size: 0.95rem; color: var(--text); line-height: 1.5; }
+
+    .explore-section {
+      max-width: 700px; margin: 0 auto; padding: 3rem 2rem;
+      border-top: 1px solid var(--surface-border);
+    }
+    .explore-section h2 { font-family: 'Playfair Display', serif; font-size: 1.35rem; margin-bottom: 1.25rem; }
+    .explore-links { display: flex; flex-direction: column; gap: 0.75rem; }
+    .explore-link {
+      display: flex; align-items: center; gap: 1rem;
+      background: var(--surface); border: 1px solid var(--surface-border);
+      border-radius: 12px; padding: 1rem 1.25rem; text-decoration: none;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .explore-link:hover { border-color: var(--primary); transform: translateX(4px); }
+    .explore-link-icon { font-size: 1.5rem; flex-shrink: 0; }
+    .explore-link-text { flex: 1; min-width: 0; }
+    .explore-link-title { font-weight: 600; font-size: 0.95rem; color: var(--text); }
+    .explore-link-desc { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.15rem; }
+    .explore-link-arrow { color: var(--primary); font-size: 1.1rem; flex-shrink: 0; }
+
     .no-stories { text-align: center; padding: 3rem 2rem; color: var(--text-secondary); }
     .no-stories p { margin-bottom: 1.5rem; }
 
@@ -287,6 +322,23 @@ const otherCharacters = allCharacters.filter((c) => c.id !== character.id).slice
         </div>
       </div>
 
+      <div class="key-facts">
+        {character.subtitle && (
+          <div class="key-fact">
+            <div class="key-fact-label">{t(locale, "character.keyFactsRole")}</div>
+            <div class="key-fact-value">{character.subtitle}</div>
+          </div>
+        )}
+        <div class="key-fact">
+          <div class="key-fact-label">{t(locale, "character.keyFactsStoriesLabel")}</div>
+          <div class="key-fact-value">{t(locale, "character.keyFactsStoriesValue").replace("{count}", String(stories.length)).replace("{name}", character.name)}</div>
+        </div>
+        <div class="key-fact">
+          <div class="key-fact-label">{t(locale, "character.keyFactsAbout")}</div>
+          <div class="key-fact-value">{character.description}</div>
+        </div>
+      </div>
+
       {stories.length > 0 ? (
         <div class="stories-grid">
           {stories.map((s) => (
@@ -310,6 +362,36 @@ const otherCharacters = allCharacters.filter((c) => c.id !== character.id).slice
         </div>
       )}
     </div>
+
+    <section class="explore-section">
+      <h2>{t(locale, "character.exploreTitle")}</h2>
+      <div class="explore-links">
+        <a href={localePath("/verse-of-the-day", locale)} class="explore-link">
+          <span class="explore-link-icon">📖</span>
+          <div class="explore-link-text">
+            <div class="explore-link-title">{t(locale, "character.exploreVerse")}</div>
+            <div class="explore-link-desc">{t(locale, "character.exploreVerseDesc")}</div>
+          </div>
+          <span class="explore-link-arrow">→</span>
+        </a>
+        <a href={localePath("/playlists", locale)} class="explore-link">
+          <span class="explore-link-icon">🎧</span>
+          <div class="explore-link-text">
+            <div class="explore-link-title">{t(locale, "character.explorePlaylists")}</div>
+            <div class="explore-link-desc">{t(locale, "character.explorePlaylistsDesc")}</div>
+          </div>
+          <span class="explore-link-arrow">→</span>
+        </a>
+        <a href={localePath("/characters", locale)} class="explore-link">
+          <span class="explore-link-icon">👥</span>
+          <div class="explore-link-text">
+            <div class="explore-link-title">{t(locale, "character.exploreCharacters")}</div>
+            <div class="explore-link-desc">{t(locale, "character.exploreCharactersDesc")}</div>
+          </div>
+          <span class="explore-link-arrow">→</span>
+        </a>
+      </div>
+    </section>
 
     <section class="faq-section">
       <h2>{t(locale, "character.faqTitle")}</h2>

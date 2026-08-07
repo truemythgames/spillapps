@@ -191,16 +191,16 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
   },
   "elijah-on-mount-carmel": {
     en: {
-      title: "Elijah on Mount Carmel — Fire from Heaven (1 Kings 18) | Bible Tea",
+      title: "Elijah vs 450 Prophets of Baal — Fire from Heaven | Bible Tea",
       description:
-        "One prophet vs 450 prophets of Baal. Two altars, one challenge: the god who answers with fire wins. Elijah on Mount Carmel, retold as immersive audio.",
+        "One prophet vs 450. Two altars, one challenge: the god who answers with fire wins. Elijah on Mount Carmel (1 Kings 18) — listen free on Bible Tea.",
     },
   },
   "angel-visits-zechariah": {
     en: {
-      title: "The Angel Visits Zechariah — Why He Went Mute (Luke 1) | Bible Tea",
+      title: "Why Was Zechariah Struck Mute? — Luke 1:5-25 | Bible Tea",
       description:
-        "An angel promises old Zechariah a miracle son — John the Baptist. He doubts it and loses his voice for 9 months. Luke 1:5-25, retold as audio.",
+        "An angel promises old Zechariah a son — John the Baptist. He doubts, and God takes his voice for 9 months. The full story (Luke 1:5-25), free audio.",
     },
   },
   "simeon-and-anna": {
@@ -243,14 +243,35 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
   },
   "boy-jesus-at-the-temple": {
     en: {
-      title: "Boy Jesus at the Temple, Age 12 — Luke 2:41-52 | Bible Tea",
+      title: "Jesus at Age 12 in the Temple — Luke 2:41-52 | Bible Tea",
       description:
-        "Jesus at 12 goes missing for three days — his parents find him in the temple, schooling the teachers. The boy Jesus in the temple, retold as audio.",
+        "Jesus at 12 goes missing for three days — his parents find him in the temple, schooling the teachers. Boy Jesus in the temple — free audio.",
     },
     es: {
       title: "El Niño Jesús en el Templo, a los 12 Años — Lucas 2:41-52 | Bible Tea",
       description:
-        "Jesús a los 12 años desaparece por tres días — sus padres lo encuentran en el templo, asombrando a los maestros. Lucas 2:41-52, narrado como audio.",
+        "Jesús a los 12 años desaparece por tres días — sus padres lo encuentran en el templo, asombrando a los maestros. Lucas 2:41-52 — audio gratis.",
+    },
+  },
+  "isaac-and-rebekah": {
+    en: {
+      title: "Isaac & Rebekah — The Bible's First Love Story (Genesis 24) | Bible Tea",
+      description:
+        "A servant, a prayer, camels at a well, and a woman who says yes. How Isaac and Rebekah met — the Bible's original love story. Listen free.",
+    },
+  },
+  "solomon-builds-the-temple": {
+    en: {
+      title: "Solomon Builds the Temple — 1 Kings 5-8 Explained | Bible Tea",
+      description:
+        "7 years, 180,000 workers, and gold on everything. Solomon builds God's temple — then glory fills it. 1 Kings 5-8, retold as free audio.",
+    },
+  },
+  "the-fish-with-a-coin": {
+    en: {
+      title: "The Fish with a Coin in Its Mouth — Matthew 17:24-27 | Bible Tea",
+      description:
+        "Jesus tells Peter to go catch a fish — the first one has a coin in its mouth to pay the tax. One of Jesus' strangest miracles. Listen free.",
     },
   },
   "the-miraculous-catch": {
@@ -300,9 +321,9 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
   },
   "jesus-stops-a-storm": {
     en: {
-      title: "Jesus Calms the Storm — Mark 4:35-41 | Bible Tea",
+      title: "Jesus Calms the Storm — \"Peace, Be Still\" (Mark 4) | Bible Tea",
       description:
-        "A storm hits, the disciples panic, and Jesus is asleep in the boat. \"Peace, be still.\" Jesus calms the storm (Mark 4:35-41), retold as audio.",
+        "A storm hits, the disciples panic, and Jesus is asleep. He wakes and says \"Peace, be still.\" Jesus calms the storm (Mark 4:35-41) — free audio.",
     },
   },
   "saul-meets-jesus": {
@@ -314,9 +335,9 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
   },
   "hosea-and-gomer": {
     en: {
-      title: "Hosea & Gomer — The Bible's Hardest Love Story | Bible Tea",
+      title: "Hosea & Gomer — The Bible's Most Heartbreaking Love Story | Bible Tea",
       description:
-        "God tells the prophet Hosea to marry Gomer. She leaves — and he buys her back. The story of Hosea and Gomer (Hosea 1-3) and what it means, retold.",
+        "God tells Hosea to marry Gomer. She leaves — and he buys her back. The story of Hosea and Gomer (Hosea 1-3) and what it means. Listen free.",
     },
   },
   "joseph-and-his-brothers": {

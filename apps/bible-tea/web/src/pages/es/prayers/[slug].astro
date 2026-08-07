@@ -211,6 +211,19 @@ const morePrayers = allPrayers.filter((p) => p.slug !== detail.slug).slice(0, 8)
         </section>
       )}
 
+      <div class="crosslink" style="max-width:700px;margin:0 auto 3rem;display:flex;gap:1.25rem;flex-wrap:wrap;">
+        <a href={locale === "es" ? "/es/versiculo-del-dia/" : "/verse-of-the-day/"} style="flex:1;min-width:240px;background:var(--surface);border:1px solid var(--surface-border);border-radius:14px;padding:1.25rem 1.5rem;text-decoration:none;transition:border-color 0.2s;">
+          <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:0.35rem;">{t(locale, "crosslink.verseTitle")}</div>
+          <div style="color:var(--text-secondary);font-size:0.9rem;line-height:1.5;margin-bottom:0.5rem;">{t(locale, "crosslink.verseDesc")}</div>
+          <span style="color:var(--primary);font-weight:600;font-size:0.85rem;">{t(locale, "crosslink.verseLink")}</span>
+        </a>
+        <a href={localePath("/widget", locale)} style="flex:1;min-width:240px;background:linear-gradient(135deg,rgba(200,162,255,0.08),rgba(107,92,231,0.08));border:1px solid rgba(200,162,255,0.2);border-radius:14px;padding:1.25rem 1.5rem;text-decoration:none;transition:border-color 0.2s;">
+          <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:0.35rem;">📱 Widget</div>
+          <div style="color:var(--text-secondary);font-size:0.9rem;line-height:1.5;margin-bottom:0.5rem;">{t(locale, "crosslink.widgetLink").replace(" →", "")}</div>
+          <span style="color:var(--primary);font-weight:600;font-size:0.85rem;">{t(locale, "crosslink.widgetLink")}</span>
+        </a>
+      </div>
+
       <section class="faq-section">
         <h2>{t(locale, "prayer.faqTitle")}</h2>
         {faqs.map((f) => (
