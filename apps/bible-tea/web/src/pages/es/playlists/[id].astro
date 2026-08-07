@@ -9,7 +9,7 @@ import {
   type Playlist,
 } from "../../../lib/stories";
 import { getLocale, localePath, t } from "../../../lib/i18n";
-import { playlistSeo, localizeBibleRef } from "../../../lib/seo";
+import { playlistSeo, localizeBibleRef, clampTitle, clampDescription } from "../../../lib/seo";
 import { playlistContent } from "../../../lib/playlist-content";
 
 export async function getStaticPaths() {
@@ -31,8 +31,8 @@ const locale = getLocale(Astro.currentLocale);
 const stories = playlist.stories;
 
 const seoOverride = playlistSeo(playlist.id, locale);
-const pageTitle = seoOverride.title ?? t(locale, "playlist.pageTitle").replace("{name}", playlist.name);
-const pageDesc = seoOverride.description ?? t(locale, "playlist.pageDesc").replace(/\{description\}/g, playlist.description).replace(/\{count\}/g, String(stories.length)).replace(/\{name\}/g, playlist.name);
+const pageTitle = clampTitle(seoOverride.title ?? t(locale, "playlist.pageTitle").replace("{name}", playlist.name));
+const pageDesc = clampDescription(seoOverride.description ?? t(locale, "playlist.pageDesc").replace(/\{description\}/g, playlist.description).replace(/\{count\}/g, String(stories.length)).replace(/\{name\}/g, playlist.name));
 const pageUrl = `https://bibletea.app/es/playlists/${playlist.id}/`;
 
 const firstCover = stories.find((s) => hasCover(s.id));
@@ -44,7 +44,6 @@ const collectionLd = {
   name: playlist.name,
   description: playlist.description,
   url: pageUrl,
-  numberOfItems: stories.length,
   publisher: {
     "@type": "Organization",
     name: "Bible Tea",

@@ -4,6 +4,7 @@ import Base from "../../layouts/Base.astro";
 import StoreButtons from "../../components/StoreButtons.astro";
 import { getPrayers, getPrayerDetail, prayerBody, type PrayerDetail, type Prayer } from "../../lib/stories";
 import { getLocale, localePath, t } from "../../lib/i18n";
+import { clampTitle, clampDescription } from "../../lib/seo";
 
 export async function getStaticPaths() {
   const prayers = await getPrayers("en");
@@ -24,8 +25,8 @@ const locale = getLocale(Astro.currentLocale);
 
 const bodyHtml = await marked.parse(prayerBody(detail.transcript));
 
-const pageTitle = t(locale, "prayer.pageTitle").replace(/\{title\}/g, detail.title);
-const pageDesc = t(locale, "prayer.pageDesc").replace(/\{description\}/g, detail.description);
+const pageTitle = clampTitle(t(locale, "prayer.pageTitle").replace(/\{title\}/g, detail.title));
+const pageDesc = clampDescription(t(locale, "prayer.pageDesc").replace(/\{description\}/g, detail.description));
 const pageUrl = `https://bibletea.app/prayers/${detail.slug}/`;
 
 const creativeWorkLd = {

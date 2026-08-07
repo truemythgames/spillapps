@@ -11,9 +11,16 @@ export function withTrailingSlash(path: string): string {
   return path.endsWith("/") ? path : `${path}/`;
 }
 
+/** English path → Spanish path when the slug differs. */
+const ES_PATH_OVERRIDES: Record<string, string> = {
+  "/verse-of-the-day": "/versiculo-del-dia",
+};
+
 export function localePath(path: string, locale: Locale): string {
   if (locale === "en") return withTrailingSlash(path);
-  return path === "/" ? "/es/" : `/es${withTrailingSlash(path)}`;
+  const normalized = path.endsWith("/") && path !== "/" ? path.slice(0, -1) : path;
+  const esPath = ES_PATH_OVERRIDES[normalized] || normalized;
+  return esPath === "/" ? "/es/" : `/es${withTrailingSlash(esPath)}`;
 }
 
 export function alternateLocale(locale: Locale): Locale {
@@ -46,7 +53,7 @@ const translations = {
 
     // Home page
     "home.title": "Bible Tea: Bible Storycast — Read the Bible Like It's Tea",
-    "home.description": "Bible stories reimagined as immersive audio experiences. Read the Bible like it's tea.",
+    "home.description": "Bible stories reimagined as immersive audio experiences. Listen free daily — no ads, no sign-up. Read the Bible like it's tea.",
     "home.h1a": "Read the Bible",
     "home.h1b": "like it's tea.",
     "home.subtitle": "Daily Bible stories as audio you'll actually enjoy. Like a podcast, but it's scripture.",
@@ -109,7 +116,7 @@ const translations = {
     "prayer.morePrayers": "More Prayers",
     "prayer.listenOn": "Listen on Bible Tea",
     "prayer.listenOnDesc": "Download the app to hear this prayer with calming narration, and create your own personal prayers.",
-    "prayer.pageTitle": "{title} — A Guided Prayer | Bible Tea",
+    "prayer.pageTitle": "{title} — Guided Prayer | Bible Tea",
     "prayer.pageDesc": "{description} Read this guided prayer or listen with narration on Bible Tea.",
     "prayer.faqTitle": "Frequently Asked Questions",
     "prayer.faqQ1": "What is the prayer \"{title}\" about?",
@@ -208,7 +215,7 @@ const translations = {
     "character.listenOnDesc": "Download the app to explore this character's stories and 200+ more.",
     "character.label": "Bible Character",
     "character.pageTitle": "Who Was {name} in the Bible? — Full Story | Bible Tea",
-    "character.pageDesc": "{description} Discover {name}'s story with free audio — no ads, no sign-up. Listen on Bible Tea.",
+    "character.pageDesc": "Discover who {name} was in the Bible with free immersive audio stories on Bible Tea — no ads, no sign-up required. {description}.",
     "character.faqTitle": "Frequently Asked Questions",
     "character.moreCharacters": "More Bible Characters",
     "character.keyFactsTitle": "Key Facts",
@@ -234,7 +241,7 @@ const translations = {
 
     // Books index
     "books.title": "Bible Books — Bible Tea",
-    "books.description": "Browse Bible stories organized by book. From Genesis to Revelation, explore every Bible book.",
+    "books.description": "Browse every Bible book from Genesis to Revelation. Listen to immersive audio stories free on Bible Tea — no ads, no sign-up.",
     "books.h1": "Bible Books",
     "books.subtitle": "Explore Bible stories organized by the books of the Bible.",
     "books.breadcrumbHome": "Home",
@@ -274,7 +281,7 @@ const translations = {
 
     // Verse of the Day
     "votd.title": "Bible Verse of the Day — Daily Scripture | Bible Tea",
-    "votd.description": "Read today's Bible verse of the day and get daily scripture delivered to your phone. A new Bible verse every day from Genesis to Revelation, with the Bible Tea widget for your home screen.",
+    "votd.description": "Today's Bible verse of the day, plus a free home-screen widget for daily scripture. New verse every day — no ads, no sign-up.",
     "votd.h1": "Bible Verse of the Day",
     "votd.subtitle": "Start each day with a verse from scripture. A fresh Bible verse every day — read it here or add the Bible Tea widget to your phone's home screen.",
     "votd.breadcrumbHome": "Home",
@@ -336,8 +343,8 @@ const translations = {
     "crosslink.widgetLink": "Get the free widget →",
 
     // Widget page
-    "widget.title": "Bible Verse Widget for iPhone & Android — Free Home Screen Widget | Bible Tea",
-    "widget.description": "Add the free Bible Tea widget to your home screen. See a new Bible verse every day without opening the app. Available on iPhone and Android.",
+    "widget.title": "Bible Verse Widget — Free Daily Scripture | Bible Tea",
+    "widget.description": "Add the free Bible Tea widget to your home screen. A new Bible verse every day without opening the app — iPhone and Android.",
     "widget.h1": "Bible Verse Widget for iPhone & Android",
     "widget.subtitle": "See a new Bible verse every morning — right on your home screen. No app to open, no notifications to dismiss. Just scripture, every day.",
     "widget.breadcrumbWidget": "Widget",
@@ -400,8 +407,8 @@ const translations = {
     "store.getItOn": "OBTENER EN",
     "store.googlePlay": "Google Play",
 
-    "home.title": "Bible Tea: Historias Bíblicas — Descubre la Biblia de una nueva manera.",
-    "home.description": "Historias bíblicas narradas como experiencias de audio inmersivas. Descubre la Biblia de una nueva manera.",
+    "home.title": "Bible Tea: Historias Bíblicas en Audio",
+    "home.description": "Historias bíblicas narradas como audio inmersivo. Escucha gratis cada día — sin anuncios ni registro. Descubre la Biblia de una nueva manera.",
     "home.h1a": "Descubre la Biblia",
     "home.h1b": "de una nueva manera.",
     "home.subtitle": "Historias bíblicas diarias en audio que realmente disfrutarás. Como un podcast, pero son las Escrituras.",
@@ -462,7 +469,7 @@ const translations = {
     "prayer.morePrayers": "Más Oraciones",
     "prayer.listenOn": "Escucha en Bible Tea",
     "prayer.listenOnDesc": "Descarga la app para escuchar esta oración con narración tranquila y crear tus propias oraciones personales.",
-    "prayer.pageTitle": "{title} — Una Oración Guiada | Bible Tea",
+    "prayer.pageTitle": "{title} — Oración Guiada | Bible Tea",
     "prayer.pageDesc": "{description} Lee esta oración guiada o escúchala con narración en Bible Tea.",
     "prayer.faqTitle": "Preguntas Frecuentes",
     "prayer.faqQ1": "¿De qué trata la oración \"{title}\"?",
@@ -554,8 +561,8 @@ const translations = {
     "character.listenOn": "Escucha en Bible Tea",
     "character.listenOnDesc": "Descarga la app para explorar las historias de este personaje y más de 200.",
     "character.label": "Personaje Bíblico",
-    "character.pageTitle": "¿Quién Fue {name} en la Biblia? — Historia Completa | Bible Tea",
-    "character.pageDesc": "{description} Descubre la historia de {name} con audio gratis — sin anuncios ni registro. Escucha en Bible Tea.",
+    "character.pageTitle": "¿Quién Fue {name}? Historia Bíblica | Bible Tea",
+    "character.pageDesc": "Descubre la historia completa de {name} con audio gratis en Bible Tea — sin anuncios ni registro. {description}.",
     "character.faqTitle": "Preguntas Frecuentes",
     "character.moreCharacters": "Más Personajes Bíblicos",
     "character.keyFactsTitle": "Datos Clave",
@@ -580,7 +587,7 @@ const translations = {
     "character.faqA3": "¡Sí! Cada historia de {name} en Bible Tea es completamente gratuita — sin suscripción. La app incluye narración profesional para cada historia, además de funciones adicionales como oraciones guiadas y un versículo bíblico diario. Descarga Bible Tea en iOS o Android y empieza a escuchar hoy.",
 
     "books.title": "Libros de la Biblia — Bible Tea",
-    "books.description": "Explora historias bíblicas organizadas por libro. Del Génesis al Apocalipsis, descubre cada libro de la Biblia.",
+    "books.description": "Explora cada libro de la Biblia del Génesis al Apocalipsis. Escucha historias en audio inmersivo gratis en Bible Tea — sin anuncios.",
     "books.h1": "Libros de la Biblia",
     "books.subtitle": "Explora historias bíblicas organizadas por los libros de la Biblia.",
     "books.breadcrumbHome": "Inicio",
@@ -618,7 +625,7 @@ const translations = {
 
     // Verse of the Day
     "votd.title": "Versículo Bíblico del Día — Escritura Diaria | Bible Tea",
-    "votd.description": "Lee el versículo bíblico del día y recibe escritura diaria en tu teléfono. Un nuevo versículo bíblico cada día, del Génesis al Apocalipsis, con el widget de Bible Tea para tu pantalla de inicio.",
+    "votd.description": "El versículo bíblico de hoy, más un widget gratis para tu pantalla de inicio. Un versículo nuevo cada día — sin anuncios ni registro.",
     "votd.h1": "Versículo del Día",
     "votd.subtitle": "Empieza cada día con un versículo de las Escrituras. Un versículo bíblico nuevo cada día — léelo aquí o agrega el widget de Bible Tea a tu pantalla de inicio.",
     "votd.breadcrumbHome": "Inicio",
@@ -680,8 +687,8 @@ const translations = {
     "crosslink.widgetLink": "Obtén el widget gratis →",
 
     // Widget page
-    "widget.title": "Widget de Versículo Bíblico para iPhone y Android — Widget Gratis | Bible Tea",
-    "widget.description": "Agrega el widget gratuito de Bible Tea a tu pantalla de inicio. Ve un nuevo versículo bíblico cada día sin abrir la app. Disponible en iPhone y Android.",
+    "widget.title": "Widget de Versículo Bíblico Gratis | Bible Tea",
+    "widget.description": "Agrega el widget gratis de Bible Tea a tu pantalla de inicio. Un versículo nuevo cada día sin abrir la app — iPhone y Android.",
     "widget.h1": "Widget de Versículo Bíblico para iPhone y Android",
     "widget.subtitle": "Ve un nuevo versículo bíblico cada mañana — directo en tu pantalla de inicio. Sin abrir apps, sin notificaciones. Solo las Escrituras, cada día.",
     "widget.breadcrumbWidget": "Widget",

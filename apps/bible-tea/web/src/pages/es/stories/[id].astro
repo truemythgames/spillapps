@@ -16,7 +16,7 @@ import {
   type Character,
 } from "../../../lib/stories";
 import { getLocale, localePath, t } from "../../../lib/i18n";
-import { localizeBibleRef, storySeo } from "../../../lib/seo";
+import { localizeBibleRef, storySeo, clampTitle, clampDescription } from "../../../lib/seo";
 import { storyAnswer } from "../../../lib/story-answers";
 
 export async function getStaticPaths() {
@@ -131,10 +131,10 @@ const next = idx < catalog.length - 1 ? catalog[idx + 1] : null;
 
 const bibleRef = localizeBibleRef(story.bibleRef, locale);
 const seoOverride = storySeo(story.id, locale);
-const pageTitle = seoOverride.title ?? `${story.title} — ${bibleRef} | Bible Tea`;
-const pageDesc = seoOverride.description ?? (locale === "es"
-  ? `${story.description} Escucha ${story.title} (${bibleRef}) como audio inmersivo en Bible Tea.`
-  : `${story.description} Listen to ${story.title} (${bibleRef}) as immersive audio on Bible Tea.`);
+const pageTitle = clampTitle(seoOverride.title ?? `${story.title} — ${bibleRef} | Bible Tea`);
+const pageDesc = clampDescription(seoOverride.description ?? (locale === "es"
+  ? `${story.description} Escucha gratis en Bible Tea — sin anuncios ni registro.`
+  : `${story.description} Listen free on Bible Tea — no ads, no sign-up.`));
 const pageUrl = `https://bibletea.app/es/stories/${story.id}/`;
 
 // Generate contextual FAQs for "People Also Ask" rich results

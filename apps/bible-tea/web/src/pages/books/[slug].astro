@@ -8,6 +8,7 @@ import {
   type Season,
 } from "../../lib/stories";
 import { getLocale, localePath, t } from "../../lib/i18n";
+import { clampTitle, clampDescription } from "../../lib/seo";
 
 export async function getStaticPaths() {
   const seasons = await getSeasons();
@@ -26,10 +27,10 @@ const { season, allSeasons } = Astro.props;
 const locale = getLocale(Astro.currentLocale);
 const stories = season.stories;
 
-const pageTitle = t(locale, "book.pageTitle").replace("{name}", season.name);
-const pageDesc = season.description
+const pageTitle = clampTitle(t(locale, "book.pageTitle").replace("{name}", season.name));
+const pageDesc = clampDescription(season.description
   ? t(locale, "book.pageDesc").replace(/\{description\}/g, season.description).replace(/\{count\}/g, String(stories.length)).replace(/\{name\}/g, season.name)
-  : t(locale, "book.pageDescFallback").replace(/\{count\}/g, String(stories.length)).replace(/\{name\}/g, season.name);
+  : t(locale, "book.pageDescFallback").replace(/\{count\}/g, String(stories.length)).replace(/\{name\}/g, season.name));
 const pageUrl = `https://bibletea.app/books/${season.slug}/`;
 const seasonCover = season.cover_image_url || season.stories[0]?.cover_image_url;
 const ogImage = seasonCover || "https://bibletea.app/icon.png";
@@ -40,7 +41,6 @@ const collectionLd = {
   name: `${season.name} Bible Stories`,
   description: pageDesc,
   url: pageUrl,
-  numberOfItems: stories.length,
   publisher: {
     "@type": "Organization",
     name: "Bible Tea",

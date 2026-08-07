@@ -556,3 +556,38 @@ export function storySeo(id: string, locale: Locale): SeoOverride {
 export function playlistSeo(id: string, locale: Locale): SeoOverride {
   return PLAYLIST_SEO[id]?.[locale] ?? {};
 }
+
+/** Keep titles in SERP-friendly range (Ahrefs/Google ~60 chars). */
+export function clampTitle(title: string, max = 60): string {
+  if (title.length <= max) return title;
+  const suffix = " | Bible Tea";
+  if (title.endsWith(suffix)) {
+    const budget = max - suffix.length;
+    let body = title.slice(0, -suffix.length);
+    if (body.length > budget) {
+      let cut = body.slice(0, budget);
+      const em = cut.lastIndexOf(" — ");
+      if (em > 12) cut = cut.slice(0, em);
+      else {
+        const sp = cut.lastIndexOf(" ");
+        if (sp > 12) cut = cut.slice(0, sp);
+      }
+      body = cut.replace(/[—\-\s:,]+$/u, "");
+    }
+    return `${body}${suffix}`;
+  }
+  let cut = title.slice(0, max - 1);
+  const sp = cut.lastIndexOf(" ");
+  if (sp > 12) cut = cut.slice(0, sp);
+  return `${cut.replace(/[—\-\s:,]+$/u, "")}…`;
+}
+
+/** Keep meta descriptions in the ~120–155 char sweet spot. */
+export function clampDescription(description: string, max = 155): string {
+  const trimmed = description.replace(/\s+/g, " ").trim();
+  if (trimmed.length <= max) return trimmed;
+  let cut = trimmed.slice(0, max - 1);
+  const sp = cut.lastIndexOf(" ");
+  if (sp > 80) cut = cut.slice(0, sp);
+  return `${cut.replace(/[—\-\s:,.]+$/u, "")}…`;
+}
