@@ -2,7 +2,8 @@ import type { APIRoute } from "astro";
 import { getCatalog, getPlaylists, getSeasons, getCharacters, getPrayers } from "../lib/stories";
 
 const SITE = "https://bibletea.app";
-const NO_LOCALE_PAGES = new Set(["/privacy", "/terms"]);
+const NO_LOCALE_PAGES = new Set(["/privacy", "/terms", "/feed.xml"]);
+const NO_TRAILING_SLASH = new Set(["/feed.xml"]);
 
 /** Pages where the Spanish slug differs from the English one. */
 const ES_SLUG_OVERRIDES: Record<string, string> = {
@@ -44,6 +45,7 @@ export const GET: APIRoute = async () => {
     { path: "/books", lastmod: today, changefreq: "weekly", priority: 0.8 },
     { path: "/verse-of-the-day", lastmod: today, changefreq: "daily", priority: 0.9 },
     { path: "/widget", lastmod: today, changefreq: "monthly", priority: 0.8 },
+    { path: "/feed.xml", lastmod: today, changefreq: "daily", priority: 0.4 },
     { path: "/privacy", lastmod: "2026-03-26T00:00:00.000Z", changefreq: "yearly", priority: 0.3 },
     { path: "/terms", lastmod: "2026-04-13T00:00:00.000Z", changefreq: "yearly", priority: 0.3 },
   ];
@@ -65,7 +67,10 @@ export const GET: APIRoute = async () => {
   }
 
   const urls: string[] = [];
-  const slash = (p: string) => (p.endsWith("/") ? p : `${p}/`);
+  const slash = (p: string) => {
+    if (NO_TRAILING_SLASH.has(p) || p.includes(".")) return p;
+    return p.endsWith("/") ? p : `${p}/`;
+  };
   for (const e of entries) {
     const hasLocales = !NO_LOCALE_PAGES.has(e.path);
     urls.push(url(`${SITE}${slash(e.path)}`, e.lastmod, e.changefreq, e.priority));

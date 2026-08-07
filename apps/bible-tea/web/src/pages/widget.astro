@@ -2,10 +2,11 @@
 import Base from "../layouts/Base.astro";
 import StoreButtons from "../components/StoreButtons.astro";
 import { getLocale, localePath, t } from "../lib/i18n";
+import { clampTitle, clampDescription } from "../lib/seo";
 
 const locale = getLocale(Astro.currentLocale);
-const title = t(locale, "widget.title");
-const description = t(locale, "widget.description");
+const title = clampTitle(t(locale, "widget.title"));
+const description = clampDescription(t(locale, "widget.description"));
 
 const breadcrumbLd = {
   "@context": "https://schema.org",
@@ -22,7 +23,7 @@ const appLd = {
   name: "Bible Tea",
   operatingSystem: "iOS, Android",
   applicationCategory: "ReligionApplication",
-  url: "https://bibletea.app",
+  url: "https://bibletea.app/",
   image: "https://bibletea.app/icon.png",
   description: "Bible verse of the day widget for your home screen. Available on iPhone and Android. 200+ Bible stories as immersive audio.",
   aggregateRating: { "@type": "AggregateRating", ratingValue: "5", ratingCount: "50", bestRating: "5" },
@@ -66,7 +67,7 @@ const webPageLd = {
   name: title,
   description,
   url: "https://bibletea.app/widget/",
-  isPartOf: { "@type": "WebSite", name: "Bible Tea", url: "https://bibletea.app" },
+  isPartOf: { "@type": "WebSite", name: "Bible Tea", url: "https://bibletea.app/" },
   about: { "@type": "Thing", name: "Bible Verse Widget for iPhone & Android" },
 };
 

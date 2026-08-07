@@ -5,7 +5,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "deploy": "astro build && wrangler pages deploy dist"
+    "deploy": "astro build && wrangler pages deploy dist && npm run indexnow",
+    "indexnow": "npx tsx scripts/indexnow.ts"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.2",

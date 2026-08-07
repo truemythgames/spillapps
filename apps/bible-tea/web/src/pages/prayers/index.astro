@@ -63,9 +63,7 @@ const itemListLd = {
   itemListElement: prayers.map((p, i) => ({
     "@type": "ListItem",
     position: i + 1,
-    name: p.title,
-    url: `https://bibletea.app/prayers/${p.slug}/`,
-    description: p.description,
+    item: { "@type": "WebPage", name: p.title, url: `https://bibletea.app/prayers/${p.slug}/` },
   })),
 };
 
@@ -73,7 +71,7 @@ const breadcrumbLd = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: "https://bibletea.app" },
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://bibletea.app/" },
     { "@type": "ListItem", position: 2, name: "Prayers", item: "https://bibletea.app/prayers/" },
   ],
 };

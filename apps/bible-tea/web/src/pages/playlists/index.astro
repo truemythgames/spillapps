@@ -37,9 +37,7 @@ const itemListLd = {
   itemListElement: playlists.map((pl, i) => ({
     "@type": "ListItem",
     position: i + 1,
-    name: pl.name,
-    url: `https://bibletea.app/playlists/${pl.id}/`,
-    description: pl.description,
+    item: { "@type": "WebPage", name: pl.name, url: `https://bibletea.app/playlists/${pl.id}/` },
   })),
 };
 
@@ -47,7 +45,7 @@ const breadcrumbLd = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: "https://bibletea.app" },
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://bibletea.app/" },
     { "@type": "ListItem", position: 2, name: "Playlists", item: "https://bibletea.app/playlists/" },
   ],
 };

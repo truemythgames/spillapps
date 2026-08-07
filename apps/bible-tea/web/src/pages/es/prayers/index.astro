@@ -63,9 +63,7 @@ const itemListLd = {
   itemListElement: prayers.map((p, i) => ({
     "@type": "ListItem",
     position: i + 1,
-    name: p.title,
-    url: `https://bibletea.app/es/prayers/${p.slug}/`,
-    description: p.description,
+    item: { "@type": "WebPage", name: p.title, url: `https://bibletea.app/es/prayers/${p.slug}/` },
   })),
 };
 

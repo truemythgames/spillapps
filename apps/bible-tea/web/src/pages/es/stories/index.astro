@@ -36,9 +36,7 @@ const itemListLd = {
   itemListElement: catalog.slice(0, 50).map((s, i) => ({
     "@type": "ListItem",
     position: i + 1,
-    name: s.title,
-    url: `https://bibletea.app/es/stories/${s.id}/`,
-    description: s.description,
+    item: { "@type": "WebPage", name: s.title, url: `https://bibletea.app/es/stories/${s.id}/` },
   })),
 };
 
@@ -52,7 +50,7 @@ const appLd = {
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
   installUrl: "https://apps.apple.com/app/bible-tea-bible-storycast/id6761665565",
   screenshot: "https://bibletea.app/icon.png",
-  author: { "@type": "Organization", name: "Bible Tea", url: "https://bibletea.app" },
+  author: { "@type": "Organization", name: "Bible Tea", url: "https://bibletea.app/" },
 };
 
 const listingFaqs = [

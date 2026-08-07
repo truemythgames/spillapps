@@ -41,21 +41,22 @@ const siteLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   name: "Bible Tea",
-  url: "https://bibletea.app",
+  url: "https://bibletea.app/",
   description: t(locale, "schema.siteDescription"),
-  potentialAction: {
-    "@type": "SearchAction",
-    target: { "@type": "EntryPoint", urlTemplate: "https://bibletea.app/stories?q={search_term_string}" },
-    "query-input": "required name=search_term_string",
-  },
+  inLanguage,
 };
 
 const orgLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "Bible Tea",
-  url: "https://bibletea.app",
-  logo: "https://bibletea.app/icon.png",
+  url: "https://bibletea.app/",
+  logo: {
+    "@type": "ImageObject",
+    url: "https://bibletea.app/icon.png",
+    width: 512,
+    height: 512,
+  },
   sameAs: [
     "https://apps.apple.com/app/bible-tea-bible-storycast/id6761665565",
     "https://play.google.com/store/apps/details?id=app.bibletea",
@@ -67,9 +68,11 @@ const podcastLd = {
   "@type": "PodcastSeries",
   name: "Bible Tea — Bible Storycast",
   description: t(locale, "schema.podcastDescription"),
-  url: "https://bibletea.app",
+  url: "https://bibletea.app/",
   image: "https://bibletea.app/icon.png",
-  author: { "@type": "Organization", name: "Bible Tea" },
+  webFeed: "https://bibletea.app/feed.xml",
+  author: { "@type": "Organization", name: "Bible Tea", url: "https://bibletea.app/" },
+  publisher: { "@type": "Organization", name: "Bible Tea", url: "https://bibletea.app/" },
   inLanguage,
 };
 
@@ -112,6 +115,7 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
   <meta name="apple-itunes-app" content="app-id=6761665565" />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <link rel="apple-touch-icon" href="/icon.png" />
+  <link rel="alternate" type="application/rss+xml" title="Bible Tea — Bible Storycast" href="https://bibletea.app/feed.xml" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

@@ -3,6 +3,7 @@ import Base from "../../layouts/Base.astro";
 import StoreButtons from "../../components/StoreButtons.astro";
 import { MEDIA_BASE, getCatalog, getPlaylists } from "../../lib/stories";
 import { getLocale, localePath, t } from "../../lib/i18n";
+import { clampTitle, clampDescription } from "../../lib/seo";
 import { getVerseOfTheDay } from "../../lib/daily-verses";
 
 const locale = getLocale(Astro.currentLocale);
@@ -10,8 +11,8 @@ const catalog = getCatalog(locale);
 const catalogMap = new Map(catalog.map((s) => [s.id, s]));
 const playlists = await getPlaylists(catalog, locale);
 
-const title = t(locale, "home.title");
-const description = t(locale, "home.description");
+const title = clampTitle(t(locale, "home.title"));
+const description = clampDescription(t(locale, "home.description"));
 
 const homeLd = {
   "@context": "https://schema.org",
@@ -19,7 +20,7 @@ const homeLd = {
   name: "Bible Tea",
   operatingSystem: "iOS, Android",
   applicationCategory: "ReligionApplication",
-  url: "https://bibletea.app",
+  url: "https://bibletea.app/",
   image: "https://bibletea.app/icon.png",
   description,
   aggregateRating: {

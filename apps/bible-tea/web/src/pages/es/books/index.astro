@@ -32,9 +32,7 @@ const itemListLd = {
   itemListElement: seasons.map((s, i) => ({
     "@type": "ListItem",
     position: i + 1,
-    name: s.name,
-    url: `https://bibletea.app/es/books/${s.slug}/`,
-    description: s.description,
+    item: { "@type": "WebPage", name: s.name, url: `https://bibletea.app/es/books/${s.slug}/` },
   })),
 };
 

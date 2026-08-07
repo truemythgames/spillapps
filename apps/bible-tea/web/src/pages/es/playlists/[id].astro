@@ -60,9 +60,7 @@ const itemListLd = {
   itemListElement: stories.map((s, i) => ({
     "@type": "ListItem",
     position: i + 1,
-    name: s.title,
-    url: `https://bibletea.app/stories/${s.id}/`,
-    description: s.description,
+    item: { "@type": "WebPage", name: s.title, url: `https://bibletea.app/es/stories/${s.id}/` },
   })),
 };
 

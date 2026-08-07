@@ -37,9 +37,7 @@ const itemListLd = {
   itemListElement: playlists.map((pl, i) => ({
     "@type": "ListItem",
     position: i + 1,
-    name: pl.name,
-    url: `https://bibletea.app/es/playlists/${pl.id}/`,
-    description: pl.description,
+    item: { "@type": "WebPage", name: pl.name, url: `https://bibletea.app/es/playlists/${pl.id}/` },
   })),
 };
 

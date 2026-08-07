@@ -131,7 +131,7 @@ const next = idx < catalog.length - 1 ? catalog[idx + 1] : null;
 
 const bibleRef = localizeBibleRef(story.bibleRef, locale);
 const seoOverride = storySeo(story.id, locale);
-const pageTitle = clampTitle(seoOverride.title ?? `${story.title} — ${bibleRef} | Bible Tea`);
+const pageTitle = clampTitle(seoOverride.title ?? `${story.title} — ${bibleRef} - Bible Tea`);
 const pageDesc = clampDescription(seoOverride.description ?? (locale === "es"
   ? `${story.description} Escucha gratis en Bible Tea — sin anuncios ni registro.`
   : `${story.description} Listen free on Bible Tea — no ads, no sign-up.`));
@@ -220,6 +220,7 @@ const audioLd = {
   "@type": "AudioObject",
   name: `${story.title} — Audio de Historia Bíblica`,
   description: `Escucha ${story.title} (${bibleRef}) como narración de audio inmersiva en Bible Tea.`,
+  contentUrl: pageUrl,
   encodingFormat: "audio/mpeg",
   isAccessibleForFree: true,
   requiresSubscription: false,

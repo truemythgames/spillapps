@@ -3,3 +3,4 @@ Allow: /
 Disallow: /cdn-cgi/
 
 Sitemap: https://bibletea.app/sitemap.xml
+# IndexNow key location is public/{uuid}.txt (see scripts/indexnow.ts)

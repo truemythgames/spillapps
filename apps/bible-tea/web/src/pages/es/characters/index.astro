@@ -31,9 +31,7 @@ const itemListLd = {
   itemListElement: characters.map((ch, i) => ({
     "@type": "ListItem",
     position: i + 1,
-    name: ch.name,
-    url: `https://bibletea.app/es/characters/${ch.id}/`,
-    description: ch.description,
+    item: { "@type": "WebPage", name: ch.name, url: `https://bibletea.app/es/characters/${ch.id}/` },
   })),
 };
 

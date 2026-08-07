@@ -32,9 +32,7 @@ const itemListLd = {
   itemListElement: seasons.map((s, i) => ({
     "@type": "ListItem",
     position: i + 1,
-    name: s.name,
-    url: `https://bibletea.app/books/${s.slug}/`,
-    description: s.description,
+    item: { "@type": "WebPage", name: s.name, url: `https://bibletea.app/books/${s.slug}/` },
   })),
 };
 
@@ -42,7 +40,7 @@ const breadcrumbLd = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: "https://bibletea.app" },
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://bibletea.app/" },
     { "@type": "ListItem", position: 2, name: "Bible Books", item: "https://bibletea.app/books/" },
   ],
 };

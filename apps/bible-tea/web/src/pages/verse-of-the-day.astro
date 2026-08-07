@@ -3,6 +3,7 @@ import Base from "../layouts/Base.astro";
 import StoreButtons from "../components/StoreButtons.astro";
 import { APP_STORE_URL } from "../lib/stories";
 import { getLocale, localePath, t } from "../lib/i18n";
+import { clampTitle, clampDescription } from "../lib/seo";
 import { getVerseOfTheDay, getUpcomingVerses } from "../lib/daily-verses";
 
 const locale = getLocale(Astro.currentLocale);
@@ -10,8 +11,8 @@ const verse = getVerseOfTheDay(new Date(), locale);
 const upcoming = getUpcomingVerses(locale, 7);
 const today = new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
 
-const title = t(locale, "votd.title");
-const description = t(locale, "votd.description");
+const title = clampTitle(t(locale, "votd.title"));
+const description = clampDescription(t(locale, "votd.description"));
 
 const breadcrumbLd = {
   "@context": "https://schema.org",
@@ -53,7 +54,7 @@ const appLd = {
   name: "Bible Tea",
   operatingSystem: "iOS, Android",
   applicationCategory: "ReligionApplication",
-  url: "https://bibletea.app",
+  url: "https://bibletea.app/",
   image: "https://bibletea.app/icon.png",
   description: "Bible stories as immersive audio, daily verse widget, guided prayers.",
   aggregateRating: { "@type": "AggregateRating", ratingValue: "5", ratingCount: "50", bestRating: "5" },
@@ -66,7 +67,7 @@ const webPageLd = {
   name: title,
   description,
   url: "https://bibletea.app/verse-of-the-day/",
-  isPartOf: { "@type": "WebSite", name: "Bible Tea", url: "https://bibletea.app" },
+  isPartOf: { "@type": "WebSite", name: "Bible Tea", url: "https://bibletea.app/" },
   about: { "@type": "Thing", name: "Bible Verse of the Day" },
   dateModified: new Date().toISOString(),
 };
