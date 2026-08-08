@@ -267,6 +267,9 @@
     "step2": "Toca el botón \"+\" (arriba a la izquierda)",
     "step3": "Busca \"Bible Tea\"",
     "step4": "Elige un tamaño de widget y agrégalo",
+    "androidStep1": "Mantén presionada tu pantalla de inicio",
+    "androidStep2": "Toca \"Widgets\" y busca \"Bible Tea\"",
+    "androidStep3": "Arrastra el widget a tu pantalla de inicio",
     "gotIt": "Entendido"
   },
   "postPurchase": {

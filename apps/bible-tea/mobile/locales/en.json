@@ -267,6 +267,9 @@
     "step2": "Tap the \"+\" button (top left)",
     "step3": "Search \"Bible Tea\"",
     "step4": "Choose a widget size & add it",
+    "androidStep1": "Long-press your home screen",
+    "androidStep2": "Tap \"Widgets\" and search \"Bible Tea\"",
+    "androidStep3": "Drag the widget to your home screen",
     "gotIt": "Got it"
   },
   "postPurchase": {

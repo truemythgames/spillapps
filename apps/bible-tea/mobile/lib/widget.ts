@@ -14,15 +14,15 @@ function getDeviceLanguage(): "en" | "es" {
 }
 
 /**
- * Write today's verse + story cover image into the App Group container
- * so the iOS widget can display them. Call this on app launch and when
- * the story of the day changes.
+ * Write today's verse + story cover image into shared storage
+ * so the native widget can display them (iOS App Group / Android SharedPreferences).
+ * Call this on app launch and when the story of the day changes.
  */
 export async function syncWidgetData(storyOfTheDay?: {
   id: string;
   cover_image_url: string | null;
 }): Promise<void> {
-  if (Platform.OS !== "ios" || !VerseWidgetBridge) return;
+  if (!VerseWidgetBridge) return;
 
   const lang = getDeviceLanguage();
   const verse = getVerseOfTheDay(new Date(), lang);
@@ -42,9 +42,9 @@ export async function syncWidgetData(storyOfTheDay?: {
   }
 }
 
-/** Ask WidgetKit to reload timelines without downloading a new image. */
+/** Reload widget timelines without downloading a new image. */
 export async function refreshWidget(): Promise<void> {
-  if (Platform.OS !== "ios" || !VerseWidgetBridge) return;
+  if (!VerseWidgetBridge) return;
   try {
     await VerseWidgetBridge.refreshTimeline();
   } catch {}
@@ -52,7 +52,7 @@ export async function refreshWidget(): Promise<void> {
 
 /** Returns true if the user has at least one Bible Tea widget on their home/lock screen. */
 export async function checkWidgetInstalled(): Promise<boolean> {
-  if (Platform.OS !== "ios" || !VerseWidgetBridge) return false;
+  if (!VerseWidgetBridge) return false;
   try {
     return await VerseWidgetBridge.isWidgetInstalled();
   } catch {

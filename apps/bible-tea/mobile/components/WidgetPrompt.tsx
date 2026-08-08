@@ -38,10 +38,20 @@ export function WidgetInstructionsModal({
           <Text style={styles.modalSubtitle}>{t("widget.promptSubtitle")}</Text>
 
           <View style={styles.instructions}>
-            <InstructionStep num="1" text={t("widget.step1")} />
-            <InstructionStep num="2" text={t("widget.step2")} />
-            <InstructionStep num="3" text={t("widget.step3")} />
-            <InstructionStep num="4" text={t("widget.step4")} />
+            {Platform.OS === "android" ? (
+              <>
+                <InstructionStep num="1" text={t("widget.androidStep1")} />
+                <InstructionStep num="2" text={t("widget.androidStep2")} />
+                <InstructionStep num="3" text={t("widget.androidStep3")} />
+              </>
+            ) : (
+              <>
+                <InstructionStep num="1" text={t("widget.step1")} />
+                <InstructionStep num="2" text={t("widget.step2")} />
+                <InstructionStep num="3" text={t("widget.step3")} />
+                <InstructionStep num="4" text={t("widget.step4")} />
+              </>
+            )}
           </View>
 
           <Pressable style={styles.modalButton} onPress={onDismiss}>
@@ -63,16 +73,10 @@ export function WidgetCard() {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    if (Platform.OS !== "ios") {
-      setInstalled(true);
-      return;
-    }
     checkWidgetInstalled().then(setInstalled);
   }, []);
 
-  // Re-check when app comes back from background (user might have just added it)
   useEffect(() => {
-    if (Platform.OS !== "ios") return;
     const { AppState } = require("react-native");
     const sub = AppState.addEventListener("change", (state: string) => {
       if (state === "active") {

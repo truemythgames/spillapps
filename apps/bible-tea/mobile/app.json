@@ -82,6 +82,7 @@
       "./plugins/hermes-dsym-plugin",
       "./plugins/now-playing-plugin",
       "./plugins/verse-widget-plugin",
+      "./plugins/android-verse-widget-plugin",
       "expo-tracking-transparency",
       "./plugins/android-16-compat"
     ],

@@ -10,3 +10,4 @@ play-store-service-account.json
 
 # Release keystore
 android/app/release.keystore
+credentials/
