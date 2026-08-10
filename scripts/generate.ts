@@ -126,6 +126,15 @@ const DEFAULT_SPEAKER: keyof typeof SPEAKERS = "grace";
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const replicate = new Replicate({ auth: process.env.REPLICATE_API_TOKEN });
 
+/** Transcript LLM — Claude by default; set TRANSCRIPT_PROVIDER=openai to keep GPT. */
+const TRANSCRIPT_PROVIDER = (
+  process.env.TRANSCRIPT_PROVIDER?.trim() || "claude"
+).toLowerCase();
+const TRANSCRIPT_MODEL =
+  process.env.TRANSCRIPT_MODEL?.trim() ||
+  (TRANSCRIPT_PROVIDER === "openai" ? "gpt-4o" : "claude-sonnet-4-5");
+const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY?.trim() || "";
+
 // ---------------------------------------------------------------------------
 // Prompt kits — keyed by CONTENT_APP_ID so each Tea product can have its own
 // storytelling voice without forking generate.ts.
@@ -176,6 +185,22 @@ const PROMPT_KITS: Record<string, PromptKit> = {
     subtitleRule:
       "Add a subtitle line in italics with the date or period: *44 BCE — Rome* or *June 6, 1944 — Normandy*",
     imageContext: "history story",
+  },
+  "true-crime-tea": {
+    appLabel: "True Crime Tea",
+    domainLabel: "true crime case",
+    refLabel: "Date / Location",
+    audienceContext: "someone who binge-listens to true crime podcasts",
+    accuracyRule:
+      "Factually accurate to the public record — names, dates, charges, verdicts, and what remains unsolved must be correct. Never invent evidence, confessions, or identities. Avoid graphic violence; focus on mystery, investigation, and aftermath",
+    quoteRule:
+      "Use markdown blockquotes (> ) for documented quotes from investigators, headlines, letters, or attributed statements. These render as styled quote cards in the app.",
+    quoteExample: `> *"I have a bomb."*
+>
+> *— Note handed to a flight attendant, Northwest Orient Flight 305, November 24, 1971*`,
+    subtitleRule:
+      "Add a subtitle line in italics with the date and place: *November 24, 1971 — Pacific Northwest* or *March 18, 1990 — Boston*",
+    imageContext: "true crime case, cinematic noir, no gore, no graphic violence",
   },
 };
 
@@ -267,29 +292,95 @@ Section: ${story.section}
 
 CRITICAL: The script MUST be 800-1200 words. MUST include all three sections: ## The Setup, ## The Story, ## The Takeaway. Do NOT stop early. The Story section alone should be 600-900 words.`;
 
-  const generate = async (attempt: number): Promise<string> => {
-    console.log(`  [transcript] Calling GPT-4o${attempt > 1 ? ` (attempt ${attempt})` : ""}...`);
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: userPrompt },
-      ],
-      temperature: 0.8 + (attempt - 1) * 0.05,
-      max_tokens: 4096,
-    });
+  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-    const text = response.choices[0]?.message?.content;
+  const generate = async (attempt: number): Promise<string> => {
+    const temp = 0.8 + (attempt - 1) * 0.05;
+    console.log(
+      `  [transcript] Calling ${TRANSCRIPT_PROVIDER}:${TRANSCRIPT_MODEL}${attempt > 1 ? ` (attempt ${attempt})` : ""}...`
+    );
+
+    let text: string | undefined;
+    let tokenNote: string | number = "?";
+
+    try {
+      if (TRANSCRIPT_PROVIDER === "openai") {
+        const response = await openai.chat.completions.create({
+          model: TRANSCRIPT_MODEL,
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: userPrompt },
+          ],
+          temperature: temp,
+          max_tokens: 4096,
+        });
+        text = response.choices[0]?.message?.content ?? undefined;
+        tokenNote = response.usage?.total_tokens || "?";
+      } else {
+        if (!ANTHROPIC_API_KEY) {
+          throw new Error(
+            "ANTHROPIC_API_KEY is required for Claude transcripts (or set TRANSCRIPT_PROVIDER=openai)"
+          );
+        }
+        const response = await fetch("https://api.anthropic.com/v1/messages", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            "x-api-key": ANTHROPIC_API_KEY,
+            "anthropic-version": "2023-06-01",
+          },
+          body: JSON.stringify({
+            model: TRANSCRIPT_MODEL,
+            max_tokens: 4096,
+            temperature: temp,
+            system: systemPrompt,
+            messages: [{ role: "user", content: userPrompt }],
+          }),
+        });
+        if (!response.ok) {
+          const err = await response.text();
+          const retryable = response.status === 429 || response.status === 529 || response.status >= 500;
+          if (retryable && attempt < 5) {
+            const waitMs = Math.min(60_000, 2000 * 2 ** (attempt - 1));
+            console.log(
+              `  [transcript] Anthropic ${response.status}, retrying in ${Math.round(waitMs / 1000)}s...`
+            );
+            await sleep(waitMs);
+            return generate(attempt + 1);
+          }
+          throw new Error(`Anthropic API failed (${response.status}): ${err.slice(0, 300)}`);
+        }
+        const data = (await response.json()) as {
+          content?: Array<{ type: string; text?: string }>;
+          usage?: { input_tokens?: number; output_tokens?: number };
+        };
+        text = data.content?.find((b) => b.type === "text")?.text;
+        const inTok = data.usage?.input_tokens ?? 0;
+        const outTok = data.usage?.output_tokens ?? 0;
+        tokenNote = inTok + outTok || "?";
+      }
+    } catch (err: any) {
+      const msg = String(err?.message || err);
+      const transient =
+        /fetch failed|ECONNRESET|ETIMEDOUT|ENOTFOUND|socket|network|AbortError/i.test(msg);
+      if (transient && attempt < 5) {
+        const waitMs = Math.min(60_000, 2000 * 2 ** (attempt - 1));
+        console.log(`  [transcript] ${msg}, retrying in ${Math.round(waitMs / 1000)}s...`);
+        await sleep(waitMs);
+        return generate(attempt + 1);
+      }
+      throw err;
+    }
+
     if (!text) throw new Error("No transcript generated");
 
     const wordCount = text.split(/\s+/).length;
     const hasTakeaway = text.includes("## The Takeaway");
-    const tokens = response.usage;
     console.log(
-      `  [transcript] Got ${wordCount} words, ${tokens?.total_tokens || "?"} tokens, takeaway: ${hasTakeaway}`
+      `  [transcript] Got ${wordCount} words, ${tokenNote} tokens, takeaway: ${hasTakeaway}`
     );
 
-    if ((!hasTakeaway || wordCount < 500) && attempt < 3) {
+    if ((!hasTakeaway || wordCount < 500) && attempt < 5) {
       console.log(`  [transcript] Too short or missing Takeaway, retrying...`);
       return generate(attempt + 1);
     }
@@ -482,7 +573,12 @@ async function generateNarration(
 // Main pipeline
 // ---------------------------------------------------------------------------
 
-async function processStory(story: Story, step?: string, locale?: string) {
+async function processStory(
+  story: Story,
+  step?: string,
+  locale?: string,
+  skipNarration = false,
+) {
   const storyDir = join(CONTENT_DIR, "stories", story.id);
   mkdirSync(storyDir, { recursive: true });
 
@@ -491,7 +587,10 @@ async function processStory(story: Story, step?: string, locale?: string) {
     ? JSON.parse(readFileSync(metadataPath, "utf8"))
     : {};
 
-  const shouldRun = (s: string) => !step || step === s;
+  const shouldRun = (s: string) => {
+    if (skipNarration && s === "narration") return false;
+    return !step || step === s;
+  };
 
   // Step 1: Transcript
   if (shouldRun("transcript")) {
@@ -504,7 +603,7 @@ async function processStory(story: Story, step?: string, locale?: string) {
       writeFileSync(transcriptPath, transcript, "utf8");
       const key = `transcript${suffix}`;
       metadata[key] = {
-        model: "gpt-4o",
+        model: `${TRANSCRIPT_PROVIDER}:${TRANSCRIPT_MODEL}`,
         locale: locale || "en",
         generatedAt: new Date().toISOString(),
         wordCount: transcript.split(/\s+/).length,
@@ -585,10 +684,19 @@ async function main() {
       process.exit(1);
     }
     stories = [story];
-  } else if (flags.all) {
+  } else if (flags.all || flags.incomplete) {
     stories = flags["seed-only"]
       ? catalog.filter((s) => s.inSeed)
       : catalog;
+    if (flags.incomplete) {
+      stories = stories.filter((s) => {
+        const dir = join(CONTENT_DIR, "stories", s.id);
+        return !(
+          existsSync(join(dir, "transcript.md")) &&
+          existsSync(join(dir, "cover.webp"))
+        );
+      });
+    }
   } else {
     console.error("Usage:");
     console.error(
@@ -603,14 +711,21 @@ async function main() {
     console.error(
       "  npx tsx scripts/generate.ts --all --seed-only          # only seed stories"
     );
+    console.error(
+      "  npx tsx scripts/generate.ts --all --skip-narration     # transcript + cover only"
+    );
+    console.error(
+      "  npx tsx scripts/generate.ts --incomplete --skip-narration  # only missing transcript/cover"
+    );
     process.exit(1);
   }
 
   const step = typeof flags.step === "string" ? flags.step : undefined;
   const locale = typeof flags.locale === "string" ? flags.locale : undefined;
+  const skipNarration = !!flags["skip-narration"];
 
   console.log(
-    `\nGenerating content for ${stories.length} stor${stories.length === 1 ? "y" : "ies"}${step ? ` (step: ${step})` : ""}${locale ? ` (locale: ${locale})` : ""}...\n`
+    `\nGenerating content for ${stories.length} stor${stories.length === 1 ? "y" : "ies"}${step ? ` (step: ${step})` : ""}${skipNarration ? " (skip narration)" : ""}${locale ? ` (locale: ${locale})` : ""}...\n`
   );
 
   let completed = 0;
@@ -620,13 +735,31 @@ async function main() {
     console.log(
       `[${completed + failed + 1}/${stories.length}] ${story.title} (${story.bibleRef})`
     );
-    try {
-      await processStory(story, step, locale);
-      completed++;
-    } catch (err: any) {
-      console.error(`  ERROR: ${err.message}`);
-      failed++;
+    let ok = false;
+    for (let storyAttempt = 1; storyAttempt <= 3; storyAttempt++) {
+      try {
+        await processStory(story, step, locale, skipNarration);
+        ok = true;
+        break;
+      } catch (err: any) {
+        const msg = String(err?.message || err);
+        const transient =
+          /fetch failed|ECONNRESET|ETIMEDOUT|ENOTFOUND|socket|network|AbortError|429|529/i.test(
+            msg
+          );
+        if (transient && storyAttempt < 3) {
+          const waitMs = 5000 * storyAttempt;
+          console.error(
+            `  ERROR: ${msg} — story retry ${storyAttempt}/3 in ${waitMs / 1000}s...`
+          );
+          await new Promise((r) => setTimeout(r, waitMs));
+          continue;
+        }
+        console.error(`  ERROR: ${msg}`);
+      }
     }
+    if (ok) completed++;
+    else failed++;
     console.log();
   }
 

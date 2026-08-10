@@ -16,13 +16,24 @@ Per Tea product
   apps/history-tea/web      — Marketing (@spillapps/history-tea-web)
   apps/history-tea/content  — Authoring (catalogs, characters/, stories/)
 
-New product: copy `apps/bible-tea` → `apps/<new-tea>`, rename packages to
-`@spillapps/<new-tea>-*`, add to root `package.json` workspaces, new bundle IDs,
-same spill-api with `app_id` in the client. Strip Firebase/FB plugins from
-app.json + delete native ios/android dirs; user runs `expo prebuild` to
-regenerate native projects from app.json. Custom native code lives under
-`mobile/plugins/` (config plugins) so it survives prebuild.
+  apps/true-crime-tea/mobile   — Expo (@spillapps/true-crime-tea-mobile)
+  apps/true-crime-tea/web      — Marketing (@spillapps/true-crime-tea-web)
+  apps/true-crime-tea/content  — Authoring (catalogs, characters/, stories/)
 
-Local: `npm run dev:mobile` (bible) or `npm run dev:mobile:history` (history)
-Generation: `npm run generate` (bible) or `npm run generate:history` (history)
+New product: copy `apps/history-tea` (secular) or `apps/bible-tea` (faith) →
+`apps/<new-tea>`, rename packages to `@spillapps/<new-tea>-*`, add to root
+`package.json` workspaces, new bundle IDs, same spill-api with `app_id` in the
+client. Strip Firebase/FB plugins from app.json + delete native ios/android
+dirs; user runs `expo prebuild` to regenerate native projects from app.json.
+Custom native code lives under `mobile/plugins/` (config plugins) so it
+survives prebuild.
+
+Local:
+  `npm run dev:mobile` (bible)
+  `npm run dev:mobile:history` (history)
+  `npm run dev:mobile:truecrime` (true crime)
+Generation:
+  `npm run generate` (bible)
+  `npm run generate:history` (history)
+  `npm run generate:truecrime` (true crime)
 EAS builds run from `apps/<product>/mobile`.

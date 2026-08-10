@@ -83,7 +83,7 @@ async function copyWithHeaders(key: string) {
 }
 
 async function main() {
-  const prefixes = ["bible-tea/", "history-tea/"];
+  const prefixes = ["bible-tea/", "history-tea/", "true-crime-tea/"];
   let total = 0;
   let updated = 0;
 

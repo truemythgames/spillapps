@@ -1,0 +1,1793 @@
+[
+  {
+    "id": "db-cooper",
+    "title": "D.B. Cooper",
+    "description": "A man in a suit hijacks a plane, parachutes into the night with ransom money, and vanishes. The only unsolved skyjacking in U.S. history.",
+    "section": "Heists",
+    "bibleRef": "November 24, 1971 \u2014 Pacific Northwest",
+    "inSeed": true,
+    "seedId": "st-db-cooper"
+  },
+  {
+    "id": "gardner-museum-heist",
+    "title": "The Gardner Museum Heist",
+    "description": "Two men dressed as cops walk out with half a billion in art. Empty frames still hang on the walls.",
+    "section": "Heists",
+    "bibleRef": "March 18, 1990 \u2014 Boston",
+    "inSeed": true,
+    "seedId": "st-gardner-museum-heist"
+  },
+  {
+    "id": "great-train-robbery",
+    "title": "The Great Train Robbery",
+    "description": "Fifteen men stop a Royal Mail train in the English countryside and steal a fortune \u2014 then the manhunt begins.",
+    "section": "Heists",
+    "bibleRef": "August 8, 1963 \u2014 Buckinghamshire",
+    "inSeed": true,
+    "seedId": "st-great-train-robbery"
+  },
+  {
+    "id": "brinks-robbery",
+    "title": "The Brink's Robbery",
+    "description": "Eleven men hit an armored depot for millions in under half an hour \u2014 then spend years looking over their shoulders.",
+    "section": "Heists",
+    "bibleRef": "January 17, 1950 \u2014 Boston",
+    "inSeed": true,
+    "seedId": "st-brinks-robbery"
+  },
+  {
+    "id": "air-france-heist",
+    "title": "The Air France Heist",
+    "description": "A crew hits an airport vault and walks away with tens of millions \u2014 one of the cleanest airport scores ever pulled.",
+    "section": "Heists",
+    "bibleRef": "July 1967 \u2014 New York",
+    "inSeed": true,
+    "seedId": "st-air-france-heist"
+  },
+  {
+    "id": "antwerp-diamond-heist",
+    "title": "The Antwerp Diamond Heist",
+    "description": "Thieves crack the world's most secure diamond vault with magnets, hair spray, and patience. Almost nothing is recovered.",
+    "section": "Heists",
+    "bibleRef": "February 15\u201316, 2003 \u2014 Antwerp",
+    "inSeed": true,
+    "seedId": "st-antwerp-diamond-heist"
+  },
+  {
+    "id": "hatton-garden-heist",
+    "title": "The Hatton Garden Heist",
+    "description": "A crew of aging thieves drills into a London vault over Easter weekend. The 'Dad's Army' heist that stunned Britain.",
+    "section": "Heists",
+    "bibleRef": "April 2015 \u2014 London",
+    "inSeed": true,
+    "seedId": "st-hatton-garden-heist"
+  },
+  {
+    "id": "northern-bank-robbery",
+    "title": "The Northern Bank Robbery",
+    "description": "Gunmen take bank executives' families hostage and walk out with \u00a326 million in Belfast.",
+    "section": "Heists",
+    "bibleRef": "December 2004 \u2014 Belfast",
+    "inSeed": true,
+    "seedId": "st-northern-bank-robbery"
+  },
+  {
+    "id": "securitas-depot-robbery",
+    "title": "The Securitas Depot Robbery",
+    "description": "Britain's largest cash robbery. A manager is kidnapped, a depot is emptied, and \u00a353 million disappears.",
+    "section": "Heists",
+    "bibleRef": "February 21, 2006 \u2014 Kent",
+    "inSeed": true,
+    "seedId": "st-securitas-depot-robbery"
+  },
+  {
+    "id": "pierre-hotel-heist",
+    "title": "The Pierre Hotel Heist",
+    "description": "Gunmen take over a luxury Manhattan hotel and empty the safe deposit boxes in a military-style raid.",
+    "section": "Heists",
+    "bibleRef": "January 2, 1972 \u2014 New York",
+    "inSeed": true,
+    "seedId": "st-pierre-hotel-heist"
+  },
+  {
+    "id": "lufthansa-heist",
+    "title": "The Lufthansa Heist",
+    "description": "A crew hits JFK's Lufthansa cargo vault for millions \u2014 then the cover-up turns deadlier than the score.",
+    "section": "Heists",
+    "bibleRef": "December 11, 1978 \u2014 New York",
+    "inSeed": true,
+    "seedId": "st-lufthansa-heist"
+  },
+  {
+    "id": "millennium-dome-raid",
+    "title": "The Millennium Dome Raid",
+    "description": "Thieves try to steal \u00a3350 million in diamonds with a digger and a speedboat. The cops are already waiting.",
+    "section": "Heists",
+    "bibleRef": "November 7, 2000 \u2014 London",
+    "inSeed": true,
+    "seedId": "st-millennium-dome-raid"
+  },
+  {
+    "id": "green-vault-heist",
+    "title": "The Green Vault Heist",
+    "description": "Thieves smash into Dresden's historic treasure chamber and escape with royal jewels worth hundreds of millions.",
+    "section": "Heists",
+    "bibleRef": "November 25, 2019 \u2014 Dresden",
+    "inSeed": true,
+    "seedId": "st-green-vault-heist"
+  },
+  {
+    "id": "stockholm-museum-heist",
+    "title": "The Stockholm Museum Heist",
+    "description": "Masked men storm a museum, grab masterpieces, and flee by speedboat through the city.",
+    "section": "Heists",
+    "bibleRef": "December 22, 2000 \u2014 Stockholm",
+    "inSeed": true,
+    "seedId": "st-stockholm-museum-heist"
+  },
+  {
+    "id": "baker-street-robbery",
+    "title": "The Baker Street Robbery",
+    "description": "A gang tunnels into a London bank vault from a nearby shop while a pirate-radio listener overhears police chatter.",
+    "section": "Heists",
+    "bibleRef": "September 1971 \u2014 London",
+    "inSeed": true,
+    "seedId": "st-baker-street-robbery"
+  },
+  {
+    "id": "knightsbridge-security-deposit",
+    "title": "The Knightsbridge Security Deposit Robbery",
+    "description": "Valerio Viccei and crew take over a London vault and empty deposit boxes with swagger in broad daylight.",
+    "section": "Heists",
+    "bibleRef": "July 12, 1987 \u2014 London",
+    "inSeed": true,
+    "seedId": "st-knightsbridge-security-deposit"
+  },
+  {
+    "id": "dunbar-armored-robbery",
+    "title": "The Dunbar Armored Robbery",
+    "description": "An insider job hits an armored facility for nearly $19 million \u2014 one of the largest cash heists in U.S. history.",
+    "section": "Heists",
+    "bibleRef": "September 13, 1997 \u2014 Los Angeles",
+    "inSeed": true,
+    "seedId": "st-dunbar-armored-robbery"
+  },
+  {
+    "id": "united-california-bank-burglary",
+    "title": "The United California Bank Burglary",
+    "description": "A professional crew drills into a Laguna Niguel bank vault and empties safe deposit boxes over a weekend.",
+    "section": "Heists",
+    "bibleRef": "March 24, 1972 \u2014 California",
+    "inSeed": true,
+    "seedId": "st-united-california-bank-burglary"
+  },
+  {
+    "id": "brussels-airport-diamond-heist",
+    "title": "The Brussels Airport Diamond Heist",
+    "description": "In under three minutes, gunmen seize tens of millions in diamonds on the tarmac \u2014 no shots fired.",
+    "section": "Heists",
+    "bibleRef": "February 18, 2013 \u2014 Brussels",
+    "inSeed": true,
+    "seedId": "st-brussels-airport-diamond-heist"
+  },
+  {
+    "id": "schiphol-airport-heist",
+    "title": "The Schiphol Airport Heist",
+    "description": "Armed men hit a secured airport area and escape with diamonds meant for a flight out of Amsterdam.",
+    "section": "Heists",
+    "bibleRef": "February 25, 2005 \u2014 Amsterdam",
+    "inSeed": true,
+    "seedId": "st-schiphol-airport-heist"
+  },
+  {
+    "id": "pink-panthers-tokyo",
+    "title": "The Pink Panthers in Tokyo",
+    "description": "A flash-mob style jewelry raid in Ginza. Smoke bombs, wigs, and a getaway that feels like cinema.",
+    "section": "Heists",
+    "bibleRef": "2004 \u2014 Tokyo",
+    "inSeed": true,
+    "seedId": "st-pink-panthers-tokyo"
+  },
+  {
+    "id": "sao-paulo-bank-tunnel",
+    "title": "The S\u00e3o Paulo Bank Tunnel Heist",
+    "description": "Thieves dig a long tunnel under a bank and empty the vault like a heist movie made real.",
+    "section": "Heists",
+    "bibleRef": "August 2005 \u2014 S\u00e3o Paulo",
+    "inSeed": true,
+    "seedId": "st-sao-paulo-bank-tunnel"
+  },
+  {
+    "id": "fortaleza-central-bank",
+    "title": "The Fortaleza Central Bank Heist",
+    "description": "A crew rents a house near the bank, tunnels for months, and walks away with tens of millions.",
+    "section": "Heists",
+    "bibleRef": "August 2005 \u2014 Fortaleza",
+    "inSeed": true,
+    "seedId": "st-fortaleza-central-bank"
+  },
+  {
+    "id": "kunsthal-art-heist",
+    "title": "The Kunsthal Art Heist",
+    "description": "Thieves grab seven masterpieces from a Rotterdam museum in minutes. Most are never seen again.",
+    "section": "Heists",
+    "bibleRef": "October 16, 2012 \u2014 Rotterdam",
+    "inSeed": true,
+    "seedId": "st-kunsthal-art-heist"
+  },
+  {
+    "id": "bonded-vault-heist",
+    "title": "The Bonded Vault Heist",
+    "description": "Providence mobsters empty a secret vault stuffed with cash and jewels \u2014 then silence becomes policy.",
+    "section": "Heists",
+    "bibleRef": "August 14, 1975 \u2014 Rhode Island",
+    "inSeed": true,
+    "seedId": "st-bonded-vault-heist"
+  },
+  {
+    "id": "carlton-intercontinental-heist",
+    "title": "The Carlton Intercontinental Heist",
+    "description": "Thieves hit a Cannes hotel jewelry display and vanish with a fortune during festival season.",
+    "section": "Heists",
+    "bibleRef": "July 28, 2013 \u2014 Cannes",
+    "inSeed": true,
+    "seedId": "st-carlton-intercontinental-heist"
+  },
+  {
+    "id": "harry-winston-paris-heist",
+    "title": "The Harry Winston Heist",
+    "description": "Armed thieves \u2014 some in wigs \u2014 storm a Paris jewelry boutique and escape with tens of millions.",
+    "section": "Heists",
+    "bibleRef": "December 4, 2008 \u2014 Paris",
+    "inSeed": true,
+    "seedId": "st-harry-winston-paris-heist"
+  },
+  {
+    "id": "graff-diamonds-heist",
+    "title": "The Graff Diamonds Heist",
+    "description": "Two men in suits walk into a Mayfair jeweler and leave with a bag of stones worth tens of millions.",
+    "section": "Heists",
+    "bibleRef": "August 6, 2009 \u2014 London",
+    "inSeed": true,
+    "seedId": "st-graff-diamonds-heist"
+  },
+  {
+    "id": "montreal-museum-of-fine-arts",
+    "title": "The Montreal Museum of Fine Arts Heist",
+    "description": "Thieves slip into the museum at night and vanish with jewels and paintings \u2014 still mostly unrecovered.",
+    "section": "Heists",
+    "bibleRef": "September 4, 1972 \u2014 Montreal",
+    "inSeed": true,
+    "seedId": "st-montreal-museum-of-fine-arts"
+  },
+  {
+    "id": "argentina-banco-rio",
+    "title": "The Banco R\u00edo Heist",
+    "description": "Hostages, a media circus, and a tunnel exit. Argentina's most cinematic bank robbery.",
+    "section": "Heists",
+    "bibleRef": "January 13, 2006 \u2014 Buenos Aires",
+    "inSeed": true,
+    "seedId": "st-argentina-banco-rio"
+  },
+  {
+    "id": "stockholm-norrmalmstorg",
+    "title": "The Norrmalmstorg Robbery",
+    "description": "A botched bank heist invents the term 'Stockholm syndrome' and becomes a global media event.",
+    "section": "Heists",
+    "bibleRef": "August 23\u201328, 1973 \u2014 Stockholm",
+    "inSeed": true,
+    "seedId": "st-stockholm-norrmalmstorg"
+  },
+  {
+    "id": "great-canadian-maple-syrup-heist",
+    "title": "The Great Canadian Maple Syrup Heist",
+    "description": "Thieves siphon millions from Quebec's strategic maple syrup reserve. Sweet, weird, and very real.",
+    "section": "Heists",
+    "bibleRef": "2011\u20132012 \u2014 Quebec",
+    "inSeed": true,
+    "seedId": "st-great-canadian-maple-syrup-heist"
+  },
+  {
+    "id": "escape-from-alcatraz",
+    "title": "Escape from Alcatraz",
+    "description": "Three inmates dig through a cell wall with spoons, build a raft from raincoats, and disappear into the bay. Did they make it?",
+    "section": "Escapes",
+    "bibleRef": "June 11, 1962 \u2014 Alcatraz",
+    "inSeed": true,
+    "seedId": "st-escape-from-alcatraz"
+  },
+  {
+    "id": "papillon",
+    "title": "Papillon",
+    "description": "A French convict's obsession with escaping Devil's Island becomes legend \u2014 part memoir, part myth, all defiance.",
+    "section": "Escapes",
+    "bibleRef": "1930s\u20131940s \u2014 French Guiana",
+    "inSeed": true,
+    "seedId": "st-papillon"
+  },
+  {
+    "id": "el-chapo-tunnel-escape",
+    "title": "El Chapo's Tunnel Escape",
+    "description": "The world's most wanted trafficker vanishes from a max-security shower stall into a mile-long tunnel.",
+    "section": "Escapes",
+    "bibleRef": "July 11, 2015 \u2014 Mexico",
+    "inSeed": true,
+    "seedId": "st-el-chapo-tunnel-escape"
+  },
+  {
+    "id": "maze-prison-escape",
+    "title": "The Maze Prison Escape",
+    "description": "Thirty-eight IRA prisoners break out of Europe's most secure prison in a meticulously planned mass escape.",
+    "section": "Escapes",
+    "bibleRef": "September 25, 1983 \u2014 Northern Ireland",
+    "inSeed": true,
+    "seedId": "st-maze-prison-escape"
+  },
+  {
+    "id": "great-escape-stalag-luft-iii",
+    "title": "The Great Escape",
+    "description": "Allied POWs dig tunnels under a Nazi camp. Most are recaptured. The legend outlives the war.",
+    "section": "Escapes",
+    "bibleRef": "March 24, 1944 \u2014 Poland",
+    "inSeed": true,
+    "seedId": "st-great-escape-stalag-luft-iii"
+  },
+  {
+    "id": "pascal-payet-helicopter",
+    "title": "Pascal Payet's Helicopter Escapes",
+    "description": "A French convict escapes prison by helicopter \u2014 more than once \u2014 turning the sky into an exit door.",
+    "section": "Escapes",
+    "bibleRef": "2001\u20132007 \u2014 France",
+    "inSeed": true,
+    "seedId": "st-pascal-payet-helicopter"
+  },
+  {
+    "id": "mexicos-puente-grande",
+    "title": "The Puente Grande Escape",
+    "description": "El Chapo's first legendary prison break: laundry carts, bribes, and a vanishing act.",
+    "section": "Escapes",
+    "bibleRef": "January 19, 2001 \u2014 Mexico",
+    "inSeed": true,
+    "seedId": "st-mexicos-puente-grande"
+  },
+  {
+    "id": "texas-seven",
+    "title": "The Texas Seven",
+    "description": "Seven inmates break out of a Texas prison and spark a nationwide manhunt that ends in blood and arrests.",
+    "section": "Escapes",
+    "bibleRef": "December 2000 \u2014 Texas",
+    "inSeed": true,
+    "seedId": "st-texas-seven"
+  },
+  {
+    "id": "john-dillinger-wooden-gun",
+    "title": "Dillinger's Wooden Gun Escape",
+    "description": "America's public enemy carves a fake gun from wood and walks out of an Indiana jail like it's a movie.",
+    "section": "Escapes",
+    "bibleRef": "March 3, 1934 \u2014 Indiana",
+    "inSeed": true,
+    "seedId": "st-john-dillinger-wooden-gun"
+  },
+  {
+    "id": "frank-abagnale-escape-stories",
+    "title": "Frank Abagnale's Escapes",
+    "description": "The famous con man's arrests and escapes blur into legend \u2014 and Hollywood can't resist the myth.",
+    "section": "Escapes",
+    "bibleRef": "1960s \u2014 United States",
+    "inSeed": true,
+    "seedId": "st-frank-abagnale-escape-stories"
+  },
+  {
+    "id": "billy-the-kid-lincoln-escape",
+    "title": "Billy the Kid's Courthouse Escape",
+    "description": "Handcuffed and condemned, Billy kills his guards and rides out of Lincoln, New Mexico.",
+    "section": "Escapes",
+    "bibleRef": "April 28, 1881 \u2014 New Mexico",
+    "inSeed": true,
+    "seedId": "st-billy-the-kid-lincoln-escape"
+  },
+  {
+    "id": "richard-lee-mcnair-escape",
+    "title": "Richard Lee McNair's Escapes",
+    "description": "A killer escapes custody multiple times, once mailing himself out of prison in a crate.",
+    "section": "Escapes",
+    "bibleRef": "1987\u20132006 \u2014 United States",
+    "inSeed": true,
+    "seedId": "st-richard-lee-mcnair-escape"
+  },
+  {
+    "id": "yuma-territorial-prison-escapes",
+    "title": "Yuma Territorial Prison Escapes",
+    "description": "Arizona's infamous desert prison and the inmates who tried to beat heat, walls, and legend.",
+    "section": "Escapes",
+    "bibleRef": "1876\u20131909 \u2014 Arizona",
+    "inSeed": true,
+    "seedId": "st-yuma-territorial-prison-escapes"
+  },
+  {
+    "id": "devil-island-escape-attempts",
+    "title": "Devil's Island Escape Attempts",
+    "description": "The French penal colony designed to be inescapable \u2014 and the men who tried anyway.",
+    "section": "Escapes",
+    "bibleRef": "1852\u20131953 \u2014 French Guiana",
+    "inSeed": true,
+    "seedId": "st-devil-island-escape-attempts"
+  },
+  {
+    "id": "colditz-castle-escapes",
+    "title": "Colditz Castle Escapes",
+    "description": "Allied officers treat a Nazi fortress like an escape university \u2014 tunnels, disguises, gliders.",
+    "section": "Escapes",
+    "bibleRef": "1940\u20131945 \u2014 Germany",
+    "inSeed": true,
+    "seedId": "st-colditz-castle-escapes"
+  },
+  {
+    "id": "alcatraz-battle",
+    "title": "The Battle of Alcatraz",
+    "description": "An escape attempt turns into a bloody siege. Hostages, gunfire, and a prison that refuses to let go.",
+    "section": "Escapes",
+    "bibleRef": "May 2\u20134, 1946 \u2014 Alcatraz",
+    "inSeed": true,
+    "seedId": "st-alcatraz-battle"
+  },
+  {
+    "id": "escape-from-dannemora",
+    "title": "Escape from Dannemora",
+    "description": "Two murderers cut their way out of a New York max prison with help from inside \u2014 then vanish into the woods.",
+    "section": "Escapes",
+    "bibleRef": "June 6, 2015 \u2014 New York",
+    "inSeed": true,
+    "seedId": "st-escape-from-dannemora"
+  },
+  {
+    "id": "jack-the-ripper",
+    "title": "Jack the Ripper",
+    "description": "A killer stalks Whitechapel. Letters taunt the police. The press invents a legend. The identity stays buried.",
+    "section": "Unsolved",
+    "bibleRef": "1888 \u2014 London",
+    "inSeed": true,
+    "seedId": "st-jack-the-ripper"
+  },
+  {
+    "id": "zodiac-cipher",
+    "title": "The Zodiac Killer",
+    "description": "Coded letters, taunting cops, and a Bay Area terror that still refuses a clean ending.",
+    "section": "Unsolved",
+    "bibleRef": "1968\u20131969 \u2014 California",
+    "inSeed": true,
+    "seedId": "st-zodiac-cipher"
+  },
+  {
+    "id": "black-dahlia",
+    "title": "The Black Dahlia",
+    "description": "Elizabeth Short's murder becomes L.A.'s most infamous unsolved case \u2014 media frenzy, endless theories, zero closure.",
+    "section": "Unsolved",
+    "bibleRef": "January 15, 1947 \u2014 Los Angeles",
+    "inSeed": true,
+    "seedId": "st-black-dahlia"
+  },
+  {
+    "id": "somerton-man",
+    "title": "The Somerton Man",
+    "description": "A body on an Australian beach. A coded note. A torn book page. DNA finally speaks \u2014 and raises new questions.",
+    "section": "Unsolved",
+    "bibleRef": "December 1, 1948 \u2014 Adelaide",
+    "inSeed": true,
+    "seedId": "st-somerton-man"
+  },
+  {
+    "id": "isdal-woman",
+    "title": "The Isdal Woman",
+    "description": "A burned body in a Norwegian valley. Fake identities. Multiple wigs. A mystery that resists every answer.",
+    "section": "Unsolved",
+    "bibleRef": "November 1970 \u2014 Bergen",
+    "inSeed": true,
+    "seedId": "st-isdal-woman"
+  },
+  {
+    "id": "tylenol-murders",
+    "title": "The Tylenol Murders",
+    "description": "Poisoned capsules spark national panic. A killer is never convicted. Packaging changes forever.",
+    "section": "Unsolved",
+    "bibleRef": "1982 \u2014 Chicago",
+    "inSeed": true,
+    "seedId": "st-tylenol-murders"
+  },
+  {
+    "id": "hinterkaifeck-murders",
+    "title": "The Hinterkaifeck Murders",
+    "description": "A German farm family is killed after nights of strange footprints and attic noises. Still unsolved.",
+    "section": "Unsolved",
+    "bibleRef": "March 31, 1922 \u2014 Bavaria",
+    "inSeed": true,
+    "seedId": "st-hinterkaifeck-murders"
+  },
+  {
+    "id": "villisca-axe-murders",
+    "title": "The Villisca Axe Murders",
+    "description": "An entire Iowa family and two guests are killed overnight. The town never gets a satisfying answer.",
+    "section": "Unsolved",
+    "bibleRef": "June 10, 1912 \u2014 Iowa",
+    "inSeed": true,
+    "seedId": "st-villisca-axe-murders"
+  },
+  {
+    "id": "axeman-of-new-orleans",
+    "title": "The Axeman of New Orleans",
+    "description": "A jazz-era terror writes to the papers and leaves a city dancing between fear and folklore.",
+    "section": "Unsolved",
+    "bibleRef": "1918\u20131919 \u2014 New Orleans",
+    "inSeed": true,
+    "seedId": "st-axeman-of-new-orleans"
+  },
+  {
+    "id": "phantom-of-heilbronn",
+    "title": "The Phantom of Heilbronn",
+    "description": "DNA links dozens of crimes across Europe to one woman \u2014 until investigators realize the DNA was contamination.",
+    "section": "Unsolved",
+    "bibleRef": "1993\u20132009 \u2014 Europe",
+    "inSeed": true,
+    "seedId": "st-phantom-of-heilbronn"
+  },
+  {
+    "id": "cleveland-torso-murderer",
+    "title": "The Cleveland Torso Murderer",
+    "description": "A Depression-era killer leaves dismembered victims across Cleveland. Eliot Ness never closes it.",
+    "section": "Unsolved",
+    "bibleRef": "1935\u20131938 \u2014 Cleveland",
+    "inSeed": true,
+    "seedId": "st-cleveland-torso-murderer"
+  },
+  {
+    "id": "oakland-county-child-killer",
+    "title": "The Oakland County Child Killer",
+    "description": "A string of child murders terrorizes Michigan suburbs. Decades later, the case still haunts investigators.",
+    "section": "Unsolved",
+    "bibleRef": "1976\u20131977 \u2014 Michigan",
+    "inSeed": true,
+    "seedId": "st-oakland-county-child-killer"
+  },
+  {
+    "id": "atlanta-child-murders-questions",
+    "title": "The Atlanta Child Murders",
+    "description": "A city in crisis. Arrests are made. Questions never fully die. The trauma reshapes Atlanta.",
+    "section": "Unsolved",
+    "bibleRef": "1979\u20131981 \u2014 Atlanta",
+    "inSeed": true,
+    "seedId": "st-atlanta-child-murders-questions"
+  },
+  {
+    "id": "earl-of-cork-mystery",
+    "title": "The Boy in the Box",
+    "description": "A murdered child found in a Philadelphia box becomes America's most famous unidentified victim case.",
+    "section": "Unsolved",
+    "bibleRef": "1957 \u2014 Philadelphia",
+    "inSeed": true,
+    "seedId": "st-earl-of-cork-mystery"
+  },
+  {
+    "id": "amber-hagerman",
+    "title": "The Murder of Amber Hagerman",
+    "description": "A kidnapping that created Amber Alerts \u2014 and a case that still demands justice.",
+    "section": "Unsolved",
+    "bibleRef": "1996 \u2014 Texas",
+    "inSeed": true,
+    "seedId": "st-amber-hagerman"
+  },
+  {
+    "id": "jonbenet-ramsey",
+    "title": "JonBen\u00e9t Ramsey",
+    "description": "A child pageant star is killed in her home. The investigation becomes a media circus that never ends.",
+    "section": "Unsolved",
+    "bibleRef": "December 26, 1996 \u2014 Colorado",
+    "inSeed": true,
+    "seedId": "st-jonbenet-ramsey"
+  },
+  {
+    "id": "madeleine-mccann",
+    "title": "Madeleine McCann",
+    "description": "A child vanishes from a Portuguese holiday apartment. The world's most publicized missing-child case.",
+    "section": "Unsolved",
+    "bibleRef": "May 3, 2007 \u2014 Praia da Luz",
+    "inSeed": true,
+    "seedId": "st-madeleine-mccann"
+  },
+  {
+    "id": "lauren-spierer",
+    "title": "Lauren Spierer",
+    "description": "A college student disappears after a night out in Bloomington. Theories multiply. Answers don't.",
+    "section": "Unsolved",
+    "bibleRef": "June 3, 2011 \u2014 Indiana",
+    "inSeed": true,
+    "seedId": "st-lauren-spierer"
+  },
+  {
+    "id": "natalee-holloway",
+    "title": "Natalee Holloway",
+    "description": "An American teen vanishes in Aruba. A suspect toys with the cameras for years.",
+    "section": "Unsolved",
+    "bibleRef": "May 30, 2005 \u2014 Aruba",
+    "inSeed": true,
+    "seedId": "st-natalee-holloway"
+  },
+  {
+    "id": "who-put-bella-in-the-wych-elm",
+    "title": "Who Put Bella in the Wych Elm?",
+    "description": "Graffiti, a skull in a tree, and a wartime British mystery that still has no clean ending.",
+    "section": "Unsolved",
+    "bibleRef": "1943 \u2014 Worcestershire",
+    "inSeed": true,
+    "seedId": "st-who-put-bella-in-the-wych-elm"
+  },
+  {
+    "id": "tamam-shud",
+    "title": "Tamam Shud Revisited",
+    "description": "The Somerton code, the Persian phrase, and why Australia can't stop reopening the file.",
+    "section": "Unsolved",
+    "bibleRef": "1948\u20132020s \u2014 Adelaide",
+    "inSeed": true,
+    "seedId": "st-tamam-shud"
+  },
+  {
+    "id": "keddie-cabin-murders",
+    "title": "The Keddie Cabin Murders",
+    "description": "A brutal cabin crime in California with suspects named, evidence disputed, and no convictions.",
+    "section": "Unsolved",
+    "bibleRef": "April 11, 1981 \u2014 California",
+    "inSeed": true,
+    "seedId": "st-keddie-cabin-murders"
+  },
+  {
+    "id": "bible-john",
+    "title": "Bible John",
+    "description": "A Glasgow killer who quoted scripture. Three women dead. A city still arguing over his name.",
+    "section": "Unsolved",
+    "bibleRef": "1968\u20131969 \u2014 Glasgow",
+    "inSeed": true,
+    "seedId": "st-bible-john"
+  },
+  {
+    "id": "servant-girl-annihilator",
+    "title": "The Servant Girl Annihilator",
+    "description": "Austin's 1880s serial attacks that some say foreshadowed Jack the Ripper.",
+    "section": "Unsolved",
+    "bibleRef": "1884\u20131885 \u2014 Austin",
+    "inSeed": true,
+    "seedId": "st-servant-girl-annihilator"
+  },
+  {
+    "id": "zodiac-lake-berryessa",
+    "title": "Zodiac at Lake Berryessa",
+    "description": "A hooded attacker, a lakeside crime, and a letter that turns trauma into theater.",
+    "section": "Unsolved",
+    "bibleRef": "September 27, 1969 \u2014 California",
+    "inSeed": true,
+    "seedId": "st-zodiac-lake-berryessa"
+  },
+  {
+    "id": "highway-of-tears",
+    "title": "Highway of Tears",
+    "description": "Dozens of Indigenous women disappear along a British Columbia highway. The pattern is the scandal.",
+    "section": "Unsolved",
+    "bibleRef": "1970s\u20132000s \u2014 British Columbia",
+    "inSeed": true,
+    "seedId": "st-highway-of-tears"
+  },
+  {
+    "id": "lindbergh-baby",
+    "title": "The Lindbergh Baby",
+    "description": "America's hero loses his child to a ransom kidnapping that grips the nation \u2014 and ends in a trial the world watches.",
+    "section": "Cold Cases",
+    "bibleRef": "March 1, 1932 \u2014 New Jersey",
+    "inSeed": true,
+    "seedId": "st-lindbergh-baby"
+  },
+  {
+    "id": "black-dahlia-investigation",
+    "title": "The Black Dahlia Investigation",
+    "description": "Not just the crime \u2014 the detectives, the tips, the frauds, and the city that couldn't stop talking.",
+    "section": "Cold Cases",
+    "bibleRef": "1947\u20131950 \u2014 Los Angeles",
+    "inSeed": true,
+    "seedId": "st-black-dahlia-investigation"
+  },
+  {
+    "id": "boston-strangler-debate",
+    "title": "The Boston Strangler Debate",
+    "description": "Confessions, DNA, and a city that still argues whether one man was the whole story.",
+    "section": "Cold Cases",
+    "bibleRef": "1962\u20131964 \u2014 Boston",
+    "inSeed": true,
+    "seedId": "st-boston-strangler-debate"
+  },
+  {
+    "id": "golden-state-killer-caught",
+    "title": "The Golden State Killer",
+    "description": "Decades of terror end when genetic genealogy finally puts a name to a nightmare.",
+    "section": "Cold Cases",
+    "bibleRef": "1974\u20131986 / 2018 \u2014 California",
+    "inSeed": true,
+    "seedId": "st-golden-state-killer-caught"
+  },
+  {
+    "id": "btk-arrest",
+    "title": "BTK",
+    "description": "A killer who wanted credit gets caught by his own floppy disk. Ego becomes evidence.",
+    "section": "Cold Cases",
+    "bibleRef": "1974\u20131991 / 2005 \u2014 Kansas",
+    "inSeed": true,
+    "seedId": "st-btk-arrest"
+  },
+  {
+    "id": "green-river-killer",
+    "title": "The Green River Killer",
+    "description": "A long hunt along the Pacific Northwest that becomes a defining American serial case.",
+    "section": "Cold Cases",
+    "bibleRef": "1982\u20131998 \u2014 Washington",
+    "inSeed": true,
+    "seedId": "st-green-river-killer"
+  },
+  {
+    "id": "night-stalker",
+    "title": "The Night Stalker",
+    "description": "A city in fear, a face on the news, and a mob that nearly ends the chase itself.",
+    "section": "Cold Cases",
+    "bibleRef": "1984\u20131985 \u2014 California",
+    "inSeed": true,
+    "seedId": "st-night-stalker"
+  },
+  {
+    "id": "son-of-sam",
+    "title": "Son of Sam",
+    "description": "A .44 caliber panic grips New York. Letters to the press turn murder into theater.",
+    "section": "Cold Cases",
+    "bibleRef": "1976\u20131977 \u2014 New York",
+    "inSeed": true,
+    "seedId": "st-son-of-sam"
+  },
+  {
+    "id": "ted-bundy-chase",
+    "title": "The Hunt for Ted Bundy",
+    "description": "Escapes, charisma, and a courtroom performance that made a killer infamous.",
+    "section": "Cold Cases",
+    "bibleRef": "1974\u20131978 \u2014 United States",
+    "inSeed": true,
+    "seedId": "st-ted-bundy-chase"
+  },
+  {
+    "id": "jeffrey-dahmer-arrest",
+    "title": "The Dahmer Case",
+    "description": "A Milwaukee arrest opens a horror that forces a city to ask what it ignored.",
+    "section": "Cold Cases",
+    "bibleRef": "1991 \u2014 Milwaukee",
+    "inSeed": true,
+    "seedId": "st-jeffrey-dahmer-arrest"
+  },
+  {
+    "id": "john-wayne-gacy",
+    "title": "John Wayne Gacy",
+    "description": "A contractor, a clown act, and a house that hid a national nightmare.",
+    "section": "Cold Cases",
+    "bibleRef": "1972\u20131978 \u2014 Chicago",
+    "inSeed": true,
+    "seedId": "st-john-wayne-gacy"
+  },
+  {
+    "id": "ed-gein",
+    "title": "Ed Gein",
+    "description": "A Wisconsin case so strange it rewired American horror forever.",
+    "section": "Cold Cases",
+    "bibleRef": "1957 \u2014 Wisconsin",
+    "inSeed": true,
+    "seedId": "st-ed-gein"
+  },
+  {
+    "id": "h-h-holmes",
+    "title": "H.H. Holmes",
+    "description": "The World's Fair, a 'murder castle,' and America's original serial-killer mythology.",
+    "section": "Cold Cases",
+    "bibleRef": "1890s \u2014 Chicago",
+    "inSeed": true,
+    "seedId": "st-h-h-holmes"
+  },
+  {
+    "id": "albert-fish",
+    "title": "Albert Fish",
+    "description": "Letters, confessions, and a case that still unsettles every crime historian who touches it.",
+    "section": "Cold Cases",
+    "bibleRef": "1920s\u20131930s \u2014 New York",
+    "inSeed": true,
+    "seedId": "st-albert-fish"
+  },
+  {
+    "id": "zodiac-arthur-leigh-allen",
+    "title": "Zodiac Suspect Arthur Leigh Allen",
+    "description": "The most famous Zodiac suspect \u2014 and why the case still wouldn't close on him.",
+    "section": "Cold Cases",
+    "bibleRef": "1969\u20131992 \u2014 California",
+    "inSeed": true,
+    "seedId": "st-zodiac-arthur-leigh-allen"
+  },
+  {
+    "id": "bear-brook-murders",
+    "title": "The Bear Brook Murders",
+    "description": "Barrels in the woods, unknown victims, and genetic genealogy that finally names the dead.",
+    "section": "Cold Cases",
+    "bibleRef": "1985\u20132000 / 2019 \u2014 New Hampshire",
+    "inSeed": true,
+    "seedId": "st-bear-brook-murders"
+  },
+  {
+    "id": "christine-jessop",
+    "title": "Christine Jessop",
+    "description": "A wrongful conviction, a DNA bombshell, and a Canadian cold case rewritten decades later.",
+    "section": "Cold Cases",
+    "bibleRef": "1984 / 2020 \u2014 Ontario",
+    "inSeed": true,
+    "seedId": "st-christine-jessop"
+  },
+  {
+    "id": "jaycee-dugard",
+    "title": "Jaycee Dugard",
+    "description": "A kidnapping that lasted 18 years \u2014 and the failures that let it continue in plain sight.",
+    "section": "Cold Cases",
+    "bibleRef": "1991\u20132009 \u2014 California",
+    "inSeed": true,
+    "seedId": "st-jaycee-dugard"
+  },
+  {
+    "id": "elizabeth-smart",
+    "title": "Elizabeth Smart",
+    "description": "A Salt Lake City kidnapping ends in rescue \u2014 and becomes a national story about survival.",
+    "section": "Cold Cases",
+    "bibleRef": "2002\u20132003 \u2014 Utah",
+    "inSeed": true,
+    "seedId": "st-elizabeth-smart"
+  },
+  {
+    "id": "chowchilla-kidnapping",
+    "title": "The Chowchilla Kidnapping",
+    "description": "A school bus buried underground. Twenty-six children. A rescue that still feels impossible.",
+    "section": "Cold Cases",
+    "bibleRef": "July 15, 1976 \u2014 California",
+    "inSeed": true,
+    "seedId": "st-chowchilla-kidnapping"
+  },
+  {
+    "id": "patty-hearst",
+    "title": "Patty Hearst",
+    "description": "Kidnapped heiress or revolutionary convert? The trial that asked what coercion really means.",
+    "section": "Cold Cases",
+    "bibleRef": "1974\u20131976 \u2014 California",
+    "inSeed": true,
+    "seedId": "st-patty-hearst"
+  },
+  {
+    "id": "lindbergh-hauptmann-trial",
+    "title": "The Lindbergh Trial",
+    "description": "The 'trial of the century' that tried to give a nation closure \u2014 and still draws skeptics.",
+    "section": "Cold Cases",
+    "bibleRef": "1935 \u2014 New Jersey",
+    "inSeed": true,
+    "seedId": "st-lindbergh-hauptmann-trial"
+  },
+  {
+    "id": "sam-sheppard",
+    "title": "The Sam Sheppard Case",
+    "description": "A doctor's murder trial becomes a media circus \u2014 and later a symbol of wrongful conviction fights.",
+    "section": "Cold Cases",
+    "bibleRef": "1954\u20131966 \u2014 Ohio",
+    "inSeed": true,
+    "seedId": "st-sam-sheppard"
+  },
+  {
+    "id": "central-park-five",
+    "title": "The Central Park Five",
+    "description": "A coerced set of confessions, a city's panic, and an exoneration that arrived years too late.",
+    "section": "Cold Cases",
+    "bibleRef": "1989\u20132002 \u2014 New York",
+    "inSeed": true,
+    "seedId": "st-central-park-five"
+  },
+  {
+    "id": "west-memphis-three",
+    "title": "The West Memphis Three",
+    "description": "Satanic panic, shaky evidence, and a release that never fully felt like justice.",
+    "section": "Cold Cases",
+    "bibleRef": "1993\u20132011 \u2014 Arkansas",
+    "inSeed": true,
+    "seedId": "st-west-memphis-three"
+  },
+  {
+    "id": "ada-oklahoma-murders",
+    "title": "The Ada Murder Cases",
+    "description": "Small-town murders, disputed convictions, and a documentary era that reopened everything.",
+    "section": "Cold Cases",
+    "bibleRef": "1980s \u2014 Oklahoma",
+    "inSeed": true,
+    "seedId": "st-ada-oklahoma-murders"
+  },
+  {
+    "id": "norfolk-four",
+    "title": "The Norfolk Four",
+    "description": "Navy sailors confess to a crime DNA says they didn't commit. Coercion on trial.",
+    "section": "Cold Cases",
+    "bibleRef": "1997\u20132017 \u2014 Virginia",
+    "inSeed": true,
+    "seedId": "st-norfolk-four"
+  },
+  {
+    "id": "craigslist-killer",
+    "title": "The Craigslist Killer",
+    "description": "A medical student, online ads, and a short violent spree that shocked Boston.",
+    "section": "Cold Cases",
+    "bibleRef": "2009 \u2014 Boston",
+    "inSeed": true,
+    "seedId": "st-craigslist-killer"
+  },
+  {
+    "id": "watergate",
+    "title": "Watergate",
+    "description": "A bungled break-in at a D.C. office building unravels into the scandal that takes down a president.",
+    "section": "Scandals",
+    "bibleRef": "June 17, 1972 \u2014 Washington, D.C.",
+    "inSeed": true,
+    "seedId": "st-watergate"
+  },
+  {
+    "id": "abscam",
+    "title": "ABSCAM",
+    "description": "FBI agents pose as Arab sheikhs and catch politicians on camera taking bribes.",
+    "section": "Scandals",
+    "bibleRef": "1978\u20131980 \u2014 United States",
+    "inSeed": true,
+    "seedId": "st-abscam"
+  },
+  {
+    "id": "teapot-dome",
+    "title": "Teapot Dome",
+    "description": "Oil leases, bribes, and the scandal that defined 1920s corruption in America.",
+    "section": "Scandals",
+    "bibleRef": "1921\u20131923 \u2014 United States",
+    "inSeed": true,
+    "seedId": "st-teapot-dome"
+  },
+  {
+    "id": "enron",
+    "title": "Enron",
+    "description": "A corporate house of cards collapses \u2014 and takes pensions, trust, and an era of hype with it.",
+    "section": "Scandals",
+    "bibleRef": "2001 \u2014 Houston",
+    "inSeed": true,
+    "seedId": "st-enron"
+  },
+  {
+    "id": "bernie-madoff",
+    "title": "Bernie Madoff",
+    "description": "The largest Ponzi scheme in history. Country clubs, feeder funds, and a confession that ends an empire.",
+    "section": "Scandals",
+    "bibleRef": "2008 \u2014 New York",
+    "inSeed": true,
+    "seedId": "st-bernie-madoff"
+  },
+  {
+    "id": "theranos",
+    "title": "Theranos",
+    "description": "A blood-testing unicorn built on secrecy, Silicon Valley mythmaking, and a fraud trial that went global.",
+    "section": "Scandals",
+    "bibleRef": "2010s \u2014 Silicon Valley",
+    "inSeed": true,
+    "seedId": "st-theranos"
+  },
+  {
+    "id": "wirecard",
+    "title": "Wirecard",
+    "description": "Europe's fintech darling goes bankrupt overnight. Billions missing. An executive vanishes.",
+    "section": "Scandals",
+    "bibleRef": "2020 \u2014 Germany",
+    "inSeed": true,
+    "seedId": "st-wirecard"
+  },
+  {
+    "id": "panama-papers",
+    "title": "The Panama Papers",
+    "description": "A leak exposes offshore secrecy for the global elite \u2014 and rewrites how we talk about money.",
+    "section": "Scandals",
+    "bibleRef": "2016 \u2014 Global",
+    "inSeed": true,
+    "seedId": "st-panama-papers"
+  },
+  {
+    "id": "cambridge-analytica",
+    "title": "Cambridge Analytica",
+    "description": "Harvested data, political targeting, and a scandal that made privacy mainstream news.",
+    "section": "Scandals",
+    "bibleRef": "2018 \u2014 Global",
+    "inSeed": true,
+    "seedId": "st-cambridge-analytica"
+  },
+  {
+    "id": "fifa-corruption",
+    "title": "FIFA Corruption",
+    "description": "Dawn raids, indictments, and the beautiful game's ugliest pay-to-play empire.",
+    "section": "Scandals",
+    "bibleRef": "2015 \u2014 Switzerland / Global",
+    "inSeed": true,
+    "seedId": "st-fifa-corruption"
+  },
+  {
+    "id": "olympic-bidding-scandals",
+    "title": "Olympic Bidding Scandals",
+    "description": "Bribes for votes, host-city dreams for sale, and sport politics at its greasiest.",
+    "section": "Scandals",
+    "bibleRef": "1990s\u20132000s \u2014 Global",
+    "inSeed": true,
+    "seedId": "st-olympic-bidding-scandals"
+  },
+  {
+    "id": "college-admissions-scandal",
+    "title": "Operation Varsity Blues",
+    "description": "Fake athletes, photoshopped faces, and wealthy parents buying elite college doors.",
+    "section": "Scandals",
+    "bibleRef": "2019 \u2014 United States",
+    "inSeed": true,
+    "seedId": "st-college-admissions-scandal"
+  },
+  {
+    "id": "unaoil",
+    "title": "Unaoil",
+    "description": "A family business and a global bribery machine linking oil deals to corruption across continents.",
+    "section": "Scandals",
+    "bibleRef": "2016 \u2014 Global",
+    "inSeed": true,
+    "seedId": "st-unaoil"
+  },
+  {
+    "id": "lockheed-bribery",
+    "title": "The Lockheed Bribery Scandals",
+    "description": "Aerospace kickbacks shake governments from Japan to Italy and rewrite U.S. anti-bribery law.",
+    "section": "Scandals",
+    "bibleRef": "1970s \u2014 Global",
+    "inSeed": true,
+    "seedId": "st-lockheed-bribery"
+  },
+  {
+    "id": "iran-contra",
+    "title": "Iran\u2013Contra",
+    "description": "Secret arms deals, hostages, and a White House scandal about what 'plausible deniability' really means.",
+    "section": "Scandals",
+    "bibleRef": "1985\u20131987 \u2014 United States",
+    "inSeed": true,
+    "seedId": "st-iran-contra"
+  },
+  {
+    "id": "profumo-affair",
+    "title": "The Profumo Affair",
+    "description": "Sex, spies, and a British war minister's lie that helps bring down a government.",
+    "section": "Scandals",
+    "bibleRef": "1963 \u2014 London",
+    "inSeed": true,
+    "seedId": "st-profumo-affair"
+  },
+  {
+    "id": "dreyfus-affair",
+    "title": "The Dreyfus Affair",
+    "description": "A wrongful treason conviction splits France and becomes a masterclass in injustice and antisemitism.",
+    "section": "Scandals",
+    "bibleRef": "1894\u20131906 \u2014 France",
+    "inSeed": true,
+    "seedId": "st-dreyfus-affair"
+  },
+  {
+    "id": "savings-and-loan-crisis",
+    "title": "The Savings and Loan Crisis",
+    "description": "Deregulation, fraud, and a financial collapse that cost taxpayers hundreds of billions.",
+    "section": "Scandals",
+    "bibleRef": "1980s\u20131990s \u2014 United States",
+    "inSeed": true,
+    "seedId": "st-savings-and-loan-crisis"
+  },
+  {
+    "id": "worldcom",
+    "title": "WorldCom",
+    "description": "Accounting tricks inflate a telecom giant until the numbers can't pretend anymore.",
+    "section": "Scandals",
+    "bibleRef": "2002 \u2014 United States",
+    "inSeed": true,
+    "seedId": "st-worldcom"
+  },
+  {
+    "id": "tyco-kozlowski",
+    "title": "Tyco and the $6,000 Shower Curtain",
+    "description": "Corporate excess on trial \u2014 and a CEO lifestyle that became a punchline for greed.",
+    "section": "Scandals",
+    "bibleRef": "2002\u20132005 \u2014 New York",
+    "inSeed": true,
+    "seedId": "st-tyco-kozlowski"
+  },
+  {
+    "id": "healthsouth",
+    "title": "HealthSouth Fraud",
+    "description": "A healthcare empire cooks books while executives swear the numbers are real.",
+    "section": "Scandals",
+    "bibleRef": "2003 \u2014 Alabama",
+    "inSeed": true,
+    "seedId": "st-healthsouth"
+  },
+  {
+    "id": "sam-bankman-fried",
+    "title": "FTX",
+    "description": "Crypto's golden boy, a black hole of customer funds, and a courtroom reckoning.",
+    "section": "Scandals",
+    "bibleRef": "2022\u20132023 \u2014 Bahamas / U.S.",
+    "inSeed": true,
+    "seedId": "st-sam-bankman-fried"
+  },
+  {
+    "id": "elizabeth-holmes-trial",
+    "title": "The Elizabeth Holmes Trial",
+    "description": "Voice drops, fake demos, and a Silicon Valley myth dissected under oath.",
+    "section": "Scandals",
+    "bibleRef": "2022 \u2014 California",
+    "inSeed": true,
+    "seedId": "st-elizabeth-holmes-trial"
+  },
+  {
+    "id": "rupert-murdoch-phone-hacking",
+    "title": "The Phone Hacking Scandal",
+    "description": "Tabloid intrusion, destroyed careers, and a media empire forced into public apology mode.",
+    "section": "Scandals",
+    "bibleRef": "2011 \u2014 United Kingdom",
+    "inSeed": true,
+    "seedId": "st-rupert-murdoch-phone-hacking"
+  },
+  {
+    "id": "dieselgate",
+    "title": "Dieselgate",
+    "description": "Volkswagen cheats emissions tests \u2014 and the trust crisis hits the entire auto industry.",
+    "section": "Scandals",
+    "bibleRef": "2015 \u2014 Germany / Global",
+    "inSeed": true,
+    "seedId": "st-dieselgate"
+  },
+  {
+    "id": "boeing-737-max",
+    "title": "Boeing 737 MAX",
+    "description": "Two crashes, hidden software, and a corporate safety culture on trial.",
+    "section": "Scandals",
+    "bibleRef": "2018\u20132019 \u2014 Global",
+    "inSeed": true,
+    "seedId": "st-boeing-737-max"
+  },
+  {
+    "id": "opioid-settlements",
+    "title": "The Opioid Crisis Lawsuits",
+    "description": "Pharma marketing, overdose deaths, and the largest public-health litigation wave in U.S. history.",
+    "section": "Scandals",
+    "bibleRef": "2010s\u20132020s \u2014 United States",
+    "inSeed": true,
+    "seedId": "st-opioid-settlements"
+  },
+  {
+    "id": "tuskegee-syphilis-study",
+    "title": "The Tuskegee Syphilis Study",
+    "description": "A government study that withheld treatment from Black men for decades \u2014 a betrayal that still echoes.",
+    "section": "Scandals",
+    "bibleRef": "1932\u20131972 \u2014 Alabama",
+    "inSeed": true,
+    "seedId": "st-tuskegee-syphilis-study"
+  },
+  {
+    "id": "mkultra",
+    "title": "MKUltra",
+    "description": "CIA mind-control experiments, destroyed files, and a scandal that sounds like fiction until it isn't.",
+    "section": "Scandals",
+    "bibleRef": "1950s\u20131970s \u2014 United States",
+    "inSeed": true,
+    "seedId": "st-mkultra"
+  },
+  {
+    "id": "amelia-earhart",
+    "title": "Amelia Earhart",
+    "description": "The world's most famous aviator vanishes over the Pacific. Theories never stop taking off.",
+    "section": "Disappearances",
+    "bibleRef": "July 2, 1937 \u2014 Pacific Ocean",
+    "inSeed": true,
+    "seedId": "st-amelia-earhart"
+  },
+  {
+    "id": "jimmy-hoffa",
+    "title": "Jimmy Hoffa",
+    "description": "America's most powerful union boss walks into a Detroit afternoon and out of history.",
+    "section": "Disappearances",
+    "bibleRef": "July 30, 1975 \u2014 Michigan",
+    "inSeed": true,
+    "seedId": "st-jimmy-hoffa"
+  },
+  {
+    "id": "db-cooper-money-find",
+    "title": "The D.B. Cooper Money Find",
+    "description": "A boy finds ransom cash on a riverbank \u2014 the only hard clue in an unsolved skyjacking.",
+    "section": "Disappearances",
+    "bibleRef": "February 1980 \u2014 Washington",
+    "inSeed": true,
+    "seedId": "st-db-cooper-money-find"
+  },
+  {
+    "id": "malaysia-airlines-mh370",
+    "title": "MH370",
+    "description": "A jet vanishes with 239 people. The ocean keeps the secret. The world keeps searching.",
+    "section": "Disappearances",
+    "bibleRef": "March 8, 2014 \u2014 Indian Ocean",
+    "inSeed": true,
+    "seedId": "st-malaysia-airlines-mh370"
+  },
+  {
+    "id": "flight-19",
+    "title": "Flight 19",
+    "description": "Five Navy bombers vanish on a training flight \u2014 and the rescue plane disappears too.",
+    "section": "Disappearances",
+    "bibleRef": "December 5, 1945 \u2014 Bermuda Triangle",
+    "inSeed": true,
+    "seedId": "st-flight-19"
+  },
+  {
+    "id": "roanoke-colony",
+    "title": "The Lost Colony of Roanoke",
+    "description": "An English colony vanishes. The word CROATOAN remains. America gets its oldest cold mystery.",
+    "section": "Disappearances",
+    "bibleRef": "1590 \u2014 North Carolina",
+    "inSeed": true,
+    "seedId": "st-roanoke-colony"
+  },
+  {
+    "id": "mary-celeste",
+    "title": "The Mary Celeste",
+    "description": "A ship found adrift. Crew gone. Cargo intact. The sea's favorite ghost story that actually happened.",
+    "section": "Disappearances",
+    "bibleRef": "December 1872 \u2014 Atlantic Ocean",
+    "inSeed": true,
+    "seedId": "st-mary-celeste"
+  },
+  {
+    "id": "flannan-isles",
+    "title": "The Flannan Isles Lighthouse",
+    "description": "Three lighthouse keepers vanish from a remote Scottish island. Dinner on the table. No bodies.",
+    "section": "Disappearances",
+    "bibleRef": "December 1900 \u2014 Scotland",
+    "inSeed": true,
+    "seedId": "st-flannan-isles"
+  },
+  {
+    "id": "lord-lucan",
+    "title": "Lord Lucan",
+    "description": "A British aristocrat vanishes after a nanny is murdered. Sight clubs and sightings for decades.",
+    "section": "Disappearances",
+    "bibleRef": "November 7, 1974 \u2014 London",
+    "inSeed": true,
+    "seedId": "st-lord-lucan"
+  },
+  {
+    "id": "agatha-christie-disappearance",
+    "title": "Agatha Christie's Disappearance",
+    "description": "The queen of mystery vanishes for 11 days \u2014 and becomes the plot everyone wants to solve.",
+    "section": "Disappearances",
+    "bibleRef": "December 1926 \u2014 England",
+    "inSeed": true,
+    "seedId": "st-agatha-christie-disappearance"
+  },
+  {
+    "id": "brian-shaffer",
+    "title": "Brian Shaffer",
+    "description": "A med student walks into a bar on camera and never walks out. One of America's strangest vanishings.",
+    "section": "Disappearances",
+    "bibleRef": "April 1, 2006 \u2014 Ohio",
+    "inSeed": true,
+    "seedId": "st-brian-shaffer"
+  },
+  {
+    "id": "maura-murray",
+    "title": "Maura Murray",
+    "description": "A nursing student crashes her car on a rural road and vanishes into a New Hampshire night.",
+    "section": "Disappearances",
+    "bibleRef": "February 9, 2004 \u2014 New Hampshire",
+    "inSeed": true,
+    "seedId": "st-maura-murray"
+  },
+  {
+    "id": "brandon-swanson",
+    "title": "Brandon Swanson",
+    "description": "A phone call from a ditch. Then silence. A Minnesota disappearance that still baffles searchers.",
+    "section": "Disappearances",
+    "bibleRef": "May 14, 2008 \u2014 Minnesota",
+    "inSeed": true,
+    "seedId": "st-brandon-swanson"
+  },
+  {
+    "id": "jennifer-kesse",
+    "title": "Jennifer Kesse",
+    "description": "A young woman vanishes from her condo complex. Her car turns up. She doesn't.",
+    "section": "Disappearances",
+    "bibleRef": "January 24, 2006 \u2014 Florida",
+    "inSeed": true,
+    "seedId": "st-jennifer-kesse"
+  },
+  {
+    "id": "susan-powell",
+    "title": "Susan Powell",
+    "description": "A Utah mother disappears. A husband's behavior becomes the case. Answers stay incomplete.",
+    "section": "Disappearances",
+    "bibleRef": "December 2009 \u2014 Utah",
+    "inSeed": true,
+    "seedId": "st-susan-powell"
+  },
+  {
+    "id": "kyron-horman",
+    "title": "Kyron Horman",
+    "description": "A boy vanishes from school on a science fair day. One of Oregon's most haunting open cases.",
+    "section": "Disappearances",
+    "bibleRef": "June 4, 2010 \u2014 Oregon",
+    "inSeed": true,
+    "seedId": "st-kyron-horman"
+  },
+  {
+    "id": "asha-degree",
+    "title": "Asha Degree",
+    "description": "A child leaves home before dawn and disappears along a North Carolina highway.",
+    "section": "Disappearances",
+    "bibleRef": "February 14, 2000 \u2014 North Carolina",
+    "inSeed": true,
+    "seedId": "st-asha-degree"
+  },
+  {
+    "id": "tara-calico",
+    "title": "Tara Calico",
+    "description": "A teen on a bike ride vanishes in New Mexico. A Polaroid haunts the investigation for years.",
+    "section": "Disappearances",
+    "bibleRef": "September 20, 1988 \u2014 New Mexico",
+    "inSeed": true,
+    "seedId": "st-tara-calico"
+  },
+  {
+    "id": "johnny-gosch",
+    "title": "Johnny Gosch",
+    "description": "A paperboy vanishes in Iowa and becomes an early face of America's missing-children movement.",
+    "section": "Disappearances",
+    "bibleRef": "September 5, 1982 \u2014 Iowa",
+    "inSeed": true,
+    "seedId": "st-johnny-gosch"
+  },
+  {
+    "id": "adam-walsh",
+    "title": "Adam Walsh",
+    "description": "A boy's murder transforms his father into America's most famous missing-kids advocate.",
+    "section": "Disappearances",
+    "bibleRef": "1981 \u2014 Florida",
+    "inSeed": true,
+    "seedId": "st-adam-walsh"
+  },
+  {
+    "id": "d-b-cooper-copycats",
+    "title": "The D.B. Cooper Copycats",
+    "description": "After Cooper, a wave of skyjackers try the same trick. Almost all fail. One mystery stays perfect.",
+    "section": "Disappearances",
+    "bibleRef": "1970s \u2014 United States",
+    "inSeed": true,
+    "seedId": "st-d-b-cooper-copycats"
+  },
+  {
+    "id": "jimmy-hoffa-dig-sites",
+    "title": "The Hoffa Dig Sites",
+    "description": "Decades of tips, empty excavations, and a disappearance that turned Michigan into a rumor map.",
+    "section": "Disappearances",
+    "bibleRef": "1975\u2013present \u2014 Michigan",
+    "inSeed": true,
+    "seedId": "st-jimmy-hoffa-dig-sites"
+  },
+  {
+    "id": "springfield-three",
+    "title": "The Springfield Three",
+    "description": "Three women vanish from a home after a party night. The house holds clues. The case holds silence.",
+    "section": "Disappearances",
+    "bibleRef": "June 7, 1992 \u2014 Missouri",
+    "inSeed": true,
+    "seedId": "st-springfield-three"
+  },
+  {
+    "id": "beaumont-children",
+    "title": "The Beaumont Children",
+    "description": "Three siblings vanish from an Australian beach. A nation's coldest missing-children case.",
+    "section": "Disappearances",
+    "bibleRef": "January 26, 1966 \u2014 Adelaide",
+    "inSeed": true,
+    "seedId": "st-beaumont-children"
+  },
+  {
+    "id": "azaria-chamberlain",
+    "title": "Azaria Chamberlain",
+    "description": "A baby disappears at Uluru. A dingo, a trial, and a miscarriage of justice Australia had to unlearn.",
+    "section": "Disappearances",
+    "bibleRef": "1980 \u2014 Northern Territory",
+    "inSeed": true,
+    "seedId": "st-azaria-chamberlain"
+  },
+  {
+    "id": "yuba-county-five",
+    "title": "The Yuba County Five",
+    "description": "Five friends go to a game and end up in the mountains. Four die. One is never found.",
+    "section": "Disappearances",
+    "bibleRef": "February 1978 \u2014 California",
+    "inSeed": true,
+    "seedId": "st-yuba-county-five"
+  },
+  {
+    "id": "frank-abagnale",
+    "title": "Frank Abagnale",
+    "description": "Fake pilots, forged checks, and a con man whose legend may be bigger than his ledger.",
+    "section": "Con Artists",
+    "bibleRef": "1960s \u2014 United States",
+    "inSeed": true,
+    "seedId": "st-frank-abagnale"
+  },
+  {
+    "id": "charles-ponzi",
+    "title": "Charles Ponzi",
+    "description": "The original scheme. Postage stamps, impossible returns, and a surname that became a crime category.",
+    "section": "Con Artists",
+    "bibleRef": "1920 \u2014 Boston",
+    "inSeed": true,
+    "seedId": "st-charles-ponzi"
+  },
+  {
+    "id": "victor-lustig",
+    "title": "Victor Lustig",
+    "description": "The man who sold the Eiffel Tower. Twice. History's smoothest scam artist.",
+    "section": "Con Artists",
+    "bibleRef": "1925 \u2014 Paris",
+    "inSeed": true,
+    "seedId": "st-victor-lustig"
+  },
+  {
+    "id": "count-victor-lustig-money-box",
+    "title": "Lustig's Money Box",
+    "description": "A machine that 'prints' cash \u2014 and a room full of greedy marks who want to believe.",
+    "section": "Con Artists",
+    "bibleRef": "1920s \u2014 Europe / U.S.",
+    "inSeed": true,
+    "seedId": "st-count-victor-lustig-money-box"
+  },
+  {
+    "id": "george-parker-bridge-sales",
+    "title": "George C. Parker",
+    "description": "The man who sold the Brooklyn Bridge \u2014 and New York's favorite metaphor for gullibility.",
+    "section": "Con Artists",
+    "bibleRef": "1880s\u20131920s \u2014 New York",
+    "inSeed": true,
+    "seedId": "st-george-parker-bridge-sales"
+  },
+  {
+    "id": "yellow-kid-weil",
+    "title": "Yellow Kid Weil",
+    "description": "A Chicago con man who treated scams like theater and wrote the playbook for the long con.",
+    "section": "Con Artists",
+    "bibleRef": "1900s\u20131940s \u2014 Chicago",
+    "inSeed": true,
+    "seedId": "st-yellow-kid-weil"
+  },
+  {
+    "id": "soapy-smith",
+    "title": "Soapy Smith",
+    "description": "Soap rackets, frontier towns, and a crime boss who ran Skagway like a crooked carnival.",
+    "section": "Con Artists",
+    "bibleRef": "1890s \u2014 Alaska",
+    "inSeed": true,
+    "seedId": "st-soapy-smith"
+  },
+  {
+    "id": "tinder-swindler",
+    "title": "The Tinder Swindler",
+    "description": "Romance apps, private jets on credit, and a dating-app predator who went global on Netflix.",
+    "section": "Con Artists",
+    "bibleRef": "2010s \u2014 Europe",
+    "inSeed": true,
+    "seedId": "st-tinder-swindler"
+  },
+  {
+    "id": "anna-delvey",
+    "title": "Anna Delvey",
+    "description": "A fake German heiress cons New York's art and hotel scene \u2014 until the checks bounce in court.",
+    "section": "Con Artists",
+    "bibleRef": "2010s \u2014 New York",
+    "inSeed": true,
+    "seedId": "st-anna-delvey"
+  },
+  {
+    "id": "billy-mcfarland-fyre",
+    "title": "Fyre Festival",
+    "description": "Influencers, island fantasies, and a luxury music festival that served cheese sandwiches and lawsuits.",
+    "section": "Con Artists",
+    "bibleRef": "2017 \u2014 Bahamas",
+    "inSeed": true,
+    "seedId": "st-billy-mcfarland-fyre"
+  },
+  {
+    "id": "jordan-belfort",
+    "title": "Jordan Belfort",
+    "description": "Pump-and-dump brokerage culture, yacht excess, and the Wolf myth that Hollywood amplified.",
+    "section": "Con Artists",
+    "bibleRef": "1990s \u2014 New York",
+    "inSeed": true,
+    "seedId": "st-jordan-belfort"
+  },
+  {
+    "id": "barry-minkow",
+    "title": "Barry Minkow / ZZZZ Best",
+    "description": "A teenage carpet-cleaning 'genius' builds a public company on fake contracts.",
+    "section": "Con Artists",
+    "bibleRef": "1980s \u2014 California",
+    "inSeed": true,
+    "seedId": "st-barry-minkow"
+  },
+  {
+    "id": "equity-funding-scandal",
+    "title": "The Equity Funding Scandal",
+    "description": "Fake insurance policies, computer fraud, and the scandal that freaked out Wall Street in the '70s.",
+    "section": "Con Artists",
+    "bibleRef": "1973 \u2014 United States",
+    "inSeed": true,
+    "seedId": "st-equity-funding-scandal"
+  },
+  {
+    "id": "albanian-ponzi-crisis",
+    "title": "Albania's Pyramid Crisis",
+    "description": "Get-rich schemes swallow a nation and help push a country into chaos.",
+    "section": "Con Artists",
+    "bibleRef": "1996\u20131997 \u2014 Albania",
+    "inSeed": true,
+    "seedId": "st-albanian-ponzi-crisis"
+  },
+  {
+    "id": "stanford-financial",
+    "title": "Allen Stanford",
+    "description": "A cricket-sponsoring billionaire, certificates of deposit, and a Caribbean Ponzi empire.",
+    "section": "Con Artists",
+    "bibleRef": "2009 \u2014 Antigua / U.S.",
+    "inSeed": true,
+    "seedId": "st-stanford-financial"
+  },
+  {
+    "id": "nick-leeson-barings",
+    "title": "Nick Leeson and Barings Bank",
+    "description": "A rogue trader in Singapore breaks Britain's oldest merchant bank.",
+    "section": "Con Artists",
+    "bibleRef": "1995 \u2014 Singapore",
+    "inSeed": true,
+    "seedId": "st-nick-leeson-barings"
+  },
+  {
+    "id": "jerome-kerviel",
+    "title": "J\u00e9r\u00f4me Kerviel",
+    "description": "A Soci\u00e9t\u00e9 G\u00e9n\u00e9rale trader's hidden bets nearly sink a bank \u2014 and spark a blame war.",
+    "section": "Con Artists",
+    "bibleRef": "2008 \u2014 France",
+    "inSeed": true,
+    "seedId": "st-jerome-kerviel"
+  },
+  {
+    "id": "romance-scam-epidemic",
+    "title": "The Romance Scam Epidemic",
+    "description": "Catfished love, stolen identities, and billions lost to heartbreak as a business model.",
+    "section": "Con Artists",
+    "bibleRef": "2010s\u20132020s \u2014 Global",
+    "inSeed": true,
+    "seedId": "st-romance-scam-epidemic"
+  },
+  {
+    "id": "fake-sheikh-mazher",
+    "title": "The Fake Sheikh Sting Era",
+    "description": "Tabloids, disguises, and celebrity entrapment that blurred journalism and theater.",
+    "section": "Con Artists",
+    "bibleRef": "1990s\u20132010s \u2014 United Kingdom",
+    "inSeed": true,
+    "seedId": "st-fake-sheikh-mazher"
+  },
+  {
+    "id": "counterfeit-art-beltracchi",
+    "title": "Wolfgang Beltracchi",
+    "description": "A forger so good that museums hung his fakes \u2014 until a wrong pigment cracked the empire.",
+    "section": "Con Artists",
+    "bibleRef": "1990s\u20132010s \u2014 Germany",
+    "inSeed": true,
+    "seedId": "st-counterfeit-art-beltracchi"
+  },
+  {
+    "id": "elmyr-de-hory",
+    "title": "Elmyr de Hory",
+    "description": "The art forger who fooled experts and inspired a famous documentary about fakery itself.",
+    "section": "Con Artists",
+    "bibleRef": "1950s\u20131970s \u2014 Europe",
+    "inSeed": true,
+    "seedId": "st-elmyr-de-hory"
+  },
+  {
+    "id": "han-van-meegeren",
+    "title": "Han van Meegeren",
+    "description": "A Dutch forger who sold fake Vermeers to Nazis \u2014 then had to prove he was a fraud to survive.",
+    "section": "Con Artists",
+    "bibleRef": "1930s\u20131940s \u2014 Netherlands",
+    "inSeed": true,
+    "seedId": "st-han-van-meegeren"
+  },
+  {
+    "id": "captain-of-kopenick",
+    "title": "The Captain of K\u00f6penick",
+    "description": "A shoemaker in a secondhand uniform commandeers soldiers and robs a German town hall.",
+    "section": "Con Artists",
+    "bibleRef": "1906 \u2014 Berlin",
+    "inSeed": true,
+    "seedId": "st-captain-of-kopenick"
+  },
+  {
+    "id": "sokal-affair",
+    "title": "The Sokal Affair",
+    "description": "A physicist hoaxes an academic journal \u2014 and detonates a culture war about truth and nonsense.",
+    "section": "Con Artists",
+    "bibleRef": "1996 \u2014 United States",
+    "inSeed": true,
+    "seedId": "st-sokal-affair"
+  },
+  {
+    "id": "great-brinks-mat",
+    "title": "The Brink's-Mat Robbery",
+    "description": "A Heathrow warehouse hit spills gold into London's underworld \u2014 and blood follows the bullion for decades.",
+    "section": "Heists",
+    "bibleRef": "November 26, 1983 \u2014 London",
+    "inSeed": true,
+    "seedId": "st-great-brinks-mat"
+  },
+  {
+    "id": "knightsbridge-safe-deposit-viccei",
+    "title": "Viccei's Knightsbridge Aftermath",
+    "description": "How a flamboyant thief's capture unraveled one of London's cheekiest vault jobs.",
+    "section": "Heists",
+    "bibleRef": "1987 \u2014 London",
+    "inSeed": true,
+    "seedId": "st-knightsbridge-safe-deposit-viccei"
+  },
+  {
+    "id": "panam-flight-103",
+    "title": "Pan Am Flight 103",
+    "description": "A bomb over Lockerbie kills 270. A decades-long investigation for justice across borders.",
+    "section": "Scandals",
+    "bibleRef": "December 21, 1988 \u2014 Lockerbie",
+    "inSeed": true,
+    "seedId": "st-panam-flight-103"
+  },
+  {
+    "id": "oklahoma-city-bombing",
+    "title": "Oklahoma City",
+    "description": "A domestic terror attack that shattered a federal building \u2014 and America's sense of safety at home.",
+    "section": "Scandals",
+    "bibleRef": "April 19, 1995 \u2014 Oklahoma",
+    "inSeed": true,
+    "seedId": "st-oklahoma-city-bombing"
+  },
+  {
+    "id": "chris-watts",
+    "title": "Chris Watts",
+    "description": "A family annihilation case that exploded on true-crime media and still sparks ethical debate.",
+    "section": "Cold Cases",
+    "bibleRef": "2018 \u2014 Colorado",
+    "inSeed": true,
+    "seedId": "st-chris-watts"
+  },
+  {
+    "id": "menendez-brothers",
+    "title": "The Menendez Brothers",
+    "description": "Beverly Hills, shotgun murders, and a trial that asked whether abuse explains everything.",
+    "section": "Cold Cases",
+    "bibleRef": "1989 \u2014 Los Angeles",
+    "inSeed": true,
+    "seedId": "st-menendez-brothers"
+  },
+  {
+    "id": "oj-simpson",
+    "title": "The O.J. Simpson Case",
+    "description": "A Bronco chase, a dream team, and the trial that ate American television.",
+    "section": "Scandals",
+    "bibleRef": "1994\u20131995 \u2014 Los Angeles",
+    "inSeed": true,
+    "seedId": "st-oj-simpson"
+  },
+  {
+    "id": "casey-anthony",
+    "title": "Casey Anthony",
+    "description": "A missing toddler, a media frenzy, and a verdict that split the country.",
+    "section": "Scandals",
+    "bibleRef": "2008\u20132011 \u2014 Florida",
+    "inSeed": true,
+    "seedId": "st-casey-anthony"
+  },
+  {
+    "id": "scott-peterson",
+    "title": "Scott Peterson",
+    "description": "A pregnant wife disappears. A trial becomes national obsession.",
+    "section": "Cold Cases",
+    "bibleRef": "2002\u20132004 \u2014 California",
+    "inSeed": true,
+    "seedId": "st-scott-peterson"
+  },
+  {
+    "id": "robert-durst",
+    "title": "Robert Durst",
+    "description": "A real-estate heir, missing people, and a documentary that becomes part of the case.",
+    "section": "Cold Cases",
+    "bibleRef": "1982\u20132021 \u2014 United States",
+    "inSeed": true,
+    "seedId": "st-robert-durst"
+  },
+  {
+    "id": "adnan-syed",
+    "title": "Adnan Syed / Serial",
+    "description": "A podcast reopens a murder conviction and changes how the world consumes true crime.",
+    "section": "Cold Cases",
+    "bibleRef": "1999 / 2014 \u2014 Maryland",
+    "inSeed": true,
+    "seedId": "st-adnan-syed"
+  },
+  {
+    "id": "steven-avery",
+    "title": "Making a Murderer",
+    "description": "A wrongful conviction, a new charge, and a Netflix series that put a Wisconsin town on trial.",
+    "section": "Cold Cases",
+    "bibleRef": "1985\u20132007 \u2014 Wisconsin",
+    "inSeed": true,
+    "seedId": "st-steven-avery"
+  },
+  {
+    "id": "mcmartin-preschool",
+    "title": "The McMartin Preschool Trial",
+    "description": "The longest, most expensive criminal trial in U.S. history \u2014 built on panic more than proof.",
+    "section": "Scandals",
+    "bibleRef": "1983\u20131990 \u2014 California",
+    "inSeed": true,
+    "seedId": "st-mcmartin-preschool"
+  },
+  {
+    "id": "duke-lacrosse",
+    "title": "The Duke Lacrosse Case",
+    "description": "A false accusation, a rush to judgment, and a prosecutor's career ending in disgrace.",
+    "section": "Scandals",
+    "bibleRef": "2006 \u2014 North Carolina",
+    "inSeed": true,
+    "seedId": "st-duke-lacrosse"
+  },
+  {
+    "id": "central-park-jogger",
+    "title": "The Central Park Jogger",
+    "description": "The crime that sparked the Five case \u2014 and a city's racial panic in real time.",
+    "section": "Cold Cases",
+    "bibleRef": "1989 \u2014 New York",
+    "inSeed": true,
+    "seedId": "st-central-park-jogger"
+  },
+  {
+    "id": "sodder-children",
+    "title": "The Sodder Children",
+    "description": "A Christmas Eve fire. Missing children. A family that never believed they burned.",
+    "section": "Disappearances",
+    "bibleRef": "December 24, 1945 \u2014 West Virginia",
+    "inSeed": true,
+    "seedId": "st-sodder-children"
+  },
+  {
+    "id": "amanda-knox",
+    "title": "Amanda Knox",
+    "description": "A murder in Perugia, media villains, and a legal rollercoaster across two countries.",
+    "section": "Scandals",
+    "bibleRef": "2007\u20132015 \u2014 Italy",
+    "inSeed": true,
+    "seedId": "st-amanda-knox"
+  }
+]
