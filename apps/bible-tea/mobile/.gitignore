@@ -5,6 +5,10 @@
 expo-env.d.ts
 # @end expo-cli
 
+# Firebase config (contains API keys)
+GoogleService-Info.plist
+google-services.json
+
 # Service account keys
 play-store-service-account.json
 
