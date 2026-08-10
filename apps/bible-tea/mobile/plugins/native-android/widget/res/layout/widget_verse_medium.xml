@@ -8,7 +8,7 @@
 
     <ImageView
         android:id="@+id/cover_image"
-        android:layout_width="120dp"
+        android:layout_width="140dp"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:contentDescription="Story cover" />
@@ -66,19 +66,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:text="Tap to hear today's story"
+            android:text="▶  Tap to listen"
             android:textColor="#A0A0B8"
             android:textSize="9sp"
             android:fontFamily="sans-serif" />
-
-        <TextView
-            android:id="@+id/branding_emoji"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:text="🍵"
-            android:textSize="12sp" />
 
     </RelativeLayout>
 

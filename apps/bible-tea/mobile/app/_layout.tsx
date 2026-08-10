@@ -1,7 +1,8 @@
 import "@/lib/i18n";
 import { useEffect, useState } from "react";
 import { View } from "react-native";
-import { Stack, usePathname, Redirect } from "expo-router";
+import { Stack, usePathname, Redirect, router } from "expo-router";
+import * as Linking from "expo-linking";
 import { StatusBar } from "expo-status-bar";
 import { MiniPlayer } from "@/components/MiniPlayer";
 import { usePlayerStore } from "@/stores/player";
@@ -27,8 +28,36 @@ import { initPurchases } from "@/lib/purchases";
 import { initAnalytics } from "@/lib/analytics";
 import { UpdatePrompt } from "@/components/UpdatePrompt";
 import { Image as ExpoImage } from "expo-image";
+import { storyIdFromUrl } from "@/lib/widget-linking";
 
 SplashScreen.preventAutoHideAsync();
+
+/** Widget taps can arrive before navigation is mounted, so they queue here. */
+let pendingWidgetStoryId: string | null = null;
+let navReady = false;
+let currentPathname = "";
+
+function goToStory(storyId: string) {
+  // Delay so the root Stack is mounted before we navigate.
+  setTimeout(() => {
+    const target = `/story/${storyId}`;
+    // expo-router resolves bibletea:///story/<id> by itself; only step in
+    // when it didn't, otherwise the screen gets pushed twice.
+    if (currentPathname === target) return;
+    router.push(target as any);
+  }, 400);
+}
+
+function handleWidgetUrl(url: string | null) {
+  if (!url) return;
+  const storyId = storyIdFromUrl(url);
+  if (!storyId) return;
+  if (navReady && storage.getBoolean(StorageKeys.HAS_ONBOARDED)) {
+    goToStory(storyId);
+  } else {
+    pendingWidgetStoryId = storyId;
+  }
+}
 
 export default function RootLayout() {
   const [appReady, setAppReady] = useState(false);
@@ -43,6 +72,7 @@ export default function RootLayout() {
   const setHideMini = usePlayerStore((s) => s.setHideMini);
 
   useEffect(() => {
+    currentPathname = pathname;
     if (hideMiniPlayer && !pathname.startsWith("/story")) {
       setHideMini(false);
     }
@@ -71,6 +101,25 @@ export default function RootLayout() {
     }
     init();
   }, []);
+
+  useEffect(() => {
+    Linking.getInitialURL().then(handleWidgetUrl);
+    const sub = Linking.addEventListener("url", ({ url }) =>
+      handleWidgetUrl(url),
+    );
+    return () => sub.remove();
+  }, []);
+
+  useEffect(() => {
+    if (!appReady || !fontsLoaded) return;
+    if (!storage.getBoolean(StorageKeys.HAS_ONBOARDED)) return;
+    navReady = true;
+    if (pendingWidgetStoryId) {
+      const id = pendingWidgetStoryId;
+      pendingWidgetStoryId = null;
+      goToStory(id);
+    }
+  }, [appReady, fontsLoaded]);
 
   useEffect(() => {
     if (isAuthenticated) {

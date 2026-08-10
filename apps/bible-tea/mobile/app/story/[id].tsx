@@ -66,9 +66,16 @@ export default function StoryScreen() {
     setHideMini,
   } = usePlayerStore();
 
+  const isSubscribed = useAppStore((s) => s.isSubscribed);
   const likedStoryIds = useAppStore((s) => s.likedStoryIds);
   const toggleLike = useAppStore((s) => s.toggleLike);
   const isLiked = likedStoryIds.includes(id);
+
+  useEffect(() => {
+    if (!isSubscribed) {
+      router.replace("/paywall");
+    }
+  }, [isSubscribed]);
 
   const storeStory = useAppStore((s) => s.stories.find((st) => st.id === id));
   const [speakers, setSpeakers] = useState<Speaker[]>([]);
@@ -79,36 +86,47 @@ export default function StoryScreen() {
   const apiStoryId = storeStory?.apiId ?? id;
   const story = storeStory || storyDetail;
 
+  const [detailLoaded, setDetailLoaded] = useState(false);
+
   useEffect(() => {
     let cancelled = false;
-    api.getStory(apiStoryId).then((data) => {
-      if (cancelled) return;
-      if (data.story) {
-        setStoryDetail(data.story);
-      }
-      if (data.audio_versions?.length) {
-        const apiSpeakers: Speaker[] = data.audio_versions.map((a: any) => ({
-          key: a.speaker_id,
-          name: a.speaker_name,
-          audioUrl: a.audio_url,
-        }));
-        setSpeakers(apiSpeakers);
-        setActiveSpeaker((prev) => {
-          if (prev && apiSpeakers.find((s) => s.key === prev.key)) return prev;
-          const { currentStory: ps, currentSpeaker: psp } = usePlayerStore.getState();
-          if (ps?.id === id && psp) {
-            const match = apiSpeakers.find((s) => s.key === psp.id);
-            if (match) return match;
-          }
-          const savedKey = storage.getString(`speaker_${id}`);
-          if (savedKey) {
-            const saved = apiSpeakers.find((s) => s.key === savedKey);
-            if (saved) return saved;
-          }
-          return apiSpeakers[0] ?? prev;
-        });
-      }
-    }).catch(() => {});
+    setDetailLoaded(false);
+
+    const fetchStory = () => {
+      api.getStory(apiStoryId).then((data) => {
+        if (cancelled) return;
+        if (data.story) {
+          setStoryDetail(data.story);
+        }
+        if (data.audio_versions?.length) {
+          const apiSpeakers: Speaker[] = data.audio_versions.map((a: any) => ({
+            key: a.speaker_id,
+            name: a.speaker_name,
+            audioUrl: a.audio_url,
+          }));
+          setSpeakers(apiSpeakers);
+          setActiveSpeaker((prev) => {
+            if (prev && apiSpeakers.find((s) => s.key === prev.key)) return prev;
+            const { currentStory: ps, currentSpeaker: psp } = usePlayerStore.getState();
+            if (ps?.id === id && psp) {
+              const match = apiSpeakers.find((s) => s.key === psp.id);
+              if (match) return match;
+            }
+            const savedKey = storage.getString(`speaker_${id}`);
+            if (savedKey) {
+              const saved = apiSpeakers.find((s) => s.key === savedKey);
+              if (saved) return saved;
+            }
+            return apiSpeakers[0] ?? prev;
+          });
+        }
+        setDetailLoaded(true);
+      }).catch(() => {
+        if (!cancelled) setTimeout(fetchStory, 2000);
+      });
+    };
+
+    fetchStory();
     return () => { cancelled = true; };
   }, [id]);
   const [showSpeakerPicker, setShowSpeakerPicker] = useState(false);
@@ -169,18 +187,19 @@ export default function StoryScreen() {
   const hasAudio = speakers.length > 0;
 
   useEffect(() => {
-    if (!story) return;
+    if (!detailLoaded) {
+      setLoadingTranscript(true);
+      return;
+    }
 
     if (storyDetail?.transcript) {
       const stripped = storyDetail.transcript.replace(/^#\s+.*\n+\*.*\*\n*/m, "");
       setTranscript(stripped);
-      setLoadingTranscript(false);
-      return;
+    } else {
+      setTranscript(null);
     }
-
-    setTranscript(null);
     setLoadingTranscript(false);
-  }, [id, storyDetail?.transcript]);
+  }, [id, detailLoaded, storyDetail?.transcript]);
 
   const displayTitle = storyDetail?.title ?? storeStory?.title ?? "";
 

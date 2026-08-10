@@ -1,60 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@android:id/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/widget_bg_small"
-    android:padding="14dp">
+    android:clipChildren="true"
+    android:clipToPadding="true">
 
-    <TextView
-        android:id="@+id/verse_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:text="VERSE OF THE DAY"
-        android:textColor="#FFD166"
-        android:textSize="8sp"
-        android:textStyle="bold"
-        android:letterSpacing="0.1"
-        android:fontFamily="sans-serif" />
-
-    <TextView
-        android:id="@+id/verse_text"
+    <ImageView
+        android:id="@+id/cover_image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/verse_label"
-        android:layout_above="@id/verse_ref"
-        android:layout_marginTop="6dp"
-        android:text="Trust in the Lord with all your heart."
-        android:textColor="#FFFFFF"
-        android:textSize="13sp"
-        android:fontFamily="serif"
-        android:maxLines="4"
-        android:ellipsize="end"
-        android:gravity="start" />
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        android:contentDescription="Story cover" />
 
-    <TextView
-        android:id="@+id/verse_ref"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/branding"
-        android:layout_marginBottom="4dp"
-        android:text="Proverbs 3:5"
-        android:textColor="#C8A2FF"
-        android:textSize="10sp"
-        android:textStyle="bold"
-        android:fontFamily="sans-serif" />
+    <ImageView
+        android:id="@+id/cover_scrim"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/widget_scrim_small"
+        android:visibility="gone"
+        android:contentDescription="" />
 
-    <TextView
-        android:id="@+id/branding"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:text="Bible Tea 🍵"
-        android:textColor="#73FFFFFF"
-        android:textSize="8sp"
-        android:textStyle="bold"
-        android:fontFamily="sans-serif" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="14dp">
 
-</RelativeLayout>
+        <LinearLayout
+            android:id="@+id/header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🍵"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="VERSE OF THE DAY"
+                android:textColor="#FFD166"
+                android:textSize="8sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.08"
+                android:fontFamily="sans-serif" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/verse_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/header"
+            android:layout_above="@id/verse_ref"
+            android:layout_marginTop="6dp"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:fontFamily="serif"
+            android:maxLines="4"
+            android:ellipsize="end"
+            android:gravity="start"
+            android:shadowColor="#CC000000"
+            android:shadowDx="0"
+            android:shadowDy="1"
+            android:shadowRadius="3" />
+
+        <TextView
+            android:id="@+id/verse_ref"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:textColor="#FFD166"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif"
+            android:shadowColor="#CC000000"
+            android:shadowDx="0"
+            android:shadowDy="1"
+            android:shadowRadius="3" />
+
+    </RelativeLayout>
+
+</FrameLayout>

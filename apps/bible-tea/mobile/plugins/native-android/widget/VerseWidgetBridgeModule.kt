@@ -3,6 +3,7 @@ package app.bibletea
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
@@ -17,6 +18,7 @@ class VerseWidgetBridgeModule(reactContext: ReactApplicationContext) :
 
     companion object {
         const val NAME = "VerseWidgetBridge"
+        const val MAX_RETRIES = 3
     }
 
     private val executor = Executors.newSingleThreadExecutor()
@@ -29,6 +31,7 @@ class VerseWidgetBridgeModule(reactContext: ReactApplicationContext) :
         verseRef: String,
         storyId: String,
         coverUrl: String,
+        coverBase64: String,
         promise: Promise
     ) {
         val ctx = reactApplicationContext
@@ -42,23 +45,52 @@ class VerseWidgetBridgeModule(reactContext: ReactApplicationContext) :
             .putString(VerseWidgetProvider.KEY_STORY_ID, storyId)
             .apply()
 
-        if (coverUrl.isNotEmpty()) {
-            executor.execute {
+        executor.execute {
+            if (coverBase64.isNotEmpty()) {
                 try {
-                    val bytes = URL(coverUrl).readBytes()
-                    val file = File(ctx.filesDir, "widget_cover.jpg")
-                    FileOutputStream(file).use { it.write(bytes) }
-                    prefs.edit()
-                        .putString(VerseWidgetProvider.KEY_COVER_PATH, file.absolutePath)
-                        .apply()
-                } catch (_: Exception) {}
-
-                notifyWidgets(ctx)
-                promise.resolve(true)
+                    val bytes = android.util.Base64.decode(coverBase64, android.util.Base64.DEFAULT)
+                    if (bytes.isNotEmpty()) {
+                        val file = File(ctx.filesDir, "widget_cover.img")
+                        FileOutputStream(file).use { it.write(bytes) }
+                        prefs.edit()
+                            .putString(VerseWidgetProvider.KEY_COVER_PATH, file.absolutePath)
+                            .putString(VerseWidgetProvider.KEY_COVER_URL, coverUrl)
+                            .apply()
+                    }
+                } catch (_: Exception) {
+                    if (coverUrl.isNotEmpty()) downloadCover(ctx, coverUrl, 1)
+                }
+            } else if (coverUrl.isNotEmpty()) {
+                downloadCover(ctx, coverUrl, 1)
             }
-        } else {
             notifyWidgets(ctx)
             promise.resolve(true)
+        }
+    }
+
+    private fun downloadCover(ctx: Context, coverUrl: String, attempt: Int) {
+        try {
+            val connection = URL(coverUrl).openConnection().apply {
+                connectTimeout = 15000
+                readTimeout = 15000
+            }
+            val bytes = connection.getInputStream().readBytes()
+            if (bytes.isNotEmpty()) {
+                val file = File(ctx.filesDir, "widget_cover.img")
+                FileOutputStream(file).use { it.write(bytes) }
+                val prefs = ctx.getSharedPreferences(
+                    VerseWidgetProvider.PREFS_NAME, Context.MODE_PRIVATE
+                )
+                prefs.edit()
+                    .putString(VerseWidgetProvider.KEY_COVER_PATH, file.absolutePath)
+                    .putString(VerseWidgetProvider.KEY_COVER_URL, coverUrl)
+                    .apply()
+            }
+        } catch (_: Exception) {
+            if (attempt < MAX_RETRIES) {
+                Thread.sleep(attempt * 1000L)
+                downloadCover(ctx, coverUrl, attempt + 1)
+            }
         }
     }
 
@@ -81,9 +113,13 @@ class VerseWidgetBridgeModule(reactContext: ReactApplicationContext) :
         val manager = AppWidgetManager.getInstance(ctx)
         val component = ComponentName(ctx, VerseWidgetProvider::class.java)
         val ids = manager.getAppWidgetIds(component)
-        if (ids.isNotEmpty()) {
-            val provider = VerseWidgetProvider()
-            provider.onUpdate(ctx, manager, ids)
-        }
+        if (ids.isEmpty()) return
+
+        // Must go through a real broadcast: the provider calls goAsync() to
+        // refresh, which is only valid while a broadcast is being delivered.
+        val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
+        intent.component = component
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
+        ctx.sendBroadcast(intent)
     }
 }

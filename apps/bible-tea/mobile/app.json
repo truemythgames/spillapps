@@ -2,7 +2,7 @@
   "expo": {
     "name": "Bible Tea",
     "slug": "bibletea",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
@@ -19,7 +19,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "app.bibletea",
-      "buildNumber": "32",
+      "buildNumber": "42",
       "usesAppleSignIn": true,
       "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
@@ -35,7 +35,7 @@
         "backgroundColor": "#0A0A0F"
       },
       "package": "app.bibletea",
-      "versionCode": 32,
+      "versionCode": 42,
       "googleServicesFile": "./google-services.json",
       "edgeToEdgeEnabled": true
     },

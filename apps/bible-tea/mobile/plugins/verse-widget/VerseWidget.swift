@@ -1,20 +1,13 @@
 import WidgetKit
 import SwiftUI
 
-// MARK: – Colors matching the app theme
-
 private extension Color {
-    static let btBackground   = Color(red: 0.039, green: 0.039, blue: 0.059)   // #0A0A0F
-    static let btSurface      = Color(red: 0.078, green: 0.078, blue: 0.125)   // #141420
-    static let btPrimary      = Color(red: 0.784, green: 0.635, blue: 1.0)     // #C8A2FF
-    static let btAccent       = Color(red: 1.0,   green: 0.82,  blue: 0.4)     // #FFD166
-    static let btText         = Color.white
-    static let btTextSecondary = Color(red: 0.627, green: 0.627, blue: 0.722)  // #A0A0B8
-    static let btGradientStart = Color(red: 0.784, green: 0.635, blue: 1.0)    // #C8A2FF
-    static let btGradientEnd   = Color(red: 0.42,  green: 0.36,  blue: 0.906)  // #6B5CE7
+    static let btBackground = Color(red: 0.039, green: 0.039, blue: 0.059)
+    static let btPrimary = Color(red: 0.784, green: 0.635, blue: 1.0)
+    static let btAccent = Color(red: 1.0, green: 0.82, blue: 0.4)
+    static let btGradientStart = Color(red: 0.784, green: 0.635, blue: 1.0)
+    static let btGradientEnd = Color(red: 0.42, green: 0.36, blue: 0.906)
 }
-
-// MARK: – Home Screen Widget (Small + Medium)
 
 struct VerseWidget: Widget {
     let kind = "VerseWidget"
@@ -24,172 +17,175 @@ struct VerseWidget: Widget {
             VerseWidgetView(entry: entry)
         }
         .configurationDisplayName("Verse of the Day")
-        .description("A daily Bible verse from Bible Tea.")
-        .supportedFamilies([.systemSmall, .systemMedium])
+        .description("Daily verse with story cover — small, medium, or large.")
+        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
+        .contentMarginsDisabled()
     }
 }
 
 struct VerseWidgetView: View {
     @Environment(\.widgetFamily) var family
-    @Environment(\.colorScheme) var colorScheme
     let entry: VerseEntry
-
-    private var isDark: Bool { colorScheme == .dark }
 
     var body: some View {
         Group {
-            if family == .systemMedium {
+            switch family {
+            case .systemLarge:
+                largeLayout
+            case .systemMedium:
                 mediumLayout
-            } else {
+            default:
                 smallLayout
             }
         }
+        // Three slashes so path is /story/… (not host=story)
+        .widgetURL(entry.deepLink)
+        .modifier(WidgetContainerBackground())
     }
-
-    // MARK: Small (2×2)
-    // Always uses cover image BG with dark scrim → white text
 
     private var smallLayout: some View {
         ZStack {
-            smallBackground
-            VStack(alignment: .leading, spacing: 6) {
+            coverLayer
+            VStack(alignment: .leading, spacing: 4) {
+                Text("VERSE OF THE DAY")
+                    .font(.system(size: 8, weight: .heavy))
+                    .foregroundColor(.btAccent)
+                    .kerning(0.8)
+
                 Spacer(minLength: 0)
 
                 Text(entry.verseText)
-                    .font(.system(size: 13, weight: .medium, design: .serif))
+                    .font(.system(size: 13, weight: .semibold, design: .serif))
                     .foregroundColor(.white)
                     .lineLimit(4)
-                    .minimumScaleFactor(0.8)
+                    .minimumScaleFactor(0.7)
+                    .shadow(color: .black.opacity(0.6), radius: 2, y: 1)
 
                 Text(entry.verseRef)
-                    .font(.system(size: 10, weight: .semibold, design: .default))
+                    .font(.system(size: 11, weight: .bold))
                     .foregroundColor(.btAccent)
-
-                Spacer(minLength: 0)
-
-                HStack {
-                    Spacer()
-                    Text("Bible Tea")
-                        .font(.system(size: 8, weight: .bold, design: .default))
-                        .foregroundColor(.white.opacity(0.45))
-                }
+                    .shadow(color: .black.opacity(0.6), radius: 2, y: 1)
             }
-            .padding(14)
+            .padding(12)
         }
-        .widgetURL(widgetDeepLink)
     }
-
-    // MARK: Medium (4×2)
 
     private var mediumLayout: some View {
         ZStack {
-            mediumBackground
-            HStack(spacing: 0) {
-                if let img = entry.coverImage {
-                    Image(uiImage: img)
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 120)
-                        .clipped()
-                } else {
-                    Rectangle()
-                        .fill(
-                            LinearGradient(
-                                colors: [.btGradientStart, .btGradientEnd],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
-                        .frame(width: 120)
-                }
+            coverLayer
+            VStack(alignment: .leading, spacing: 6) {
+                Text("VERSE OF THE DAY")
+                    .font(.system(size: 9, weight: .bold))
+                    .foregroundColor(.btAccent)
+                    .kerning(1)
 
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("VERSE OF THE DAY")
-                        .font(.system(size: 9, weight: .bold, design: .default))
-                        .foregroundColor(isDark ? .btAccent : Color(red: 0.75, green: 0.55, blue: 0.0))
-                        .kerning(1.2)
+                Spacer(minLength: 0)
 
-                    Spacer(minLength: 0)
+                Text(entry.verseText)
+                    .font(.system(size: 15, weight: .semibold, design: .serif))
+                    .foregroundColor(.white)
+                    .lineLimit(3)
+                    .minimumScaleFactor(0.75)
+                    .shadow(color: .black.opacity(0.6), radius: 2, y: 1)
 
-                    Text(entry.verseText)
-                        .font(.system(size: 14, weight: .medium, design: .serif))
-                        .foregroundColor(isDark ? .white : Color(red: 0.12, green: 0.12, blue: 0.14))
-                        .lineLimit(3)
-                        .minimumScaleFactor(0.8)
+                Text(entry.verseRef)
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundColor(.btAccent)
+                    .shadow(color: .black.opacity(0.6), radius: 2, y: 1)
 
-                    Text(entry.verseRef)
-                        .font(.system(size: 11, weight: .semibold, design: .default))
-                        .foregroundColor(isDark ? .btPrimary : Color(red: 0.48, green: 0.30, blue: 0.78))
+                Spacer(minLength: 0)
 
-                    Spacer(minLength: 0)
-
-                    HStack {
-                        Text("Tap to hear today's story")
-                            .font(.system(size: 9, weight: .medium, design: .default))
-                            .foregroundColor(isDark ? .btTextSecondary : Color(red: 0.45, green: 0.45, blue: 0.5))
-                        Spacer()
-                        Text("🍵")
-                            .font(.system(size: 12))
-                    }
-                }
-                .padding(.horizontal, 14)
-                .padding(.vertical, 12)
+                Text("Tap to listen")
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundColor(.white.opacity(0.7))
             }
+            .padding(14)
         }
-        .widgetURL(widgetDeepLink)
     }
 
-    // MARK: Backgrounds
+    private var largeLayout: some View {
+        ZStack {
+            coverLayer
+            VStack(alignment: .leading, spacing: 0) {
+                Text("VERSE OF THE DAY")
+                    .font(.system(size: 10, weight: .heavy))
+                    .foregroundColor(.btAccent)
+                    .kerning(1.2)
 
+                Spacer(minLength: 8)
+
+                Text(entry.verseText)
+                    .font(.system(size: 22, weight: .semibold, design: .serif))
+                    .foregroundColor(.white)
+                    .lineLimit(7)
+                    .minimumScaleFactor(0.65)
+                    .shadow(color: .black.opacity(0.55), radius: 3, y: 1)
+
+                Text(entry.verseRef)
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundColor(.btAccent)
+                    .padding(.top, 8)
+                    .shadow(color: .black.opacity(0.55), radius: 2, y: 1)
+
+                Spacer(minLength: 0)
+
+                Text("Tap to listen")
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundColor(.white.opacity(0.7))
+            }
+            .padding(18)
+        }
+    }
+
+    /// Reliable full-bleed image: clear + overlay (scaledToFill alone often renders blank in widgets).
     @ViewBuilder
-    private var smallBackground: some View {
-        if let img = entry.coverImage {
-            ZStack {
-                Image(uiImage: img)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
+    private var coverLayer: some View {
+        Group {
+            if let img = entry.coverImage {
+                Color.clear
+                    .overlay(
+                        Image(uiImage: img)
+                            .resizable()
+                            .scaledToFill()
+                    )
+                    .clipped()
+            } else {
                 LinearGradient(
-                    colors: [
-                        Color.black.opacity(0.55),
-                        Color.black.opacity(0.82)
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
+                    colors: [.btGradientStart, .btGradientEnd, .btBackground],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
                 )
             }
-        } else {
-            // No cover: gradient fallback
+        }
+        .overlay(
             LinearGradient(
-                colors: [
-                    Color(red: 0.15, green: 0.12, blue: 0.25),
-                    .btBackground
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
+                colors: [Color.black.opacity(0.2), Color.black.opacity(0.78)],
+                startPoint: .top,
+                endPoint: .bottom
             )
+        )
+    }
+}
+
+private struct WidgetContainerBackground: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(iOSApplicationExtension 17.0, *) {
+            content.containerBackground(for: .widget) {
+                Color.btBackground
+            }
+        } else {
+            content
         }
     }
+}
 
-    @ViewBuilder
-    private var mediumBackground: some View {
-        if isDark {
-            Color.btBackground
-        } else {
-            LinearGradient(
-                colors: [
-                    Color(red: 0.97, green: 0.95, blue: 1.0),
-                    Color.white
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
+extension VerseEntry {
+    var deepLink: URL {
+        // Three slashes → path "/story/…". Also include query fallback for the JS parser.
+        if let storyId = storyId, !storyId.isEmpty {
+            let encoded = storyId.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? storyId
+            return URL(string: "bibletea:///story/\(encoded)?storyId=\(encoded)")!
         }
-    }
-
-    private var widgetDeepLink: URL {
-        if let storyId = entry.storyId {
-            return URL(string: "bibletea://story/\(storyId)")!
-        }
-        return URL(string: "bibletea://")!
+        return URL(string: "bibletea:///")!
     }
 }
