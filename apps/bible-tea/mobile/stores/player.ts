@@ -260,6 +260,23 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
         lastSavedPosition = position;
         const completed = position / duration >= 0.97;
         setLocalProgress(state.currentStory.id, position, completed, duration);
+        useAppStore.getState().bumpProgress();
+        if (completed) {
+          const alreadyDone = useAppStore
+            .getState()
+            .completedStoryIds.includes(state.currentStory.id);
+          useAppStore.getState().markCompleted(state.currentStory.id);
+          if (!alreadyDone) {
+            const localStreak = recordStreakCheckIn();
+            useAppStore.setState({
+              streak: {
+                current_streak: localStreak.currentStreak,
+                max_streak: localStreak.longestStreak,
+                last_listen_date: localStreak.lastCheckIn,
+              },
+            });
+          }
+        }
       }
     }
   },

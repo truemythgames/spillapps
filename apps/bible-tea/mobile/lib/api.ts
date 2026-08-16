@@ -1,32 +1,15 @@
-import * as SecureStore from "expo-secure-store";
 import Constants from "expo-constants";
-const debuggerHost =
-  Constants.expoConfig?.hostUri ?? Constants.manifest2?.extra?.expoGo?.debuggerHost;
-const devHost = debuggerHost?.split(":")[0] ?? "localhost";
 
 const extra = Constants.expoConfig?.extra as
   | { apiUrl?: string; appId?: string }
   | undefined;
 
-/** Production API (Spill platform). Override with EXPO_PUBLIC_API_URL at build time if needed. */
-const PROD_API_BASE =
+const API_BASE =
   process.env.EXPO_PUBLIC_API_URL?.trim() ||
   extra?.apiUrl ||
   "https://api.spillapps.com";
 
 export const APP_ID = extra?.appId || "bible-tea";
-
-const API_BASE = PROD_API_BASE;
-
-const TOKEN_KEY = "auth_token";
-
-async function getToken(): Promise<string | null> {
-  try {
-    return await SecureStore.getItemAsync(TOKEN_KEY);
-  } catch {
-    return null;
-  }
-}
 
 function getLanguage(): string {
   try {
@@ -41,17 +24,11 @@ async function request<T>(
   path: string,
   options: RequestInit = {}
 ): Promise<T> {
-  const token = await getToken();
-
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
     "Accept-Language": getLanguage(),
     ...(options.headers as Record<string, string>),
   };
-
-  if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
-  }
 
   const res = await fetch(`${API_BASE}${path}`, {
     ...options,
@@ -66,20 +43,6 @@ async function request<T>(
 }
 
 export const api = {
-  // Auth (no session token needed — this is how you GET a session token)
-  signIn: (providerToken: string, provider: "google" | "apple") =>
-    request<{
-      session_token: string;
-      user: { id: string; email: string; name?: string; picture?: string };
-    }>("/v1/auth/signin", {
-      method: "POST",
-      body: JSON.stringify({
-        token: providerToken,
-        provider,
-        app_id: APP_ID,
-      }),
-    }),
-
   // Config
   getConfig: () =>
     request<{
@@ -205,12 +168,10 @@ export const api = {
     onDelta: (delta: string) => void,
     onDone: () => void,
   ) => {
-    const token = await getToken();
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
       "Accept-Language": getLanguage(),
     };
-    if (token) headers["Authorization"] = `Bearer ${token}`;
 
     const res = await fetch(`${API_BASE}/v1/chat/stream`, {
       method: "POST",

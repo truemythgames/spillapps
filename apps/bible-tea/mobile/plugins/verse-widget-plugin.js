@@ -193,13 +193,15 @@ module.exports = function withVerseWidget(config) {
     }
 
     // Configure build settings for the widget target
-    let developmentTeam;
+    let developmentTeam = config.ios?.appleTeamId;
     const configs = project.pbxXCBuildConfigurationSection();
-    for (const key in configs) {
-      const cfg = configs[key];
-      if (typeof cfg === "object" && cfg.buildSettings?.DEVELOPMENT_TEAM) {
-        developmentTeam = cfg.buildSettings.DEVELOPMENT_TEAM;
-        break;
+    if (!developmentTeam) {
+      for (const key in configs) {
+        const cfg = configs[key];
+        if (typeof cfg === "object" && cfg.buildSettings?.DEVELOPMENT_TEAM) {
+          developmentTeam = cfg.buildSettings.DEVELOPMENT_TEAM;
+          break;
+        }
       }
     }
 

@@ -21,6 +21,7 @@ import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 import { Skeleton, SkeletonText } from "@/components/Skeleton";
 import { WidgetCard } from "@/components/WidgetPrompt";
 import { CoverImage } from "@/components/CoverImage";
+import { VerseOfTheDayCard } from "@/components/VerseShareCard";
 
 const CARD_WIDTH = 150;
 const CARD_IMAGE_HEIGHT = 150;
@@ -264,6 +265,12 @@ export default function HomeScreen() {
           </View>
         </Pressable>
       )}
+
+      {/* Verse of the Day — shareable branded card */}
+      <VerseOfTheDayCard
+        storyId={storyOfTheDay?.id}
+        coverImageUrl={storyOfTheDay?.cover_image_url}
+      />
 
       {/* Widget prompt — hidden once the user has added the widget */}
       <WidgetCard />

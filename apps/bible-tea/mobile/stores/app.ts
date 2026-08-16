@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { storage, StorageKeys, getLocalProgress, getStreakData, setLocalProgress } from "@/lib/storage";
+import { storage, StorageKeys, getLocalProgress, getStreakData, setLocalProgress, getCompletedStoryIds } from "@/lib/storage";
 import { api } from "@/lib/api";
 import { checkSubscription } from "@/lib/purchases";
 import { syncWidgetData } from "@/lib/widget";
@@ -141,10 +141,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       if (raw) localLikes = JSON.parse(raw);
     } catch {}
 
-    const localProgress = getLocalProgress();
-    const localCompleted = Object.entries(localProgress)
-      .filter(([, p]) => p.completed)
-      .map(([id]) => id);
+    const localCompleted = getCompletedStoryIds();
 
     const localStreak = getStreakData();
 
@@ -306,6 +303,12 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   loadUserData: async () => {
     if (DEMO_MODE) return;
+    // Always keep local completions as source of truth (no account / auth).
+    const localCompleted = getCompletedStoryIds();
+    if (localCompleted.length) {
+      set({ completedStoryIds: localCompleted });
+    }
+
     try {
       const [likesRes, progressRes, streakRes] = await Promise.allSettled([
         api.getLikes(),
@@ -324,15 +327,25 @@ export const useAppStore = create<AppState>((set, get) => ({
           map[p.story_id] = p;
         }
         updates.progressMap = map;
-        updates.completedStoryIds = Object.values(map)
+        const serverCompleted = Object.values(map)
           .filter((p) => p.completed)
           .map((p) => p.story_id);
+        // Merge — never wipe local completions with empty/partial server data.
+        updates.completedStoryIds = [
+          ...new Set([...getCompletedStoryIds(), ...serverCompleted]),
+        ];
       }
       if (streakRes.status === "fulfilled") {
-        updates.streak = streakRes.value;
+        const local = getStreakData();
+        const server = streakRes.value;
+        updates.streak = {
+          current_streak: Math.max(local.currentStreak, server.current_streak ?? 0),
+          max_streak: Math.max(local.longestStreak, server.max_streak ?? 0),
+          last_listen_date: server.last_listen_date ?? local.lastCheckIn,
+        };
       }
 
-      set(updates);
+      if (Object.keys(updates).length) set(updates);
     } catch {}
   },
 
@@ -353,8 +366,15 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   markCompleted: (storyId) => {
     const prev = get().completedStoryIds;
+    const local = getLocalProgress()[storyId];
+    setLocalProgress(storyId, local?.position ?? 0, true, local?.duration);
     if (!prev.includes(storyId)) {
-      set({ completedStoryIds: [...prev, storyId] });
+      set({
+        completedStoryIds: [...prev, storyId],
+        progressVersion: get().progressVersion + 1,
+      });
+    } else {
+      set({ progressVersion: get().progressVersion + 1 });
     }
   },
 

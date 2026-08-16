@@ -29,6 +29,13 @@
     "noConnection": "No connection",
     "noConnectionDesc": "Check your internet and try again"
   },
+  "share": {
+    "verseOfTheDay": "VERSE OF THE DAY",
+    "brand": "BIBLE TEA",
+    "button": "Share verse",
+    "dialogTitle": "Share today's verse",
+    "message": "\"{{text}}\" — {{ref}}\n\nFrom Bible Tea 🍵\n{{url}}"
+  },
   "explore": {
     "title": "Stories",
     "completed": "completed",
@@ -102,32 +109,6 @@
     "askQuestion": "Ask a question",
     "noTranscript": "Transcript not yet generated.",
     "chooseVoice": "Choose a voice"
-  },
-  "settings": {
-    "title": "Settings",
-    "friend": "Friend",
-    "signInToSync": "Sign in to sync",
-    "signInDesc": "Save your progress, streaks, and likes across devices",
-    "dayStreak": "Day Streak",
-    "completed": "Completed",
-    "started": "Started",
-    "liked": "Liked",
-    "goPremium": "Go Premium",
-    "goPremiumDesc": "Unlock all 40+ stories and new ones every week",
-    "yourNarrator": "Your Narrator",
-    "selected": "Selected",
-    "playbackSpeed": "Playback Speed",
-    "signOut": "Sign Out"
-  },
-  "login": {
-    "signInFailed": "Sign-in failed",
-    "tryAgain": "Please try again.",
-    "title": "Create Account",
-    "subtitle": "Save your progress, streaks, and\nfavorites across all your devices.",
-    "continueGoogle": "Continue with Google",
-    "continueApple": "Continue with Apple",
-    "skip": "Skip for now",
-    "terms": "By continuing, you agree to our Terms of Service\nand Privacy Policy."
   },
   "unlock": {
     "unlocked": "Unlocked",

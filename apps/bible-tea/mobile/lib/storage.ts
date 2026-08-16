@@ -1,10 +1,39 @@
-import { Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// MMKV requires native build; use AsyncStorage-backed fallback for Expo Go
-// Swap to real MMKV after `expo prebuild`
-
 const memoryCache: Record<string, string> = {};
+
+export const StorageKeys = {
+  HAS_ONBOARDED: "has_onboarded",
+  SELECTED_SPEAKER: "selected_speaker",
+  LAST_PLAYED_STORY: "last_played_story",
+  PLAYBACK_SPEED: "playback_speed",
+  LOCAL_PROGRESS: "local_progress",
+  STREAK_DATA: "streak_data",
+  IS_SUBSCRIBED: "is_subscribed",
+  LIKES: "likes",
+  HAS_SEEN_INITIAL_OFFER: "has_seen_initial_offer",
+} as const;
+
+const HYDRATE_KEYS = Object.values(StorageKeys);
+
+let hydratePromise: Promise<void> | null = null;
+
+/**
+ * Load persisted keys into memory before any reads.
+ * Must be awaited on app start — otherwise progress shows 0% forever.
+ */
+export function hydrateStorage(): Promise<void> {
+  if (hydratePromise) return hydratePromise;
+  hydratePromise = AsyncStorage.multiGet(HYDRATE_KEYS).then((pairs) => {
+    for (const [k, v] of pairs) {
+      // Don't clobber values written before hydrate finished.
+      if (v !== null && memoryCache[k] === undefined) {
+        memoryCache[k] = v;
+      }
+    }
+  });
+  return hydratePromise;
+}
 
 export const storage = {
   getString: (key: string): string | undefined => memoryCache[key],
@@ -21,35 +50,6 @@ export const storage = {
     AsyncStorage.setItem(key, String(value)).catch(() => {});
   },
 };
-
-// Hydrate cache from AsyncStorage on startup
-AsyncStorage.multiGet([
-  "has_onboarded",
-  "selected_speaker",
-  "last_played_story",
-  "playback_speed",
-  "local_progress",
-  "streak_data",
-  "is_subscribed",
-  "likes",
-  "has_seen_initial_offer",
-]).then((pairs) => {
-  for (const [k, v] of pairs) {
-    if (v !== null) memoryCache[k] = v;
-  }
-});
-
-export const StorageKeys = {
-  HAS_ONBOARDED: "has_onboarded",
-  SELECTED_SPEAKER: "selected_speaker",
-  LAST_PLAYED_STORY: "last_played_story",
-  PLAYBACK_SPEED: "playback_speed",
-  LOCAL_PROGRESS: "local_progress",
-  STREAK_DATA: "streak_data",
-  IS_SUBSCRIBED: "is_subscribed",
-  LIKES: "likes",
-  HAS_SEEN_INITIAL_OFFER: "has_seen_initial_offer",
-} as const;
 
 // --- Progress ---
 
@@ -77,13 +77,21 @@ export function setLocalProgress(
   duration?: number
 ) {
   const progress = getLocalProgress();
+  const prev = progress[storyId];
   progress[storyId] = {
     position,
-    duration: duration ?? progress[storyId]?.duration ?? 0,
-    completed,
+    duration: duration ?? prev?.duration ?? 0,
+    // Once completed, stay completed.
+    completed: Boolean(completed || prev?.completed),
     lastPlayedAt: new Date().toISOString(),
   };
   storage.set(StorageKeys.LOCAL_PROGRESS, JSON.stringify(progress));
+}
+
+export function getCompletedStoryIds(): string[] {
+  return Object.entries(getLocalProgress())
+    .filter(([, p]) => p.completed)
+    .map(([id]) => id);
 }
 
 export function getOverallProgress(totalStories: number): {

@@ -115,16 +115,6 @@ export function trackChatStarted(topic: string) {
   trackEvent("chat_started", { topic });
 }
 
-export function setUserId(userId: string) {
-  try {
-    analyticsModule?.()?.setUserId(userId);
-  } catch {}
-
-  try {
-    crashlyticsModule?.()?.setUserId(userId);
-  } catch {}
-}
-
 export function logError(error: Error, context?: string) {
   try {
     if (context) crashlyticsModule?.()?.log(context);

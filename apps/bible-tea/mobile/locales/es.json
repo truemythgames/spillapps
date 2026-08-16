@@ -29,6 +29,13 @@
     "noConnection": "Sin conexión",
     "noConnectionDesc": "Revisa tu internet e inténtalo de nuevo"
   },
+  "share": {
+    "verseOfTheDay": "VERSÍCULO DEL DÍA",
+    "brand": "BIBLE TEA",
+    "button": "Compartir versículo",
+    "dialogTitle": "Compartir el versículo de hoy",
+    "message": "\"{{text}}\" — {{ref}}\n\nDe Bible Tea 🍵\n{{url}}"
+  },
   "explore": {
     "title": "Historias",
     "completed": "completado",
@@ -102,32 +109,6 @@
     "askQuestion": "Hacer una pregunta",
     "noTranscript": "Transcripción aún no disponible.",
     "chooseVoice": "Elige una voz"
-  },
-  "settings": {
-    "title": "Ajustes",
-    "friend": "Amigo",
-    "signInToSync": "Inicia sesión para sincronizar",
-    "signInDesc": "Guarda tu progreso, rachas y favoritos en todos tus dispositivos",
-    "dayStreak": "Racha",
-    "completed": "Completadas",
-    "started": "Iniciadas",
-    "liked": "Favoritas",
-    "goPremium": "Hazte Premium",
-    "goPremiumDesc": "Desbloquea más de 40 historias y nuevas cada semana",
-    "yourNarrator": "Tu narrador",
-    "selected": "Seleccionado",
-    "playbackSpeed": "Velocidad",
-    "signOut": "Cerrar sesión"
-  },
-  "login": {
-    "signInFailed": "Error de inicio de sesión",
-    "tryAgain": "Por favor intenta de nuevo.",
-    "title": "Crear cuenta",
-    "subtitle": "Guarda tu progreso, rachas y\nfavoritos en todos tus dispositivos.",
-    "continueGoogle": "Continuar con Google",
-    "continueApple": "Continuar con Apple",
-    "skip": "Omitir por ahora",
-    "terms": "Al continuar, aceptas nuestros Términos de servicio\ny Política de privacidad."
   },
   "unlock": {
     "unlocked": "Desbloqueado",

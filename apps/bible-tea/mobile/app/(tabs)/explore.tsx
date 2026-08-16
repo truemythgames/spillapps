@@ -32,12 +32,13 @@ export default function StoriesScreen() {
   }, [loadRemoteData]);
 
   const likedCount = likedStoryIds.length;
-  const completedCount = completedStoryIds.length;
-  const percent = stories.length > 0 ? Math.round((completedCount / stories.length) * 100) : 0;
-
   // progressVersion triggers re-render when progress is synced
   void progressVersion;
   const progress = getLocalProgress();
+  const completedFromLocal = Object.values(progress).filter((p) => p.completed).length;
+  const completedCount = Math.max(completedStoryIds.length, completedFromLocal);
+  const percent = stories.length > 0 ? Math.round((completedCount / stories.length) * 100) : 0;
+
   const storyMap = Object.fromEntries(stories.map((s) => [s.id, s]));
   const continueListening = Object.entries(progress)
     .filter(([id, p]) => !p.completed && p.position > 0 && storyMap[id])

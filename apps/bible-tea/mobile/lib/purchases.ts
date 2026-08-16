@@ -106,6 +106,19 @@ export async function initPurchases(userId?: string): Promise<void> {
     console.warn("[Purchases] setFBAnonymousID failed:", e);
   }
 
+  // Pass the Firebase app instance ID so RevenueCat's Firebase integration
+  // can attribute server-side events (renewals, cancellations, refunds) to
+  // the correct GA4 user. Required for the dashboard integration to work.
+  try {
+    const analytics = require("@react-native-firebase/analytics").default;
+    const instanceId = await analytics().getAppInstanceId();
+    if (instanceId) {
+      Purchases.setFirebaseAppInstanceID(instanceId);
+    }
+  } catch (e) {
+    console.warn("[Purchases] setFirebaseAppInstanceID failed:", e);
+  }
+
   // Apple Ads (Search Ads) attribution: collect the AdServices token so
   // RevenueCat can attribute installs/subscriptions to Apple Ads campaigns.
   // iOS only, and must run after configure(). Yields campaign-level
@@ -174,11 +187,25 @@ export async function restorePurchases(): Promise<boolean> {
   }
 }
 
+// Auto-sync runs at most once per install: after a reinstall the local
+// RevenueCat user id is new, so an active store purchase can look missing
+// until the receipt is synced onto this install.
+const AUTO_SYNC_KEY = "rc_auto_synced";
+
 export async function checkSubscription(): Promise<boolean | null> {
   if (!Purchases) return null;
   try {
     const customerInfo = await Purchases.getCustomerInfo();
-    return hasActiveEntitlement(customerInfo);
+    if (hasActiveEntitlement(customerInfo)) return true;
+
+    const alreadySynced = await SecureStore.getItemAsync(AUTO_SYNC_KEY).catch(() => null);
+    if (alreadySynced) return false;
+    await SecureStore.setItemAsync(AUTO_SYNC_KEY, "1").catch(() => {});
+
+    // syncPurchases is silent (no user prompt), unlike restorePurchases.
+    await Purchases.syncPurchases();
+    const synced = await Purchases.getCustomerInfo();
+    return hasActiveEntitlement(synced);
   } catch (e) {
     console.warn("[Purchases] Check failed:", e);
     return null;

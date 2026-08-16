@@ -20,10 +20,9 @@ import {
 } from "@expo-google-fonts/playfair-display";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useAppStore } from "@/stores/app";
-import { useAuthStore } from "@/stores/auth";
 import { setupPlayer } from "@/stores/player";
 import { colors } from "@/lib/theme";
-import { storage, StorageKeys } from "@/lib/storage";
+import { storage, StorageKeys, hydrateStorage } from "@/lib/storage";
 import { initPurchases } from "@/lib/purchases";
 import { initAnalytics } from "@/lib/analytics";
 import { UpdatePrompt } from "@/components/UpdatePrompt";
@@ -64,8 +63,6 @@ export default function RootLayout() {
   const loadInitialData = useAppStore((s) => s.loadInitialData);
   const loadUserData = useAppStore((s) => s.loadUserData);
   const refreshSubscription = useAppStore((s) => s.refreshSubscription);
-  const hydrateAuth = useAuthStore((s) => s.hydrate);
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const pathname = usePathname();
   const currentStory = usePlayerStore((s) => s.currentStory);
   const hideMiniPlayer = usePlayerStore((s) => s.hideMini);
@@ -89,11 +86,11 @@ export default function RootLayout() {
 
   useEffect(() => {
     async function init() {
+      await hydrateStorage();
       loadInitialData();
       ExpoImage.prefetch(require("@/assets/onboarding/noahs-ark.webp"));
       await Promise.all([
         setupPlayer(),
-        hydrateAuth(),
         initPurchases(),
         initAnalytics(),
       ]);
@@ -122,11 +119,10 @@ export default function RootLayout() {
   }, [appReady, fontsLoaded]);
 
   useEffect(() => {
-    if (isAuthenticated) {
-      loadUserData();
-    }
+    if (!appReady) return;
+    loadUserData();
     refreshSubscription();
-  }, [isAuthenticated]);
+  }, [appReady]);
 
   useEffect(() => {
     if (fontsLoaded && appReady) {
@@ -166,10 +162,6 @@ export default function RootLayout() {
           }}
         />
         <Stack.Screen name="(tabs)" />
-        <Stack.Screen
-          name="login"
-          options={{ animation: "slide_from_bottom", presentation: "fullScreenModal" }}
-        />
         <Stack.Screen
           name="unlock"
           options={{ animation: "slide_from_bottom", presentation: "fullScreenModal" }}
@@ -231,10 +223,6 @@ export default function RootLayout() {
         />
         <Stack.Screen
           name="testament/[id]"
-          options={{ animation: "slide_from_right" }}
-        />
-        <Stack.Screen
-          name="settings"
           options={{ animation: "slide_from_right" }}
         />
         <Stack.Screen
