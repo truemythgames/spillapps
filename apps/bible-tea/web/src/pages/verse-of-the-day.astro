@@ -3,16 +3,17 @@ import Base from "../layouts/Base.astro";
 import StoreButtons from "../components/StoreButtons.astro";
 import { APP_STORE_URL } from "../lib/stories";
 import { getLocale, localePath, t } from "../lib/i18n";
-import { clampTitle, clampDescription } from "../lib/seo";
+import { verseOfTheDaySeo } from "../lib/seo";
 import { getVerseOfTheDay, getUpcomingVerses } from "../lib/daily-verses";
 
 const locale = getLocale(Astro.currentLocale);
-const verse = getVerseOfTheDay(new Date(), locale);
+const now = new Date();
+const verse = getVerseOfTheDay(now, locale);
 const upcoming = getUpcomingVerses(locale, 7);
-const today = new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
+const today = now.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
 
-const title = clampTitle(t(locale, "votd.title"));
-const description = clampDescription(t(locale, "votd.description"));
+const { title, description } = verseOfTheDaySeo(locale, verse, now);
+const faqA5 = t(locale, "votd.faqA5").replace("{ref}", verse.ref).replace("{text}", verse.text);
 
 const breadcrumbLd = {
   "@context": "https://schema.org",
@@ -39,7 +40,7 @@ const faqLd = {
     { "@type": "Question", name: t(locale, "votd.faqQ2"), acceptedAnswer: { "@type": "Answer", text: t(locale, "votd.faqA2") } },
     { "@type": "Question", name: t(locale, "votd.faqQ3"), acceptedAnswer: { "@type": "Answer", text: t(locale, "votd.faqA3") } },
     { "@type": "Question", name: t(locale, "votd.faqQ4"), acceptedAnswer: { "@type": "Answer", text: t(locale, "votd.faqA4") } },
-    { "@type": "Question", name: t(locale, "votd.faqQ5"), acceptedAnswer: { "@type": "Answer", text: t(locale, "votd.faqA5") } },
+    { "@type": "Question", name: t(locale, "votd.faqQ5"), acceptedAnswer: { "@type": "Answer", text: faqA5 } },
     { "@type": "Question", name: t(locale, "votd.faqQ6"), acceptedAnswer: { "@type": "Answer", text: t(locale, "votd.faqA6") } },
     { "@type": "Question", name: t(locale, "votd.faqQ7"), acceptedAnswer: { "@type": "Answer", text: t(locale, "votd.faqA7") } },
     { "@type": "Question", name: t(locale, "votd.faqQ8"), acceptedAnswer: { "@type": "Answer", text: t(locale, "votd.faqA8") } },
@@ -376,7 +377,7 @@ const webPageLd = {
       <div class="faq-item"><h3>{t(locale, "votd.faqQ2")}</h3><p>{t(locale, "votd.faqA2")}</p></div>
       <div class="faq-item"><h3>{t(locale, "votd.faqQ3")}</h3><p>{t(locale, "votd.faqA3")}</p></div>
       <div class="faq-item"><h3>{t(locale, "votd.faqQ4")}</h3><p>{t(locale, "votd.faqA4")}</p></div>
-      <div class="faq-item"><h3>{t(locale, "votd.faqQ5")}</h3><p>{t(locale, "votd.faqA5")}</p></div>
+      <div class="faq-item"><h3>{t(locale, "votd.faqQ5")}</h3><p>{faqA5}</p></div>
       <div class="faq-item"><h3>{t(locale, "votd.faqQ6")}</h3><p>{t(locale, "votd.faqA6")}</p></div>
       <div class="faq-item"><h3>{t(locale, "votd.faqQ7")}</h3><p>{t(locale, "votd.faqA7")}</p></div>
       <div class="faq-item"><h3>{t(locale, "votd.faqQ8")}</h3><p>{t(locale, "votd.faqA8")}</p></div>

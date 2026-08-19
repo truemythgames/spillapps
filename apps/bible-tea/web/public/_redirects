@@ -2,3 +2,33 @@
 /terms.html /terms/ 301
 /es/verse-of-the-day /es/versiculo-del-dia/ 301
 /es/verse-of-the-day/ /es/versiculo-del-dia/ 301
+/versiculo-del-dia /es/versiculo-del-dia/ 301
+/versiculo-del-dia/ /es/versiculo-del-dia/ 301
+
+# Collapse the no-slash URLs Google still indexes
+/verse-of-the-day /verse-of-the-day/ 301
+/es/versiculo-del-dia /es/versiculo-del-dia/ 301
+/stories /stories/ 301
+/es/stories /es/stories/ 301
+/playlists /playlists/ 301
+/es/playlists /es/playlists/ 301
+/characters /characters/ 301
+/es/characters /es/characters/ 301
+/prayers /prayers/ 301
+/es/prayers /es/prayers/ 301
+/books /books/ 301
+/es/books /es/books/ 301
+/widget /widget/ 301
+/es/widget /es/widget/ 301
+/es /es/ 301
+
+/stories/:slug /stories/:slug/ 301
+/es/stories/:slug /es/stories/:slug/ 301
+/characters/:id /characters/:id/ 301
+/es/characters/:id /es/characters/:id/ 301
+/playlists/:id /playlists/:id/ 301
+/es/playlists/:id /es/playlists/:id/ 301
+/prayers/:slug /prayers/:slug/ 301
+/es/prayers/:slug /es/prayers/:slug/ 301
+/books/:slug /books/:slug/ 301
+/es/books/:slug /es/books/:slug/ 301

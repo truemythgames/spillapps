@@ -90,8 +90,8 @@ const translations = {
     "home.ctaSub": "Download Bible Tea — 200+ stories, daily verses, guided prayers. Free on iOS and Android.",
 
     // Prayers index
-    "prayers.title": "Guided Prayers — Bible Tea",
-    "prayers.description": "60+ guided Bible prayers for anxiety, gratitude, healing, strength, and more. Read or listen to a prayer for whatever you're walking through.",
+    "prayers.title": "Guided Prayers for Anxiety, Healing & Strength - Bible Tea",
+    "prayers.description": "60+ guided Bible prayers for anxiety, gratitude, healing, strength, work, and sleep. Read a prayer here or listen in the app.",
     "prayers.h1": "Guided Prayers",
     "prayers.subtitle": "Prayers for every season of life — tied to real Bible stories and characters. Read one here, or listen with narration in the app.",
     "prayers.breadcrumbHome": "Home",
@@ -125,8 +125,8 @@ const translations = {
     "prayer.faqA2": "Guided prayers like this one give you the words to start. You can read it slowly, make it your own, or open the Bible Tea app to listen along and create a personal prayer for your exact situation.",
 
     // Stories index
-    "stories.title": "Bible Stories — Bible Tea",
-    "stories.description": "Browse all Bible stories from Genesis to Revelation. Listen to immersive audio retellings of every Bible story.",
+    "stories.title": "Bible Stories from Genesis to Revelation - Bible Tea",
+    "stories.description": "Every Bible story retold as immersive audio — from Genesis to Revelation. Listen free, no ads, no sign-up.",
     "stories.h1": "Bible Stories",
     "stories.subtitle": "From Creation to Revelation — every Bible story retold as immersive audio.",
     "stories.allStories": "All Stories",
@@ -198,8 +198,8 @@ const translations = {
     "playlist.faqA3More": " and more",
 
     // Characters index
-    "characters.title": "Bible Characters — Bible Tea",
-    "characters.description": "Explore Bible characters from the Old and New Testament. Discover their stories and follow their journeys.",
+    "characters.title": "Bible Characters — Who Was Who in Scripture - Bible Tea",
+    "characters.description": "Who was Sarah, Paul, Esther, David? Meet Bible characters and listen to their stories as immersive audio — free on Bible Tea.",
     "characters.h1": "Bible Characters",
     "characters.subtitle": "Meet the people of the Bible. Follow their journeys across multiple stories.",
     "characters.breadcrumbHome": "Home",
@@ -214,8 +214,9 @@ const translations = {
     "character.listenOn": "Listen on Bible Tea",
     "character.listenOnDesc": "Download the app to explore this character's stories and 200+ more.",
     "character.label": "Bible Character",
-    "character.pageTitle": "Who Was {name} in the Bible? — Full Story - Bible Tea",
-    "character.pageDesc": "Discover who {name} was in the Bible with free immersive audio stories on Bible Tea — no ads, no sign-up required. {description}.",
+    "character.h1": "Who Was {name} in the Bible?",
+    "character.pageTitle": "Who Was {name} in the Bible? - Bible Tea",
+    "character.pageDesc": "Who was {name} in the Bible? {description} Listen to {name}'s stories as free immersive audio on Bible Tea.",
     "character.faqTitle": "Frequently Asked Questions",
     "character.moreCharacters": "More Bible Characters",
     "character.keyFactsTitle": "Key Facts",
@@ -240,8 +241,8 @@ const translations = {
     "character.faqA3": "Yes! Every {name} story on Bible Tea is completely free to listen to — no subscription required. The app includes professional narration for each story, plus additional features like guided prayers and a daily Bible verse. Download Bible Tea on iOS or Android and start listening today.",
 
     // Books index
-    "books.title": "Bible Books — Bible Tea",
-    "books.description": "Browse every Bible book from Genesis to Revelation. Listen to immersive audio stories free on Bible Tea — no ads, no sign-up.",
+    "books.title": "Bible Books from Genesis to Revelation - Bible Tea",
+    "books.description": "Browse every Bible book and listen to its stories as immersive audio. Genesis to Revelation, free on Bible Tea.",
     "books.h1": "Bible Books",
     "books.subtitle": "Explore Bible stories organized by the books of the Bible.",
     "books.breadcrumbHome": "Home",
@@ -280,7 +281,7 @@ const translations = {
     "notFound.browseStories": "Browse Stories",
 
     // Verse of the Day
-    "votd.title": "Bible Verse of the Day — Daily Scripture - Bible Tea",
+    "votd.title": "Verse of the Day — Daily Bible Verse | Bible Tea",
     "votd.description": "Today's Bible verse of the day, plus a free home-screen widget for daily scripture. New verse every day — no ads, no sign-up.",
     "votd.h1": "Bible Verse of the Day",
     "votd.subtitle": "Start each day with a verse from scripture. A fresh Bible verse every day — read it here or add the Bible Tea widget to your phone's home screen.",
@@ -314,7 +315,7 @@ const translations = {
     "votd.faqQ4": "What translation does Bible Verse of the Day use?",
     "votd.faqA4": "Bible Tea's daily verses are modern English retellings inspired by widely-used translations. They're designed to be clear, accessible, and meaningful — like a friend sharing the best of scripture with you.",
     "votd.faqQ5": "What is today's Bible verse?",
-    "votd.faqA5": "Today's Bible verse is shown at the top of this page and updates every morning. Bible Tea selects a meaningful verse for today from across the entire Bible — you can also see it on your home screen by adding the free Bible Tea widget.",
+    "votd.faqA5": "Today's Bible verse is {ref}: \"{text}\" It updates every morning on this page, and you can also put it on your home screen with the free Bible Tea widget.",
     "votd.faqQ6": "How do I get a daily Bible verse?",
     "votd.faqA6": "The easiest way to get a daily Bible verse is to download Bible Tea and add the verse widget to your home screen. You'll see a fresh verse every morning without opening the app — completely free on iPhone and Android.",
     "votd.faqQ7": "What is the best Bible verse of the day app?",
@@ -444,8 +445,8 @@ const translations = {
     "home.ctaTitle": "¿Listo para Leer la Biblia como Nunca Antes?",
     "home.ctaSub": "Descarga Bible Tea — 200+ historias, versículos diarios, oraciones guiadas. Gratis en iOS y Android.",
 
-    "prayers.title": "Oraciones Guiadas — Bible Tea",
-    "prayers.description": "Más de 60 oraciones bíblicas guiadas para la ansiedad, la gratitud, la sanación, la fortaleza y más. Lee o escucha una oración para lo que estés viviendo.",
+    "prayers.title": "Oraciones Guiadas para Ansiedad, Sanidad y Fortaleza - Bible Tea",
+    "prayers.description": "Más de 60 oraciones bíblicas guiadas para la ansiedad, la gratitud, la sanación, el trabajo y el sueño. Lee una aquí o escúchala en la app.",
     "prayers.h1": "Oraciones Guiadas",
     "prayers.subtitle": "Oraciones para cada etapa de la vida — conectadas con historias y personajes reales de la Biblia. Lee una aquí o escúchala con narración en la app.",
     "prayers.breadcrumbHome": "Inicio",
@@ -477,8 +478,8 @@ const translations = {
     "prayer.faqQ2": "¿Cómo oro cuando no sé qué decir?",
     "prayer.faqA2": "Las oraciones guiadas como esta te dan las palabras para empezar. Puedes leerla despacio, hacerla tuya, o abrir la app de Bible Tea para escucharla y crear una oración personal para tu situación exacta.",
 
-    "stories.title": "Historias Bíblicas — Bible Tea",
-    "stories.description": "Explora todas las historias bíblicas del Génesis al Apocalipsis. Escucha narraciones inmersivas de cada historia bíblica.",
+    "stories.title": "Historias Bíblicas del Génesis al Apocalipsis - Bible Tea",
+    "stories.description": "Todas las historias bíblicas narradas como audio inmersivo — del Génesis al Apocalipsis. Escucha gratis, sin anuncios ni registro.",
     "stories.h1": "Historias Bíblicas",
     "stories.subtitle": "De la Creación al Apocalipsis — cada historia bíblica narrada como audio inmersivo.",
     "stories.allStories": "Todas las Historias",
@@ -546,8 +547,8 @@ const translations = {
     "playlist.faqA3": "La colección {name} cubre {refs}. Cada historia es una narración moderna con audio inmersivo.",
     "playlist.faqA3More": " y más",
 
-    "characters.title": "Personajes Bíblicos — Bible Tea",
-    "characters.description": "Explora personajes bíblicos del Antiguo y Nuevo Testamento. Descubre sus historias y sigue sus viajes.",
+    "characters.title": "Personajes Bíblicos — ¿Quién Fue Quién? - Bible Tea",
+    "characters.description": "¿Quién fue Sara, Pablo, Ester, David? Conoce a los personajes de la Biblia y escucha sus historias como audio inmersivo — gratis en Bible Tea.",
     "characters.h1": "Personajes Bíblicos",
     "characters.subtitle": "Conoce a los personajes de la Biblia. Sigue sus viajes a través de múltiples historias.",
     "characters.breadcrumbHome": "Inicio",
@@ -561,8 +562,9 @@ const translations = {
     "character.listenOn": "Escucha en Bible Tea",
     "character.listenOnDesc": "Descarga la app para explorar las historias de este personaje y más de 200.",
     "character.label": "Personaje Bíblico",
-    "character.pageTitle": "¿Quién Fue {name}? Historia Bíblica - Bible Tea",
-    "character.pageDesc": "Descubre la historia completa de {name} con audio gratis en Bible Tea — sin anuncios ni registro. {description}.",
+    "character.h1": "¿Quién fue {name} en la Biblia?",
+    "character.pageTitle": "¿Quién fue {name} en la Biblia? - Bible Tea",
+    "character.pageDesc": "¿Quién era {name} en la Biblia? {description} Escucha las historias de {name} como audio inmersivo gratis en Bible Tea.",
     "character.faqTitle": "Preguntas Frecuentes",
     "character.moreCharacters": "Más Personajes Bíblicos",
     "character.keyFactsTitle": "Datos Clave",
@@ -586,8 +588,8 @@ const translations = {
     "character.faqQ3": "¿Puedo escuchar la historia de {name} gratis?",
     "character.faqA3": "¡Sí! Cada historia de {name} en Bible Tea es completamente gratuita — sin suscripción. La app incluye narración profesional para cada historia, además de funciones adicionales como oraciones guiadas y un versículo bíblico diario. Descarga Bible Tea en iOS o Android y empieza a escuchar hoy.",
 
-    "books.title": "Libros de la Biblia — Bible Tea",
-    "books.description": "Explora cada libro de la Biblia del Génesis al Apocalipsis. Escucha historias en audio inmersivo gratis en Bible Tea — sin anuncios.",
+    "books.title": "Libros de la Biblia del Génesis al Apocalipsis - Bible Tea",
+    "books.description": "Explora cada libro de la Biblia y escucha sus historias como audio inmersivo. Del Génesis al Apocalipsis, gratis en Bible Tea.",
     "books.h1": "Libros de la Biblia",
     "books.subtitle": "Explora historias bíblicas organizadas por los libros de la Biblia.",
     "books.breadcrumbHome": "Inicio",
@@ -624,9 +626,9 @@ const translations = {
     "notFound.browseStories": "Explorar Historias",
 
     // Verse of the Day
-    "votd.title": "Versículo Bíblico del Día — Escritura Diaria - Bible Tea",
-    "votd.description": "El versículo bíblico de hoy, más un widget gratis para tu pantalla de inicio. Un versículo nuevo cada día — sin anuncios ni registro.",
-    "votd.h1": "Versículo del Día",
+    "votd.title": "Versículo de Hoy — Versículo del Día | Bible Tea",
+    "votd.description": "El versículo del día de hoy, más un widget gratis para tu pantalla de inicio. Un versículo nuevo cada día — sin anuncios ni registro.",
+    "votd.h1": "Versículo del Día de Hoy",
     "votd.subtitle": "Empieza cada día con un versículo de las Escrituras. Un versículo bíblico nuevo cada día — léelo aquí o agrega el widget de Bible Tea a tu pantalla de inicio.",
     "votd.breadcrumbHome": "Inicio",
     "votd.breadcrumbVerse": "Versículo del Día",
@@ -657,8 +659,8 @@ const translations = {
     "votd.faqA3": "¡Sí! El widget de versículos de Bible Tea es completamente gratis en iPhone y Android. Descarga la app, mantén presionada tu pantalla de inicio, agrega el widget de Bible Tea y recibirás un versículo bíblico nuevo cada día sin costo.",
     "votd.faqQ4": "¿Qué traducción usa el Versículo del Día?",
     "votd.faqA4": "Los versículos diarios de Bible Tea son narraciones modernas en español inspiradas en traducciones ampliamente usadas. Están diseñados para ser claros, accesibles y significativos.",
-    "votd.faqQ5": "¿Cuál es el versículo bíblico de hoy?",
-    "votd.faqA5": "El versículo bíblico de hoy aparece en la parte superior de esta página y se actualiza cada mañana. Bible Tea selecciona un versículo significativo de toda la Biblia — también puedes verlo en tu pantalla de inicio agregando el widget gratuito de Bible Tea.",
+    "votd.faqQ5": "¿Cuál es el versículo de hoy?",
+    "votd.faqA5": "El versículo de hoy es {ref}: \"{text}\" Se actualiza cada mañana en esta página, y también puedes verlo en tu pantalla de inicio con el widget gratis de Bible Tea.",
     "votd.faqQ6": "¿Cómo puedo recibir un versículo bíblico diario?",
     "votd.faqA6": "La forma más fácil de recibir un versículo bíblico diario es descargar Bible Tea y agregar el widget de versículos a tu pantalla de inicio. Verás un versículo nuevo cada mañana sin abrir la app — completamente gratis en iPhone y Android.",
     "votd.faqQ7": "¿Cuál es la mejor app de versículo bíblico del día?",

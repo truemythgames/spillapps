@@ -314,7 +314,7 @@ const otherCharacters = allCharacters.filter((c) => c.id !== character.id).slice
         )}
         <div class="character-info">
           <div class="character-label">{t(locale, "character.label")}</div>
-          <h1>{character.name}</h1>
+          <h1>{t(locale, "character.h1").replace("{name}", character.name)}</h1>
           <p class="character-desc">{character.description}</p>
           {stories.length > 0 && <p class="character-meta">{stories.length} {t(locale, "characters.storyCount")}</p>}
           <StoreButtons variant="hero" />

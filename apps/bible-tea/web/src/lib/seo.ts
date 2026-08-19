@@ -119,6 +119,11 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
       description:
         "What were John the Baptist's last words? \"He must increase, I must decrease\" (John 3:30). The story behind his final recorded words — and how he died.",
     },
+    es: {
+      title: "Las Últimas Palabras de Juan el Bautista — Juan 3:30 - Bible Tea",
+      description:
+        "¿Cuáles fueron las últimas palabras de Juan el Bautista? \"Es necesario que él crezca, y que yo mengüe\" (Juan 3:30). La historia completa, narrada.",
+    },
   },
   "john-the-baptist-beheaded": {
     en: {
@@ -150,19 +155,17 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
       description:
         "Jesus walks on water in the middle of a storm — and Peter steps out to join him. Who walked on water with Jesus, what happened, and what it means.",
     },
+    es: {
+      title: "Jesús Camina sobre el Agua — Mateo 14:22-33 - Bible Tea",
+      description:
+        "Jesús camina sobre las aguas en medio de la tormenta — y Pedro sale a reunirse con él. Mateo 14:22-33, narrado como audio inmersivo.",
+    },
   },
   "flight-to-egypt": {
     en: {
       title: "The Flight to Egypt — Why Jesus' Family Fled (Matthew 2) - Bible Tea",
       description:
         "An angel warns Joseph in a dream and the family escapes to Egypt by night while Herod hunts the child. The flight to Egypt story, retold as audio.",
-    },
-  },
-  "crossing-the-red-sea": {
-    en: {
-      title: "Crossing the Red Sea — The Full Story (Exodus 14) - Bible Tea",
-      description:
-        "Trapped between Pharaoh's army and the sea, Moses raises his staff — and the sea splits. The crossing of the Red Sea, retold as immersive audio.",
     },
   },
   "zacchaeus-climbs-a-tree": {
@@ -195,6 +198,11 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
       description:
         "One prophet vs 450. Two altars, one challenge: the god who answers with fire wins. Elijah on Mount Carmel (1 Kings 18) — listen free on Bible Tea.",
     },
+    es: {
+      title: "Elías vs 450 Profetas de Baal — Fuego del Cielo - Bible Tea",
+      description:
+        "Un profeta contra 450. Dos altares, un desafío: el dios que responda con fuego gana. Elías en el monte Carmelo (1 Reyes 18), narrado.",
+    },
   },
   "angel-visits-zechariah": {
     en: {
@@ -215,6 +223,11 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
       title: "Jacob & Esau: The Bible's Twin Brothers (Genesis 25-27) - Bible Tea",
       description:
         "Were Jacob and Esau twins? Yes — sons of Isaac and Rebekah. A stolen blessing, a bowl of stew, and decades of family beef. The full story, retold.",
+    },
+    es: {
+      title: "Jacob y Esaú: Los Gemelos de la Biblia (Génesis 25-27) - Bible Tea",
+      description:
+        "¿Eran gemelos Jacob y Esaú? Sí — hijos de Isaac y Rebeca. Una bendición robada, un plato de lentejas y décadas de rivalidad. La historia completa.",
     },
   },
   "the-centurions-faith": {
@@ -253,13 +266,6 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
         "Jesús a los 12 años desaparece por tres días — sus padres lo encuentran en el templo, asombrando a los maestros. Lucas 2:41-52 — audio gratis.",
     },
   },
-  "isaac-and-rebekah": {
-    en: {
-      title: "Isaac & Rebekah — The Bible's First Love Story (Genesis 24) - Bible Tea",
-      description:
-        "A servant, a prayer, camels at a well, and a woman who says yes. How Isaac and Rebekah met — the Bible's original love story. Listen free.",
-    },
-  },
   "solomon-builds-the-temple": {
     en: {
       title: "Solomon Builds the Temple — 1 Kings 5-8 Explained - Bible Tea",
@@ -272,13 +278,6 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
       title: "The Fish with a Coin in Its Mouth — Matthew 17:24-27 - Bible Tea",
       description:
         "Jesus tells Peter to go catch a fish — the first one has a coin in its mouth to pay the tax. One of Jesus' strangest miracles. Listen free.",
-    },
-  },
-  "the-miraculous-catch": {
-    en: {
-      title: "The Miraculous Catch of Fish — Luke 5:1-11 - Bible Tea",
-      description:
-        "Professional fishermen catch nothing all night. Jesus says try again — and the nets nearly break. The miraculous catch of fish, retold as audio.",
     },
   },
   "absaloms-rebellion": {
@@ -319,25 +318,11 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
         "El becerro de oro era un falso dios: Moisés tardó 40 días y el pueblo fundió sus joyas para adorar un ídolo. Éxodo 32, narrado como nunca antes.",
     },
   },
-  "jesus-stops-a-storm": {
-    en: {
-      title: "Jesus Calms the Storm — \"Peace, Be Still\" (Mark 4) - Bible Tea",
-      description:
-        "A storm hits, the disciples panic, and Jesus is asleep. He wakes and says \"Peace, be still.\" Jesus calms the storm (Mark 4:35-41) — free audio.",
-    },
-  },
   "saul-meets-jesus": {
     en: {
       title: "Saul Meets Jesus on the Road to Damascus — Acts 9 - Bible Tea",
       description:
         "A blinding light, a voice from heaven, and the church's worst enemy becomes its greatest apostle. Saul's conversion on the road to Damascus, retold.",
-    },
-  },
-  "hosea-and-gomer": {
-    en: {
-      title: "Hosea & Gomer — The Bible's Most Heartbreaking Love Story - Bible Tea",
-      description:
-        "God tells Hosea to marry Gomer. She leaves — and he buys her back. The story of Hosea and Gomer (Hosea 1-3) and what it means. Listen free.",
     },
   },
   "joseph-and-his-brothers": {
@@ -357,13 +342,6 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
       title: "Al Dios Desconocido — Pablo en Atenas (Hechos 17) - Bible Tea",
       description:
         "Pablo encuentra en Atenas un altar \"al dios desconocido\" — y les dice exactamente quién es. Hechos 17:15-34, narrado como audio inmersivo.",
-    },
-  },
-  "the-witch-of-endor": {
-    en: {
-      title: "The Witch of Endor — Saul's Séance (1 Samuel 28) - Bible Tea",
-      description:
-        "Desperate king Saul visits a medium to summon dead Samuel — and it works. The witch of Endor (1 Samuel 28), the Bible's eeriest story, retold.",
     },
   },
   "jacobs-ladder": {
@@ -388,6 +366,11 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
     },
   },
   "eutychus-falls-out-a-window": {
+    en: {
+      title: "Eutychus Falls Out a Window — Acts 20:7-12 - Bible Tea",
+      description:
+        "Who fell out a window while Paul preached? Eutychus — he fell asleep, dropped from a third story, and Paul brought him back. Acts 20, retold as audio.",
+    },
     es: {
       title: "Eutico, el Joven que se Cayó de la Ventana — Hechos 20 - Bible Tea",
       description:
@@ -399,20 +382,6 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
       title: "Elías y la Viuda de Sarepta — 1 Reyes 17:8-24 - Bible Tea",
       description:
         "Una viuda con su último puñado de harina, un profeta que pide pan, y un milagro que no se acaba. Elías y la viuda (1 Reyes 17:8-24), narrado.",
-    },
-  },
-  "caleb-claims-his-mountain": {
-    es: {
-      title: "Caleb Reclama su Tierra — Josué 14 - Bible Tea",
-      description:
-        "A los 85 años, Caleb reclama su tierra: \"dame la montaña con los gigantes.\" Y la conquista. La historia de Caleb (Josué 14), narrada como audio.",
-    },
-  },
-  "god-answers-job": {
-    es: {
-      title: "Dios Responde a Job desde el Torbellino — Job 38-41 - Bible Tea",
-      description:
-        "¿Desde dónde respondió Dios a Job? Desde un torbellino: \"¿Dónde estabas tú cuando yo fundaba la tierra?\" Job 38-41, narrado como audio inmersivo.",
     },
   },
   "achans-hidden-sin": {
@@ -444,13 +413,47 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
     },
   },
   "the-good-samaritan": {
+    en: {
+      title: "The Good Samaritan — Luke 10:25-37 Explained - Bible Tea",
+      description:
+        "A man is beaten and left for dead. A priest and a Levite walk past. The despised outsider stops. The Good Samaritan parable (Luke 10:25-37) and what it means.",
+    },
     es: {
       title: "El Buen Samaritano — Lucas 10:25-37 Explicado - Bible Tea",
       description:
         "Un hombre asaltado, religiosos que pasan de largo, y el forastero despreciado que se detiene. La parábola del buen samaritano y su significado.",
     },
   },
+  "a-talking-donkey-and-a-hired-prophet": {
+    en: {
+      title: "Balaam's Talking Donkey — Numbers 22 - Bible Tea",
+      description:
+        "Which Bible character was spoken to by a donkey? Balaam — hired to curse Israel, until his donkey saw the angel he couldn't. Numbers 22, retold as audio.",
+    },
+    es: {
+      title: "El Burro que Habla y el Profeta Balaam — Números 22 - Bible Tea",
+      description:
+        "¿A qué personaje de la Biblia le habló un burro? A Balaam — contratado para maldecir a Israel, hasta que su burra vio al ángel. Números 22, narrado.",
+    },
+  },
+  "jesus-stops-a-storm": {
+    en: {
+      title: "Jesus Calms the Storm — \"Peace, Be Still\" (Mark 4) - Bible Tea",
+      description:
+        "A storm hits, the disciples panic, and Jesus is asleep. He wakes and says \"Peace, be still.\" Jesus calms the storm (Mark 4:35-41) — free audio.",
+    },
+    es: {
+      title: "Jesús Calma la Tormenta — Marcos 4:35-41 - Bible Tea",
+      description:
+        "Una tormenta, los discípulos en pánico, y Jesús dormido. Se despierta y dice: \"¡Calla, enmudece!\" Jesús calma la tormenta. Narrado como audio.",
+    },
+  },
   "wandering-the-desert": {
+    en: {
+      title: "Why Israel Wandered 40 Years in the Desert - Bible Tea",
+      description:
+        "Why did Israel wander 40 years in the wilderness? They didn't trust God at the edge of the promised land. Numbers 14–36, retold as immersive audio.",
+    },
     es: {
       title: "40 Años Vagando por el Desierto — Números 14-36 - Bible Tea",
       description:
@@ -458,17 +461,159 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
     },
   },
   "lots-escape-gone-wrong": {
+    en: {
+      title: "Lot's Escape from Sodom — Genesis 19 - Bible Tea",
+      description:
+        "Lot flees Sodom, his wife looks back and becomes salt — and then it gets worse. Genesis 19:30-38, retold as immersive audio.",
+    },
     es: {
       title: "La Huida de Lot de Sodoma — Génesis 19:30-38 - Bible Tea",
       description:
         "Lot sale de Sodoma, su esposa mira atrás y se convierte en sal — y luego todo empeora. Génesis 19:30-38, narrado como audio inmersivo.",
     },
   },
-  "a-talking-donkey-and-a-hired-prophet": {
-    es: {
-      title: "El Burro que Habla y el Profeta Balaam — Números 22 - Bible Tea",
+  "david-and-goliath": {
+    en: {
+      title: "David and Goliath — The Full Story (1 Samuel 17) - Bible Tea",
       description:
-        "¿A qué personaje de la Biblia le habló un burro? A Balaam — contratado para maldecir a Israel, hasta que su burra vio al ángel. Números 22, narrado.",
+        "A shepherd boy, a giant, and one stone. How David defeated Goliath — the underdog story that still lands. 1 Samuel 17, retold as immersive audio.",
+    },
+    es: {
+      title: "David y Goliat — Historia Completa (1 Samuel 17) - Bible Tea",
+      description:
+        "Un pastor, un gigante y una piedra. Cómo David venció a Goliat — la historia del menospreciado que todavía impacta. 1 Samuel 17, narrado como audio.",
+    },
+  },
+  "jonah-and-the-whale": {
+    en: {
+      title: "Jonah and the Whale — The Full Story (Jonah 1-4) - Bible Tea",
+      description:
+        "A prophet runs from God, a storm hits, and a great fish swallows him. Jonah and the whale (Jonah 1–4) — what happened next, retold as audio.",
+    },
+    es: {
+      title: "Jonás y la Ballena — Historia Completa (Jonás 1-4) - Bible Tea",
+      description:
+        "Un profeta huye de Dios, llega una tormenta y un gran pez se lo traga. Jonás y la ballena (Jonás 1–4) — qué pasó después, narrado como audio.",
+    },
+  },
+  "jesus-flips-tables": {
+    en: {
+      title: "Jesus Flips the Tables — Cleansing the Temple - Bible Tea",
+      description:
+        "Jesus walks into the temple, makes a whip, and drives out the money changers. Why he flipped the tables — and what it meant. Retold as audio.",
+    },
+    es: {
+      title: "Jesús Voltea las Mesas — Limpieza del Templo - Bible Tea",
+      description:
+        "Jesús entra al templo, hace un látigo y echa a los cambistas. Por qué volcó las mesas — y qué significó. Narrado como audio inmersivo.",
+    },
+  },
+  "the-resurrection": {
+    en: {
+      title: "The Resurrection of Jesus — Easter Morning - Bible Tea",
+      description:
+        "The tomb is empty. The women arrive first. Death doesn't get the last word. The resurrection of Jesus, retold as immersive audio on Bible Tea.",
+    },
+    es: {
+      title: "La Resurrección de Jesús — La Mañana de Pascua - Bible Tea",
+      description:
+        "La tumba está vacía. Las mujeres llegan primero. La muerte no tiene la última palabra. La resurrección de Jesús, narrada como audio inmersivo.",
+    },
+  },
+  "elijah-runs-from-jezebel": {
+    en: {
+      title: "Elijah Runs from Jezebel — 1 Kings 19 - Bible Tea",
+      description:
+        "After Carmel, Elijah collapses. Jezebel wants him dead, and he runs into the wilderness. What God said to the exhausted prophet. 1 Kings 19, retold.",
+    },
+    es: {
+      title: "Elías Huye de Jezabel — 1 Reyes 19 - Bible Tea",
+      description:
+        "Después del Carmelo, Elías se derrumba. Jezabel quiere matarlo y huye al desierto. Lo que Dios le dijo al profeta agotado. 1 Reyes 19, narrado.",
+    },
+  },
+  "hosea-and-gomer": {
+    en: {
+      title: "Hosea & Gomer — The Bible's Most Heartbreaking Love Story - Bible Tea",
+      description:
+        "God tells Hosea to marry Gomer. She leaves — and he buys her back. The story of Hosea and Gomer (Hosea 1-3) and what it means. Listen free.",
+    },
+    es: {
+      title: "Oseas y Gomer — La Historia de Amor Más Dolorosa - Bible Tea",
+      description:
+        "Dios le dice a Oseas que se case con Gomer. Ella se va — y él la vuelve a comprar. Oseas 1–3 y lo que significa, narrado como audio.",
+    },
+  },
+  "the-miraculous-catch": {
+    en: {
+      title: "The Miraculous Catch of Fish — Luke 5:1-11 - Bible Tea",
+      description:
+        "Professional fishermen catch nothing all night. Jesus says try again — and the nets nearly break. The miraculous catch of fish, retold as audio.",
+    },
+    es: {
+      title: "La Pesca Milagrosa — Lucas 5:1-11 - Bible Tea",
+      description:
+        "Pescadores profesionales no pescan nada en toda la noche. Jesús dice inténtenlo de nuevo — y las redes casi se rompen. Lucas 5:1-11, narrado.",
+    },
+  },
+  "crossing-the-red-sea": {
+    en: {
+      title: "Crossing the Red Sea — The Full Story (Exodus 14) - Bible Tea",
+      description:
+        "Trapped between Pharaoh's army and the sea, Moses raises his staff — and the sea splits. The crossing of the Red Sea, retold as immersive audio.",
+    },
+    es: {
+      title: "El Cruce del Mar Rojo — Éxodo 14 Completo - Bible Tea",
+      description:
+        "Atrapados entre el ejército de Faraón y el mar, Moisés alza su vara — y el mar se parte. El cruce del Mar Rojo, narrado como audio inmersivo.",
+    },
+  },
+  "the-witch-of-endor": {
+    en: {
+      title: "The Witch of Endor — Saul's Séance (1 Samuel 28) - Bible Tea",
+      description:
+        "Desperate king Saul visits a medium to summon dead Samuel — and it works. The witch of Endor (1 Samuel 28), the Bible's eeriest story, retold.",
+    },
+    es: {
+      title: "La Bruja de Endor — El Séance de Saúl (1 Samuel 28) - Bible Tea",
+      description:
+        "Saúl, desesperado, visita a una médium para invocar al Samuel muerto — y funciona. La bruja de Endor (1 Samuel 28), narrada como nunca.",
+    },
+  },
+  "isaac-and-rebekah": {
+    en: {
+      title: "Isaac & Rebekah — The Bible's First Love Story (Genesis 24) - Bible Tea",
+      description:
+        "A servant, a prayer, camels at a well, and a woman who says yes. How Isaac and Rebekah met — the Bible's original love story. Listen free.",
+    },
+    es: {
+      title: "Isaac y Rebeca — La Primera Historia de Amor (Génesis 24) - Bible Tea",
+      description:
+        "Un siervo, una oración, camellos en un pozo y una mujer que dice que sí. Cómo se conocieron Isaac y Rebeca. Génesis 24, narrado como audio.",
+    },
+  },
+  "god-answers-job": {
+    en: {
+      title: "God Answers Job from the Whirlwind — Job 38-41 - Bible Tea",
+      description:
+        "Where did God answer Job from? A whirlwind: \"Where were you when I laid the earth's foundation?\" Job 38–41, retold as immersive audio.",
+    },
+    es: {
+      title: "Dios Responde a Job desde el Torbellino — Job 38-41 - Bible Tea",
+      description:
+        "¿Desde dónde respondió Dios a Job? Desde un torbellino: \"¿Dónde estabas tú cuando yo fundaba la tierra?\" Job 38-41, narrado como audio inmersivo.",
+    },
+  },
+  "caleb-claims-his-mountain": {
+    en: {
+      title: "Caleb Claims His Mountain — Joshua 14 - Bible Tea",
+      description:
+        "At 85, Caleb asks for the land with the giants still on it — and takes it. The story of Caleb (Joshua 14), retold as immersive audio.",
+    },
+    es: {
+      title: "Caleb Reclama su Tierra — Josué 14 - Bible Tea",
+      description:
+        "A los 85 años, Caleb reclama su tierra: \"dame la montaña con los gigantes.\" Y la conquista. La historia de Caleb (Josué 14), narrada como audio.",
     },
   },
 };
@@ -557,10 +702,10 @@ export function playlistSeo(id: string, locale: Locale): SeoOverride {
   return PLAYLIST_SEO[id]?.[locale] ?? {};
 }
 
-/** Keep titles in SERP-friendly range (Ahrefs/Google ~60 chars). */
-export function clampTitle(title: string, max = 60): string {
+/** Keep titles in SERP-friendly range (Google typically shows ~60–70 chars). */
+export function clampTitle(title: string, max = 70): string {
   if (title.length <= max) return title;
-  const suffix = " - Bible Tea";
+  const suffix = title.endsWith(" | Bible Tea") ? " | Bible Tea" : " - Bible Tea";
   if (title.endsWith(suffix)) {
     const budget = max - suffix.length;
     let body = title.slice(0, -suffix.length);
@@ -590,4 +735,35 @@ export function clampDescription(description: string, max = 155): string {
   const sp = cut.lastIndexOf(" ");
   if (sp > 80) cut = cut.slice(0, sp);
   return `${cut.replace(/[—\-\s:,.]+$/u, "")}…`;
+}
+
+/** Title + description that include today's verse so the SERP snippet changes daily. */
+export function verseOfTheDaySeo(
+  locale: Locale,
+  verse: { text: string; ref: string },
+  date: Date,
+): { title: string; description: string } {
+  const dateLabel =
+    locale === "es"
+      ? date.toLocaleDateString("es-ES", { day: "numeric", month: "short", year: "numeric" })
+      : date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  const snippet =
+    verse.text.length > 100
+      ? `${verse.text.slice(0, 97).replace(/\s+\S*$/, "")}…`
+      : verse.text;
+
+  if (locale === "es") {
+    return {
+      title: clampTitle(`Versículo de hoy (${verse.ref}) — ${dateLabel} | Bible Tea`),
+      description: clampDescription(
+        `Versículo del día de hoy (${verse.ref}): “${snippet}” Léelo aquí o en el widget gratis para tu pantalla.`,
+      ),
+    };
+  }
+  return {
+    title: clampTitle(`Verse of the Day (${verse.ref}) — ${dateLabel} | Bible Tea`),
+    description: clampDescription(
+      `Today's Bible verse of the day (${verse.ref}): “${snippet}” Read it here or on the free home-screen widget.`,
+    ),
+  };
 }
