@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import type { Env } from "../types";
 import { requireAuth } from "../middleware/auth";
 import { mediaUrl } from "../lib/media";
+import { resolveStoryId } from "../lib/story";
 
 export const progressRoutes = new Hono<{ Bindings: Env }>();
 
@@ -11,7 +12,7 @@ progressRoutes.get("/", async (c) => {
   const user = c.get("user");
 
   const progress = await c.env.DB.prepare(
-    `SELECT up.*, s.title as story_title, s.cover_image_key,
+    `SELECT up.*, s.slug as story_slug, s.title as story_title, s.cover_image_key,
             se.name as season_name, se.testament
      FROM user_progress up
      JOIN stories s ON up.story_id = s.id AND s.app_id = ?
@@ -39,12 +40,8 @@ progressRoutes.put("/:storyId", async (c) => {
     completed?: boolean;
   }>();
 
-  const ok = await c.env.DB.prepare(
-    "SELECT 1 FROM stories WHERE id = ? AND app_id = ?"
-  )
-    .bind(storyId, user.appId)
-    .first();
-  if (!ok) {
+  const canonicalId = await resolveStoryId(c.env.DB, user.appId, storyId);
+  if (!canonicalId) {
     return c.json({ error: "Story not found" }, 404);
   }
 
@@ -62,7 +59,7 @@ progressRoutes.put("/:storyId", async (c) => {
   )
     .bind(
       user.userId,
-      storyId,
+      canonicalId,
       body.speaker_id,
       body.position_seconds,
       body.completed ? 1 : 0,

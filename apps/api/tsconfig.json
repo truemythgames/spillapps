@@ -1,11 +1,12 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "rootDir": "./src",
+    "noEmit": true,
     "types": ["@cloudflare/workers-types"],
     "typeRoots": ["../../node_modules/@types", "../../node_modules"],
     "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx",
-    "outDir": "./dist"
+    "jsxImportSource": "hono/jsx"
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts"]
+  "include": ["./src"]
 }

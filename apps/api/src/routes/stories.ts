@@ -211,6 +211,24 @@ storiesRoutes.get("/:id", async (c) => {
     fields: ["name", "description"],
   });
 
+  const relatedPrayerRows = await c.env.DB.prepare(
+    `SELECT p.id, p.title, p.slug, p.description, pc.name as category_name, pc.icon as category_icon
+     FROM prayers p
+     JOIN prayer_stories ps ON p.id = ps.prayer_id
+     JOIN prayer_categories pc ON p.category_id = pc.id
+     WHERE ps.story_id = ? AND p.app_id = ? AND p.is_published = 1
+     ORDER BY p.sort_order ASC`
+  )
+    .bind(storyId, appId)
+    .all();
+
+  const relatedPrayers = await overlayTranslations(c.env.DB, relatedPrayerRows.results as any[], {
+    entityType: "prayer",
+    appId,
+    locale,
+    fields: ["title", "description"],
+  });
+
   return c.json({
     story: {
       ...(story as any),
@@ -225,5 +243,6 @@ storiesRoutes.get("/:id", async (c) => {
       ...ch,
       cover_image_url: mediaUrl(c.env, ch.cover_image_key, appId),
     })),
+    related_prayers: relatedPrayers,
   });
 });

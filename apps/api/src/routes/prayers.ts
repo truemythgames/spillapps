@@ -3,6 +3,7 @@ import type { Env } from "../types";
 import { mediaUrl } from "../lib/media";
 import { resolvePublicAppId } from "../lib/request-app";
 import { resolveLocale, overlayTranslations } from "../lib/locale";
+import { resolveStoryId } from "../lib/story";
 
 export const prayersRoutes = new Hono<{ Bindings: Env }>();
 
@@ -130,6 +131,19 @@ prayersRoutes.get("/:id", async (c) => {
     .bind(prayerId)
     .all();
 
+  const translatedStories = await overlayTranslations(c.env.DB, relatedStories.results as any[], {
+    entityType: "story",
+    appId,
+    locale,
+    fields: ["title"],
+  });
+  const translatedRelatedChars = await overlayTranslations(c.env.DB, relatedCharacters.results as any[], {
+    entityType: "character",
+    appId,
+    locale,
+    fields: ["name", "description"],
+  });
+
   return c.json({
     prayer: {
       ...(prayer as any),
@@ -139,17 +153,19 @@ prayersRoutes.get("/:id", async (c) => {
       audio_url: mediaUrl(c.env, a.audio_key, appId) ?? "",
       speaker_avatar_url: mediaUrl(c.env, a.speaker_avatar, appId),
     })),
-    related_stories: relatedStories.results.map((s: any) => ({
+    related_stories: translatedStories.map((s: any) => ({
       ...s,
       cover_image_url: mediaUrl(c.env, s.cover_image_key, appId),
     })),
-    related_characters: relatedCharacters.results,
+    related_characters: translatedRelatedChars,
   });
 });
 
 prayersRoutes.get("/for-story/:storyId", async (c) => {
   const appId = resolvePublicAppId(c);
-  const storyId = c.req.param("storyId");
+  const locale = resolveLocale(c);
+  const rawId = c.req.param("storyId");
+  const storyId = (await resolveStoryId(c.env.DB, appId, rawId)) ?? rawId;
 
   const result = await c.env.DB.prepare(
     `SELECT p.id, p.title, p.slug, p.description, pc.name as category_name, pc.icon as category_icon
@@ -162,5 +178,12 @@ prayersRoutes.get("/for-story/:storyId", async (c) => {
     .bind(storyId, appId)
     .all();
 
-  return c.json({ prayers: result.results });
+  const prayers = await overlayTranslations(c.env.DB, result.results as any[], {
+    entityType: "prayer",
+    appId,
+    locale,
+    fields: ["title", "description"],
+  });
+
+  return c.json({ prayers });
 });
