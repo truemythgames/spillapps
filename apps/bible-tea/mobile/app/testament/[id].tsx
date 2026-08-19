@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useAppStore, type StoryWithCover } from "@/stores/app";
 import { useGate } from "@/lib/useGate";
 import { CoverImage } from "@/components/CoverImage";
-import { getLocalProgress } from "@/lib/storage";
+import { getLocalProgress, completionPercent } from "@/lib/storage";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
 export default function TestamentScreen() {
@@ -54,8 +54,8 @@ export default function TestamentScreen() {
       >
         {sectionNames.map((name) => {
           const sectionStories = grouped[name];
-          const completed = sectionStories.filter((s) => progress[s.id]?.completed).length;
-          const pct = sectionStories.length > 0 ? Math.round((completed / sectionStories.length) * 100) : 0;
+          const completed = sectionStories.filter((s) => progress[s.id]?.completed || (s.apiId && progress[s.apiId]?.completed)).length;
+          const pct = completionPercent(completed, sectionStories.length);
 
           return (
             <View key={name} style={styles.seasonBlock}>
@@ -68,7 +68,7 @@ export default function TestamentScreen() {
               </View>
 
               {sectionStories.map((story) => {
-                const done = progress[story.id]?.completed;
+                const done = !!(progress[story.id]?.completed || (story.apiId && progress[story.apiId]?.completed));
                 return (
                   <Pressable
                     key={story.id}

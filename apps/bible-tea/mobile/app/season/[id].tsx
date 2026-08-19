@@ -79,13 +79,13 @@ export default function SeasonScreen() {
           </View>
         }
         renderItem={({ item, index }) => {
-          const p = progress[item.id];
+          const p = progress[item.id] ?? progress[item.slug];
           const isCompleted = p?.completed;
 
           return (
             <Pressable
               style={styles.storyRow}
-              onPress={() => router.push(`/story/${item.id}`)}
+              onPress={() => router.push(`/story/${item.slug ?? item.id}`)}
             >
               <View style={styles.storyNumber}>
                 <Text

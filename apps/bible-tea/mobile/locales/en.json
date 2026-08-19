@@ -26,6 +26,8 @@
   "home": {
     "title": "Bible Tea",
     "storyOfTheDay": "STORY OF THE DAY",
+    "today": "TODAY",
+    "everydayWord": "Everyday Word",
     "noConnection": "No connection",
     "noConnectionDesc": "Check your internet and try again"
   },
@@ -58,7 +60,11 @@
     "startPrayer": "Start Prayer",
     "free": "Free",
     "createTitle": "Create Your Prayer",
-    "createSubtitle": "Tell me what's on your heart and I'll help you find the words"
+    "createSubtitle": "Tell me what's on your heart and I'll help you find the words",
+    "completed": "completed",
+    "of": "{{completed}} of {{total}} prayers",
+    "prayer": "prayer",
+    "prayers": "prayers"
   },
   "discover": {
     "title": "Discover",
@@ -93,6 +99,7 @@
     "greetingExplain": "Drop a passage, verse, or topic and I'll break it down so it actually makes sense.",
     "greetingFree": "Hey! Ask me literally anything about the Bible — I'm here for all of it.",
     "greetingStory": "You're reading \"{{title}}\" ({{ref}}). Ask me anything — what it means, historical context, how it applies to your life, or anything else!",
+    "greetingStoryNoRef": "You're reading \"{{title}}\". Ask me anything — what it means, historical context, how it applies to your life, or anything else!",
     "titlePrayer": "Create a Prayer",
     "placeholderPrayer": "What would you like to pray about?",
     "greetingPrayer": "What's on your heart right now? Tell me what you're going through, what you're thankful for, or what you need — and I'll help you put it into a prayer.",
@@ -108,7 +115,9 @@
     "playSession": "Play Session",
     "askQuestion": "Ask a question",
     "noTranscript": "Transcript not yet generated.",
-    "chooseVoice": "Choose a voice"
+    "chooseVoice": "Choose a voice",
+    "relatedPrayers": "Related Prayers",
+    "relatedCharacters": "Related Characters"
   },
   "unlock": {
     "unlocked": "Unlocked",
@@ -123,12 +132,18 @@
   "liked": {
     "title": "My Likes",
     "emptyTitle": "No liked stories yet",
-    "emptyDesc": "Tap the heart on any story to save it here."
+    "emptyDesc": "Tap the heart on any story to save it here.",
+    "prayerTitle": "Liked prayers",
+    "emptyPrayerTitle": "No liked prayers yet",
+    "emptyPrayerDesc": "Tap the heart on a prayer to save it here."
   },
   "completedScreen": {
     "title": "Completed",
     "emptyTitle": "No completed stories yet",
-    "emptyDesc": "Finish listening to a story and it will appear here."
+    "emptyDesc": "Finish listening to a story and it will appear here.",
+    "prayerTitle": "Completed prayers",
+    "emptyPrayerTitle": "No completed prayers yet",
+    "emptyPrayerDesc": "Finish listening to a prayer and it will appear here."
   },
   "characters": {
     "title": "Bible Characters"
@@ -251,7 +266,12 @@
     "androidStep1": "Long-press your home screen",
     "androidStep2": "Tap \"Widgets\" and search \"Bible Tea\"",
     "androidStep3": "Drag the widget to your home screen",
-    "gotIt": "Got it"
+    "gotIt": "Got it",
+    "dismiss": "Dismiss"
+  },
+  "player": {
+    "viewStory": "View story",
+    "viewPrayer": "View prayer"
   },
   "postPurchase": {
     "title": "You're all set!",

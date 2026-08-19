@@ -39,6 +39,9 @@ export const spacing = {
   xxl: 48,
 };
 
+/** Mini player bar: progress (3) + thumb (40) + vertical padding. */
+export const MINI_PLAYER_HEIGHT = 3 + 40 + spacing.sm * 2;
+
 export const radius = {
   sm: 8,
   md: 12,

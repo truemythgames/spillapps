@@ -151,8 +151,7 @@ export default function PaywallScreen() {
     const pkg = getTargetPackage() ?? packages[0];
 
     if (!pkg) {
-      setSubscribed(true);
-      router.replace("/post-purchase" as any);
+      Alert.alert(t("paywall.purchaseFailed"), t("paywall.purchaseError"));
       return;
     }
 

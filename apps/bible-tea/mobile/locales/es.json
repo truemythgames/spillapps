@@ -26,6 +26,8 @@
   "home": {
     "title": "Bible Tea",
     "storyOfTheDay": "HISTORIA DEL DÍA",
+    "today": "HOY",
+    "everydayWord": "Palabra de Cada Día",
     "noConnection": "Sin conexión",
     "noConnectionDesc": "Revisa tu internet e inténtalo de nuevo"
   },
@@ -58,7 +60,11 @@
     "startPrayer": "Iniciar oración",
     "free": "Gratis",
     "createTitle": "Crea Tu Oración",
-    "createSubtitle": "Dime qué hay en tu corazón y te ayudo a encontrar las palabras"
+    "createSubtitle": "Dime qué hay en tu corazón y te ayudo a encontrar las palabras",
+    "completed": "completadas",
+    "of": "{{completed}} de {{total}} oraciones",
+    "prayer": "oración",
+    "prayers": "oraciones"
   },
   "discover": {
     "title": "Explorar",
@@ -93,6 +99,7 @@
     "greetingExplain": "Dime un pasaje, versículo o tema y te lo explico de forma que tenga sentido.",
     "greetingFree": "¡Hola! Pregúntame lo que quieras sobre la Biblia — estoy para todo.",
     "greetingStory": "Estás leyendo \"{{title}}\" ({{ref}}). Pregúntame lo que quieras — qué significa, contexto histórico, cómo aplicarlo a tu vida, ¡lo que sea!",
+    "greetingStoryNoRef": "Estás leyendo \"{{title}}\". Pregúntame lo que quieras — qué significa, contexto histórico, cómo aplicarlo a tu vida, ¡lo que sea!",
     "titlePrayer": "Crea una oración",
     "placeholderPrayer": "¿Por qué quieres orar?",
     "greetingPrayer": "¿Qué hay en tu corazón ahora mismo? Cuéntame por lo que estás pasando, por lo que estás agradecido, o lo que necesitas — y te ayudo a ponerlo en una oración.",
@@ -108,7 +115,9 @@
     "playSession": "Reproducir",
     "askQuestion": "Hacer una pregunta",
     "noTranscript": "Transcripción aún no disponible.",
-    "chooseVoice": "Elige una voz"
+    "chooseVoice": "Elige una voz",
+    "relatedPrayers": "Oraciones relacionadas",
+    "relatedCharacters": "Personajes relacionados"
   },
   "unlock": {
     "unlocked": "Desbloqueado",
@@ -123,12 +132,18 @@
   "liked": {
     "title": "Mis favoritas",
     "emptyTitle": "Aún no tienes favoritas",
-    "emptyDesc": "Toca el corazón en cualquier historia para guardarla aquí."
+    "emptyDesc": "Toca el corazón en cualquier historia para guardarla aquí.",
+    "prayerTitle": "Oraciones favoritas",
+    "emptyPrayerTitle": "Aún no tienes oraciones favoritas",
+    "emptyPrayerDesc": "Toca el corazón en una oración para guardarla aquí."
   },
   "completedScreen": {
     "title": "Completadas",
     "emptyTitle": "Aún no hay historias completadas",
-    "emptyDesc": "Termina de escuchar una historia y aparecerá aquí."
+    "emptyDesc": "Termina de escuchar una historia y aparecerá aquí.",
+    "prayerTitle": "Oraciones completadas",
+    "emptyPrayerTitle": "Aún no hay oraciones completadas",
+    "emptyPrayerDesc": "Termina de escuchar una oración y aparecerá aquí."
   },
   "characters": {
     "title": "Personajes bíblicos"
@@ -251,7 +266,12 @@
     "androidStep1": "Mantén presionada tu pantalla de inicio",
     "androidStep2": "Toca \"Widgets\" y busca \"Bible Tea\"",
     "androidStep3": "Arrastra el widget a tu pantalla de inicio",
-    "gotIt": "Entendido"
+    "gotIt": "Entendido",
+    "dismiss": "Cerrar"
+  },
+  "player": {
+    "viewStory": "Ver historia",
+    "viewPrayer": "Ver oración"
   },
   "postPurchase": {
     "title": "¡Todo listo!",

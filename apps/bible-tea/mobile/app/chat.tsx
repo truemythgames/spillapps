@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   Pressable,
   FlatList,
   KeyboardAvoidingView,
+  Keyboard,
   Platform,
   ActivityIndicator,
 } from "react-native";
@@ -15,7 +16,8 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import { api } from "@/lib/api";
-import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
+import { usePlayerStore } from "@/stores/player";
+import { colors, fonts, fontSize, spacing, radius, MINI_PLAYER_HEIGHT } from "@/lib/theme";
 
 interface Message {
   id: string;
@@ -45,13 +47,35 @@ export default function ChatConversation() {
 
   const config = TOPIC_CONFIG[topic ?? "free"] ?? TOPIC_CONFIG.free;
 
+  const trimmedRef = storyRef?.trim();
+
   const storyContext = topic === "story" && storyTitle
-    ? `I'm reading "${storyTitle}" (${storyRef || ""}). `
+    ? `I'm reading "${storyTitle}"${trimmedRef ? ` (${trimmedRef})` : ""}. `
     : "";
 
   const greeting = topic === "story" && storyTitle
-    ? t("chat.greetingStory", { title: storyTitle, ref: storyRef })
+    ? trimmedRef
+      ? t("chat.greetingStory", { title: storyTitle, ref: trimmedRef })
+      : t("chat.greetingStoryNoRef", { title: storyTitle })
     : config.greeting;
+
+  const playing = usePlayerStore((s) => !!s.currentStory);
+  const [keyboardOpen, setKeyboardOpen] = useState(false);
+
+  useEffect(() => {
+    const show = Keyboard.addListener(
+      Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow",
+      () => setKeyboardOpen(true)
+    );
+    const hide = Keyboard.addListener(
+      Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide",
+      () => setKeyboardOpen(false)
+    );
+    return () => {
+      show.remove();
+      hide.remove();
+    };
+  }, []);
 
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([
@@ -146,7 +170,18 @@ export default function ChatConversation() {
       />
 
       {/* Input */}
-      <View style={[styles.inputRow, { paddingBottom: insets.bottom + 8 }]}>
+      <View
+        style={[
+          styles.inputRow,
+          {
+            paddingBottom: keyboardOpen
+              ? spacing.sm
+              : playing
+                ? insets.bottom + spacing.sm + MINI_PLAYER_HEIGHT + spacing.sm
+                : insets.bottom + spacing.sm,
+          },
+        ]}
+      >
         <TextInput
           style={styles.input}
           placeholder={config.placeholder}

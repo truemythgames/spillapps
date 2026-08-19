@@ -22,13 +22,15 @@ import { Skeleton, SkeletonText } from "@/components/Skeleton";
 import { WidgetCard } from "@/components/WidgetPrompt";
 import { CoverImage } from "@/components/CoverImage";
 import { VerseOfTheDayCard } from "@/components/VerseShareCard";
+import { everydayWordPlaylist, homePlaylistRows } from "@/lib/home-playlists";
 
 const CARD_WIDTH = 150;
 const CARD_IMAGE_HEIGHT = 150;
 
-function SectionHeader({ title }: { title: string }) {
+function SectionHeader({ title, label }: { title: string; label?: string }) {
   return (
     <View style={styles.sectionHeader}>
+      {label ? <Text style={styles.sectionLabel}>{label}</Text> : null}
       <Text style={styles.sectionTitle}>{title}</Text>
     </View>
   );
@@ -186,14 +188,9 @@ export default function HomeScreen() {
   }, [router]);
 
   const sortedPlaylists = useMemo(() => {
-    const copy = [...playlists];
-    copy.sort((a, b) => {
-      const aStart = a.name.toLowerCase().includes("start here") ? 0 : 1;
-      const bStart = b.name.toLowerCase().includes("start here") ? 0 : 1;
-      return aStart - bStart;
-    });
-    return copy;
-  }, [playlists]);
+    const everyday = everydayWordPlaylist(stories, t("home.everydayWord"));
+    return homePlaylistRows(playlists, everyday);
+  }, [playlists, stories, t]);
 
   React.useEffect(() => {
     if (stories.length === 0) loadInitialData();
@@ -266,20 +263,14 @@ export default function HomeScreen() {
         </Pressable>
       )}
 
-      {/* Verse of the Day — shareable branded card */}
-      <VerseOfTheDayCard
-        storyId={storyOfTheDay?.id}
-        coverImageUrl={storyOfTheDay?.cover_image_url}
-      />
-
-      {/* Widget prompt — hidden once the user has added the widget */}
-      <WidgetCard />
-
       {/* Playlist sections or skeleton placeholders */}
       {sortedPlaylists.length > 0 ? (
         sortedPlaylists.map((playlist) => (
           <View key={playlist.id} style={styles.section}>
-            <SectionHeader title={playlist.name} />
+            <SectionHeader
+              title={playlist.name}
+              label={playlist.id.startsWith("everyday-word-") ? t("home.today") : undefined}
+            />
             <FlatList
               horizontal
               data={playlist.stories}
@@ -311,6 +302,12 @@ export default function HomeScreen() {
           </View>
         </>
       )}
+
+      <VerseOfTheDayCard
+        storyId={storyOfTheDay?.id}
+        coverImageUrl={storyOfTheDay?.cover_image_url}
+      />
+      <WidgetCard />
     </ScrollView>
     </Animated.View>
   );
@@ -385,6 +382,13 @@ const styles = StyleSheet.create({
   sectionHeader: {
     paddingHorizontal: spacing.lg,
     marginBottom: spacing.sm,
+  },
+  sectionLabel: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: fontSize.xs,
+    color: colors.accent,
+    letterSpacing: 1.4,
+    marginBottom: 4,
   },
   sectionTitle: {
     fontFamily: fonts.heading,

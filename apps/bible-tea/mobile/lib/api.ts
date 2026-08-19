@@ -1,4 +1,5 @@
 import Constants from "expo-constants";
+import { getSession, clearSession } from "@/lib/identity";
 
 const extra = Constants.expoConfig?.extra as
   | { apiUrl?: string; appId?: string }
@@ -20,20 +21,41 @@ function getLanguage(): string {
   }
 }
 
+async function buildHeaders(
+  options: RequestInit,
+  token: string | null
+): Promise<Record<string, string>> {
+  return {
+    "Content-Type": "application/json",
+    "Accept-Language": getLanguage(),
+    "X-App-Id": APP_ID,
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...(options.headers as Record<string, string>),
+  };
+}
+
 async function request<T>(
   path: string,
   options: RequestInit = {}
 ): Promise<T> {
-  const headers: Record<string, string> = {
-    "Content-Type": "application/json",
-    "Accept-Language": getLanguage(),
-    ...(options.headers as Record<string, string>),
-  };
+  const session = await getSession();
 
-  const res = await fetch(`${API_BASE}${path}`, {
+  let res = await fetch(`${API_BASE}${path}`, {
     ...options,
-    headers,
+    headers: await buildHeaders(options, session?.token ?? null),
   });
+
+  // Sessions last 30 days; a rejected token means mint a new one and retry once.
+  if (res.status === 401 && session) {
+    await clearSession();
+    const retry = await getSession();
+    if (retry) {
+      res = await fetch(`${API_BASE}${path}`, {
+        ...options,
+        headers: await buildHeaders(options, retry.token),
+      });
+    }
+  }
 
   if (!res.ok) {
     throw new Error(`API Error: ${res.status} ${res.statusText}`);
@@ -75,7 +97,7 @@ export const api = {
   },
 
   getStory: (id: string) =>
-    request<{ story: any; audio_versions: any[]; characters: any[] }>(
+    request<{ story: any; audio_versions: any[]; characters: any[]; related_prayers?: any[] }>(
       `/v1/stories/${id}`
     ),
 
@@ -118,6 +140,9 @@ export const api = {
     request<{ prayer: any; audio_versions: any[]; related_stories: any[]; related_characters: any[] }>(
       `/v1/prayers/${id}`
     ),
+
+  getPrayersForStory: (storyId: string) =>
+    request<{ prayers: any[] }>(`/v1/prayers/for-story/${encodeURIComponent(storyId)}`),
 
   // Progress
   getProgress: () =>
@@ -168,9 +193,12 @@ export const api = {
     onDelta: (delta: string) => void,
     onDone: () => void,
   ) => {
+    const session = await getSession();
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
       "Accept-Language": getLanguage(),
+      "X-App-Id": APP_ID,
+      ...(session ? { Authorization: `Bearer ${session.token}` } : {}),
     };
 
     const res = await fetch(`${API_BASE}/v1/chat/stream`, {
@@ -205,13 +233,4 @@ export const api = {
     }
     onDone();
   },
-
-  getChatConversations: (limit = 20, offset = 0) =>
-    request<{ conversations: any[] }>(`/v1/chat/conversations?limit=${limit}&offset=${offset}`),
-
-  getChatConversation: (id: string) =>
-    request<{ conversation: any; messages: any[] }>(`/v1/chat/conversations/${id}`),
-
-  deleteChatConversation: (id: string) =>
-    request<{ success: boolean }>(`/v1/chat/conversations/${id}`, { method: "DELETE" }),
 };

@@ -85,7 +85,7 @@ export default function PlaylistScreen() {
         renderItem={({ item, index }) => (
           <Pressable
             style={styles.storyRow}
-            onPress={() => router.push(`/story/${item.id}`)}
+            onPress={() => router.push(`/story/${item.slug ?? item.id}`)}
           >
             <Text style={styles.indexText}>{index + 1}</Text>
             <CoverImage

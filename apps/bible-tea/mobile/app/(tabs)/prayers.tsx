@@ -16,6 +16,8 @@ import { useTranslation } from "react-i18next";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { api } from "@/lib/api";
+import { useAppStore } from "@/stores/app";
+import { getLocalProgress, getPrayerStreakData, isPrayerPlayerId, prayerRouteId, completionPercent } from "@/lib/storage";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
 const PRAYER_COVER = require("@/assets/prayer-chat-cover.webp");
@@ -56,20 +58,27 @@ export default function PrayersScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
 
+  const likedStoryIds = useAppStore((s) => s.likedStoryIds);
+  const completedStoryIds = useAppStore((s) => s.completedStoryIds);
+  const progressVersion = useAppStore((s) => s.progressVersion);
+
   const [categories, setCategories] = useState<PrayerCategory[]>([]);
   const [prayers, setPrayers] = useState<Prayer[]>([]);
+  const [allPrayers, setAllPrayers] = useState<Prayer[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
   const loadData = useCallback(async () => {
     try {
-      const [catRes, prayerRes] = await Promise.all([
+      const [catRes, allRes] = await Promise.all([
         api.getPrayerCategories(),
         api.getPrayers(),
       ]);
       setCategories(catRes.categories);
-      setPrayers(prayerRes.prayers);
+      setAllPrayers(allRes.prayers);
+      setPrayers(allRes.prayers);
+      setSelectedCategory(null);
     } catch (err) {
       console.error("[Prayers] Failed to load:", err);
     } finally {
@@ -110,6 +119,22 @@ export default function PrayersScreen() {
     );
   }
 
+  void progressVersion;
+  const progress = getLocalProgress();
+  const likedCount = new Set(
+    likedStoryIds.filter(isPrayerPlayerId).map(prayerRouteId),
+  ).size;
+  const completedKeys = new Set<string>();
+  for (const id of completedStoryIds) {
+    if (isPrayerPlayerId(id)) completedKeys.add(prayerRouteId(id));
+  }
+  for (const [id, p] of Object.entries(progress)) {
+    if (p.completed && isPrayerPlayerId(id)) completedKeys.add(prayerRouteId(id));
+  }
+  const completedCount = completedKeys.size;
+  const percent = completionPercent(completedCount, allPrayers.length);
+  const prayerStreak = getPrayerStreakData();
+
   return (
     <ScrollView
       style={[styles.container, { paddingTop: insets.top }]}
@@ -125,6 +150,36 @@ export default function PrayersScreen() {
       }
     >
       <Text style={styles.pageTitle}>{t("prayers.title")}</Text>
+
+      <View style={styles.progressCard}>
+        <View style={styles.progressTop}>
+          <Text style={styles.progressPercent}>{percent}%</Text>
+          <Text style={styles.progressLabel}>{t("prayers.completed")}</Text>
+        </View>
+        <View style={styles.progressBar}>
+          <View style={[styles.progressFill, { width: `${percent}%` }]} />
+        </View>
+        <Text style={styles.progressSub}>
+          {t("prayers.of", { completed: completedCount, total: allPrayers.length })}
+        </Text>
+      </View>
+      <View style={styles.statsRow}>
+        <View style={styles.statCard}>
+          <Text style={styles.statEmoji}>🔥</Text>
+          <Text style={styles.statNum}>{prayerStreak.currentStreak}</Text>
+          <Text style={styles.statLabel}>{t("explore.dayStreak")}</Text>
+        </View>
+        <Pressable style={styles.statCard} onPress={() => router.push({ pathname: "/completed", params: { kind: "prayer" } })}>
+          <Text style={styles.statEmoji}>✅</Text>
+          <Text style={styles.statNum}>{completedCount}</Text>
+          <Text style={styles.statLabel}>{t("explore.completedLabel")}</Text>
+        </Pressable>
+        <Pressable style={styles.statCard} onPress={() => router.push({ pathname: "/liked", params: { kind: "prayer" } })}>
+          <Text style={styles.statEmoji}>❤️</Text>
+          <Text style={styles.statNum}>{likedCount}</Text>
+          <Text style={styles.statLabel}>{t("explore.liked")}</Text>
+        </Pressable>
+      </View>
 
       {/* Create prayer chat card */}
       <Pressable
@@ -209,7 +264,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: spacing.lg,
   },
   pageTitle: {
     fontFamily: fonts.heading,
@@ -218,6 +273,43 @@ const styles = StyleSheet.create({
     paddingTop: spacing.lg,
     marginBottom: spacing.md,
   },
+  progressCard: {
+    backgroundColor: colors.surface,
+    borderRadius: radius.md,
+    padding: spacing.lg,
+    borderWidth: 1,
+    borderColor: colors.surfaceBorder,
+    marginBottom: spacing.md,
+  },
+  progressTop: { flexDirection: "row", alignItems: "baseline", gap: 6 },
+  progressPercent: { fontFamily: fonts.bodyBold, fontSize: 32, color: colors.primary },
+  progressLabel: { fontFamily: fonts.body, fontSize: fontSize.md, color: colors.textSecondary },
+  progressBar: {
+    height: 6,
+    backgroundColor: colors.surfaceLight,
+    borderRadius: 3,
+    marginTop: spacing.sm,
+    overflow: "hidden",
+  },
+  progressFill: { height: "100%", backgroundColor: colors.primary, borderRadius: 3 },
+  progressSub: { fontFamily: fonts.body, fontSize: fontSize.xs, color: colors.textMuted, marginTop: spacing.xs },
+  statsRow: {
+    flexDirection: "row",
+    gap: spacing.sm,
+    marginBottom: spacing.lg,
+  },
+  statCard: {
+    flex: 1,
+    backgroundColor: colors.surface,
+    borderRadius: radius.md,
+    paddingVertical: spacing.md,
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: colors.surfaceBorder,
+  },
+  statEmoji: { fontSize: 20 },
+  statNum: { fontFamily: fonts.bodyBold, fontSize: fontSize.xl, color: colors.text, marginTop: 4 },
+  statLabel: { fontFamily: fonts.body, fontSize: fontSize.xs, color: colors.textMuted, marginTop: 2 },
   categoryList: {
     paddingVertical: spacing.sm,
     gap: spacing.sm,

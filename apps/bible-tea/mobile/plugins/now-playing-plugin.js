@@ -60,17 +60,18 @@ class NowPlayingBridge: RCTEventEmitter {
     }
     cc.togglePlayPauseCommand.isEnabled = true
     cc.togglePlayPauseCommand.addTarget { _ in
-      NowPlayingBridge.emit("onRemotePause")
+      let rate = MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate] as? Double ?? 0
+      NowPlayingBridge.emit(rate > 0 ? "onRemotePause" : "onRemotePlay")
       return .success
     }
     cc.skipForwardCommand.isEnabled = true
-    cc.skipForwardCommand.preferredIntervals = [15]
+    cc.skipForwardCommand.preferredIntervals = [10]
     cc.skipForwardCommand.addTarget { _ in
       NowPlayingBridge.emit("onRemoteSkipForward")
       return .success
     }
     cc.skipBackwardCommand.isEnabled = true
-    cc.skipBackwardCommand.preferredIntervals = [15]
+    cc.skipBackwardCommand.preferredIntervals = [10]
     cc.skipBackwardCommand.addTarget { _ in
       NowPlayingBridge.emit("onRemoteSkipBackward")
       return .success

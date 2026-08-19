@@ -1,6 +1,5 @@
 import { Platform } from "react-native";
-import * as SecureStore from "expo-secure-store";
-import * as Crypto from "expo-crypto";
+import { getUserId } from "@/lib/identity";
 import { trackSubscription, trackEvent } from "@/lib/analytics";
 
 let AppEventsLogger: any = null;
@@ -26,13 +25,6 @@ const REVENUECAT_ANDROID_KEY = "goog_OrYzAxZViXKjAqteWSEQolNVWNU";
 
 const ENTITLEMENT_ID = "premium";
 
-// Stable per-install identifier used as the RevenueCat appUserID.
-// Persisted in the OS keychain via expo-secure-store so it survives app
-// restarts and (on iOS) reinstalls. We prefix it so it's recognisable in
-// the RevenueCat dashboard versus auto-generated `$RCAnonymousID:` ids.
-const APP_USER_ID_KEY = "rc_app_user_id";
-const APP_USER_ID_PREFIX = "bt_";
-
 export const PRODUCT_IDS = {
   quarterlyOnboarding3DayTrial: "bibletea_quarterly_onboarding_3day_freetrial",
   quarterly30DayTrial: "bibletea_quarterly_30day_trial",
@@ -43,34 +35,10 @@ export const PRODUCT_IDS = {
 } as const;
 
 let initialized = false;
-let cachedAppUserId: string | null = null;
 let cachedOffering: PurchasesOffering | null = null;
 let offeringPromise: Promise<PurchasesOffering | null> | null = null;
-
-async function getOrCreateAppUserId(): Promise<string> {
-  if (cachedAppUserId) return cachedAppUserId;
-  try {
-    const existing = await SecureStore.getItemAsync(APP_USER_ID_KEY);
-    if (existing) {
-      cachedAppUserId = existing;
-      return existing;
-    }
-  } catch (e) {
-    console.warn("[Purchases] Failed to read stored appUserID:", e);
-  }
-
-  const fresh = `${APP_USER_ID_PREFIX}${Crypto.randomUUID()}`;
-  try {
-    await SecureStore.setItemAsync(APP_USER_ID_KEY, fresh);
-  } catch (e) {
-    console.warn("[Purchases] Failed to persist appUserID:", e);
-  }
-  cachedAppUserId = fresh;
-  return fresh;
-}
-
 export async function getAppUserId(): Promise<string> {
-  return getOrCreateAppUserId();
+  return getUserId();
 }
 
 export async function initPurchases(userId?: string): Promise<void> {
@@ -82,18 +50,16 @@ export async function initPurchases(userId?: string): Promise<void> {
     Purchases.setLogLevel(LOG_LEVEL.DEBUG);
   }
 
-  // Configure anonymously first, then logIn with our stable id. This makes
-  // RevenueCat alias any pre-existing anonymous customer (e.g. an install
-  // that already purchased before this fix shipped) onto the stable id,
-  // preserving entitlements instead of orphaning them.
+  // Anonymous configure, then logIn with our own user id. RevenueCat aliases
+  // the existing anonymous customer onto it, so entitlements carry over and a
+  // customer maps to a row in our users table.
   Purchases.configure({ apiKey });
   initialized = true;
 
   try {
-    const stableId = userId?.trim() || (await getOrCreateAppUserId());
-    await Purchases.logIn(stableId);
+    await Purchases.logIn(userId?.trim() || (await getUserId()));
   } catch (e) {
-    console.warn("[Purchases] logIn with stable id failed:", e);
+    console.warn("[Purchases] logIn failed:", e);
   }
 
   // Pass Facebook Anonymous ID so RevenueCat can forward events via Conversions API
@@ -187,31 +153,49 @@ export async function restorePurchases(): Promise<boolean> {
   }
 }
 
-// Auto-sync runs at most once per install: after a reinstall the local
-// RevenueCat user id is new, so an active store purchase can look missing
-// until the receipt is synced onto this install.
-const AUTO_SYNC_KEY = "rc_auto_synced";
+/** Store expirations can miss RevenueCat's webhook, so the receipt is
+ * verified once per launch rather than trusting a cached entitlement. */
+let syncedThisLaunch = false;
 
 export async function checkSubscription(): Promise<boolean | null> {
   if (!Purchases) return null;
+
+  // Cached answer first: works offline, so a subscriber on bad signal is
+  // never locked out by a failed request.
+  let cached: boolean | null = null;
   try {
-    const customerInfo = await Purchases.getCustomerInfo();
-    if (hasActiveEntitlement(customerInfo)) return true;
-
-    const alreadySynced = await SecureStore.getItemAsync(AUTO_SYNC_KEY).catch(() => null);
-    if (alreadySynced) return false;
-    await SecureStore.setItemAsync(AUTO_SYNC_KEY, "1").catch(() => {});
-
-    // syncPurchases is silent (no user prompt), unlike restorePurchases.
-    await Purchases.syncPurchases();
-    const synced = await Purchases.getCustomerInfo();
-    return hasActiveEntitlement(synced);
+    cached = hasActiveEntitlement(await Purchases.getCustomerInfo());
   } catch (e) {
-    console.warn("[Purchases] Check failed:", e);
-    return null;
+    console.warn("[Purchases] Cached check failed:", e);
+  }
+
+  if (syncedThisLaunch) return cached;
+  syncedThisLaunch = true;
+
+  // Then confirm against the current store receipt. Access is only revoked
+  // when fresh data says so, never because the network was unavailable.
+  try {
+    await Purchases.invalidateCustomerInfoCache();
+    await Purchases.syncPurchases();
+    return hasActiveEntitlement(await Purchases.getCustomerInfo());
+  } catch (e) {
+    console.warn("[Purchases] Receipt verification failed:", e);
+    return cached;
   }
 }
 
 function hasActiveEntitlement(info: CustomerInfo): boolean {
-  return typeof info?.entitlements?.active?.[ENTITLEMENT_ID] !== "undefined";
+  const ent = info?.entitlements?.active?.[ENTITLEMENT_ID];
+  if (!ent) return false;
+  if (ent.isActive === false) return false;
+  if (ent.expirationDate && new Date(ent.expirationDate).getTime() <= Date.now()) {
+    return false;
+  }
+  // Receipt has no live products → do not trust a leftover RC entitlement.
+  const activeSubs = info.activeSubscriptions;
+  if (Array.isArray(activeSubs) && activeSubs.length === 0) {
+    const store = String(ent.store ?? "").toUpperCase();
+    if (store !== "PROMOTIONAL") return false;
+  }
+  return true;
 }

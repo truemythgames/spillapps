@@ -10,7 +10,7 @@ import { useGate } from "@/lib/useGate";
 import { coverUrl } from "@/lib/content";
 import { CoverImage } from "@/components/CoverImage";
 
-import { getLocalProgress } from "@/lib/storage";
+import { getLocalProgress, completionPercent, isPrayerPlayerId, prayerRouteId } from "@/lib/storage";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
 export default function StoriesScreen() {
@@ -31,26 +31,39 @@ export default function StoriesScreen() {
     } finally { setRefreshing(false); }
   }, [loadRemoteData]);
 
-  const likedCount = likedStoryIds.length;
+  const likedCount = new Set(likedStoryIds.filter((id) => !isPrayerPlayerId(id))).size;
   // progressVersion triggers re-render when progress is synced
   void progressVersion;
   const progress = getLocalProgress();
-  const completedFromLocal = Object.values(progress).filter((p) => p.completed).length;
-  const completedCount = Math.max(completedStoryIds.length, completedFromLocal);
-  const percent = stories.length > 0 ? Math.round((completedCount / stories.length) * 100) : 0;
+  const storyMap = Object.fromEntries(
+    stories.flatMap((s) => (s.apiId && s.apiId !== s.id ? [[s.id, s], [s.apiId, s]] : [[s.id, s]]))
+  ) as Record<string, (typeof stories)[number]>;
+  const completedKeys = new Set<string>();
+  for (const id of completedStoryIds) {
+    if (isPrayerPlayerId(id)) continue;
+    completedKeys.add(storyMap[id]?.id ?? id);
+  }
+  for (const [id, p] of Object.entries(progress)) {
+    if (!p.completed || isPrayerPlayerId(id)) continue;
+    completedKeys.add(storyMap[id]?.id ?? id);
+  }
+  const completedCount = completedKeys.size;
+  const percent = completionPercent(completedCount, stories.length);
 
-  const storyMap = Object.fromEntries(stories.map((s) => [s.id, s]));
+  const seenContinue = new Set<string>();
   const continueListening = Object.entries(progress)
     .filter(([id, p]) => !p.completed && p.position > 0 && storyMap[id])
     .sort(([, a], [, b]) => (b.lastPlayedAt ?? "").localeCompare(a.lastPlayedAt ?? ""))
-    .slice(0, 10)
-    .map(([id, p]) => {
+    .reduce<Array<(typeof stories)[number] & { progressPercent: number }>>((acc, [id, p]) => {
       const story = storyMap[id];
-      return {
+      if (!story || seenContinue.has(story.id) || acc.length >= 10) return acc;
+      seenContinue.add(story.id);
+      acc.push({
         ...story,
         progressPercent: p.duration > 0 ? Math.round((p.position / p.duration) * 100) : 0,
-      };
-    });
+      });
+      return acc;
+    }, []);
 
   return (
     <ScrollView
@@ -107,7 +120,13 @@ export default function StoriesScreen() {
           <Text style={styles.sectionTitle}>{t("explore.nowPlaying")}</Text>
           <Pressable
             style={styles.nowPlaying}
-            onPress={() => guardedPush(`/story/${currentStory.id}`)}
+            onPress={() =>
+              guardedPush(
+                isPrayerPlayerId(currentStory.id)
+                  ? `/prayer/${prayerRouteId(currentStory.id)}`
+                  : `/story/${currentStory.id}`,
+              )
+            }
           >
             <CoverImage uri={currentStory.cover_image_url} storyId={currentStory.id} style={styles.npThumb} contentFit="cover" transition={300} />
             <View style={styles.npInfo}>

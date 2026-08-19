@@ -15,11 +15,13 @@ import { usePlayerStore } from "@/stores/player";
 import { useAppStore } from "@/stores/app";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 import { api } from "@/lib/api";
+import { isSamePrayerPlayer, prayerAliasIds, prayerPlayerId } from "@/lib/storage";
 
 interface Speaker {
   key: string;
   name: string;
   audioUrl: string;
+  durationSeconds?: number;
 }
 
 export default function PrayerScreen() {
@@ -28,7 +30,7 @@ export default function PrayerScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
-  const { currentStory, isPlaying, play, pause, resume } = usePlayerStore();
+  const { currentStory, currentSpeaker, isPlaying, play, pause, resume } = usePlayerStore();
   const selectedSpeaker = useAppStore((s) => s.selectedSpeaker);
 
   const [prayer, setPrayer] = useState<any>(null);
@@ -51,6 +53,7 @@ export default function PrayerScreen() {
           key: a.speaker_id,
           name: a.speaker_name,
           audioUrl: a.audio_url,
+          durationSeconds: Number(a.duration_seconds) || 0,
         }));
         setSpeakers(mapped);
 
@@ -65,13 +68,14 @@ export default function PrayerScreen() {
     return () => { cancelled = true; };
   }, [id]);
 
-  const isThisPraying =
-    currentStory?.id === `prayer-${id}` && isPlaying;
+  const isThisLoaded = isSamePrayerPlayer(currentStory?.id, prayer, id);
+  const isThisPraying = isThisLoaded && isPlaying;
 
   const handlePlay = () => {
     if (!activeSpeaker) return;
 
-    if (currentStory?.id === `prayer-${id}`) {
+    const sameSpeaker = currentSpeaker?.id === activeSpeaker.key;
+    if (isThisLoaded && sameSpeaker) {
       if (isPlaying) {
         pause();
       } else {
@@ -81,13 +85,17 @@ export default function PrayerScreen() {
     }
 
     const prayerStory = {
-      id: `prayer-${id}`,
+      id: prayerPlayerId(prayer, id),
       title: prayer?.title ?? "Prayer",
       description: prayer?.category_name ?? "",
       cover_image_url: null,
+      duration_seconds:
+        activeSpeaker.durationSeconds || prayer?.duration_seconds || 0,
+      progressAliases: prayerAliasIds(prayer, id),
     };
     const speaker = { id: activeSpeaker.key, name: activeSpeaker.name };
     play(prayerStory, speaker, activeSpeaker.audioUrl);
+    router.push("/player");
   };
 
   if (loading) {
@@ -138,7 +146,23 @@ export default function PrayerScreen() {
                   styles.speakerChip,
                   activeSpeaker?.key === sp.key && styles.speakerChipActive,
                 ]}
-                onPress={() => setActiveSpeaker(sp)}
+                onPress={() => {
+                  setActiveSpeaker(sp);
+                  if (isThisLoaded) {
+                    play(
+                      {
+                        id: prayerPlayerId(prayer, id),
+                        title: prayer?.title ?? "Prayer",
+                        description: prayer?.category_name ?? "",
+                        cover_image_url: null,
+                        duration_seconds: sp.durationSeconds || prayer?.duration_seconds || 0,
+                        progressAliases: prayerAliasIds(prayer, id),
+                      },
+                      { id: sp.key, name: sp.name },
+                      sp.audioUrl
+                    );
+                  }
+                }}
               >
                 <Text
                   style={[
@@ -180,7 +204,7 @@ export default function PrayerScreen() {
               <Pressable
                 key={story.id}
                 style={styles.relatedItem}
-                onPress={() => router.push(`/story/${story.slug}` as any)}
+                onPress={() => router.push(`/story/${story.slug ?? story.id}` as any)}
               >
                 <Ionicons name="book-outline" size={18} color={colors.primary} />
                 <Text style={styles.relatedItemText}>{story.title}</Text>
@@ -198,7 +222,7 @@ export default function PrayerScreen() {
               <Pressable
                 key={ch.id}
                 style={styles.relatedItem}
-                onPress={() => router.push(`/character/${encodeURIComponent(ch.name)}` as any)}
+                onPress={() => router.push(`/character/${encodeURIComponent(ch.slug ?? ch.id ?? ch.name)}` as any)}
               >
                 <Ionicons name="person-outline" size={18} color={colors.accent} />
                 <Text style={styles.relatedItemText}>{ch.name}</Text>
@@ -221,7 +245,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: spacing.lg,
     paddingVertical: spacing.sm,
   },
   headerTitle: {
@@ -235,13 +259,13 @@ const styles = StyleSheet.create({
     fontFamily: fonts.heading,
     fontSize: fontSize.xl,
     color: colors.text,
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: spacing.lg,
     marginTop: spacing.lg,
     marginBottom: spacing.lg,
   },
   speakerRow: {
     flexDirection: "row",
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: spacing.lg,
     gap: spacing.sm,
     marginBottom: spacing.md,
   },
@@ -270,7 +294,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: spacing.sm,
-    marginHorizontal: spacing.md,
+    marginHorizontal: spacing.lg,
     paddingVertical: 14,
     borderRadius: radius.lg,
     backgroundColor: colors.primary,
@@ -282,7 +306,7 @@ const styles = StyleSheet.create({
     color: colors.background,
   },
   transcriptSection: {
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: spacing.lg,
     marginBottom: spacing.xl,
   },
   transcriptText: {
@@ -292,7 +316,7 @@ const styles = StyleSheet.create({
     lineHeight: 26,
   },
   relatedSection: {
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: spacing.lg,
     marginBottom: spacing.lg,
   },
   sectionTitle: {

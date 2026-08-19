@@ -29,12 +29,14 @@ import { usePlayerStore } from "@/stores/player";
 import { useAppStore } from "@/stores/app";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 import { api } from "@/lib/api";
-import { storage } from "@/lib/storage";
+import { bibleRefFromTranscript, bibleRefFromStory } from "@/lib/bible-ref";
+import { listHasId, storage, storyAliasIds } from "@/lib/storage";
 
 interface Speaker {
   key: string;
   name: string;
   audioUrl: string;
+  durationSeconds?: number;
 }
 
 const { width } = Dimensions.get("window");
@@ -69,7 +71,6 @@ export default function StoryScreen() {
   const isSubscribed = useAppStore((s) => s.isSubscribed);
   const likedStoryIds = useAppStore((s) => s.likedStoryIds);
   const toggleLike = useAppStore((s) => s.toggleLike);
-  const isLiked = likedStoryIds.includes(id);
 
   useEffect(() => {
     if (!isSubscribed) {
@@ -77,7 +78,7 @@ export default function StoryScreen() {
     }
   }, [isSubscribed]);
 
-  const storeStory = useAppStore((s) => s.stories.find((st) => st.id === id));
+  const storeStory = useAppStore((s) => s.stories.find((st) => st.id === id || st.apiId === id));
   const [speakers, setSpeakers] = useState<Speaker[]>([]);
   const [activeSpeaker, setActiveSpeaker] = useState<Speaker | null>(null);
   const [storyDetail, setStoryDetail] = useState<any>(null);
@@ -87,10 +88,14 @@ export default function StoryScreen() {
   const story = storeStory || storyDetail;
 
   const [detailLoaded, setDetailLoaded] = useState(false);
+  const [relatedPrayers, setRelatedPrayers] = useState<any[]>([]);
+  const [relatedCharacters, setRelatedCharacters] = useState<any[]>([]);
 
   useEffect(() => {
     let cancelled = false;
     setDetailLoaded(false);
+    setRelatedPrayers([]);
+    setRelatedCharacters([]);
 
     const fetchStory = () => {
       api.getStory(apiStoryId).then((data) => {
@@ -103,6 +108,7 @@ export default function StoryScreen() {
             key: a.speaker_id,
             name: a.speaker_name,
             audioUrl: a.audio_url,
+            durationSeconds: Number(a.duration_seconds) || 0,
           }));
           setSpeakers(apiSpeakers);
           setActiveSpeaker((prev) => {
@@ -118,6 +124,17 @@ export default function StoryScreen() {
               if (saved) return saved;
             }
             return apiSpeakers[0] ?? prev;
+          });
+        }
+        setRelatedCharacters(data.characters ?? []);
+        if (data.related_prayers) {
+          setRelatedPrayers(data.related_prayers);
+        } else {
+          const storyKey = data.story?.id ?? apiStoryId;
+          api.getPrayersForStory(storyKey).then((res) => {
+            if (!cancelled) setRelatedPrayers(res.prayers ?? []);
+          }).catch(() => {
+            if (!cancelled) setRelatedPrayers([]);
           });
         }
         setDetailLoaded(true);
@@ -182,8 +199,16 @@ export default function StoryScreen() {
   const [loadingTranscript, setLoadingTranscript] = useState(true);
 
   const playerDuration = usePlayerStore((s) => s.duration);
-  const isThisPlaying = currentStory?.id === id && isPlaying;
-  const isThisLoaded = currentStory?.id === id;
+  const storyPlayerId = storeStory?.id ?? storyDetail?.slug ?? id;
+  const storyAliases = storyAliasIds(storeStory ?? null, storyDetail?.id, storyDetail?.slug, id, storyPlayerId);
+  const isLiked = listHasId(likedStoryIds, ...storyAliases);
+  const isThisLoaded =
+    currentStory?.id === id ||
+    currentStory?.id === storeStory?.id ||
+    currentStory?.id === storeStory?.apiId ||
+    currentStory?.id === storyDetail?.id ||
+    currentStory?.id === storyDetail?.slug;
+  const isThisPlaying = isThisLoaded && isPlaying;
   const hasAudio = speakers.length > 0;
 
   useEffect(() => {
@@ -202,6 +227,11 @@ export default function StoryScreen() {
   }, [id, detailLoaded, storyDetail?.transcript]);
 
   const displayTitle = storyDetail?.title ?? storeStory?.title ?? "";
+  const bibleRef =
+    bibleRefFromTranscript(storyDetail?.transcript) ||
+    bibleRefFromStory(storyDetail) ||
+    storeStory?.bibleRef ||
+    "";
 
   const handlePlayPause = useCallback(async () => {
     if (!story || !activeSpeaker) return;
@@ -209,13 +239,23 @@ export default function StoryScreen() {
       isPlaying ? await pause() : await resume();
     } else {
       play(
-        { id, title: displayTitle, cover_image_url: coverImageUrl },
+        {
+          id: storyPlayerId,
+          title: displayTitle,
+          cover_image_url: coverImageUrl,
+          duration_seconds:
+            activeSpeaker.durationSeconds ||
+            storyDetail?.duration_seconds ||
+            storeStory?.duration_seconds ||
+            0,
+          progressAliases: storyAliases,
+        },
         { id: activeSpeaker.key, name: activeSpeaker.name },
         activeSpeaker.audioUrl
       );
       router.push("/player");
     }
-  }, [story, activeSpeaker, isThisLoaded, isPlaying, displayTitle]);
+  }, [story, activeSpeaker, isThisLoaded, isPlaying, displayTitle, storyDetail, storeStory, storyPlayerId, storyAliases]);
 
   const handleSpeakerSelect = useCallback(
     async (speaker: Speaker) => {
@@ -224,12 +264,22 @@ export default function StoryScreen() {
       closeSheet();
       if (!story) return;
       await play(
-        { id, title: displayTitle, cover_image_url: coverImageUrl },
+        {
+          id: storyPlayerId,
+          title: displayTitle,
+          cover_image_url: coverImageUrl,
+          duration_seconds:
+            speaker.durationSeconds ||
+            storyDetail?.duration_seconds ||
+            storeStory?.duration_seconds ||
+            0,
+          progressAliases: storyAliases,
+        },
         { id: speaker.key, name: speaker.name },
         speaker.audioUrl
       );
     },
-    [story, id, displayTitle]
+    [story, id, displayTitle, storyDetail, storeStory, storyPlayerId, storyAliases]
   );
 
   if (!story) {
@@ -277,7 +327,7 @@ export default function StoryScreen() {
           </Pressable>
           <Pressable
             style={[styles.navBtn, styles.likeBtn, { top: insets.top + spacing.xs }]}
-            onPress={() => toggleLike(id)}
+            onPress={() => toggleLike(storyPlayerId, storyAliases)}
           >
             <Ionicons
               name={isLiked ? "heart" : "heart-outline"}
@@ -289,7 +339,7 @@ export default function StoryScreen() {
           {/* Title + meta overlaid at bottom */}
           <View style={styles.coverContent}>
             <Text style={styles.heroTitle}>{displayTitle}</Text>
-            <Text style={styles.heroRef}>{storyDetail?.bible_ref ?? storeStory?.bibleRef ?? ""}</Text>
+            {bibleRef ? <Text style={styles.heroRef}>{bibleRef}</Text> : null}
 
             {/* Speaker + Length row */}
             {hasAudio && (
@@ -334,7 +384,7 @@ export default function StoryScreen() {
           )}
           <Pressable
             style={styles.askBtn}
-            onPress={() => router.push(`/chat?topic=story&storyId=${id}&storyTitle=${encodeURIComponent(displayTitle)}&storyRef=${encodeURIComponent(storyDetail?.bible_ref ?? storeStory?.bibleRef ?? "")}` as any)}
+            onPress={() => router.push(`/chat?topic=story&storyId=${id}&storyTitle=${encodeURIComponent(displayTitle)}&storyRef=${encodeURIComponent(bibleRef)}` as any)}
           >
             <Ionicons name="sparkles" size={18} color={colors.text} />
             <Text style={styles.askBtnText}>{t("story.askQuestion")}</Text>
@@ -353,6 +403,40 @@ export default function StoryScreen() {
             </Text>
           )}
         </View>
+
+        {relatedPrayers.length > 0 && (
+          <View style={styles.relatedSection}>
+            <Text style={styles.relatedTitle}>{t("story.relatedPrayers")}</Text>
+            {relatedPrayers.map((prayer: any) => (
+              <Pressable
+                key={prayer.id}
+                style={styles.relatedItem}
+                onPress={() => router.push(`/prayer/${prayer.slug ?? prayer.id}` as any)}
+              >
+                <Ionicons name="heart-outline" size={18} color={colors.primary} />
+                <Text style={styles.relatedItemText}>{prayer.title}</Text>
+                <Ionicons name="chevron-forward" size={16} color={colors.textMuted} />
+              </Pressable>
+            ))}
+          </View>
+        )}
+
+        {relatedCharacters.length > 0 && (
+          <View style={styles.relatedSection}>
+            <Text style={styles.relatedTitle}>{t("story.relatedCharacters")}</Text>
+            {relatedCharacters.map((ch: any) => (
+              <Pressable
+                key={ch.id}
+                style={styles.relatedItem}
+                onPress={() => router.push(`/character/${encodeURIComponent(ch.slug ?? ch.id ?? ch.name)}` as any)}
+              >
+                <Ionicons name="person-outline" size={18} color={colors.accent} />
+                <Text style={styles.relatedItemText}>{ch.name}</Text>
+                <Ionicons name="chevron-forward" size={16} color={colors.textMuted} />
+              </Pressable>
+            ))}
+          </View>
+        )}
       </ScrollView>
 
       {/* Speaker picker bottom sheet */}
@@ -669,5 +753,30 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     fontStyle: "italic",
     marginTop: spacing.sm,
+  },
+  relatedSection: {
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.xl,
+    paddingBottom: spacing.sm,
+  },
+  relatedTitle: {
+    fontFamily: fonts.heading,
+    fontSize: fontSize.xl,
+    color: colors.text,
+    marginBottom: spacing.sm,
+  },
+  relatedItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.surfaceBorder,
+  },
+  relatedItemText: {
+    fontFamily: fonts.body,
+    fontSize: fontSize.md,
+    color: colors.text,
+    flex: 1,
   },
 });

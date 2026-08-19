@@ -8,8 +8,10 @@ import {
   Platform,
 } from "react-native";
 import { useTranslation } from "react-i18next";
+import { Ionicons } from "@expo/vector-icons";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 import { checkWidgetInstalled } from "@/lib/widget";
+import { storage, StorageKeys } from "@/lib/storage";
 
 /**
  * Modal with step-by-step instructions for adding the widget.
@@ -64,12 +66,14 @@ export function WidgetInstructionsModal({
 }
 
 /**
- * Inline card for the home screen. Shows below the story of the day.
- * Hidden when the widget is already installed — checked via WidgetKit.
+ * Quiet footer prompt. Hidden once the widget is installed or the user taps X.
  */
 export function WidgetCard() {
   const { t } = useTranslation();
   const [installed, setInstalled] = useState<boolean | null>(null);
+  const [dismissed, setDismissed] = useState(
+    () => storage.getBoolean(StorageKeys.WIDGET_PROMPT_DISMISSED) === true
+  );
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
@@ -86,22 +90,35 @@ export function WidgetCard() {
     return () => sub.remove();
   }, []);
 
-  if (installed === null || installed) return null;
+  const dismiss = () => {
+    storage.set(StorageKeys.WIDGET_PROMPT_DISMISSED, true);
+    setDismissed(true);
+  };
+
+  if (dismissed || installed === null || installed) return null;
 
   return (
     <>
-      <Pressable style={styles.card} onPress={() => setShowModal(true)}>
-        <View style={styles.cardLeft}>
-          <Text style={styles.cardEmoji}>🍵</Text>
-        </View>
-        <View style={styles.cardContent}>
-          <Text style={styles.cardTitle}>{t("widget.cardTitle")}</Text>
-          <Text style={styles.cardSubtitle}>{t("widget.cardSubtitle")}</Text>
-        </View>
-        <View style={styles.cardArrow}>
-          <Text style={styles.cardArrowText}>›</Text>
-        </View>
-      </Pressable>
+      <View style={styles.card}>
+        <Pressable style={styles.cardTap} onPress={() => setShowModal(true)}>
+          <View style={styles.cardLeft}>
+            <Text style={styles.cardEmoji}>🍵</Text>
+          </View>
+          <View style={styles.cardContent}>
+            <Text style={styles.cardTitle}>{t("widget.cardTitle")}</Text>
+            <Text style={styles.cardSubtitle}>{t("widget.cardSubtitle")}</Text>
+          </View>
+        </Pressable>
+        <Pressable
+          style={styles.dismissBtn}
+          onPress={dismiss}
+          hitSlop={10}
+          accessibilityRole="button"
+          accessibilityLabel={t("widget.dismiss")}
+        >
+          <Ionicons name="close" size={16} color={colors.textMuted} />
+        </Pressable>
+      </View>
       <WidgetInstructionsModal
         visible={showModal}
         onDismiss={() => setShowModal(false)}
@@ -128,11 +145,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginHorizontal: spacing.lg,
     marginBottom: spacing.xl,
-    backgroundColor: colors.primary + "12",
+    backgroundColor: colors.surface,
     borderRadius: radius.md,
     padding: spacing.md,
     borderWidth: 1,
-    borderColor: colors.primary + "30",
+    borderColor: colors.surfaceBorder,
+    gap: spacing.sm,
+  },
+  cardTap: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
     gap: spacing.md,
   },
   cardLeft: {
@@ -160,14 +183,12 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     marginTop: 2,
   },
-  cardArrow: {
-    width: 24,
+  dismissBtn: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
     alignItems: "center",
-  },
-  cardArrowText: {
-    fontSize: 22,
-    color: colors.textMuted,
-    fontWeight: "300",
+    justifyContent: "center",
   },
 
   // ── Modal ──

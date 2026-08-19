@@ -414,7 +414,7 @@ export default function OnboardingScreen() {
         style={StyleSheet.absoluteFill}
         contentFit={currentStep === "welcome" ? "contain" : "cover"}
         contentPosition={currentStep === "welcome" ? "center" : "center"}
-        transition={300}
+        transition={currentStep === "welcome" ? 0 : 300}
       />
       <LinearGradient
         colors={

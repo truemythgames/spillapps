@@ -15,7 +15,10 @@ export default function CharacterScreen() {
   const insets = useSafeAreaInsets();
   const { characters: apiCharacters } = useAppStore();
 
-  const apiChar = apiCharacters.find((c: any) => c.name === name);
+  const decoded = name ? decodeURIComponent(name) : "";
+  const apiChar = apiCharacters.find(
+    (c: any) => c.id === decoded || c.slug === decoded || c.name === decoded
+  );
   if (!apiChar) return null;
 
   const displayName = apiChar.name;

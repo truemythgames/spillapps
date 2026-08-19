@@ -3,14 +3,10 @@ import { Image } from "expo-image";
 import { useRouter, usePathname } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import Animated, {
-  useAnimatedStyle,
-  withTiming,
-} from "react-native-reanimated";
 import { usePlayerStore } from "@/stores/player";
 import { colors, fonts, fontSize, spacing, radius, TAB_BAR_HEIGHT } from "@/lib/theme";
 
-const TAB_ROUTES = ["/", "/explore", "/playlists", "/profile"];
+const TAB_ROUTES = ["/", "/explore", "/prayers", "/playlists", "/profile"];
 
 export function MiniPlayer() {
   const router = useRouter();
@@ -27,10 +23,6 @@ export function MiniPlayer() {
 
   const progress = duration > 0 ? position / duration : 0;
 
-  const progressStyle = useAnimatedStyle(() => ({
-    width: withTiming(`${progress * 100}%`, { duration: 500 }),
-  }));
-
   return (
     <Pressable
       style={[styles.container, { bottom: bottomOffset }]}
@@ -38,7 +30,7 @@ export function MiniPlayer() {
     >
       {/* Progress bar */}
       <View style={styles.progressBar}>
-        <Animated.View style={[styles.progressFill, progressStyle]} />
+        <View style={[styles.progressFill, { width: `${Math.round(progress * 1000) / 10}%` }]} />
       </View>
 
       <View style={styles.content}>

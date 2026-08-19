@@ -1,6 +1,7 @@
 import { create } from "zustand";
-import { storage, StorageKeys, getLocalProgress, getStreakData, setLocalProgress, getCompletedStoryIds } from "@/lib/storage";
+import { storage, StorageKeys, getLocalProgress, getStreakData, setLocalProgress, getCompletedStoryIds, getLikes, isPrayerPlayerId } from "@/lib/storage";
 import { api } from "@/lib/api";
+import { bibleRefFromStory } from "@/lib/bible-ref";
 import { checkSubscription } from "@/lib/purchases";
 import { syncWidgetData } from "@/lib/widget";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -20,6 +21,7 @@ export interface StoryWithCover {
   order?: number;
   cover_image_url: string | null;
   apiId?: string;
+  duration_seconds?: number;
 }
 
 export interface Playlist {
@@ -73,7 +75,7 @@ interface AppState {
   loadInitialData: () => Promise<void>;
   loadRemoteData: () => Promise<void>;
   loadUserData: () => Promise<void>;
-  toggleLike: (storyId: string) => Promise<void>;
+  toggleLike: (storyId: string, aliases?: string[]) => Promise<void>;
   markCompleted: (storyId: string) => void;
   bumpProgress: () => void;
   setSpeaker: (speaker: any) => void;
@@ -88,11 +90,12 @@ function apiStoryToCover(s: any): StoryWithCover {
     apiId: s.id,
     title: s.title,
     description: s.description ?? "",
-    bibleRef: s.bible_ref ?? s.bibleRef ?? "",
+    bibleRef: bibleRefFromStory(s),
     section: s.season_name ?? s.section ?? "",
     testament: s.testament ?? "",
     order: s.sort_order ?? s.order ?? 0,
     cover_image_url: s.cover_image_url ?? null,
+    duration_seconds: Number(s.duration_seconds) || 0,
   };
 }
 
@@ -133,8 +136,6 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   loadInitialData: async () => {
     console.log("[App] loadInitialData started");
-    const subscribed = storage.getBoolean(StorageKeys.IS_SUBSCRIBED) ?? false;
-
     let localLikes: string[] = [];
     try {
       const raw = storage.getString(StorageKeys.LIKES);
@@ -146,7 +147,6 @@ export const useAppStore = create<AppState>((set, get) => ({
     const localStreak = getStreakData();
 
     set({
-      isSubscribed: subscribed,
       likedStoryIds: localLikes,
       completedStoryIds: localCompleted,
       streak: {
@@ -202,8 +202,10 @@ export const useAppStore = create<AppState>((set, get) => ({
 
       const playlistsP = api.getPlaylists().then(async (res) => {
         if (!res.playlists?.length) return null;
+        const featured = res.playlists.filter((pl: any) => Number(pl.is_featured) === 1);
+        const toLoad = featured.length ? featured : res.playlists;
         const plResults = await Promise.allSettled(
-          res.playlists.map(async (pl: any) => {
+          toLoad.map(async (pl: any) => {
             const detail = await api.getPlaylist(pl.id);
             return {
               id: pl.id,
@@ -319,12 +321,29 @@ export const useAppStore = create<AppState>((set, get) => ({
       const updates: Partial<AppState> = {};
 
       if (likesRes.status === "fulfilled") {
-        updates.likedStoryIds = likesRes.value.likes;
+        // Likes existed only on-device until sessions shipped, so the server
+        // starts empty. Merge, never replace, or the first authenticated
+        // launch would blank everyone's likes.
+        const serverLikes: string[] = likesRes.value.likes ?? [];
+        const localLikes = getLikes();
+        const merged = [...new Set([...localLikes, ...serverLikes])];
+        updates.likedStoryIds = merged;
+        storage.set(StorageKeys.LIKES, JSON.stringify(merged));
+
+        const unsynced = localLikes.filter((id) => !serverLikes.includes(id));
+        for (const storyId of unsynced.slice(0, 200)) {
+          api.toggleLike(storyId).catch(() => {});
+        }
       }
       if (progressRes.status === "fulfilled") {
-        const map: Record<string, ProgressEntry> = {};
+        const local = getLocalProgress();
+        const map: Record<string, ProgressEntry> = { ...get().progressMap };
+        const serverKeys = new Set<string>();
         for (const p of progressRes.value.progress) {
-          map[p.story_id] = p;
+          const key = p.story_slug ?? p.story_id;
+          serverKeys.add(key);
+          if (p.story_id) serverKeys.add(p.story_id);
+          map[key] = { ...p, story_id: key };
         }
         updates.progressMap = map;
         const serverCompleted = Object.values(map)
@@ -334,6 +353,27 @@ export const useAppStore = create<AppState>((set, get) => ({
         updates.completedStoryIds = [
           ...new Set([...getCompletedStoryIds(), ...serverCompleted]),
         ];
+
+        // First authenticated launch: server is empty. Push local history
+        // so a later reinstall (iOS keychain) can restore it.
+        const speakerId =
+          get().selectedSpeaker?.id ??
+          get().speakers?.find((s: any) => s.is_default)?.id ??
+          get().speakers?.[0]?.id;
+        if (speakerId) {
+          const unsynced = Object.entries(local)
+            .filter(([id]) => !serverKeys.has(id) && !isPrayerPlayerId(id))
+            .slice(0, 200);
+          for (const [id, p] of unsynced) {
+            api
+              .updateProgress(id, {
+                speaker_id: speakerId,
+                position_seconds: p.position,
+                completed: p.completed,
+              })
+              .catch(() => {});
+          }
+        }
       }
       if (streakRes.status === "fulfilled") {
         const local = getStreakData();
@@ -349,11 +389,12 @@ export const useAppStore = create<AppState>((set, get) => ({
     } catch {}
   },
 
-  toggleLike: async (storyId) => {
+  toggleLike: async (storyId, aliases = []) => {
+    const keys = [...new Set([storyId, ...aliases].filter(Boolean))];
     const prev = get().likedStoryIds;
-    const isLiked = prev.includes(storyId);
+    const isLiked = keys.some((id) => prev.includes(id));
     const updated = isLiked
-      ? prev.filter((id) => id !== storyId)
+      ? prev.filter((id) => !keys.includes(id))
       : [...prev, storyId];
 
     set({ likedStoryIds: updated });
@@ -382,13 +423,11 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   setSpeaker: (speaker) => set({ selectedSpeaker: speaker }),
   setSubscribed: (subscribed) => {
-    storage.set(StorageKeys.IS_SUBSCRIBED, subscribed);
     set({ isSubscribed: subscribed });
   },
   refreshSubscription: async () => {
     const active = await checkSubscription();
     if (active !== null) {
-      storage.set(StorageKeys.IS_SUBSCRIBED, active);
       set({ isSubscribed: active });
     }
   },
