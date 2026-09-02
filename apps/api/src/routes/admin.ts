@@ -433,6 +433,11 @@ adminRoutes.post("/cache/purge", async (c) => {
     const today = new Date().toISOString().split("T")[0];
     keys.push(`sotd:${appId}:${locale}:${today}`);
     keys.push(`playlist-of-the-week:${appId}:${locale}`);
+    keys.push(`catalog:characters:${appId}:${locale}`);
+    keys.push(`catalog:playlists:${appId}:${locale}`);
+    keys.push(`catalog:recent:${appId}:${locale}:10`);
+    keys.push(`catalog:stories:${appId}:${locale}:::500:0`);
+    keys.push(`catalog:stories:${appId}:${locale}:::50:0`);
   }
 
   for (const key of keys) {

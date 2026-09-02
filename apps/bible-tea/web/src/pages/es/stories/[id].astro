@@ -749,7 +749,7 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
 
       <div class="story-hero-card">
         {hasImage ? (
-          <img src={cover} alt={story.title} class="hero-cover" loading="eager" width="240" height="240" />
+          <img src={coverUrl(story.id, 800)} alt={story.title} class="hero-cover" loading="eager" width="240" height="240" />
         ) : (
           <div class="hero-cover-placeholder">📖</div>
         )}
@@ -871,7 +871,7 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
             <a href={localePath(`/stories/${r.id}`, locale)} class="related-card">
               <div class="related-cover">
                 {hasCover(r.id) ? (
-                  <img src={coverUrl(r.id)} alt={r.title} loading="lazy" width="150" height="150" />
+                  <img src={coverUrl(r.id, 300)} alt={r.title} loading="lazy" width="150" height="150" />
                 ) : (
                   <div class="related-cover-ph">📖</div>
                 )}

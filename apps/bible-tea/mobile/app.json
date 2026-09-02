@@ -2,7 +2,7 @@
   "expo": {
     "name": "Bible Tea",
     "slug": "bibletea",
-    "version": "1.1.4",
+    "version": "1.1.5",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
@@ -19,7 +19,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "app.bibletea",
-      "buildNumber": "71",
+      "buildNumber": "77",
       "appleTeamId": "T8QBXL5U75",
       "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
@@ -35,7 +35,7 @@
         "backgroundColor": "#0A0A0F"
       },
       "package": "app.bibletea",
-      "versionCode": 71,
+      "versionCode": 77,
       "googleServicesFile": "./google-services.json",
       "edgeToEdgeEnabled": true
     },
@@ -70,8 +70,8 @@
           "displayName": "Bible Tea",
           "scheme": "fb4486535591581092",
           "advertiserIDCollectionEnabled": true,
-          "autoLogAppEventsEnabled": true,
-          "isAutoInitEnabled": true,
+          "autoLogAppEventsEnabled": false,
+          "isAutoInitEnabled": false,
           "iosUserTrackingPermission": "This identifier will be used to deliver personalized ads to you."
         }
       ],

@@ -3,6 +3,7 @@ import type { Env } from "../types";
 import { mediaUrl } from "../lib/media";
 import { resolvePublicAppId } from "../lib/request-app";
 import { resolveLocale, overlayTranslation, overlaySeasonNames } from "../lib/locale";
+import { readCatalogCache, writeCatalogCache } from "../lib/catalog-cache";
 
 export const featuredRoutes = new Hono<{ Bindings: Env }>();
 
@@ -12,9 +13,9 @@ featuredRoutes.get("/story-of-the-day", async (c) => {
   const today = new Date().toISOString().split("T")[0];
   const cacheKey = `sotd:${appId}:${locale}:${today}`;
 
-  const cached = await c.env.CACHE.get(cacheKey);
+  const cached = await readCatalogCache<Record<string, unknown>>(c.env.CACHE, cacheKey);
   if (cached) {
-    return c.json(JSON.parse(cached));
+    return c.json(cached);
   }
 
   const feature = await c.env.DB.prepare(
@@ -83,9 +84,12 @@ featuredRoutes.get("/story-of-the-day", async (c) => {
 
   const secondsUntilMidnight =
     86400 - ((Date.now() / 1000) % 86400);
-  await c.env.CACHE.put(cacheKey, JSON.stringify(response), {
-    expirationTtl: Math.max(Math.floor(secondsUntilMidnight), 60),
-  });
+  await writeCatalogCache(
+    c.env.CACHE,
+    cacheKey,
+    response,
+    Math.max(Math.floor(secondsUntilMidnight), 60),
+  );
 
   return c.json(response);
 });
@@ -94,9 +98,9 @@ featuredRoutes.get("/playlist-of-the-week", async (c) => {
   const appId = resolvePublicAppId(c);
   const locale = resolveLocale(c);
   const cacheKey = `playlist-of-the-week:${appId}:${locale}`;
-  const cached = await c.env.CACHE.get(cacheKey);
+  const cached = await readCatalogCache<any>(c.env.CACHE, cacheKey);
   if (cached) {
-    return c.json({ playlist: JSON.parse(cached) });
+    return c.json({ playlist: cached });
   }
 
   let playlist = await c.env.DB.prepare(
@@ -112,9 +116,7 @@ featuredRoutes.get("/playlist-of-the-week", async (c) => {
       locale,
       fields: ["name", "description"],
     });
-    await c.env.CACHE.put(cacheKey, JSON.stringify(playlist), {
-      expirationTtl: 604800,
-    });
+    await writeCatalogCache(c.env.CACHE, cacheKey, playlist, 604800);
   }
 
   return c.json({

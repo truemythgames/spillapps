@@ -34,9 +34,20 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#06080F"
       },
-      "package": "app.truecrimetea"
+      "package": "app.truecrimetea",
+      "edgeToEdgeEnabled": true
     },
     "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 36,
+            "targetSdkVersion": 36,
+            "buildToolsVersion": "36.0.0"
+          }
+        }
+      ],
       "expo-dev-client",
       "expo-router",
       "expo-font",
@@ -68,7 +79,8 @@
           "iosUserTrackingPermission": "This identifier will be used to deliver personalized ads to you."
         }
       ],
-      "expo-tracking-transparency"
+      "expo-tracking-transparency",
+      "./plugins/android-16-compat"
     ],
     "experiments": {
       "typedRoutes": true

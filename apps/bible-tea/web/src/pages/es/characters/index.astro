@@ -1,7 +1,7 @@
 ---
 import Base from "../../../layouts/Base.astro";
 import StoreButtons from "../../../components/StoreButtons.astro";
-import { getCharacters } from "../../../lib/stories";
+import { getCharacters, sizedMedia } from "../../../lib/stories";
 import { getLocale, localePath, t } from "../../../lib/i18n";
 
 const locale = getLocale(Astro.currentLocale);
@@ -223,7 +223,7 @@ const jsonLdArray = [collectionLd, itemListLd, breadcrumbLd, faqLd];
         {characters.map((ch) => (
           <a href={localePath(`/characters/${ch.id}`, locale)} class="char-card">
             {ch.image_url ? (
-              <img src={ch.image_url} alt={ch.name} class="char-avatar" loading="lazy" width="120" height="120" />
+              <img src={sizedMedia(ch.image_url, 240)} alt={ch.name} class="char-avatar" loading="lazy" width="120" height="120" />
             ) : (
               <div class="char-avatar-ph">👤</div>
             )}

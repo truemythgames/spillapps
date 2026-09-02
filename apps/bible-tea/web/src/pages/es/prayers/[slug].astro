@@ -2,7 +2,7 @@
 import { marked } from "marked";
 import Base from "../../../layouts/Base.astro";
 import StoreButtons from "../../../components/StoreButtons.astro";
-import { getPrayers, getPrayerDetail, prayerBody, type PrayerDetail, type Prayer } from "../../../lib/stories";
+import { getPrayers, getPrayerDetail, prayerBody, sizedMedia, type PrayerDetail, type Prayer } from "../../../lib/stories";
 import { getLocale, localePath, t } from "../../../lib/i18n";
 import { clampTitle, clampDescription } from "../../../lib/seo";
 
@@ -186,7 +186,7 @@ const morePrayers = allPrayers.filter((p) => p.slug !== detail.slug).slice(0, 8)
               <a href={localePath(`/stories/${s.slug}`, locale)} class="story-card">
                 <div class="card-cover">
                   {s.cover_image_url ? (
-                    <img src={s.cover_image_url} alt={s.title} loading="lazy" width="300" height="300" />
+                    <img src={sizedMedia(s.cover_image_url, 600)} alt={s.title} loading="lazy" width="300" height="300" />
                   ) : (
                     <div class="card-cover-placeholder">📖</div>
                   )}

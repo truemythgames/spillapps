@@ -310,6 +310,7 @@ export default function StoryScreen() {
           <CoverImage
             uri={coverImageUrl}
             storyId={id}
+            displayWidth={1024}
             style={styles.coverImage}
             contentFit="cover"
           />

@@ -76,7 +76,7 @@ export default function PaywallScreen() {
   }
 
   function hideOffer() {
-    if (busy) return;
+    if (busy || purchasing) return;
     setBusy(true);
     s2Y.value = withSpring(400, { damping: 20, stiffness: 120 });
     setTimeout(() => {
@@ -336,7 +336,11 @@ export default function PaywallScreen() {
             onPress={hideOffer}
             disabled={purchasing}
           />
-          <Animated.View style={[styles.sheet, { paddingBottom: insets.bottom + 20 }, s2Style]}>
+          <Animated.View
+            style={[styles.sheet, { paddingBottom: insets.bottom + 20 }, s2Style]}
+          >
+            {/* Swallow taps on the sheet so they don't hit the backdrop. */}
+            <Pressable style={{ width: "100%" }}>
             <Pressable
               style={styles.sheetX}
               onPress={goBack}
@@ -373,6 +377,7 @@ export default function PaywallScreen() {
               ) : (
                 <Text style={styles.sheetCtaText}>{t("paywall.unlock")}</Text>
               )}
+            </Pressable>
             </Pressable>
           </Animated.View>
         </>

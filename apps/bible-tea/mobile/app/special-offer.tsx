@@ -6,6 +6,7 @@ import {
   Pressable,
   Alert,
   ActivityIndicator,
+  Linking,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -15,9 +16,13 @@ import { useAppStore } from "@/stores/app";
 import {
   getOfferings,
   purchasePackage,
+  restorePurchases,
   PRODUCT_IDS,
   type PurchasesPackage,
 } from "@/lib/purchases";
+
+const TERMS_URL = "https://bibletea.app/terms/";
+const PRIVACY_URL = "https://bibletea.app/privacy/";
 
 export default function SpecialOfferScreen() {
   const router = useRouter();
@@ -28,6 +33,7 @@ export default function SpecialOfferScreen() {
   const [packages, setPackages] = useState<PurchasesPackage[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [purchasing, setPurchasing] = useState(false);
+  const [restoring, setRestoring] = useState(false);
 
   useEffect(() => {
     getOfferings()
@@ -67,6 +73,25 @@ export default function SpecialOfferScreen() {
       router.back();
     } else {
       router.replace("/(tabs)" as any);
+    }
+  }
+
+  async function handleRestore() {
+    if (purchasing || restoring) return;
+    setRestoring(true);
+    try {
+      const success = await restorePurchases();
+      if (success) {
+        setSubscribed(true);
+        Alert.alert(t("paywall.restored"), t("paywall.restoredDesc"));
+        close();
+      } else {
+        Alert.alert(t("paywall.nothingToRestore"), t("paywall.nothingToRestoreDesc"));
+      }
+    } catch {
+      Alert.alert(t("paywall.restoreFailed"), t("paywall.restoreFailedDesc"));
+    } finally {
+      setRestoring(false);
     }
   }
 
@@ -181,6 +206,24 @@ export default function SpecialOfferScreen() {
         <Text style={styles.billing}>
           {t("specialOffer.billedYearly", { price: yearlyPrice })}
         </Text>
+
+        <View style={styles.legalRow}>
+          <Pressable onPress={() => Linking.openURL(TERMS_URL)} hitSlop={8} disabled={purchasing}>
+            <Text style={styles.legalLink}>{t("paywall.terms")}</Text>
+          </Pressable>
+          <Text style={styles.legalDot}>·</Text>
+          <Pressable onPress={() => Linking.openURL(PRIVACY_URL)} hitSlop={8} disabled={purchasing}>
+            <Text style={styles.legalLink}>{t("paywall.privacyPolicy")}</Text>
+          </Pressable>
+          <Text style={styles.legalDot}>·</Text>
+          <Pressable onPress={handleRestore} hitSlop={8} disabled={purchasing || restoring}>
+            {restoring ? (
+              <ActivityIndicator size="small" color={MUTED} />
+            ) : (
+              <Text style={styles.legalLink}>{t("paywall.restore")}</Text>
+            )}
+          </Pressable>
+        </View>
       </View>
     </View>
   );
@@ -344,5 +387,20 @@ const styles = StyleSheet.create({
     color: MUTED,
     fontSize: 13,
     textAlign: "center",
+  },
+  legalRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 6,
+    marginTop: 14,
+  },
+  legalLink: {
+    fontSize: 11,
+    color: MUTED,
+  },
+  legalDot: {
+    fontSize: 11,
+    color: MUTED,
   },
 });

@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { storage, StorageKeys, getLocalProgress, getStreakData, setLocalProgress, getCompletedStoryIds, getLikes, isPrayerPlayerId } from "@/lib/storage";
+import { maybeRequestReview } from "@/lib/review";
 import { api } from "@/lib/api";
 import { bibleRefFromStory } from "@/lib/bible-ref";
 import { checkSubscription } from "@/lib/purchases";
@@ -414,6 +415,7 @@ export const useAppStore = create<AppState>((set, get) => ({
         completedStoryIds: [...prev, storyId],
         progressVersion: get().progressVersion + 1,
       });
+      maybeRequestReview();
     } else {
       set({ progressVersion: get().progressVersion + 1 });
     }

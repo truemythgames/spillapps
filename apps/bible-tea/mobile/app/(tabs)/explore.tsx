@@ -1,13 +1,11 @@
 import { useState, useCallback } from "react";
 import { View, Text, StyleSheet, ScrollView, Pressable, FlatList, RefreshControl } from "react-native";
-import { Image, Image as ExpoImage } from "expo-image";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import { useAppStore } from "@/stores/app";
 import { usePlayerStore } from "@/stores/player";
 import { useGate } from "@/lib/useGate";
-import { coverUrl } from "@/lib/content";
 import { CoverImage } from "@/components/CoverImage";
 
 import { getLocalProgress, completionPercent, isPrayerPlayerId, prayerRouteId } from "@/lib/storage";
@@ -25,8 +23,6 @@ export default function StoriesScreen() {
   const handleRefresh = useCallback(async () => {
     setRefreshing(true);
     try {
-      await ExpoImage.clearDiskCache();
-      await ExpoImage.clearMemoryCache();
       await loadRemoteData();
     } finally { setRefreshing(false); }
   }, [loadRemoteData]);
@@ -128,7 +124,7 @@ export default function StoriesScreen() {
               )
             }
           >
-            <CoverImage uri={currentStory.cover_image_url} storyId={currentStory.id} style={styles.npThumb} contentFit="cover" transition={300} />
+            <CoverImage uri={currentStory.cover_image_url} storyId={currentStory.id} displayWidth={160} style={styles.npThumb} contentFit="cover" transition={0} />
             <View style={styles.npInfo}>
               <Text style={styles.npTitle} numberOfLines={1}>{currentStory.title}</Text>
               <Text style={styles.npSub}>{t("explore.tapToContinue")}</Text>
@@ -149,7 +145,7 @@ export default function StoriesScreen() {
             renderItem={({ item }) => (
               <Pressable style={styles.clCard} onPress={() => guardedPush(`/story/${item.id}`)}>
                 <View>
-                  <CoverImage uri={item.cover_image_url} storyId={item.id} style={styles.clImg} contentFit="cover" transition={300} />
+                  <CoverImage uri={item.cover_image_url} storyId={item.id} displayWidth={360} style={styles.clImg} contentFit="cover" transition={0} />
                   <View style={styles.clBarBg}>
                     <View style={[styles.clBarFill, { width: `${item.progressPercent}%` }]} />
                   </View>
@@ -167,14 +163,14 @@ export default function StoriesScreen() {
         <Text style={styles.sectionTitle}>{t("explore.browse")}</Text>
         <View style={styles.testamentRow}>
           <Pressable style={styles.testamentCard} onPress={() => router.push("/testament/old")}>
-            <Image source={{ uri: storyMap["crossing-the-red-sea"]?.cover_image_url ?? coverUrl("crossing-the-red-sea") }} style={styles.testamentImg} contentFit="cover" transition={300} />
+            <CoverImage uri={storyMap["crossing-the-red-sea"]?.cover_image_url} storyId="crossing-the-red-sea" displayWidth={400} style={styles.testamentImg} contentFit="cover" transition={0} />
             <View style={styles.testamentOverlay} />
             <View style={styles.testamentContent}>
               <Text style={styles.testamentLabel}>{t("explore.oldTestament")}</Text>
             </View>
           </Pressable>
           <Pressable style={styles.testamentCard} onPress={() => router.push("/testament/new")}>
-            <Image source={{ uri: storyMap["the-resurrection"]?.cover_image_url ?? coverUrl("the-resurrection") }} style={styles.testamentImg} contentFit="cover" transition={300} />
+            <CoverImage uri={storyMap["the-resurrection"]?.cover_image_url} storyId="the-resurrection" displayWidth={400} style={styles.testamentImg} contentFit="cover" transition={0} />
             <View style={styles.testamentOverlay} />
             <View style={styles.testamentContent}>
               <Text style={styles.testamentLabel}>{t("explore.newTestament")}</Text>

@@ -1,6 +1,15 @@
 interface Env {
   MEDIA: R2Bucket;
+  IMAGES?: {
+    input(stream: ReadableStream | ArrayBuffer): {
+      transform(opts: { width?: number; height?: number; fit?: string }): {
+        output(opts: { format?: string; quality?: number }): Promise<{ response(): Response } | { response(): Response }>;
+      };
+    };
+  };
 }
+
+const MAX_AGE = "public, max-age=31536000, immutable";
 
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
@@ -11,12 +20,21 @@ export default {
       return new Response("Not Found", { status: 404 });
     }
 
+    const width = parseDim(url.searchParams.get("w"));
+    const quality = clamp(Number(url.searchParams.get("q") || 72), 40, 90);
+    const canResize = !!width && isImageKey(key);
+
     const cache = (caches as any).default as Cache;
     const cacheUrl = new URL(url.toString());
-    cacheUrl.search = "";
+    if (!canResize) cacheUrl.search = "";
+    else {
+      cacheUrl.search = "";
+      cacheUrl.searchParams.set("w", String(width));
+      cacheUrl.searchParams.set("q", String(quality));
+      cacheUrl.searchParams.set("v", "2");
+    }
     const cacheKey = new Request(cacheUrl.toString());
 
-    // Allow cache refresh via ?purge=1 — deletes old cache, fetches fresh from R2
     const shouldPurge = url.searchParams.has("purge");
 
     if (!shouldPurge) {
@@ -26,28 +44,61 @@ export default {
       await cache.delete(cacheKey);
     }
 
-    // Fetch from R2
     const object = await env.MEDIA.get(key);
     if (!object) {
       return new Response("Not Found", { status: 404 });
     }
 
+    if (canResize && env.IMAGES && object.body) {
+      try {
+        const transformed = await env.IMAGES.input(object.body)
+          .transform({ width: width!, fit: "scale-down" })
+          .output({ format: "image/webp", quality });
+        const resized = transformed.response();
+        const headers = new Headers(resized.headers);
+        headers.set("Cache-Control", MAX_AGE);
+        headers.set("Access-Control-Allow-Origin", "*");
+        const response = new Response(resized.body, { status: 200, headers });
+        ctx.waitUntil(cache.put(cacheKey, response.clone()));
+        return response;
+      } catch (e) {
+        console.warn("[media] resize failed, serving original", e);
+      }
+    }
+
     const headers = new Headers();
     headers.set("Content-Type", object.httpMetadata?.contentType || getMimeType(key));
-    headers.set("Cache-Control", "public, max-age=31536000, immutable");
+    headers.set("Cache-Control", MAX_AGE);
     headers.set("ETag", object.etag);
     if (object.size != null) headers.set("Content-Length", String(object.size));
     if (object.uploaded) headers.set("Last-Modified", object.uploaded.toUTCString());
     headers.set("Access-Control-Allow-Origin", "*");
 
     const response = new Response(object.body, { status: 200, headers });
-
-    // Store fresh version in edge cache
-    ctx.waitUntil(cache.put(cacheKey, response.clone()));
-
+    // Never store the original under a resized cache key — that would pin the
+    // full-size file to ?w= for a year if Images is missing or fails.
+    if (!canResize) {
+      ctx.waitUntil(cache.put(cacheKey, response.clone()));
+    }
     return response;
   },
 } satisfies ExportedHandler<Env>;
+
+function parseDim(raw: string | null): number | null {
+  if (!raw) return null;
+  const n = Number(raw);
+  if (!Number.isFinite(n)) return null;
+  return Math.min(1024, Math.max(80, Math.round(n)));
+}
+
+function clamp(n: number, min: number, max: number) {
+  if (!Number.isFinite(n)) return min;
+  return Math.min(max, Math.max(min, Math.round(n)));
+}
+
+function isImageKey(key: string) {
+  return /\.(webp|png|jpe?g)$/i.test(key);
+}
 
 function getMimeType(key: string): string {
   if (key.endsWith(".webp")) return "image/webp";

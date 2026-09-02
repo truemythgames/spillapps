@@ -1,0 +1,72 @@
+---
+import { getImage } from "astro:assets";
+import { coverUrl } from "../lib/stories";
+
+interface Props {
+  storyId?: string;
+  src?: string | null;
+  alt: string;
+  width: number;
+  height: number;
+  loading?: "lazy" | "eager";
+  fetchpriority?: "high" | "low" | "auto";
+  class?: string;
+}
+
+const {
+  storyId,
+  src,
+  alt,
+  width,
+  height,
+  loading = "lazy",
+  fetchpriority,
+  class: className,
+} = Astro.props;
+
+const raw = src || (storyId ? coverUrl(storyId) : "");
+// Display × 2 for retina. Crop to the same aspect as width/height so playlist
+// cards (2:1) are not served as square files stretched by CSS.
+const targetW = Math.min(640, Math.max(width, Math.round(width * 1.75)));
+const targetH = Math.round((targetW * height) / width);
+
+let out: { src: string; srcSet: { attribute: string } } | null = null;
+if (raw) {
+  try {
+    out = await getImage({
+      src: raw,
+      width: targetW,
+      height: targetH,
+      fit: "cover",
+      format: "webp",
+      quality: 68,
+    });
+  } catch {
+    out = null;
+  }
+}
+---
+
+{out ? (
+  <img
+    src={out.src}
+    alt={alt}
+    width={width}
+    height={height}
+    loading={loading}
+    fetchpriority={fetchpriority}
+    decoding="async"
+    class={className}
+  />
+) : raw ? (
+  <img
+    src={`${raw}${raw.includes("?") ? "&" : "?"}w=${targetW}&q=68&v=2`}
+    alt={alt}
+    width={width}
+    height={height}
+    loading={loading}
+    fetchpriority={fetchpriority}
+    decoding="async"
+    class={className}
+  />
+) : null}

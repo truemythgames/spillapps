@@ -1,7 +1,9 @@
 ---
 import Base from "../layouts/Base.astro";
 import StoreButtons from "../components/StoreButtons.astro";
-import { MEDIA_BASE, getCatalog, getPlaylists } from "../lib/stories";
+import CoverImg from "../components/CoverImg.astro";
+import { getImage } from "astro:assets";
+import { getCatalog, getPlaylists, hasCover, coverUrl } from "../lib/stories";
 import { getLocale, localePath, t } from "../lib/i18n";
 import { clampTitle, clampDescription } from "../lib/seo";
 import { getVerseOfTheDay } from "../lib/daily-verses";
@@ -43,20 +45,28 @@ const storyCards = featuredIds
   .filter(Boolean)
   .map((s) => ({ id: s!.id, title: s!.title, ref: s!.bibleRef }));
 
-const playlistCoverMap: Record<string, string> = {
-  "pl-beginners": "creation",
-  "pl-easter": "the-last-supper",
-  "pl-love": "adam-and-eve",
-  "pl-miracles": "crossing-the-red-sea",
-  "pl-family": "joseph-and-his-brothers",
-  "pl-jesus": "the-resurrection",
-  "pl-courage": "daniel-and-the-lions-den",
-  "pl-drama": "samson-and-delilah",
-  "pl-underdogs": "david-and-goliath",
-};
+const LCP_STORY_ID = storyCards[0]?.id ?? "creation";
+let lcpCoverHref = "";
+try {
+  const lcp = await getImage({
+    src: coverUrl(LCP_STORY_ID),
+    width: 350,
+    height: 350,
+    fit: "cover",
+    format: "webp",
+    quality: 68,
+  });
+  lcpCoverHref = lcp.src;
+} catch {
+  /* CoverImg still renders if remote optimize fails */
+}
+
 const playlistCards = playlists
-  .filter((p) => playlistCoverMap[p.id])
-  .map((p) => ({ cover: playlistCoverMap[p.id], name: p.name, id: p.id }));
+  .map((p) => {
+    const cover = p.stories.find((s) => hasCover(s.id))?.id;
+    return cover ? { id: p.id, name: p.name, cover } : null;
+  })
+  .filter((p): p is { id: string; name: string; cover: string } => p != null);
 
 const reviews = [
   { text: "This app completely changed how I engage with the Bible. The narrations are beautiful and the artwork for each story is stunning. I listen every morning with my coffee.", name: "Sarah M.", initial: "S", date: "May 2026" },
@@ -73,7 +83,7 @@ const votdHref = locale === "es" ? "/es/versiculo-del-dia/" : "/verse-of-the-day
 const starSvg = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/></svg>`;
 ---
 
-<Base title={title} description={description} canonicalPath="/" jsonLd={homeLd}>
+<Base title={title} description={description} canonicalPath="/" jsonLd={homeLd} preloadImage={lcpCoverHref || undefined}>
   <style>
     /* Hero */
     .hero {
@@ -437,7 +447,7 @@ const starSvg = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.0
   </style>
 
   <section class="hero">
-    <img src="/icon-sm.png" alt="Bible Tea App Icon" class="hero-icon" width="120" height="120" />
+    <img src="/icon-sm.webp" alt="Bible Tea App Icon" class="hero-icon" width="120" height="120" decoding="async" />
     <h1 class="heading">{t(locale, "home.h1a")}<br/>{t(locale, "home.h1b")}</h1>
     <p class="hero-sub">{t(locale, "home.subtitle")}</p>
     <div class="hero-stars">★★★★★</div>
@@ -449,10 +459,17 @@ const starSvg = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.0
     <h2 class="heading showcase-title">{t(locale, "home.showcaseTitle")}</h2>
     <p class="showcase-sub">{t(locale, "home.showcaseSub")}</p>
     <div style="overflow: hidden;">
-      <div class="card-scroll" id="card-scroll">
-        {storyCards.map((s) => (
+      <div class="card-scroll">
+        {storyCards.concat(storyCards).map((s, i) => (
           <a href={localePath(`/stories/${s.id}`, locale)} class="story-card">
-            <img src={`${MEDIA_BASE}/stories/${s.id}/cover.webp`} alt={s.title} loading="lazy" decoding="async" width="200" height="200" />
+            <CoverImg
+              storyId={s.id}
+              alt={s.title}
+              width={200}
+              height={200}
+              loading={s.id === LCP_STORY_ID && i < storyCards.length ? "eager" : "lazy"}
+              fetchpriority={s.id === LCP_STORY_ID && i < storyCards.length ? "high" : undefined}
+            />
             <div class="story-card-body">
               <div class="story-card-title">{s.title}</div>
               <div class="story-card-ref">{s.ref}</div>
@@ -460,12 +477,12 @@ const starSvg = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.0
           </a>
         ))}
       </div>
-      <div class="card-scroll-reverse" id="playlist-scroll">
-        {playlistCards.map((p) => {
+      <div class="card-scroll-reverse">
+        {playlistCards.concat(playlistCards).map((p) => {
           const href = localePath(`/playlists/${p.id}`, locale);
           return (
             <a href={href} class="playlist-card">
-              <img src={`${MEDIA_BASE}/stories/${p.cover}/cover.webp`} alt={p.name} loading="lazy" decoding="async" width="240" height="120" />
+              <CoverImg storyId={p.cover} alt={p.name} width={240} height={120} />
               <div class="playlist-overlay">
                 <div class="playlist-label">{t(locale, "home.playlistLabel")}</div>
                 <div class="playlist-name">{p.name}</div>
@@ -528,11 +545,4 @@ const starSvg = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.0
     <p>{t(locale, "home.ctaSub")}</p>
     <StoreButtons variant="light" />
   </section>
-
-  <script is:inline>
-    const scroll = document.getElementById('card-scroll');
-    if (scroll) scroll.innerHTML += scroll.innerHTML;
-    const plScroll = document.getElementById('playlist-scroll');
-    if (plScroll) plScroll.innerHTML += plScroll.innerHTML;
-  </script>
 </Base>

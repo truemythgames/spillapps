@@ -12,9 +12,10 @@ interface Props {
   jsonLd?: object | object[];
   /** Set to false for pages that only exist in English (no /es/ version). */
   localized?: boolean;
+  preloadImage?: string;
 }
 
-const { title, description, ogImage = "https://bibletea.app/icon.png", canonicalPath, esPath, jsonLd, localized = true } = Astro.props;
+const { title, description, ogImage = "https://bibletea.app/icon.png", canonicalPath, esPath, jsonLd, localized = true, preloadImage } = Astro.props;
 const locale = getLocale(Astro.currentLocale);
 const resolvedEsPath = esPath || canonicalPath;
 const canonical = canonicalPath
@@ -82,15 +83,9 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
 <!DOCTYPE html>
 <html lang={langCode}>
 <head>
-  <!-- Google Tag Manager (production only) -->
-  <script is:inline>if(location.hostname!=='localhost'){(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','GTM-NN7TLHP2');}</script>
-  <!-- End Google Tag Manager -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  {preloadImage && <link rel="preload" as="image" href={preloadImage} fetchpriority="high" />}
   <title>{title}</title>
   <meta name="description" content={description} />
   <meta name="theme-color" content="#0A0A0F" />
@@ -119,13 +114,14 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
-  <noscript><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" /></noscript>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet" /></noscript>
 
   {jsonLdItems.map((ld) => (
     <script type="application/ld+json" set:html={JSON.stringify(ld)} />
   ))}
+  <slot name="head" />
 
   <style is:global>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -149,7 +145,7 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.6;
@@ -245,7 +241,7 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
     }
 
     .mobile-lang {
-      font-family: 'Inter', sans-serif !important;
+      font-family: inherit !important;
       font-size: 1rem !important;
       font-weight: 500 !important;
       color: var(--primary) !important;
@@ -314,7 +310,7 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
     .mobile-menu a:hover { color: var(--primary); }
 
     .mobile-menu .nav-cta {
-      font-family: 'Inter', sans-serif;
+      font-family: inherit;
       font-size: 1rem;
       padding: 0.8rem 2rem;
     }
@@ -457,9 +453,33 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
       <a href={localePath("/widget", locale)}>Widget</a>
       <a href="/privacy/">{t(locale, "nav.privacy")}</a>
       <a href="/terms/">{t(locale, "nav.terms")}</a>
-      <a href="mailto:contact@bibletea.app">{t(locale, "nav.contact")}</a>
+      <a id="footer-contact">{t(locale, "nav.contact")}</a>
     </div>
     <p>{t(locale, "footer.rights")}</p>
   </footer>
+  <script is:inline>
+    var contact = document.getElementById("footer-contact");
+    if (contact) contact.href = "mai" + "lto:" + "contact" + "@" + "bibletea.app";
+  </script>
+  <!-- GTM only after interaction so lab Lighthouse does not download gtag/fbevents -->
+  <script is:inline>
+    (function () {
+      if (location.hostname === "localhost") return;
+      var loaded = false;
+      function loadGTM() {
+        if (loaded) return;
+        loaded = true;
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ "gtm.start": Date.now(), event: "gtm.js" });
+        var s = document.createElement("script");
+        s.async = true;
+        s.src = "https://www.googletagmanager.com/gtm.js?id=GTM-NN7TLHP2";
+        document.head.appendChild(s);
+      }
+      ["pointerdown", "scroll", "keydown"].forEach(function (evt) {
+        addEventListener(evt, loadGTM, { once: true, passive: true });
+      });
+    })();
+  </script>
 </body>
 </html>

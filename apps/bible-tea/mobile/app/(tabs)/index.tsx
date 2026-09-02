@@ -6,7 +6,6 @@ import {
   ScrollView,
   Pressable,
   FlatList,
-  Animated,
   ActivityIndicator,
   RefreshControl,
 } from "react-native";
@@ -15,9 +14,10 @@ import { useNetInfo } from "@react-native-community/netinfo";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
-import { useAppStore } from "@/stores/app";
+import { useAppStore, type Playlist } from "@/stores/app";
 import { useGate } from "@/lib/useGate";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
+import { sizedMedia } from "@/lib/content";
 import { Skeleton, SkeletonText } from "@/components/Skeleton";
 import { WidgetCard } from "@/components/WidgetPrompt";
 import { CoverImage } from "@/components/CoverImage";
@@ -26,6 +26,9 @@ import { everydayWordPlaylist, homePlaylistRows } from "@/lib/home-playlists";
 
 const CARD_WIDTH = 150;
 const CARD_IMAGE_HEIGHT = 150;
+const CARD_STRIDE = CARD_WIDTH + spacing.md;
+const CARD_COVER_W = 360;
+const HERO_COVER_W = 800;
 
 function SectionHeader({ title, label }: { title: string; label?: string }) {
   return (
@@ -36,16 +39,26 @@ function SectionHeader({ title, label }: { title: string; label?: string }) {
   );
 }
 
-function StoryCard({ story, onPress }: { story: any; onPress: () => void }) {
+const StoryCard = React.memo(function StoryCard({
+  story,
+  onPress,
+  retryKey,
+}: {
+  story: any;
+  onPress: () => void;
+  retryKey?: number;
+}) {
   return (
     <Pressable style={styles.storyCard} onPress={onPress}>
       <View style={[styles.cardImageWrap, { backgroundColor: colors.surfaceLight, borderRadius: radius.md }]}>
         <CoverImage
           uri={story.cover_image_url}
           storyId={story.id}
+          displayWidth={CARD_COVER_W}
+          retryKey={retryKey}
           style={styles.cardImage}
           contentFit="cover"
-          transition={300}
+          transition={0}
         />
       </View>
       <Text style={styles.cardTitle} numberOfLines={2}>
@@ -56,7 +69,56 @@ function StoryCard({ story, onPress }: { story: any; onPress: () => void }) {
       </Text>
     </Pressable>
   );
-}
+});
+
+const PlaylistRow = React.memo(function PlaylistRow({
+  playlist,
+  coverEpoch,
+  onPressStory,
+}: {
+  playlist: Playlist;
+  coverEpoch: number;
+  onPressStory: (id: string) => void;
+}) {
+  const { t } = useTranslation();
+  const renderItem = useCallback(
+    ({ item }: { item: Playlist["stories"][number] }) => (
+      <StoryCard
+        story={item}
+        retryKey={coverEpoch}
+        onPress={() => onPressStory(item.id)}
+      />
+    ),
+    [coverEpoch, onPressStory],
+  );
+
+  return (
+    <View style={styles.section}>
+      <SectionHeader
+        title={playlist.name}
+        label={playlist.id.startsWith("everyday-word-") ? t("home.today") : undefined}
+      />
+      <FlatList
+        horizontal
+        data={playlist.stories}
+        keyExtractor={(item) => item.id}
+        extraData={coverEpoch}
+        renderItem={renderItem}
+        initialNumToRender={4}
+        maxToRenderPerBatch={4}
+        windowSize={3}
+        removeClippedSubviews
+        getItemLayout={(_, index) => ({
+          length: CARD_STRIDE,
+          offset: CARD_STRIDE * index,
+          index,
+        })}
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.horizontalList}
+      />
+    </View>
+  );
+});
 
 function SkeletonCard() {
   return (
@@ -159,17 +221,16 @@ export default function HomeScreen() {
   const { storyOfTheDay, playlists, stories, loadInitialData, loadRemoteData, isLoading } =
     useAppStore();
   const [refreshing, setRefreshing] = useState(false);
+  const [coverEpoch, setCoverEpoch] = useState(0);
 
   const handleRefresh = useCallback(async () => {
     setRefreshing(true);
     try {
-      await ExpoImage.clearDiskCache();
-      await ExpoImage.clearMemoryCache();
       await loadRemoteData();
+      setCoverEpoch((n) => n + 1);
     } finally { setRefreshing(false); }
   }, [loadRemoteData]);
 
-  const fadeAnim = useRef(new Animated.Value(0)).current;
   const hasData = stories.length > 0;
 
   const tapTimestamps = useRef<number[]>([]);
@@ -197,14 +258,21 @@ export default function HomeScreen() {
   }, []);
 
   useEffect(() => {
-    if (hasData) {
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 400,
-        useNativeDriver: true,
-      }).start();
+    const firstRow = sortedPlaylists[0]?.stories.slice(0, 6) ?? [];
+    const urls = firstRow
+      .map((s) => s.cover_image_url)
+      .filter((u): u is string => !!u)
+      .map((u) => sizedMedia(u, CARD_COVER_W));
+    if (storyOfTheDay?.cover_image_url) {
+      urls.unshift(sizedMedia(storyOfTheDay.cover_image_url, HERO_COVER_W));
     }
-  }, [hasData]);
+    if (urls.length) ExpoImage.prefetch(urls);
+  }, [sortedPlaylists, storyOfTheDay]);
+
+  const openStory = useCallback(
+    (id: string) => guardedPush(`/story/${id}`),
+    [guardedPush],
+  );
 
   const { isConnected } = useNetInfo();
 
@@ -215,25 +283,8 @@ export default function HomeScreen() {
     return <OfflineScreen paddingTop={insets.top} onRetry={loadInitialData} />;
   }
 
-  return (
-    <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={{
-        paddingBottom: 120,
-        paddingTop: insets.top,
-      }}
-      showsVerticalScrollIndicator={false}
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={handleRefresh}
-          tintColor={colors.primary}
-          progressViewOffset={insets.top}
-        />
-      }
-    >
-      {/* Header */}
+  const listHeader = (
+    <>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>{t("home.title")}</Text>
         <Pressable onPress={handleTeaTap} hitSlop={10}>
@@ -241,18 +292,19 @@ export default function HomeScreen() {
         </Pressable>
       </View>
 
-      {/* Story of the Day */}
       {storyOfTheDay && (
         <Pressable
           style={styles.sotdCard}
-          onPress={() => guardedPush(`/story/${storyOfTheDay.id}`)}
+          onPress={() => openStory(storyOfTheDay.id)}
         >
           <CoverImage
             uri={storyOfTheDay.cover_image_url}
             storyId={storyOfTheDay.id}
+            displayWidth={HERO_COVER_W}
+            retryKey={coverEpoch}
             style={styles.sotdImage}
             contentFit="cover"
-            transition={400}
+            transition={0}
           />
           <View style={styles.sotdOverlay} />
           <View style={styles.sotdContent}>
@@ -262,54 +314,49 @@ export default function HomeScreen() {
           </View>
         </Pressable>
       )}
+    </>
+  );
 
-      {/* Playlist sections or skeleton placeholders */}
-      {sortedPlaylists.length > 0 ? (
-        sortedPlaylists.map((playlist) => (
-          <View key={playlist.id} style={styles.section}>
-            <SectionHeader
-              title={playlist.name}
-              label={playlist.id.startsWith("everyday-word-") ? t("home.today") : undefined}
-            />
-            <FlatList
-              horizontal
-              data={playlist.stories}
-              keyExtractor={(item) => item.id}
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.horizontalList}
-              renderItem={({ item }) => (
-                <StoryCard
-                  story={item}
-                  onPress={() => guardedPush(`/story/${item.id}`)}
-                />
-              )}
-            />
-          </View>
-        ))
-      ) : (
+  return (
+    <FlatList
+      style={styles.container}
+      data={sortedPlaylists}
+      keyExtractor={(item) => item.id}
+      ListHeaderComponent={listHeader}
+      ListFooterComponent={
         <>
-          <View style={styles.section}>
-            <View style={styles.sectionHeader}><SkeletonText width={180} height={20} /></View>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.horizontalList}>
-              <SkeletonCard /><SkeletonCard /><SkeletonCard />
-            </ScrollView>
-          </View>
-          <View style={styles.section}>
-            <View style={styles.sectionHeader}><SkeletonText width={140} height={20} /></View>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.horizontalList}>
-              <SkeletonCard /><SkeletonCard /><SkeletonCard />
-            </ScrollView>
-          </View>
+          <VerseOfTheDayCard
+            storyId={storyOfTheDay?.id}
+            coverImageUrl={storyOfTheDay?.cover_image_url}
+          />
+          <WidgetCard />
         </>
+      }
+      renderItem={({ item }) => (
+        <PlaylistRow
+          playlist={item}
+          coverEpoch={coverEpoch}
+          onPressStory={openStory}
+        />
       )}
-
-      <VerseOfTheDayCard
-        storyId={storyOfTheDay?.id}
-        coverImageUrl={storyOfTheDay?.cover_image_url}
-      />
-      <WidgetCard />
-    </ScrollView>
-    </Animated.View>
+      initialNumToRender={3}
+      maxToRenderPerBatch={2}
+      windowSize={5}
+      removeClippedSubviews
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{
+        paddingBottom: 120,
+        paddingTop: insets.top,
+      }}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+          tintColor={colors.primary}
+          progressViewOffset={insets.top}
+        />
+      }
+    />
   );
 }
 

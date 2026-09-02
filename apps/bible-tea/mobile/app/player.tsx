@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { View, Text, StyleSheet, Pressable, Dimensions, ActivityIndicator, Platform } from "react-native";
-import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -16,6 +15,7 @@ import Animated, {
 import { COMPLETED_FRACTION, SKIP_SECONDS, usePlayerStore } from "@/stores/player";
 import { useAppStore } from "@/stores/app";
 import { isPrayerPlayerId, listHasId, prayerRouteId } from "@/lib/storage";
+import { CoverImage } from "@/components/CoverImage";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
 const { width, height } = Dimensions.get("window");
@@ -198,8 +198,10 @@ export default function PlayerScreen() {
 
       <Pressable style={styles.coverContainer} onPress={goToStory}>
         {currentStory.cover_image_url ? (
-          <Image
-            source={{ uri: currentStory.cover_image_url }}
+          <CoverImage
+            uri={currentStory.cover_image_url}
+            storyId={currentStory.id}
+            displayWidth={1024}
             style={styles.coverImage}
             contentFit="cover"
           />

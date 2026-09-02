@@ -3,6 +3,7 @@ import type { Env } from "../types";
 import { mediaUrl } from "../lib/media";
 import { resolvePublicAppId } from "../lib/request-app";
 import { resolveLocale, overlayTranslations, overlayTranslation, overlaySeasonNames } from "../lib/locale";
+import { readCatalogCache, writeCatalogCache } from "../lib/catalog-cache";
 
 export const storiesRoutes = new Hono<{ Bindings: Env }>();
 
@@ -14,9 +15,14 @@ storiesRoutes.get("/", async (c) => {
   const limit = parseInt(c.req.query("limit") || "50");
   const offset = parseInt(c.req.query("offset") || "0");
 
+  const cacheKey = `catalog:stories:${appId}:${locale}:${seasonId ?? ""}:${testament ?? ""}:${limit}:${offset}`;
+  const cached = await readCatalogCache<{ stories: any[] }>(c.env.CACHE, cacheKey);
+  if (cached) return c.json(cached);
+
   let query = `
-    SELECT s.*, se.name as season_name, se.testament,
-      (SELECT COUNT(*) FROM story_audio sa WHERE sa.story_id = s.id) as audio_count
+    SELECT s.id, s.season_id, s.title, s.slug, s.description, s.cover_image_key,
+           s.duration_seconds, s.sort_order, s.is_free, s.is_published, s.published_at,
+           s.bible_ref, se.name as season_name, se.testament
     FROM stories s
     JOIN seasons se ON s.season_id = se.id AND se.app_id = s.app_id
     WHERE s.is_published = 1 AND s.app_id = ?
@@ -48,21 +54,27 @@ storiesRoutes.get("/", async (c) => {
   });
   stories = await overlaySeasonNames(c.env.DB, stories, appId, locale);
 
-  return c.json({
+  const payload = {
     stories: stories.map((s: any) => ({
       ...s,
       cover_image_url: mediaUrl(c.env, s.cover_image_key, appId),
     })),
-  });
+  };
+  await writeCatalogCache(c.env.CACHE, cacheKey, payload);
+  return c.json(payload);
 });
 
 storiesRoutes.get("/recently-added", async (c) => {
   const appId = resolvePublicAppId(c);
   const locale = resolveLocale(c);
   const limit = parseInt(c.req.query("limit") || "10");
+  const cacheKey = `catalog:recent:${appId}:${locale}:${limit}`;
+  const cached = await readCatalogCache<{ stories: any[] }>(c.env.CACHE, cacheKey);
+  if (cached) return c.json(cached);
 
   const result = await c.env.DB.prepare(
-    `SELECT s.*, se.name as season_name, se.testament
+    `SELECT s.id, s.season_id, s.title, s.slug, s.description, s.cover_image_key,
+            s.duration_seconds, s.sort_order, s.bible_ref, se.name as season_name, se.testament
      FROM stories s
      JOIN seasons se ON s.season_id = se.id AND se.app_id = s.app_id
      WHERE s.is_published = 1 AND s.app_id = ?
@@ -80,32 +92,32 @@ storiesRoutes.get("/recently-added", async (c) => {
   });
   stories = await overlaySeasonNames(c.env.DB, stories, appId, locale);
 
-  return c.json({
+  const payload = {
     stories: stories.map((s: any) => ({
       ...s,
       cover_image_url: mediaUrl(c.env, s.cover_image_key, appId),
     })),
-  });
+  };
+  await writeCatalogCache(c.env.CACHE, cacheKey, payload);
+  return c.json(payload);
 });
 
 storiesRoutes.get("/popular", async (c) => {
   const appId = resolvePublicAppId(c);
   const locale = resolveLocale(c);
   const cacheKey = `popular-stories:${appId}:${locale}`;
-  const cached = await c.env.CACHE.get(cacheKey);
+  const cached = await readCatalogCache<{ stories: any[] }>(c.env.CACHE, cacheKey);
   if (cached) {
-    return c.json(JSON.parse(cached));
+    return c.json(cached);
   }
 
   const result = await c.env.DB.prepare(
-    `SELECT s.*, se.name as season_name, se.testament,
-            COUNT(up.story_id) as play_count
+    `SELECT s.id, s.season_id, s.title, s.slug, s.description, s.cover_image_key,
+            s.duration_seconds, s.sort_order, s.bible_ref, se.name as season_name, se.testament
      FROM stories s
      JOIN seasons se ON s.season_id = se.id AND se.app_id = s.app_id
-     LEFT JOIN user_progress up ON s.id = up.story_id
      WHERE s.is_published = 1 AND s.app_id = ?
-     GROUP BY s.id
-     ORDER BY play_count DESC
+     ORDER BY s.published_at DESC
      LIMIT 20`
   )
     .bind(appId)
@@ -126,9 +138,7 @@ storiesRoutes.get("/popular", async (c) => {
     })),
   };
 
-  await c.env.CACHE.put(cacheKey, JSON.stringify(data), {
-    expirationTtl: 3600,
-  });
+  await writeCatalogCache(c.env.CACHE, cacheKey, data, 3600);
 
   return c.json(data);
 });

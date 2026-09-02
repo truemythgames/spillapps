@@ -1,10 +1,14 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { Image, type ImageProps } from "expo-image";
-import { coverUrl } from "@/lib/content";
+import { coverUrl, sizedMedia } from "@/lib/content";
 
 interface CoverImageProps extends Omit<ImageProps, "source" | "onError"> {
   uri: string | null | undefined;
   storyId?: string;
+  /** Requested decode width. Defaults to a home-card size, not the 1024 original. */
+  displayWidth?: number;
+  /** Bump to remount after a failed or cancelled load. */
+  retryKey?: string | number;
 }
 
 /**
@@ -12,26 +16,33 @@ interface CoverImageProps extends Omit<ImageProps, "source" | "onError"> {
  * URI (typically cover_image_url from the API) fails to load.
  * Prevents blank gray boxes when the CDN is slow or returns an error.
  */
-export function CoverImage({ uri, storyId, ...props }: CoverImageProps) {
+export function CoverImage({ uri, storyId, displayWidth = 360, retryKey, ...props }: CoverImageProps) {
   const [useFallback, setUseFallback] = useState(false);
+  const [retries, setRetries] = useState(0);
 
   useEffect(() => {
     setUseFallback(false);
-  }, [uri]);
+    setRetries(0);
+  }, [uri, storyId, retryKey, displayWidth]);
 
   const handleError = useCallback(() => {
     if (!useFallback && storyId) {
       setUseFallback(true);
+      return;
     }
-  }, [useFallback, storyId]);
+    if (retries < 2) {
+      setRetries((n) => n + 1);
+    }
+  }, [useFallback, storyId, retries]);
 
-  const fallbackUri = storyId ? coverUrl(storyId) : undefined;
+  const sizedUri = uri ? sizedMedia(uri, displayWidth) : undefined;
+  const fallbackUri = storyId ? coverUrl(storyId, displayWidth) : undefined;
 
   const source =
     useFallback && fallbackUri
       ? { uri: fallbackUri }
-      : uri
-        ? { uri }
+      : sizedUri
+        ? { uri: sizedUri }
         : fallbackUri
           ? { uri: fallbackUri }
           : undefined;
@@ -41,9 +52,10 @@ export function CoverImage({ uri, storyId, ...props }: CoverImageProps) {
   return (
     <Image
       {...props}
+      key={`${source.uri}:${retries}:${retryKey ?? ""}`}
       source={source}
       onError={handleError}
-      recyclingKey={source.uri}
+      recyclingKey={`${storyId ?? source.uri}:${retries}:${retryKey ?? ""}`}
       cachePolicy="memory-disk"
     />
   );

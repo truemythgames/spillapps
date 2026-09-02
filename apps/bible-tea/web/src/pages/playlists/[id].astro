@@ -498,7 +498,7 @@ const guideEntries = (editorial?.guide ?? [])
           <a href={localePath(`/stories/${s.id}`, locale)} class="story-card">
             <div class="card-cover">
               {hasCover(s.id) ? (
-                <img src={coverUrl(s.id)} alt={s.title} loading="lazy" width="300" height="300" />
+                <img src={coverUrl(s.id, 600)} alt={s.title} loading="lazy" width="300" height="300" />
               ) : (
                 <div class="card-cover-placeholder">📖</div>
               )}

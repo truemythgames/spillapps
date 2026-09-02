@@ -24,8 +24,6 @@ import Animated, {
   runOnJS,
   Easing,
 } from "react-native-reanimated";
-let StoreReview: any = null;
-try { StoreReview = require("expo-store-review"); } catch {}
 import { storage, StorageKeys } from "@/lib/storage";
 import { colors, fonts, fontSize, spacing } from "@/lib/theme";
 import { requestATT } from "@/lib/analytics";
@@ -75,7 +73,6 @@ const BACKGROUNDS = [
   LOCAL_COVERS["daniel-and-the-lions-den"], // reviews
   LOCAL_COVERS["samson-and-delilah"],    // feature2
   LOCAL_COVERS["feeding-5000"],          // feature3
-  LOCAL_COVERS["the-crucifixion"],       // rate
 ];
 
 interface FeatureSlide {
@@ -92,8 +89,7 @@ type Step =
   | "feature1"
   | "feature2"
   | "feature3"
-  | "reviews"
-  | "rate";
+  | "reviews";
 
 const STEP_ORDER: Step[] = [
   "welcome",
@@ -105,10 +101,9 @@ const STEP_ORDER: Step[] = [
   "reviews",
   "feature2",
   "feature3",
-  "rate",
 ];
 
-const SHOWCASE_STEPS: Step[] = ["feature1", "reviews", "feature2", "feature3", "rate"];
+const SHOWCASE_STEPS: Step[] = ["feature1", "reviews", "feature2", "feature3"];
 const SHOWCASE_START_IDX = STEP_ORDER.indexOf("feature1");
 
 export default function OnboardingScreen() {
@@ -153,24 +148,12 @@ export default function OnboardingScreen() {
 
   const fadeAnim = useSharedValue(1);
   const ctaScale = useSharedValue(1);
-  const reviewPrompted = useRef(false);
   const step = STEP_ORDER[stepIdx];
   const inShowcase = stepIdx >= SHOWCASE_START_IDX;
   const showcaseStep = inShowcase ? SHOWCASE_STEPS[showcaseIdx] : null;
   const currentStep = inShowcase ? showcaseStep! : step;
   const bgIdx = inShowcase ? SHOWCASE_START_IDX + showcaseIdx : stepIdx;
   const bgUri = BACKGROUNDS[bgIdx] ?? BACKGROUNDS[0];
-
-  if (showcaseStep === "rate" && !reviewPrompted.current) {
-    reviewPrompted.current = true;
-    setTimeout(async () => {
-      try {
-        if (StoreReview && await StoreReview.hasAction()) {
-          await StoreReview.requestReview();
-        }
-      } catch {}
-    }, 600);
-  }
 
   function animateTransition(next: () => void) {
     fadeAnim.value = withTiming(0, { duration: 200, easing: Easing.out(Easing.quad) }, (finished) => {
@@ -280,19 +263,6 @@ export default function OnboardingScreen() {
                 <Text style={styles.reviewName}>— {r.name}</Text>
               </View>
             ))}
-          </View>
-        );
-      case "rate":
-        return (
-          <View style={styles.rateContent}>
-            <Text style={styles.rateTitle}>{t("onboarding.rateTitle")}</Text>
-            <Text style={styles.starsRowLarge}>⭐⭐⭐⭐⭐</Text>
-            <View style={styles.rateCard}>
-              <Text style={styles.reviewText}>
-                "{t("onboarding.rateReview")}"
-              </Text>
-              <Text style={styles.reviewName}>— {t("onboarding.rateReviewName")}</Text>
-            </View>
           </View>
         );
       default:
@@ -736,32 +706,6 @@ const styles = StyleSheet.create({
     color: "#555",
     textAlign: "center",
     marginTop: spacing.sm,
-  },
-
-  // Rate
-  rateContent: {
-    paddingHorizontal: spacing.lg,
-    alignItems: "center",
-  },
-  rateTitle: {
-    fontFamily: fonts.heading,
-    fontSize: 30,
-    color: "#fff",
-    textAlign: "center",
-    marginBottom: spacing.lg,
-  },
-  starsRowLarge: {
-    fontSize: 36,
-    letterSpacing: 8,
-    marginBottom: spacing.xl,
-  },
-  rateCard: {
-    backgroundColor: CARD_BG,
-    borderRadius: 16,
-    padding: 20,
-    borderWidth: 1,
-    borderColor: CARD_BORDER,
-    width: "100%",
   },
 
   // Progress dots

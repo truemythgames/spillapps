@@ -13,6 +13,8 @@ export const StorageKeys = {
   HAS_SEEN_INITIAL_OFFER: "has_seen_initial_offer",
   PRAYER_STREAK_DATA: "prayer_streak_data",
   WIDGET_PROMPT_DISMISSED: "widget_prompt_dismissed",
+  HAS_REQUESTED_REVIEW: "has_requested_review",
+  LAUNCH_COUNT: "launch_count",
 } as const;
 
 export function isPrayerPlayerId(id: string) {

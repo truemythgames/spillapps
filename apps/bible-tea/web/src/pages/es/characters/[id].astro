@@ -3,6 +3,7 @@ import Base from "../../../layouts/Base.astro";
 import StoreButtons from "../../../components/StoreButtons.astro";
 import {
   getCharacters,
+  sizedMedia,
   type Character,
 } from "../../../lib/stories";
 import { getLocale, localePath, t } from "../../../lib/i18n";
@@ -308,7 +309,7 @@ const otherCharacters = allCharacters.filter((c) => c.id !== character.id).slice
 
       <div class="character-hero">
         {character.image_url ? (
-          <img src={character.image_url} alt={character.name} class="character-avatar" loading="eager" width="200" height="200" />
+          <img src={sizedMedia(character.image_url, 400)} alt={character.name} class="character-avatar" loading="eager" width="200" height="200" />
         ) : (
           <div class="character-avatar-ph">👤</div>
         )}
@@ -344,7 +345,7 @@ const otherCharacters = allCharacters.filter((c) => c.id !== character.id).slice
             <a href={localePath(`/stories/${s.slug}`, locale)} class="story-card">
               <div class="card-cover">
                 {s.cover_image_url ? (
-                  <img src={s.cover_image_url} alt={s.title} loading="lazy" width="300" height="300" />
+                  <img src={sizedMedia(s.cover_image_url, 600)} alt={s.title} loading="lazy" width="300" height="300" />
                 ) : (
                   <div class="card-cover-placeholder">📖</div>
                 )}
@@ -409,7 +410,7 @@ const otherCharacters = allCharacters.filter((c) => c.id !== character.id).slice
           {otherCharacters.map((c) => (
             <a href={localePath(`/characters/${c.id}`, locale)} class="char-card">
               {c.image_url ? (
-                <img src={c.image_url} alt={c.name} class="char-card-avatar" loading="lazy" width="100" height="100" />
+                <img src={sizedMedia(c.image_url, 200)} alt={c.name} class="char-card-avatar" loading="lazy" width="100" height="100" />
               ) : (
                 <div class="char-card-ph">👤</div>
               )}

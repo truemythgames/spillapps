@@ -1,4 +1,4 @@
-import { Platform } from "react-native";
+import { AppState, Platform } from "react-native";
 import { requestTrackingPermissionsAsync, getTrackingPermissionsAsync } from "expo-tracking-transparency";
 
 let Settings: any = null;
@@ -21,23 +21,27 @@ try {
 } catch {}
 
 let initialized = false;
-let attRequested = false;
+let attInFlight: Promise<boolean> | null = null;
+let trackingSdksReady = false;
+
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function waitForActive(): Promise<void> {
+  if (AppState.currentState === "active") return Promise.resolve();
+  return new Promise((resolve) => {
+    const sub = AppState.addEventListener("change", (state) => {
+      if (state === "active") {
+        sub.remove();
+        resolve();
+      }
+    });
+  });
+}
 
 export async function initAnalytics() {
   if (initialized) return;
-
-  try {
-    if (Platform.OS === "ios") {
-      Settings?.initializeSDK();
-      const { granted } = await getTrackingPermissionsAsync();
-      Settings?.setAdvertiserTrackingEnabled(granted);
-    } else {
-      Settings?.initializeSDK();
-      Settings?.setAdvertiserTrackingEnabled(true);
-    }
-  } catch (e) {
-    console.warn("[Analytics] Facebook SDK init failed:", e);
-  }
 
   try {
     await crashlyticsModule?.()?.setCrashlyticsCollectionEnabled(!__DEV__);
@@ -48,21 +52,68 @@ export async function initAnalytics() {
   initialized = true;
 }
 
-export async function requestATT(): Promise<boolean> {
-  if (attRequested) return false;
-  attRequested = true;
-
-  if (Platform.OS !== "ios") return true;
+/** Facebook stays off until ATT is granted or denied. */
+async function enableTrackingSdks() {
+  if (trackingSdksReady) return;
+  trackingSdksReady = true;
 
   try {
-    const { status } = await requestTrackingPermissionsAsync();
-    const granted = status === "granted";
-    Settings?.setAdvertiserTrackingEnabled(granted);
-    return granted;
+    Settings?.initializeSDK();
+    if (Platform.OS === "ios") {
+      const { status } = await getTrackingPermissionsAsync();
+      const granted = status === "granted";
+      Settings?.setAdvertiserTrackingEnabled(granted);
+    } else {
+      Settings?.setAdvertiserTrackingEnabled(true);
+    }
+    Settings?.setAutoLogAppEventsEnabled?.(true);
   } catch (e) {
-    console.warn("[Analytics] ATT request failed:", e);
-    return false;
+    console.warn("[Analytics] Facebook SDK init failed:", e);
   }
+}
+
+/**
+ * Show the system ATT dialog once the app is active and still.
+ * iPadOS drops the prompt if we ask during launch, splash, or a transition.
+ * A silent no-op returns "undetermined" — retry instead of treating that as done.
+ */
+export async function requestATT(): Promise<boolean> {
+  if (Platform.OS !== "ios") {
+    await enableTrackingSdks();
+    return true;
+  }
+  if (attInFlight) return attInFlight;
+
+  attInFlight = (async () => {
+    try {
+      await waitForActive();
+      await delay(Platform.isPad ? 800 : 400);
+
+      const existing = await getTrackingPermissionsAsync();
+      if (existing.status === "granted" || existing.status === "denied") {
+        await enableTrackingSdks();
+        return existing.status === "granted";
+      }
+
+      let { status } = await requestTrackingPermissionsAsync();
+      if (status === "undetermined") {
+        await waitForActive();
+        await delay(600);
+        ({ status } = await requestTrackingPermissionsAsync());
+      }
+
+      await enableTrackingSdks();
+      return status === "granted";
+    } catch (e) {
+      console.warn("[Analytics] ATT request failed:", e);
+      await enableTrackingSdks();
+      return false;
+    } finally {
+      attInFlight = null;
+    }
+  })();
+
+  return attInFlight;
 }
 
 export function trackEvent(name: string, params?: Record<string, any>) {

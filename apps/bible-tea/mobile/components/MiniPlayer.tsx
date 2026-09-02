@@ -1,9 +1,9 @@
 import { View, Text, StyleSheet, Pressable, ActivityIndicator } from "react-native";
-import { Image } from "expo-image";
 import { useRouter, usePathname } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { usePlayerStore } from "@/stores/player";
+import { CoverImage } from "@/components/CoverImage";
 import { colors, fonts, fontSize, spacing, radius, TAB_BAR_HEIGHT } from "@/lib/theme";
 
 const TAB_ROUTES = ["/", "/explore", "/prayers", "/playlists", "/profile"];
@@ -35,8 +35,10 @@ export function MiniPlayer() {
 
       <View style={styles.content}>
         {currentStory.cover_image_url ? (
-          <Image
-            source={{ uri: currentStory.cover_image_url }}
+          <CoverImage
+            uri={currentStory.cover_image_url}
+            storyId={currentStory.id}
+            displayWidth={160}
             style={styles.thumb}
             contentFit="cover"
           />

@@ -45,8 +45,24 @@ export function hasCover(id: string): boolean {
   return existsSync(join(CONTENT_DIR, "stories", id, "cover.webp"));
 }
 
-export function coverUrl(id: string): string {
-  return `${MEDIA_BASE}/stories/${id}/cover.webp`;
+export function coverUrl(id: string, width?: number): string {
+  const url = `${MEDIA_BASE}/stories/${id}/cover.webp`;
+  return width ? sizedMedia(url, width) : url;
+}
+
+/** Resize via media.spillapps.com ?w= (media-worker). */
+export function sizedMedia(url: string, width: number, quality = 72): string {
+  if (!url) return url;
+  try {
+    const u = new URL(url);
+    if (!u.hostname.endsWith("spillapps.com")) return url;
+    u.searchParams.set("w", String(Math.min(1024, Math.max(80, Math.round(width)))));
+    u.searchParams.set("q", String(quality));
+    u.searchParams.set("v", "2");
+    return u.toString();
+  } catch {
+    return url;
+  }
 }
 
 const API_BASE = "https://api.spillapps.com/v1";

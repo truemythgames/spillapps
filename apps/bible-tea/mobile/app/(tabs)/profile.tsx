@@ -1,6 +1,5 @@
 import { useState, useCallback } from "react";
 import { View, Text, StyleSheet, ScrollView, Pressable, RefreshControl } from "react-native";
-import { Image, Image as ExpoImage } from "expo-image";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
@@ -22,8 +21,6 @@ export default function ChatScreen() {
   const handleRefresh = useCallback(async () => {
     setRefreshing(true);
     try {
-      await ExpoImage.clearDiskCache();
-      await ExpoImage.clearMemoryCache();
       await loadRemoteData();
     } finally { setRefreshing(false); }
   }, [loadRemoteData]);
@@ -69,7 +66,7 @@ export default function ChatScreen() {
       <View style={styles.cards}>
         {CHAT_TOPICS.map((topic) => (
           <Pressable key={topic.id} style={styles.card} onPress={() => handleTopic(topic.id)}>
-            <CoverImage uri={topic.image} storyId={topic.storyId} style={styles.cardImage} contentFit="cover" />
+            <CoverImage uri={topic.image} storyId={topic.storyId} displayWidth={800} style={styles.cardImage} contentFit="cover" />
             <LinearGradient
               colors={["transparent", "rgba(0,0,0,0.7)"]}
               style={styles.cardGradient}

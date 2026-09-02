@@ -344,7 +344,7 @@ const jsonLdArray = [collectionLd, itemListLd, appLd, faqLd, breadcrumbLd];
           <a href={localePath(`/stories/${s.id}`, locale)} class="mini-card">
             <div class="mini-cover">
               {hasCover(s.id) ? (
-                <img src={coverUrl(s.id)} alt={s.title} loading="lazy" width="200" height="200" />
+                <img src={coverUrl(s.id, 400)} alt={s.title} loading="lazy" width="200" height="200" />
               ) : (
                 <div class="mini-cover-ph">📖</div>
               )}

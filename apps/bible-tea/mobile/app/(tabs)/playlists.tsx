@@ -1,5 +1,4 @@
 import { View, Text, StyleSheet, ScrollView, Pressable, FlatList, TextInput, Animated as RNAnimated, RefreshControl } from "react-native";
-import { Image, Image as ExpoImage } from "expo-image";
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -61,8 +60,6 @@ export default function DiscoverScreen() {
   const handleRefresh = useCallback(async () => {
     setRefreshing(true);
     try {
-      await ExpoImage.clearDiskCache();
-      await ExpoImage.clearMemoryCache();
       await loadRemoteData();
     } finally { setRefreshing(false); }
   }, [loadRemoteData]);
@@ -143,7 +140,7 @@ export default function DiscoverScreen() {
           )}
           {filtered.map((s) => (
             <Pressable key={s.id} style={styles.resultRow} onPress={() => router.push(`/story/${s.id}` as any)}>
-              <CoverImage uri={s.cover_image_url} storyId={s.id} style={styles.resultThumb} contentFit="cover" transition={300} />
+              <CoverImage uri={s.cover_image_url} storyId={s.id} displayWidth={160} style={styles.resultThumb} contentFit="cover" transition={0} />
               <View style={styles.resultInfo}>
                 <Text style={styles.resultTitle} numberOfLines={1}>{s.title}</Text>
                 <Text style={styles.resultSub} numberOfLines={2}>{s.description}</Text>
@@ -171,11 +168,12 @@ export default function DiscoverScreen() {
                   const charCover = item.image_url ?? item.stories?.[0]?.cover_image_url ?? null;
                   return (
                     <Pressable style={styles.charCard} onPress={() => router.push(`/character/${item.name}` as any)}>
-                      <Image
-                        source={{ uri: charCover ?? undefined }}
+                      <CoverImage
+                        uri={charCover}
+                        displayWidth={200}
                         style={styles.charAvatar}
                         contentFit="cover"
-                        transition={300}
+                        transition={0}
                       />
                       
                       <Text style={styles.charName}>{item.name}</Text>
@@ -198,11 +196,12 @@ export default function DiscoverScreen() {
                     style={styles.seasonCard}
                     onPress={() => router.push(`/collection?type=season&name=${encodeURIComponent(season.name)}` as any)}
                   >
-                    <Image
-                      source={{ uri: season.cover ?? undefined }}
+                    <CoverImage
+                      uri={season.cover}
+                      displayWidth={400}
                       style={StyleSheet.absoluteFill}
                       contentFit="cover"
-                      transition={300}
+                      transition={0}
                     />
                     <View style={styles.seasonOverlay} />
                     <View style={styles.seasonContent}>
@@ -231,7 +230,7 @@ export default function DiscoverScreen() {
                 showsHorizontalScrollIndicator={false}
                 renderItem={({ item }) => (
                   <Pressable style={styles.recentCard} onPress={() => router.push(`/story/${item.id}` as any)}>
-                    <CoverImage uri={item.cover_image_url} storyId={item.id} style={styles.recentImg} contentFit="cover" transition={300} />
+                    <CoverImage uri={item.cover_image_url} storyId={item.id} displayWidth={360} style={styles.recentImg} contentFit="cover" transition={0} />
                     <Text style={styles.recentTitle} numberOfLines={1}>{item.title}</Text>
                     <Text style={styles.recentSub} numberOfLines={2}>{item.description}</Text>
                   </Pressable>

@@ -1,6 +1,6 @@
 import "@/lib/i18n";
 import { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import { Stack, usePathname, router } from "expo-router";
 import * as Linking from "expo-linking";
 import { StatusBar } from "expo-status-bar";
@@ -23,11 +23,11 @@ import { useAppStore } from "@/stores/app";
 import { setupPlayer } from "@/stores/player";
 import { colors } from "@/lib/theme";
 import { storage, StorageKeys, hydrateStorage } from "@/lib/storage";
+import { recordReturningLaunch } from "@/lib/review";
 import { initPurchases } from "@/lib/purchases";
 import { initAnalytics } from "@/lib/analytics";
 import { getSession } from "@/lib/identity";
 import { UpdatePrompt } from "@/components/UpdatePrompt";
-import { SplashIntro } from "@/components/SplashIntro";
 import { Image as ExpoImage } from "expo-image";
 import { storyIdFromUrl } from "@/lib/widget-linking";
 
@@ -37,8 +37,6 @@ SplashScreen.preventAutoHideAsync();
 let pendingWidgetStoryId: string | null = null;
 let navReady = false;
 let currentPathname = "";
-/** Survives RootLayout remounts (Redirect / expo-router) so the intro cannot replay. */
-let introPlayedThisLaunch = false;
 
 function goToStory(storyId: string) {
   // Delay so the root Stack is mounted before we navigate.
@@ -65,7 +63,6 @@ function handleWidgetUrl(url: string | null) {
 export default function RootLayout() {
   const [hydrated, setHydrated] = useState(false);
   const [appReady, setAppReady] = useState(false);
-  const [introDone, setIntroDone] = useState(introPlayedThisLaunch);
   const loadInitialData = useAppStore((s) => s.loadInitialData);
   const loadUserData = useAppStore((s) => s.loadUserData);
   const refreshSubscription = useAppStore((s) => s.refreshSubscription);
@@ -94,8 +91,7 @@ export default function RootLayout() {
     async function init() {
       await hydrateStorage();
       if (storage.getBoolean(StorageKeys.HAS_ONBOARDED)) {
-        introPlayedThisLaunch = true;
-        setIntroDone(true);
+        recordReturningLaunch();
       }
       setHydrated(true);
       loadInitialData();
@@ -121,7 +117,7 @@ export default function RootLayout() {
   }, []);
 
   useEffect(() => {
-    if (!appReady || !fontsLoaded || !introDone) return;
+    if (!appReady || !fontsLoaded) return;
     if (!storage.getBoolean(StorageKeys.HAS_ONBOARDED)) return;
     navReady = true;
     if (pendingWidgetStoryId) {
@@ -129,7 +125,7 @@ export default function RootLayout() {
       pendingWidgetStoryId = null;
       goToStory(id);
     }
-  }, [appReady, fontsLoaded, introDone]);
+  }, [appReady, fontsLoaded]);
 
   useEffect(() => {
     if (!appReady) return;
@@ -138,22 +134,21 @@ export default function RootLayout() {
   }, [appReady]);
 
   useEffect(() => {
-    if (fontsLoaded && appReady && introPlayedThisLaunch) {
+    if (fontsLoaded && appReady) {
       SplashScreen.hideAsync();
     }
   }, [fontsLoaded, appReady]);
 
   useEffect(() => {
-    if (!appReady || !fontsLoaded || !introDone) return;
+    if (!appReady || !fontsLoaded) return;
     if (storage.getBoolean(StorageKeys.HAS_ONBOARDED)) return;
     if (pathname === "/onboarding") return;
     router.replace("/onboarding");
-  }, [appReady, fontsLoaded, introDone, pathname]);
+  }, [appReady, fontsLoaded, pathname]);
 
   if (!hydrated) return null;
 
   const hasOnboarded = storage.getBoolean(StorageKeys.HAS_ONBOARDED);
-  const showIntro = !introDone && !hasOnboarded;
   const hideMini = pathname === "/player" || pathname === "/onboarding" || pathname === "/paywall" || pathname === "/post-purchase";
   const ready = fontsLoaded && appReady;
 
@@ -254,24 +249,6 @@ export default function RootLayout() {
       ) : (
         <View style={{ flex: 1, backgroundColor: "#0A0A0F" }} />
       )}
-      {showIntro && (
-        <View style={styles.introOverlay}>
-          <SplashIntro
-            onDone={() => {
-              introPlayedThisLaunch = true;
-              setIntroDone(true);
-            }}
-          />
-        </View>
-      )}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  introOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    zIndex: 999,
-    backgroundColor: "#0A0A0F",
-  },
-});

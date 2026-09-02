@@ -7,7 +7,6 @@ import {
   Pressable,
   ActivityIndicator,
 } from "react-native";
-import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
@@ -63,8 +62,9 @@ export default function PlaylistScreen() {
         ListHeaderComponent={
           <View style={styles.header}>
             {playlist?.cover_image_url ? (
-              <Image
-                source={{ uri: playlist.cover_image_url }}
+              <CoverImage
+                uri={playlist.cover_image_url}
+                displayWidth={800}
                 style={styles.playlistCover}
                 contentFit="cover"
               />
