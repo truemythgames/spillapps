@@ -41,8 +41,23 @@ export async function getTranscript(id: string, locale: Locale = "en"): Promise<
   }
 }
 
+// content/stories/ (covers, audio) is gitignored, so CI builds don't have the
+// files on disk. The committed manifest keeps hasCover() truthful there.
+const coverManifest: Set<string> = (() => {
+  try {
+    return new Set(
+      JSON.parse(readFileSync(join(CONTENT_DIR, "cover-manifest.json"), "utf8")),
+    );
+  } catch {
+    return new Set();
+  }
+})();
+
 export function hasCover(id: string): boolean {
-  return existsSync(join(CONTENT_DIR, "stories", id, "cover.webp"));
+  return (
+    coverManifest.has(id) ||
+    existsSync(join(CONTENT_DIR, "stories", id, "cover.webp"))
+  );
 }
 
 export function coverUrl(id: string, width?: number): string {
