@@ -9,9 +9,9 @@ import type { Locale } from "./i18n";
  *    "1 reyes 17:8-24". Localizing the reference makes titles exact-match
  *    dozens of reference queries we already rank for.
  *
- * 2. `STORY_SEO` / `PLAYLIST_SEO` — hand-written titles and meta descriptions
- *    for pages that rank on page 1 with high impressions but ~0% CTR.
- *    Each override is phrased to match the actual queries from GSC.
+ * 2. `STORY_SEO` / `PLAYLIST_SEO` / `CHARACTER_SEO` / `PRAYER_SEO` —
+ *    hand-written titles and meta descriptions for pages that rank on page 1
+ *    with high impressions but ~0% CTR. Each override matches GSC queries.
  */
 
 const BOOK_NAMES_ES: Record<string, string> = {
@@ -702,6 +702,485 @@ export function playlistSeo(id: string, locale: Locale): SeoOverride {
   return PLAYLIST_SEO[id]?.[locale] ?? {};
 }
 
+/**
+ * English character pages were ranking 30–65 for "who is X in the bible"
+ * while Spanish "¿Quién fue X?" sat around 10. Question titles close the gap.
+ */
+export const CHARACTER_SEO: Record<string, LocalizedSeo> = {
+  "ch-absalom": {
+    en: {
+      title: "Who Was Absalom in the Bible? — David's Son | Bible Tea",
+      description:
+        "Who was Absalom in the Bible? David's son who stole Israel's heart and rebelled. Why he turned on his father (2 Samuel 13–18), retold as audio.",
+    },
+    es: {
+      title: "¿Quién era Absalón en la Biblia? — Hijo de David | Bible Tea",
+      description:
+        "¿Quién era Absalón en la Biblia? El hijo de David que robó el corazón de Israel y se rebeló. 2 Samuel 13–18, narrado como audio.",
+    },
+  },
+  "ch-isaac": {
+    en: {
+      title: "Who Is Isaac in the Bible? — Son of the Promise | Bible Tea",
+      description:
+        "Who is Isaac in the Bible? Abraham and Sarah's promised son, Rebekah's husband, Jacob and Esau's father. His story, retold as immersive audio.",
+    },
+    es: {
+      title: "¿Quién fue Isaac en la Biblia? — El hijo de la promesa | Bible Tea",
+      description:
+        "¿Quién es Isaac en la Biblia? El hijo prometido de Abraham y Sara, esposo de Rebeca, padre de Jacob y Esaú. Su historia, narrada como audio.",
+    },
+  },
+  "ch-rachel": {
+    en: {
+      title: "Who Was Rachel in the Bible? — Jacob's Wife | Bible Tea",
+      description:
+        "Who was Rachel in the Bible? Jacob waited 14 years for her. Sister of Leah, mother of Joseph. Her story, retold as immersive audio.",
+    },
+    es: {
+      title: "¿Quién era Raquel en la Biblia? — Esposa de Jacob | Bible Tea",
+      description:
+        "¿Quién era Raquel en la Biblia? Jacob esperó 14 años por ella. Hermana de Lea, madre de José. Su historia, narrada como audio inmersivo.",
+    },
+  },
+  "ch-rebekah": {
+    en: {
+      title: "Who Was Rebekah in the Bible? — Isaac's Wife | Bible Tea",
+      description:
+        "Who was Rebekah in the Bible? The woman at the well who said yes — Isaac's wife, mother of Jacob and Esau. Genesis 24, retold as audio.",
+    },
+    es: {
+      title: "¿Quién fue Rebeca en la Biblia? — Esposa de Isaac | Bible Tea",
+      description:
+        "¿Quién fue Rebeca en la Biblia? La mujer del pozo que dijo que sí: esposa de Isaac, madre de Jacob y Esaú. Génesis 24, narrado como audio.",
+    },
+  },
+  "ch-caleb": {
+    en: {
+      title: "Who Was Caleb in the Bible? — Joshua 14 | Bible Tea",
+      description:
+        "Who was Caleb in the Bible? At 85 he asked for the mountain with the giants still on it. The story of Caleb, retold as immersive audio.",
+    },
+    es: {
+      title: "¿Quién fue Caleb en la Biblia? — Josué 14 | Bible Tea",
+      description:
+        "¿Quién fue Caleb en la Biblia? A los 85 años pidió la montaña con los gigantes. La historia de Caleb, narrada como audio inmersivo.",
+    },
+  },
+  "ch-sarah": {
+    en: {
+      title: "Who Was Sarah in the Bible? — Abraham's Wife | Bible Tea",
+      description:
+        "Who was Sarah in the Bible? She laughed at the promise, then held Isaac anyway. Abraham's wife, mother of the nation. Listen on Bible Tea.",
+    },
+    es: {
+      title: "¿Quién fue Sara en la Biblia? — Esposa de Abraham | Bible Tea",
+      description:
+        "¿Quién era Sara en la Biblia? Se rió de la promesa y luego sostuvo a Isaac. Esposa de Abraham, madre de la nación. Escúchala en Bible Tea.",
+    },
+  },
+  "ch-esther": {
+    en: {
+      title: "Who Is Esther in the Bible? — The Queen Who Risked It | Bible Tea",
+      description:
+        "Who was Esther in the Bible? An orphan who became queen and saved her people. Her story, retold as immersive audio on Bible Tea.",
+    },
+    es: {
+      title: "¿Quién es Ester en la Biblia? — La reina que se arriesgó | Bible Tea",
+      description:
+        "¿Quién fue Ester en la Biblia? Una huérfana que llegó a reina y salvó a su pueblo. Su historia, narrada como audio inmersivo.",
+    },
+  },
+  "ch-elijah": {
+    en: {
+      title: "Who Is Elijah in the Bible? — The Fire Prophet | Bible Tea",
+      description:
+        "Who is Elijah in the Bible? He called fire on Carmel, ran from Jezebel, and left in a whirlwind. Every Elijah story, retold as audio.",
+    },
+    es: {
+      title: "¿Quién es Elías en la Biblia? — El profeta del fuego | Bible Tea",
+      description:
+        "¿Quién era Elías en la Biblia? Llamó fuego en el Carmelo, huyó de Jezabel y se fue en un torbellino. Todas sus historias, narradas.",
+    },
+  },
+  "ch-solomon": {
+    en: {
+      title: "Who Is Solomon in the Bible? — Wisdom and the Temple | Bible Tea",
+      description:
+        "Who is Solomon in the Bible? David's son: the wisest king, the temple builder, and a downfall nobody saw coming. Listen on Bible Tea.",
+    },
+    es: {
+      title: "¿Quién es Salomón en la Biblia? — Sabiduría y el templo | Bible Tea",
+      description:
+        "¿Quién fue Salomón en la Biblia? Hijo de David: el rey más sabio, el que construyó el templo, y una caída que nadie vio venir.",
+    },
+  },
+  "ch-peter": {
+    en: {
+      title: "Who Was Peter in the Bible? — The Apostle's Story | Bible Tea",
+      description:
+        "Who was Peter in the Bible? Fisherman, denier, miracle-worker. Every story of the apostle Peter, retold as immersive audio on Bible Tea.",
+    },
+    es: {
+      title: "¿Quién era Pedro en la Biblia? — La historia del apóstol | Bible Tea",
+      description:
+        "¿Quién fue Pedro en la Biblia? Pescador, el que negó, el que hizo milagros. Toda la historia del apóstol Pedro, narrada como audio.",
+    },
+  },
+  "ch-lazarus": {
+    en: {
+      title: "Who Was Lazarus in the Bible? — Raised from the Dead | Bible Tea",
+      description:
+        "Who was Lazarus in the Bible? Jesus' friend who died — and walked out of the tomb four days later. John 11, retold as audio.",
+    },
+    es: {
+      title: "¿Quién era Lázaro en la Biblia? — Resucitado | Bible Tea",
+      description:
+        "¿Quién fue Lázaro en la Biblia? El amigo de Jesús que murió y salió de la tumba a los cuatro días. Juan 11, narrado como audio.",
+    },
+  },
+  "ch-jonah": {
+    en: {
+      title: "Who Was Jonah in the Bible? — The Prophet and the Fish | Bible Tea",
+      description:
+        "Who was Jonah in the Bible? The prophet who ran, got swallowed, and sulked when Nineveh repented. Jonah 1–4, retold as audio.",
+    },
+    es: {
+      title: "¿Quién fue Jonás en la Biblia? — El profeta y el pez | Bible Tea",
+      description:
+        "¿Quién era Jonás en la Biblia? El profeta que huyó, fue tragado y se enojó cuando Nínive se arrepintió. Jonás 1–4, narrado.",
+    },
+  },
+  "ch-pilate": {
+    en: {
+      title: "Who Was Pilate in the Bible? — The Governor Who Washed His Hands | Bible Tea",
+      description:
+        "Who was Pontius Pilate in the Bible? The Roman governor who found no guilt in Jesus — and crucified him anyway. The full story, retold.",
+    },
+    es: {
+      title: "¿Quién era Pilato en la Biblia? — Poncio Pilato | Bible Tea",
+      description:
+        "¿Quién fue Poncio Pilato en la Biblia? El gobernador romano que no halló culpa en Jesús y aun así lo crucificó. La historia completa.",
+    },
+  },
+  "ch-jacob": {
+    en: {
+      title: "Who Was Jacob in the Bible? — Esau's Twin | Bible Tea",
+      description:
+        "Who was Jacob in the Bible? Isaac's son, Esau's twin — stew, a stolen blessing, a ladder to heaven. His story, retold as audio.",
+    },
+    es: {
+      title: "¿Quién fue Jacob en la Biblia? — El gemelo de Esaú | Bible Tea",
+      description:
+        "¿Quién era Jacob en la Biblia? Hijo de Isaac, gemelo de Esaú: un plato de lentejas, una bendición robada, una escalera al cielo.",
+    },
+  },
+  "ch-lot": {
+    en: {
+      title: "Who Is Lot in the Bible? — Abraham's Nephew | Bible Tea",
+      description:
+        "Who is Lot in the Bible? Abraham's nephew who chose Sodom, fled, and looked back too late. Genesis 19, retold as immersive audio.",
+    },
+    es: {
+      title: "¿Quién es Lot en la Biblia? — Sobrino de Abraham | Bible Tea",
+      description:
+        "¿Quién fue Lot en la Biblia? El sobrino de Abraham que eligió Sodoma, huyó y miró atrás demasiado tarde. Génesis 19, narrado.",
+    },
+  },
+  "ch-gideon": {
+    en: {
+      title: "Who Is Gideon in the Bible? — 300 Against Midian | Bible Tea",
+      description:
+        "Who is Gideon in the Bible? The least in his family, asked to save Israel with 300 men. Judges 6–8, retold as immersive audio.",
+    },
+    es: {
+      title: "¿Quién es Gedeón en la Biblia? — 300 contra Madián | Bible Tea",
+      description:
+        "¿Quién fue Gedeón en la Biblia? El menor de su casa, llamado a salvar a Israel con 300 hombres. Jueces 6–8, narrado como audio.",
+    },
+  },
+  "ch-nicodemus": {
+    en: {
+      title: "Who Was Nicodemus in the Bible? — The Night Visitor | Bible Tea",
+      description:
+        "Who was Nicodemus in the Bible? A Pharisee who came to Jesus at night and heard 'you must be born again.' John 3, retold as audio.",
+    },
+    es: {
+      title: "¿Quién era Nicodemo en la Biblia? — El que vino de noche | Bible Tea",
+      description:
+        "¿Quién fue Nicodemo en la Biblia? Un fariseo que fue a Jesús de noche y oyó «necesitas nacer de nuevo». Juan 3, narrado.",
+    },
+  },
+  "ch-john-the-baptist": {
+    en: {
+      title: "Who Was John the Baptist in the Bible? | Bible Tea",
+      description:
+        "Who was John the Baptist? The prophet who prepared the way, said 'He must increase,' and died for it. His story, retold as audio.",
+    },
+    es: {
+      title: "¿Quién fue Juan el Bautista en la Biblia? | Bible Tea",
+      description:
+        "¿Quién era Juan el Bautista? El profeta que preparó el camino, dijo «él debe crecer» y murió por eso. Su historia, narrada.",
+    },
+  },
+  "ch-paul": {
+    en: {
+      title: "Who Was Paul in the Bible? — From Saul to Apostle | Bible Tea",
+      description:
+        "Who was Paul in the Bible? The church's worst enemy, blinded on the Damascus road, then its greatest apostle. Listen on Bible Tea.",
+    },
+    es: {
+      title: "¿Quién fue Pablo en la Biblia? — De Saulo a apóstol | Bible Tea",
+      description:
+        "¿Quién era Pablo en la Biblia? El peor enemigo de la iglesia, cegado en el camino a Damasco, luego su mayor apóstol.",
+    },
+  },
+  "ch-david": {
+    en: {
+      title: "Who Was David in the Bible? — Shepherd, King, Psalm-Writer | Bible Tea",
+      description:
+        "Who was David in the Bible? The boy who faced Goliath, the king who fell, the poet behind Psalm 23. His stories, retold as audio.",
+    },
+    es: {
+      title: "¿Quién fue David en la Biblia? — Pastor, rey, salmista | Bible Tea",
+      description:
+        "¿Quién era David en la Biblia? El muchacho que enfrentó a Goliat, el rey que cayó, el poeta del Salmo 23. Sus historias, narradas.",
+    },
+  },
+  "ch-cornelius": {
+    en: {
+      title: "Who Was Cornelius in the Bible? — The Roman Who Changed the Church | Bible Tea",
+      description:
+        "Who was Cornelius in the Bible? A Roman centurion whose vision opened the gospel to the nations. Acts 10, retold as audio.",
+    },
+    es: {
+      title: "¿Quién fue Cornelio en la Biblia? — El romano que cambió la iglesia | Bible Tea",
+      description:
+        "¿Quién era Cornelio en la Biblia? Un centurión romano cuya visión abrió el evangelio a las naciones. Hechos 10, narrado.",
+    },
+  },
+  "ch-deborah": {
+    en: {
+      title: "Who Is Deborah in the Bible? — The Judge and Prophet | Bible Tea",
+      description:
+        "Who is Deborah in the Bible? A judge, a prophet, and the woman who rode to war when Barak wouldn't go alone. Judges 4–5, retold.",
+    },
+    es: {
+      title: "¿Quién es Débora en la Biblia? — Jueza y profetisa | Bible Tea",
+      description:
+        "¿Quién era Débora en la Biblia? Jueza, profetisa y la mujer que fue a la guerra cuando Barac no quiso ir solo. Jueces 4–5, narrado.",
+    },
+  },
+  "ch-hezekiah": {
+    en: {
+      title: "Who Was Hezekiah in the Bible? — The King Who Got More Years | Bible Tea",
+      description:
+        "Who was Hezekiah in the Bible? The king who prayed, faced an empire, and was given fifteen extra years. His story, retold as audio.",
+    },
+    es: {
+      title: "¿Quién era Ezequías en la Biblia? — El rey que recibió más años | Bible Tea",
+      description:
+        "¿Quién fue Ezequías en la Biblia? El rey que oró, enfrentó un imperio y recibió quince años más. Su historia, narrada como audio.",
+    },
+  },
+};
+
+/**
+ * Spanish prayer pages already rank #1 for the query and get 0 clicks.
+ * Titles must match "oración para el trabajo", not "{title} — Oración Guiada".
+ */
+export const PRAYER_SEO: Record<string, LocalizedSeo> = {
+  "job-work": {
+    en: {
+      title: "Prayer for Work — Purpose and Direction | Bible Tea",
+      description:
+        "A guided prayer for your work when Monday feels heavy or the path is unclear. Read it here or listen with narration on Bible Tea.",
+    },
+    es: {
+      title: "Oración para el trabajo | Bible Tea",
+      description:
+        "Oración para el trabajo cuando el lunes pesa o no sabes qué hacer con tu carrera. Léela aquí o escúchala con narración en Bible Tea.",
+    },
+  },
+  "forgiving-yourself": {
+    en: {
+      title: "Prayer for Forgiving Yourself | Bible Tea",
+      description:
+        "God already forgave you. This guided prayer is for the part that still won't let go. Read it or listen on Bible Tea.",
+    },
+    es: {
+      title: "Oración para perdonarme a mí mismo | Bible Tea",
+      description:
+        "Oración para perdonarme a mí mismo cuando Dios ya perdonó y tú no puedes. Léela aquí o escúchala en Bible Tea.",
+    },
+  },
+  "letting-go-of-control": {
+    en: {
+      title: "Prayer for Letting Go of Control | Bible Tea",
+      description:
+        "A guided prayer to release your grip and trust God's plan. Read it here or listen with calming narration on Bible Tea.",
+    },
+    es: {
+      title: "Oración para soltar y dejar ir | Bible Tea",
+      description:
+        "Oración para soltar y dejar ir cuando no puedes controlarlo todo. Léela aquí o escúchala con narración en Bible Tea.",
+    },
+  },
+  "fear-of-future": {
+    en: {
+      title: "Prayer for Fear of the Future | Bible Tea",
+      description:
+        "When tomorrow terrifies you. A guided prayer to trust the One who holds it. Read or listen on Bible Tea.",
+    },
+    es: {
+      title: "Oración para el miedo al futuro | Bible Tea",
+      description:
+        "Oración para cuando el mañana te aterra. Confía en Quien lo sostiene. Léela o escúchala en Bible Tea.",
+    },
+  },
+  "endurance": {
+    en: {
+      title: "Prayer for Endurance | Bible Tea",
+      description:
+        "The race is long and your legs are heavy. A guided prayer to keep going. Read it here or listen on Bible Tea.",
+    },
+    es: {
+      title: "Oración para la perseverancia | Bible Tea",
+      description:
+        "Oración para la perseverancia cuando la carrera es larga y las piernas pesan. Léela o escúchala en Bible Tea.",
+    },
+  },
+  "trusting-gods-timing": {
+    en: {
+      title: "Prayer for Trusting God's Timing | Bible Tea",
+      description:
+        "It's taking too long. A guided prayer to trust that God's clock is perfect. Read or listen on Bible Tea.",
+    },
+    es: {
+      title: "Oración para confiar en el tiempo de Dios | Bible Tea",
+      description:
+        "Oración para confiar en el tiempo de Dios cuando tarda demasiado. Léela o escúchala en Bible Tea.",
+    },
+  },
+  "facing-giants": {
+    en: {
+      title: "Prayer for Strength | Bible Tea",
+      description:
+        "A guided prayer for strength when the problem is bigger than you. Read it here or listen on Bible Tea.",
+    },
+    es: {
+      title: "Oración para la fortaleza | Bible Tea",
+      description:
+        "Oración para la fortaleza cuando el problema es más grande que tú. Léela o escúchala en Bible Tea.",
+    },
+  },
+  "physical-healing": {
+    en: {
+      title: "Prayer for Healing | Bible Tea",
+      description:
+        "A guided prayer for healing when your body is broken. Bring it to the Healer. Read or listen on Bible Tea.",
+    },
+    es: {
+      title: "Oración para la sanidad | Bible Tea",
+      description:
+        "Oración para la sanidad cuando el cuerpo está roto. Llévalo al Sanador. Léela o escúchala en Bible Tea.",
+    },
+  },
+  "anxious-thoughts": {
+    en: {
+      title: "Prayer for Anxiety | Bible Tea",
+      description:
+        "A guided prayer for anxiety when your mind will not sit down. Read it here or listen on Bible Tea.",
+    },
+    es: {
+      title: "Oración para la ansiedad | Bible Tea",
+      description:
+        "Oración para la ansiedad cuando la mente no se sienta. Léela aquí o escúchala en Bible Tea.",
+    },
+  },
+  "protection-through-night": {
+    en: {
+      title: "Prayer for Protection | Bible Tea",
+      description:
+        "A guided prayer for protection through the night. Read it here or listen with narration on Bible Tea.",
+    },
+    es: {
+      title: "Oración para la protección | Bible Tea",
+      description:
+        "Oración para la protección durante la noche. Léela aquí o escúchala en Bible Tea.",
+    },
+  },
+  "peace-in-chaos": {
+    en: {
+      title: "Prayer for Peace | Bible Tea",
+      description:
+        "A guided prayer for peace when the storm is still in the boat. Read or listen on Bible Tea.",
+    },
+    es: {
+      title: "Oración para la paz | Bible Tea",
+      description:
+        "Oración para la paz cuando la tormenta sigue en el bote. Léela o escúchala en Bible Tea.",
+    },
+  },
+  "asking-forgiveness": {
+    en: {
+      title: "Prayer for Forgiveness | Bible Tea",
+      description:
+        "You blew it. This guided prayer asks God for forgiveness and believes His mercy is bigger. Read or listen on Bible Tea.",
+    },
+    es: {
+      title: "Oración para el perdón | Bible Tea",
+      description:
+        "La regaste. Esta oración pide perdón a Dios y cree que Su misericordia es más grande. Léela o escúchala en Bible Tea.",
+    },
+  },
+  "lost-someone": {
+    en: {
+      title: "Prayer for Grief | Bible Tea",
+      description:
+        "A guided prayer when you have lost someone and the chair is empty. Read it here or listen on Bible Tea.",
+    },
+    es: {
+      title: "Oración para el duelo | Bible Tea",
+      description:
+        "Oración para el duelo cuando has perdido a alguien y la silla está vacía. Léela o escúchala en Bible Tea.",
+    },
+  },
+  "marriage": {
+    en: {
+      title: "Prayer for Marriage | Bible Tea",
+      description:
+        "A guided prayer for your marriage — patience, grace, and staying committed. Read it here or listen on Bible Tea.",
+    },
+    es: {
+      title: "Oración para el matrimonio | Bible Tea",
+      description:
+        "Oración para el matrimonio: paciencia, gracia y seguir eligiendo. Léela o escúchala en Bible Tea.",
+    },
+  },
+  "lonely": {
+    en: {
+      title: "Prayer for Loneliness | Bible Tea",
+      description:
+        "No one calls. This guided prayer is for the hour you feel unseen. Read or listen on Bible Tea.",
+    },
+    es: {
+      title: "Oración para la soledad | Bible Tea",
+      description:
+        "Nadie llama. Esta oración es para la hora en que nadie te ve. Léela o escúchala en Bible Tea.",
+    },
+  },
+};
+
+export function characterSeo(id: string, locale: Locale): SeoOverride {
+  return CHARACTER_SEO[id]?.[locale] ?? {};
+}
+
+export function prayerSeo(slug: string, locale: Locale): SeoOverride {
+  const key = slug.startsWith("pr-") ? slug.slice(3) : slug;
+  return PRAYER_SEO[key]?.[locale] ?? PRAYER_SEO[slug]?.[locale] ?? {};
+}
+
 /** Keep titles in SERP-friendly range (Google typically shows ~60–70 chars). */
 export function clampTitle(title: string, max = 70): string {
   if (title.length <= max) return title;
@@ -754,16 +1233,41 @@ export function verseOfTheDaySeo(
 
   if (locale === "es") {
     return {
-      title: clampTitle(`Versículo de hoy — ${dateLabel} | Bible Tea`),
+      title: clampTitle(`Versículo del día de hoy — ${verse.ref} | Bible Tea`),
       description: clampDescription(
-        `Versículo del día de hoy (${verse.ref}): “${snippet}” Léelo aquí o en el widget gratis para tu pantalla.`,
+        `Versículo del día de hoy (${dateLabel}, ${verse.ref}): “${snippet}” Léelo aquí o ponlo en tu pantalla con el widget gratis.`,
       ),
     };
   }
   return {
-    title: clampTitle(`Bible Verse of the Day — ${dateLabel} | Bible Tea`),
+    title: clampTitle(`Bible Verse of the Day — ${verse.ref} | Bible Tea`),
     description: clampDescription(
-      `Today's Bible verse of the day (${verse.ref}): “${snippet}” Read it here, or download the app for the free home-screen widget.`,
+      `Today's Bible verse of the day (${dateLabel}, ${verse.ref}): “${snippet}” Read it here, or add the free home-screen widget.`,
+    ),
+  };
+}
+
+export function prayerForTodaySeo(
+  locale: Locale,
+  prayerTitle: string,
+  date: Date,
+): { title: string; description: string } {
+  const dateLabel =
+    locale === "es"
+      ? date.toLocaleDateString("es-ES", { day: "numeric", month: "short", year: "numeric" })
+      : date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  if (locale === "es") {
+    return {
+      title: clampTitle("Oración de hoy | Bible Tea"),
+      description: clampDescription(
+        `Oración de hoy (${dateLabel}): ${prayerTitle}. Léela aquí o escúchala con narración en Bible Tea.`,
+      ),
+    };
+  }
+  return {
+    title: clampTitle("Prayer for Today | Bible Tea"),
+    description: clampDescription(
+      `Prayer for today (${dateLabel}): ${prayerTitle}. Read it here, or listen with narration on Bible Tea.`,
     ),
   };
 }

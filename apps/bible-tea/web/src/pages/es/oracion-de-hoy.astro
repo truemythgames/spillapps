@@ -1,0 +1,149 @@
+---
+import { marked } from "marked";
+import Base from "../../layouts/Base.astro";
+import StoreButtons from "../../components/StoreButtons.astro";
+import { getLocale, localePath, t } from "../../lib/i18n";
+import { prayerForTodaySeo } from "../../lib/seo";
+import { getPrayerForToday } from "../../lib/prayer-for-today";
+import { prayerBody } from "../../lib/stories";
+
+const locale = getLocale(Astro.currentLocale);
+const now = new Date();
+const detail = await getPrayerForToday(now, locale);
+if (!detail) throw new Error("No prayer available for oracion-de-hoy");
+
+const today = now.toLocaleDateString("es-ES", {
+  weekday: "long",
+  month: "long",
+  day: "numeric",
+  year: "numeric",
+});
+const { title, description } = prayerForTodaySeo(locale, detail.title, now);
+const bodyHtml = await marked.parse(prayerBody(detail.transcript));
+const faqA1 = t(locale, "pft.faqA1").replace("{title}", detail.title);
+const faqs = [
+  { q: t(locale, "pft.faqQ1"), a: faqA1 },
+  { q: t(locale, "pft.faqQ2"), a: t(locale, "pft.faqA2") },
+];
+
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Inicio", item: "https://bibletea.app/es/" },
+    { "@type": "ListItem", position: 2, name: t(locale, "pft.breadcrumb"), item: "https://bibletea.app/es/oracion-de-hoy/" },
+  ],
+};
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+---
+
+<Base title={title} description={description} canonicalPath="/prayer-for-today" esPath="/oracion-de-hoy" jsonLd={[breadcrumbLd, faqLd]}>
+  <style>
+    .bc { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--text-muted); max-width: 1200px; margin: 0 auto; padding: 6.5rem 2rem 0; flex-wrap: wrap; }
+    .bc a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .bc a:hover { color: var(--primary); }
+    .bc .sep { opacity: 0.4; }
+
+    .pft-hero { padding: 2rem 2rem 2rem; text-align: center; max-width: 700px; margin: 0 auto; }
+    .pft-hero .pft-date { font-size: 0.85rem; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 1rem; }
+    .pft-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin-bottom: 0.75rem;
+      background: linear-gradient(135deg, var(--text) 0%, var(--primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .pft-hero p { color: var(--text-secondary); font-size: 1.1rem; line-height: 1.7; margin-bottom: 1.5rem; }
+
+    .prayer-page { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+    .prayer-cat-link { display: inline-block; font-size: 0.85rem; color: var(--primary); text-decoration: none; margin-bottom: 1.25rem; }
+    .prayer-cat-link:hover { text-decoration: underline; }
+
+    .prayer-body {
+      background: var(--surface); border: 1px solid var(--surface-border); border-left: 3px solid var(--primary);
+      border-radius: 14px; padding: 1.75rem 1.9rem; margin-bottom: 2.5rem;
+    }
+    .prayer-body :global(p) { color: var(--text); font-size: 1.08rem; line-height: 1.9; margin-bottom: 1.1rem; }
+    .prayer-body :global(p:last-child) { margin-bottom: 0; }
+
+    .cta-inline { margin-bottom: 3rem; display: flex; flex-wrap: wrap; gap: 1.25rem; }
+    .cta-inline a { color: var(--primary); font-weight: 600; text-decoration: none; }
+    .cta-inline a:hover { text-decoration: underline; }
+
+    .faq-section { padding: 3rem 0; border-top: 1px solid var(--surface-border); }
+    .faq-section h2 { font-family: 'Playfair Display', serif; font-size: 1.35rem; margin-bottom: 1rem; }
+    .faq-item { background: var(--surface); border: 1px solid var(--surface-border); border-radius: 12px; margin-bottom: 0.6rem; overflow: hidden; transition: border-color 0.2s; }
+    .faq-item:hover { border-color: var(--primary); }
+    .faq-item[open] { border-color: rgba(200, 162, 255, 0.3); }
+    .faq-item summary { padding: 1rem 1.25rem; cursor: pointer; font-weight: 600; font-size: 0.95rem; color: var(--text); list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after { content: '+'; font-size: 1.25rem; color: var(--primary); flex-shrink: 0; }
+    .faq-item[open] summary::after { content: '−'; }
+    .faq-item p { padding: 0 1.25rem 1rem; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+
+    .bottom-cta { text-align: center; padding: 4rem 2rem 3rem; }
+    .bottom-cta h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.5rem, 3vw, 2rem); margin-bottom: 0.75rem; }
+    .bottom-cta p { color: var(--text-secondary); margin-bottom: 1.5rem; max-width: 450px; margin-left: auto; margin-right: auto; }
+
+    @media (max-width: 640px) {
+      .bc { padding: 5.5rem 1.25rem 0; }
+      .pft-hero { padding: 1.5rem 1.25rem; }
+      .prayer-page { padding: 0 1.25rem; }
+      .prayer-body { padding: 1.35rem 1.4rem; }
+    }
+  </style>
+
+  <div class="bc" role="navigation" aria-label="Breadcrumb">
+    <a href={localePath("/", locale)}>{t(locale, "prayer.breadcrumbHome")}</a>
+    <span class="sep">/</span>
+    <a href={localePath("/prayers", locale)}>{t(locale, "prayer.breadcrumbPrayers")}</a>
+    <span class="sep">/</span>
+    <span>{t(locale, "pft.breadcrumb")}</span>
+  </div>
+
+  <div class="pft-hero">
+    <p class="pft-date">{today}</p>
+    <h1>{t(locale, "pft.h1")}</h1>
+    <div class="hero-download"><StoreButtons variant="hero" /></div>
+    <p>{t(locale, "pft.subtitle")}</p>
+  </div>
+
+  <div class="prayer-page">
+    <a href={localePath(`/prayers/${detail.slug}`, locale)} class="prayer-cat-link">{detail.title}</a>
+
+    <div class="prayer-body">
+      <Fragment set:html={bodyHtml} />
+    </div>
+
+    <div class="cta-inline">
+      <a href={localePath("/verse-of-the-day", locale)}>{t(locale, "pft.votdLink")}</a>
+      <a href={localePath("/prayers", locale)}>{t(locale, "pft.more")}</a>
+    </div>
+
+    <section class="faq-section">
+      <h2>{t(locale, "pft.faqTitle")}</h2>
+      {faqs.map((f) => (
+        <details class="faq-item">
+          <summary>{f.q}</summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </section>
+  </div>
+
+  <section class="bottom-cta">
+    <h2>{t(locale, "prayer.listenOn")}</h2>
+    <p>{t(locale, "pft.listen")}</p>
+    <StoreButtons variant="hero" />
+  </section>
+</Base>

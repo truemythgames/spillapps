@@ -4,7 +4,7 @@ import Base from "../../layouts/Base.astro";
 import StoreButtons from "../../components/StoreButtons.astro";
 import { getPrayers, getPrayerDetail, prayerBody, sizedMedia, type PrayerDetail, type Prayer } from "../../lib/stories";
 import { getLocale, localePath, t } from "../../lib/i18n";
-import { clampTitle, clampDescription } from "../../lib/seo";
+import { clampTitle, clampDescription, prayerSeo } from "../../lib/seo";
 
 export async function getStaticPaths() {
   const prayers = await getPrayers("en");
@@ -25,8 +25,10 @@ const locale = getLocale(Astro.currentLocale);
 
 const bodyHtml = await marked.parse(prayerBody(detail.transcript));
 
-const pageTitle = clampTitle(t(locale, "prayer.pageTitle").replace(/\{title\}/g, detail.title));
-const pageDesc = clampDescription(t(locale, "prayer.pageDesc").replace(/\{description\}/g, detail.description));
+const seoOverride = prayerSeo(detail.slug, locale);
+const pageTitle = clampTitle(seoOverride.title ?? t(locale, "prayer.pageTitle").replace(/\{title\}/g, detail.title));
+const pageDesc = clampDescription(seoOverride.description ?? t(locale, "prayer.pageDesc").replace(/\{description\}/g, detail.description));
+const pageH1 = seoOverride.title ? seoOverride.title.replace(/\s*[|—-]\s*Bible Tea\s*$/u, "").trim() : detail.title;
 const pageUrl = `https://bibletea.app/prayers/${detail.slug}/`;
 
 const creativeWorkLd = {
@@ -80,18 +82,34 @@ const morePrayers = allPrayers.filter((p) => p.slug !== detail.slug).slice(0, 8)
 
 <Base title={pageTitle} description={pageDesc} canonicalPath={`/prayers/${detail.slug}`} jsonLd={jsonLdArray}>
   <style>
-    .prayer-page { max-width: 1200px; margin: 0 auto; padding: 7rem 2rem 0; }
+    .bc { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--text-muted); max-width: 1200px; margin: 0 auto; padding: 6.5rem 2rem 0; flex-wrap: wrap; }
+    .bc a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .bc a:hover { color: var(--primary); }
+    .bc .sep { opacity: 0.4; }
 
-    .breadcrumbs { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 2rem; flex-wrap: wrap; }
-    .breadcrumbs a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
-    .breadcrumbs a:hover { color: var(--primary); }
-    .breadcrumbs .sep { opacity: 0.4; }
+    .prayer-hero { padding: 2rem 2rem 2rem; text-align: center; max-width: 700px; margin: 0 auto; }
+    .prayer-hero .prayer-label {
+      display: inline-block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 1rem;
+      text-decoration: none;
+    }
+    .prayer-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin-bottom: 0.75rem;
+      background: linear-gradient(135deg, var(--text) 0%, var(--primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .prayer-hero p { color: var(--text-secondary); font-size: 1.1rem; line-height: 1.7; margin-bottom: 1.5rem; }
 
-    .prayer-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; color: var(--accent); margin-bottom: 0.5rem; }
-    .prayer-h1 { font-family: 'Playfair Display', serif; font-size: clamp(1.9rem, 4.5vw, 2.6rem); line-height: 1.15; margin-bottom: 0.6rem; }
-    .prayer-cat-link { display: inline-block; font-size: 0.85rem; color: var(--primary); text-decoration: none; margin-bottom: 1.25rem; }
-    .prayer-cat-link:hover { text-decoration: underline; }
-    .prayer-lead { color: var(--text-secondary); font-size: 1.1rem; line-height: 1.7; margin-bottom: 2rem; }
+    .prayer-page { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
 
     .prayer-body {
       background: var(--surface); border: 1px solid var(--surface-border); border-left: 3px solid var(--primary);
@@ -147,30 +165,35 @@ const morePrayers = allPrayers.filter((p) => p.slug !== detail.slug).slice(0, 8)
     .bottom-cta p { color: var(--text-secondary); margin-bottom: 1.5rem; max-width: 450px; margin-left: auto; margin-right: auto; }
 
     @media (max-width: 640px) {
-      .prayer-page { padding: 6rem 1.5rem 0; }
+      .bc { padding: 5.5rem 1.25rem 0; }
+      .prayer-hero { padding: 1.5rem 1.25rem; }
+      .prayer-page { padding: 0 1.25rem; }
       .prayer-body { padding: 1.35rem 1.4rem; }
       .more-prayers { padding: 2rem 1.5rem; }
     }
   </style>
 
   <main>
-    <div class="prayer-page">
-      <div class="breadcrumbs">
-        <a href={localePath("/", locale)}>{t(locale, "prayer.breadcrumbHome")}</a>
-        <span class="sep">/</span>
-        <a href={localePath("/prayers", locale)}>{t(locale, "prayer.breadcrumbPrayers")}</a>
-        <span class="sep">/</span>
-        <span>{detail.title}</span>
-      </div>
+    <div class="bc" role="navigation" aria-label="Breadcrumb">
+      <a href={localePath("/", locale)}>{t(locale, "prayer.breadcrumbHome")}</a>
+      <span class="sep">/</span>
+      <a href={localePath("/prayers", locale)}>{t(locale, "prayer.breadcrumbPrayers")}</a>
+      <span class="sep">/</span>
+      <span>{detail.title}</span>
+    </div>
 
-      <div class="prayer-label">{t(locale, "prayer.label")}</div>
-      <h1 class="prayer-h1">{detail.title}</h1>
-      <div class="hero-download"><StoreButtons variant="hero" /></div>
-      {detail.category_name && (
-        <a href={localePath("/prayers", locale)} class="prayer-cat-link">{detail.category_name}</a>
+    <div class="prayer-hero">
+      {detail.category_name ? (
+        <a href={localePath("/prayers", locale)} class="prayer-label">{detail.category_name}</a>
+      ) : (
+        <div class="prayer-label">{t(locale, "prayer.label")}</div>
       )}
-      {detail.description && <p class="prayer-lead">{detail.description}</p>}
+      <h1>{pageH1}</h1>
+      <div class="hero-download"><StoreButtons variant="hero" /></div>
+      {detail.description && <p>{detail.description}</p>}
+    </div>
 
+    <div class="prayer-page">
       <div class="prayer-body">
         <Fragment set:html={bodyHtml} />
       </div>

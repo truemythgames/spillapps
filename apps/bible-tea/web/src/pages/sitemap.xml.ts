@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { getCatalog, getPlaylists, getSeasons, getCharacters, getPrayers } from "../lib/stories";
+import { getVerseTopics } from "../lib/verse-topics";
 
 const SITE = "https://bibletea.app";
 const NO_LOCALE_PAGES = new Set(["/privacy", "/terms", "/feed.xml"]);
@@ -8,6 +9,9 @@ const NO_TRAILING_SLASH = new Set(["/feed.xml"]);
 /** Pages where the Spanish slug differs from the English one. */
 const ES_SLUG_OVERRIDES: Record<string, string> = {
   "/verse-of-the-day": "/versiculo-del-dia",
+  "/prayer-for-today": "/oracion-de-hoy",
+  "/verses": "/versiculos",
+  ...Object.fromEntries(getVerseTopics().map((t) => [`/verses/${t.slug}`, `/versiculos/${t.esSlug}`])),
 };
 
 interface SitemapEntry {
@@ -44,6 +48,8 @@ export const GET: APIRoute = async () => {
     { path: "/prayers", lastmod: today, changefreq: "weekly", priority: 0.8 },
     { path: "/books", lastmod: today, changefreq: "weekly", priority: 0.8 },
     { path: "/verse-of-the-day", lastmod: today, changefreq: "daily", priority: 0.9 },
+    { path: "/prayer-for-today", lastmod: today, changefreq: "daily", priority: 0.9 },
+    { path: "/verses", lastmod: today, changefreq: "weekly", priority: 0.85 },
     { path: "/widget", lastmod: today, changefreq: "monthly", priority: 0.8 },
     { path: "/feed.xml", lastmod: today, changefreq: "daily", priority: 0.4 },
     { path: "/privacy", lastmod: "2026-03-26T00:00:00.000Z", changefreq: "yearly", priority: 0.3 },
@@ -64,6 +70,9 @@ export const GET: APIRoute = async () => {
   }
   for (const prayer of prayers) {
     entries.push({ path: `/prayers/${prayer.slug}`, lastmod: today, changefreq: "monthly", priority: 0.6 });
+  }
+  for (const topic of getVerseTopics()) {
+    entries.push({ path: `/verses/${topic.slug}`, lastmod: today, changefreq: "weekly", priority: 0.8 });
   }
 
   const urls: string[] = [];

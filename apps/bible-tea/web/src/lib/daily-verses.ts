@@ -373,11 +373,13 @@ export const DAILY_VERSES: DailyVerse[] = [
 
 export type Locale = "en" | "es";
 
-export function getVerseOfTheDay(date: Date = new Date(), locale: Locale = "en"): { text: string; ref: string } {
+export function dayOfYear(date: Date = new Date()): number {
   const start = new Date(date.getFullYear(), 0, 0);
-  const diff = date.getTime() - start.getTime();
-  const dayOfYear = Math.floor(diff / 86_400_000);
-  const index = (dayOfYear - 1 + 365) % DAILY_VERSES.length;
+  return Math.floor((date.getTime() - start.getTime()) / 86_400_000);
+}
+
+export function getVerseOfTheDay(date: Date = new Date(), locale: Locale = "en"): { text: string; ref: string } {
+  const index = (dayOfYear(date) - 1 + 365) % DAILY_VERSES.length;
   return DAILY_VERSES[index][locale];
 }
 

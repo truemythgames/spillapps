@@ -311,6 +311,10 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
       padding: 0.25rem;
     }
 
+    nav.nav-compact .nav-stories-link,
+    nav.nav-compact .nav-stores { display: none; }
+    nav.nav-compact .menu-btn { display: block; }
+
     .mobile-menu {
       display: none;
       position: fixed;
@@ -383,12 +387,6 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
 
     @media (max-width: 640px) {
       nav { padding: 0.75rem 1rem; }
-      .nav-links .nav-stories-link { display: none; }
-      .nav-lang { display: none; }
-      .nav-cta { padding: 0.5rem 1rem; font-size: 0.75rem; }
-      .nav-stores { gap: 0.35rem; }
-      .nav-store-icon { width: 32px; height: 32px; }
-      .menu-btn { display: block; }
       .footer-links { flex-wrap: wrap; gap: 1rem 1.5rem; }
     }
   </style>
@@ -398,7 +396,7 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NN7TLHP2"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
-  <nav>
+  <nav class="nav-compact">
     <a href={localePath("/", locale)} class="nav-brand">
       <img src="/icon-nav.png" alt="Bible Tea" width="36" height="36" />
       <span class="heading">Bible Tea</span>
@@ -467,6 +465,30 @@ const jsonLdItems = [siteLd, orgLd, podcastLd, ...pageJsonLd];
     document.querySelector('.menu-close')?.addEventListener('click', () => {
       document.getElementById('mobile-menu')?.classList.remove('open');
     });
+
+    (function () {
+      var nav = document.querySelector("nav");
+      var brand = nav && nav.querySelector(".nav-brand");
+      var firstLink = nav && nav.querySelector(".nav-stories-link");
+      if (!nav || !brand || !firstLink) return;
+      var ticking = false;
+      function measure() {
+        ticking = false;
+        nav.classList.remove("nav-compact");
+        var brandRight = brand.getBoundingClientRect().right;
+        var linkLeft = firstLink.getBoundingClientRect().left;
+        if (linkLeft < brandRight + 24 || nav.scrollWidth > nav.clientWidth + 1) {
+          nav.classList.add("nav-compact");
+        }
+      }
+      function fit() {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(measure);
+      }
+      measure();
+      addEventListener("resize", fit);
+    })();
   </script>
 
   <main>

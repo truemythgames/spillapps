@@ -1,0 +1,123 @@
+---
+import Base from "../../../layouts/Base.astro";
+import StoreButtons from "../../../components/StoreButtons.astro";
+import { getLocale, localePath, t } from "../../../lib/i18n";
+import { clampTitle, clampDescription } from "../../../lib/seo";
+import { getVerseTopics, topicCopy, verseRef, verseText } from "../../../lib/verse-topics";
+
+const locale = getLocale(Astro.currentLocale);
+const topics = getVerseTopics();
+const title = clampTitle(t(locale, "verses.indexTitle"));
+const description = clampDescription(t(locale, "verses.indexDesc"));
+
+const itemListLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: t(locale, "verses.indexH1"),
+  numberOfItems: topics.length,
+  itemListElement: topics.map((topic, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: topicCopy(topic, "h1", locale),
+    url: `https://bibletea.app/es/versiculos/${topic.esSlug}/`,
+  })),
+};
+---
+
+<Base title={title} description={description} canonicalPath="/verses" esPath="/versiculos" jsonLd={[itemListLd]}>
+  <style>
+    .bc { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--text-muted); max-width: 1200px; margin: 0 auto; padding: 6.5rem 2rem 0; flex-wrap: wrap; }
+    .bc a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .bc a:hover { color: var(--primary); }
+    .bc .sep { opacity: 0.4; }
+
+    .verses-hero { padding: 2rem 2rem 2rem; text-align: center; max-width: 700px; margin: 0 auto; }
+    .verses-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin-bottom: 0.75rem;
+      background: linear-gradient(135deg, var(--text) 0%, var(--primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .verses-hero p { color: var(--text-secondary); font-size: 1.1rem; line-height: 1.7; margin-bottom: 1.5rem; }
+
+    .verses-page { max-width: 1200px; margin: 0 auto; padding: 2rem 2rem 0; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+    a.topic {
+      display: flex;
+      flex-direction: column;
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 14px;
+      padding: 1.25rem 1.35rem;
+      text-decoration: none;
+      color: inherit;
+      min-height: 100%;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    a.topic:hover { transform: translateY(-4px); border-color: var(--primary); }
+    .topic-top { display: flex; justify-content: space-between; align-items: baseline; gap: 0.75rem; margin-bottom: 0.85rem; }
+    .topic-top strong { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--text); }
+    .topic-top em { font-style: normal; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); }
+    .topic blockquote {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.02rem;
+      line-height: 1.5;
+      margin: 0 0 0.65rem;
+      color: var(--text);
+      flex: 1;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .topic .ref { font-size: 0.8rem; font-weight: 600; color: var(--accent); }
+
+    .bottom-cta { text-align: center; padding: 4rem 2rem 3rem; }
+    .bottom-cta h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.5rem, 3vw, 2rem); margin-bottom: 0.75rem; }
+    .bottom-cta p { color: var(--text-secondary); margin-bottom: 1.5rem; max-width: 450px; margin-left: auto; margin-right: auto; }
+
+    @media (max-width: 640px) {
+      .bc { padding: 5.5rem 1.25rem 0; }
+      .verses-hero { padding: 1.5rem 1.25rem; }
+      .verses-page { padding: 1.5rem 1.5rem 0; }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+
+  <div class="bc" role="navigation" aria-label="Breadcrumb">
+    <a href={localePath("/", locale)}>{t(locale, "prayer.breadcrumbHome")}</a><span class="sep">/</span>
+    <span>{t(locale, "verses.breadcrumb")}</span>
+  </div>
+  <div class="verses-hero">
+    <h1>{t(locale, "verses.indexH1")}</h1>
+    <div class="hero-download"><StoreButtons variant="hero" /></div>
+    <p>{t(locale, "verses.indexIntro")}</p>
+  </div>
+
+  <div class="verses-page">
+    <div class="grid">
+      {topics.map((topic) => {
+        const first = topic.verses[0];
+        return (
+          <a class="topic" href={localePath(`/verses/${topic.slug}`, locale)}>
+            <div class="topic-top">
+              <strong>{topicCopy(topic, "label", locale)}</strong>
+              <em>{t(locale, "verses.count").replace("{n}", String(topic.verses.length))}</em>
+            </div>
+            <blockquote>“{verseText(first, locale)}”</blockquote>
+            <div class="ref">{verseRef(first, locale)}</div>
+          </a>
+        );
+      })}
+    </div>
+  </div>
+
+  <section class="bottom-cta">
+    <h2>{t(locale, "votd.ctaTitle")}</h2>
+    <p>{t(locale, "votd.ctaDesc")}</p>
+    <StoreButtons variant="hero" />
+  </section>
+</Base>

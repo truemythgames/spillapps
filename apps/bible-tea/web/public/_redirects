@@ -8,6 +8,18 @@
 # Collapse the no-slash URLs Google still indexes
 /verse-of-the-day /verse-of-the-day/ 301
 /es/versiculo-del-dia /es/versiculo-del-dia/ 301
+/prayer-for-today /prayer-for-today/ 301
+/oracion-de-hoy /es/oracion-de-hoy/ 301
+/oracion-de-hoy/ /es/oracion-de-hoy/ 301
+/es/prayer-for-today /es/oracion-de-hoy/ 301
+/es/prayer-for-today/ /es/oracion-de-hoy/ 301
+/es/oracion-de-hoy /es/oracion-de-hoy/ 301
+/verses /verses/ 301
+/es/verses /es/versiculos/ 301
+/es/verses/ /es/versiculos/ 301
+/es/versiculos /es/versiculos/ 301
+/versiculos /es/versiculos/ 301
+/versiculos/ /es/versiculos/ 301
 /stories /stories/ 301
 /es/stories /es/stories/ 301
 /playlists /playlists/ 301
@@ -32,3 +44,5 @@
 /es/prayers/:slug /es/prayers/:slug/ 301
 /books/:slug /books/:slug/ 301
 /es/books/:slug /es/books/:slug/ 301
+/verses/:slug /verses/:slug/ 301
+/es/versiculos/:slug /es/versiculos/:slug/ 301

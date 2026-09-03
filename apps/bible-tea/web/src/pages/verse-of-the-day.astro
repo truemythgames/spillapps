@@ -5,10 +5,13 @@ import { APP_STORE_URL } from "../lib/stories";
 import { getLocale, localePath, t } from "../lib/i18n";
 import { verseOfTheDaySeo } from "../lib/seo";
 import { getVerseOfTheDay, getUpcomingVerses } from "../lib/daily-verses";
+import { getVerseReflection } from "../lib/verse-reflections";
 
 const locale = getLocale(Astro.currentLocale);
 const now = new Date();
 const verse = getVerseOfTheDay(now, locale);
+const verseEn = getVerseOfTheDay(now, "en");
+const reflection = getVerseReflection(verseEn, verse, locale);
 const upcoming = getUpcomingVerses(locale, 7);
 const today = now.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
 
@@ -278,8 +281,8 @@ const webPageLd = {
 
     .reflection { margin-bottom: 3rem; }
     .reflection h2 { font-size: 1.35rem; margin-bottom: 1.25rem; }
-    .reflection-list { display: flex; flex-direction: column; gap: 1rem; }
-    .reflection-item {
+    .reflection-body { color: var(--text-secondary); line-height: 1.8; font-size: 1.05rem; margin-bottom: 1.25rem; }
+    .reflection-q {
       background: var(--surface);
       border: 1px solid var(--surface-border);
       border-radius: 12px;
@@ -288,7 +291,17 @@ const webPageLd = {
       color: var(--text);
       line-height: 1.6;
       font-style: italic;
+      margin-bottom: 1.25rem;
     }
+    .reflection-related {
+      display: block;
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+    .reflection-related:hover { text-decoration: underline; }
+    .reflection-related-label { display: block; color: var(--text-muted); font-size: 0.8rem; font-weight: 600; margin-bottom: 0.35rem; font-style: normal; }
 
     .why-section { margin-bottom: 4rem; }
     .why-section h2 { font-size: 1.5rem; margin-bottom: 1rem; }
@@ -326,14 +339,17 @@ const webPageLd = {
       </blockquote>
       <p class="verse-ref">{verse.ref}</p>
     </div>
+    <p style="text-align:center;margin:-0.5rem 0 2rem;">
+      <a href={localePath("/prayer-for-today", locale)} style="color:var(--primary);font-weight:600;text-decoration:none;margin-right:1.25rem;">{t(locale, "votd.pftLink")}</a>
+      <a href={localePath("/verses", locale)} style="color:var(--primary);font-weight:600;text-decoration:none;">{t(locale, "votd.versesLink")}</a>
+    </p>
 
     <section class="reflection">
       <h2 class="heading">{t(locale, "votd.reflectionTitle")}</h2>
-      <div class="reflection-list">
-        <div class="reflection-item">{t(locale, "votd.reflectionQ1")}</div>
-        <div class="reflection-item">{t(locale, "votd.reflectionQ2")}</div>
-        <div class="reflection-item">{t(locale, "votd.reflectionQ3")}</div>
-      </div>
+      <p class="reflection-body">{reflection.body}</p>
+      <div class="reflection-q">{reflection.question}</div>
+      <span class="reflection-related-label">{t(locale, "votd.relatedStory")}</span>
+      <a class="reflection-related" href={reflection.related.href}>{t(locale, "votd.relatedStoryCta").replace("{title}", reflection.related.label)}</a>
     </section>
 
     <div class="verse-cta">

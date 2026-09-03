@@ -7,7 +7,7 @@ import {
   type Character,
 } from "../../../lib/stories";
 import { getLocale, localePath, t } from "../../../lib/i18n";
-import { clampTitle, clampDescription } from "../../../lib/seo";
+import { clampTitle, clampDescription, characterSeo } from "../../../lib/seo";
 
 export async function getStaticPaths() {
   const characters = await getCharacters("es");
@@ -26,8 +26,9 @@ const { character, allCharacters } = Astro.props;
 const locale = getLocale(Astro.currentLocale);
 const stories = character.stories;
 
-const pageTitle = clampTitle(t(locale, "character.pageTitle").replace("{name}", character.name));
-const pageDesc = clampDescription(t(locale, "character.pageDesc").replace(/\{description\}/g, character.description).replace(/\{count\}/g, String(stories.length > 1 ? stories.length : "")).replace(/\{name\}/g, character.name).replace(/\s{2,}/g, " "));
+const seoOverride = characterSeo(character.id, locale);
+const pageTitle = clampTitle(seoOverride.title ?? t(locale, "character.pageTitle").replace("{name}", character.name));
+const pageDesc = clampDescription(seoOverride.description ?? t(locale, "character.pageDesc").replace(/\{description\}/g, character.description).replace(/\{count\}/g, String(stories.length > 1 ? stories.length : "")).replace(/\{name\}/g, character.name).replace(/\s{2,}/g, " "));
 const pageUrl = `https://bibletea.app/es/characters/${character.id}/`;
 const ogImage = character.image_url || "https://bibletea.app/icon.png";
 

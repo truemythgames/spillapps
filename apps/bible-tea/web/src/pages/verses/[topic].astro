@@ -1,0 +1,209 @@
+---
+import Base from "../../layouts/Base.astro";
+import StoreButtons from "../../components/StoreButtons.astro";
+import { getLocale, localePath, t } from "../../lib/i18n";
+import { clampTitle, clampDescription } from "../../lib/seo";
+import { getVerseTopics, topicCopy, verseRef, verseText } from "../../lib/verse-topics";
+
+export function getStaticPaths() {
+  return getVerseTopics().map((topic) => ({
+    params: { topic: topic.slug },
+    props: { topic },
+  }));
+}
+
+const { topic } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const title = clampTitle(topicCopy(topic, "title", locale));
+const description = clampDescription(topicCopy(topic, "description", locale));
+const h1 = topicCopy(topic, "h1", locale);
+const label = topicCopy(topic, "label", locale);
+const pageUrl = `https://bibletea.app/verses/${topic.slug}/`;
+const others = getVerseTopics().filter((item) => item.slug !== topic.slug);
+
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://bibletea.app/" },
+    { "@type": "ListItem", position: 2, name: t(locale, "verses.breadcrumb"), item: "https://bibletea.app/verses/" },
+    { "@type": "ListItem", position: 3, name: h1, item: pageUrl },
+  ],
+};
+
+const itemListLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: h1,
+  numberOfItems: topic.verses.length,
+  itemListElement: topic.verses.map((v, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: verseRef(v, locale),
+    description: verseText(v, locale),
+  })),
+};
+
+const faqs = [
+  { q: t(locale, "verses.faqQ1").replace("{topic}", label), a: t(locale, "verses.faqA1") },
+  { q: t(locale, "verses.faqQ2"), a: t(locale, "verses.faqA2") },
+];
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+---
+
+<Base title={title} description={description} canonicalPath={`/verses/${topic.slug}`} esPath={`/versiculos/${topic.esSlug}`} jsonLd={[breadcrumbLd, itemListLd, faqLd]}>
+  <style>
+    .bc { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--text-muted); max-width: 1200px; margin: 0 auto; padding: 6.5rem 2rem 0; flex-wrap: wrap; }
+    .bc a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .bc a:hover { color: var(--primary); }
+    .bc .sep { opacity: 0.4; }
+
+    .verses-hero { padding: 2rem 2rem 2rem; text-align: center; max-width: 700px; margin: 0 auto; }
+    .verses-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin-bottom: 0.75rem;
+      background: linear-gradient(135deg, var(--text) 0%, var(--primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .verses-hero p { color: var(--text-secondary); font-size: 1.1rem; line-height: 1.7; }
+
+    .verses-content { max-width: 1200px; margin: 0 auto; padding: 0 2rem 2rem; }
+
+    .crosslink { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
+    .crosslink a {
+      flex: 1;
+      min-width: 220px;
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 14px;
+      padding: 1.1rem 1.25rem;
+      text-decoration: none;
+      transition: border-color 0.2s;
+    }
+    .crosslink a:hover { border-color: var(--primary); }
+    .crosslink-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-bottom: 0.35rem; }
+    .crosslink-title { color: var(--primary); font-weight: 600; font-size: 1rem; }
+
+    .verse {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-left: 3px solid var(--primary);
+      border-radius: 14px;
+      padding: 1.35rem 1.5rem;
+      margin-bottom: 0.85rem;
+    }
+    .verse .ref { font-size: 0.8rem; color: var(--accent); font-weight: 600; margin-bottom: 0.5rem; }
+    .verse blockquote { font-family: 'Playfair Display', serif; font-size: 1.15rem; line-height: 1.5; margin: 0 0 0.5rem; color: var(--text); }
+    .verse .note { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.65; margin: 0; }
+
+    .votd-link { display: block; text-align: center; margin: 1.5rem 0 0; color: var(--primary); font-weight: 600; text-decoration: none; }
+    .votd-link:hover { text-decoration: underline; }
+
+    .more { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem; }
+    .more h2 { font-family: 'Playfair Display', serif; font-size: 1.35rem; margin-bottom: 1rem; }
+    .more-list { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .more-list a {
+      font-size: 0.9rem;
+      color: var(--primary);
+      text-decoration: none;
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 999px;
+      padding: 0.4rem 0.9rem;
+    }
+    .more-list a:hover { border-color: var(--primary); }
+
+    .faq-section { max-width: 700px; margin: 0 auto; padding: 3rem 2rem; border-top: 1px solid var(--surface-border); }
+    .faq-section h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 1.25rem; }
+    .faq-item { background: var(--surface); border: 1px solid var(--surface-border); border-radius: 12px; margin-bottom: 0.6rem; overflow: hidden; transition: border-color 0.2s; }
+    .faq-item:hover { border-color: var(--primary); }
+    .faq-item[open] { border-color: rgba(200, 162, 255, 0.3); }
+    .faq-item summary { padding: 1rem 1.25rem; cursor: pointer; font-weight: 600; font-size: 0.95rem; color: var(--text); list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after { content: '+'; font-size: 1.25rem; color: var(--primary); flex-shrink: 0; }
+    .faq-item[open] summary::after { content: '−'; }
+    .faq-item p { padding: 0 1.25rem 1rem; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+
+    .bottom-cta { text-align: center; padding: 4rem 2rem 3rem; }
+    .bottom-cta h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.5rem, 3vw, 2rem); margin-bottom: 0.75rem; }
+    .bottom-cta p { color: var(--text-secondary); margin-bottom: 1.5rem; max-width: 450px; margin-left: auto; margin-right: auto; }
+
+    @media (max-width: 640px) {
+      .bc { padding: 5.5rem 1.25rem 0; }
+      .verses-hero { padding: 1.5rem 1.25rem; }
+      .verses-content { padding: 0 1.25rem 2rem; }
+      .verse { padding: 1.2rem 1.25rem; }
+      .more { padding: 2rem 1.25rem; }
+    }
+  </style>
+
+  <div class="bc" role="navigation" aria-label="Breadcrumb">
+    <a href={localePath("/", locale)}>{t(locale, "prayer.breadcrumbHome")}</a><span class="sep">/</span>
+    <a href={localePath("/verses", locale)}>{t(locale, "verses.breadcrumb")}</a><span class="sep">/</span>
+    <span>{label}</span>
+  </div>
+
+  <div class="verses-hero">
+    <h1>{h1}</h1>
+    <p>{topicCopy(topic, "intro", locale)}</p>
+  </div>
+
+  <div class="verses-content">
+    <div class="crosslink">
+      <a href={localePath(`/prayers/${topic.prayerSlug}`, locale)}>
+        <div class="crosslink-label">{t(locale, "verses.prayerCta")}</div>
+        <div class="crosslink-title">{topicCopy(topic, "prayerCta", locale)}</div>
+      </a>
+      <a href={localePath(`/stories/${topic.storySlug}`, locale)}>
+        <div class="crosslink-label">{t(locale, "verses.storyCta")}</div>
+        <div class="crosslink-title">{topicCopy(topic, "storyCta", locale)}</div>
+      </a>
+    </div>
+
+    {topic.verses.map((v) => (
+      <article class="verse">
+        <div class="ref">{verseRef(v, locale)}</div>
+        <blockquote>“{verseText(v, locale)}”</blockquote>
+        <p class="note">{v.note[locale]}</p>
+      </article>
+    ))}
+
+    <a class="votd-link" href={localePath("/verse-of-the-day", locale)}>{t(locale, "verses.votdCta")}</a>
+  </div>
+
+  <section class="more">
+    <h2>{t(locale, "verses.moreTopics")}</h2>
+    <div class="more-list">
+      {others.map((ot) => (
+        <a href={localePath(`/verses/${ot.slug}`, locale)}>{topicCopy(ot, "label", locale)}</a>
+      ))}
+    </div>
+  </section>
+
+  <section class="faq-section">
+    <h2>{t(locale, "verses.faqTitle")}</h2>
+    {faqs.map((f) => (
+      <details class="faq-item">
+        <summary>{f.q}</summary>
+        <p>{f.a}</p>
+      </details>
+    ))}
+  </section>
+
+  <section class="bottom-cta">
+    <h2>{t(locale, "votd.ctaTitle")}</h2>
+    <p>{t(locale, "votd.ctaDesc")}</p>
+    <StoreButtons variant="hero" />
+  </section>
+</Base>
