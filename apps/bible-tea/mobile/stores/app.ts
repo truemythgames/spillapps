@@ -201,26 +201,22 @@ export const useAppStore = create<AppState>((set, get) => ({
         return null;
       }).catch((e) => { console.error("[API] getStoryOfTheDay failed:", e.message); return null; });
 
-      const playlistsP = api.getPlaylists().then(async (res) => {
+      const playlistsP = api.getPlaylists().then((res) => {
         if (!res.playlists?.length) return null;
-        const featured = res.playlists.filter((pl: any) => Number(pl.is_featured) === 1);
-        const toLoad = featured.length ? featured : res.playlists;
-        const plResults = await Promise.allSettled(
-          toLoad.map(async (pl: any) => {
-            const detail = await api.getPlaylist(pl.id);
-            return {
-              id: pl.id,
-              name: pl.name,
-              cover_image_url: pl.cover_image_url,
-              stories: detail.stories.map(apiStoryToCover),
-            } as Playlist;
-          }),
+        // Prefer embedded stories (new API). Fall back to detail fetch for older API shapes.
+        const withStories = res.playlists.filter(
+          (pl: any) => Array.isArray(pl.stories) && pl.stories.length > 0,
         );
-        const apiPlaylists = plResults
-          .filter((r): r is PromiseFulfilledResult<Playlist> => r.status === "fulfilled")
-          .map((r) => r.value)
-          .filter((p) => p.stories.length > 0);
-        if (apiPlaylists.length) {
+        if (withStories.length) {
+          const apiPlaylists = withStories.map(
+            (pl: any) =>
+              ({
+                id: pl.id,
+                name: pl.name,
+                cover_image_url: pl.cover_image_url,
+                stories: pl.stories.map(apiStoryToCover),
+              }) as Playlist,
+          );
           set({ playlists: apiPlaylists });
           return apiPlaylists;
         }

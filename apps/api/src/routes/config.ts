@@ -1,6 +1,8 @@
 import { Hono } from "hono";
 import type { Env } from "../types";
 import { resolvePublicAppId } from "../lib/request-app";
+import { catKey, loadCatalog } from "../lib/catalog-store";
+import { buildSettings } from "../lib/catalog-builder";
 
 export const configRoute = new Hono<{ Bindings: Env }>();
 
@@ -9,14 +11,14 @@ configRoute.get("/", async (c) => {
   const apiBase = c.env.PUBLIC_API_BASE.replace(/\/$/, "");
   const mediaBase = c.env.PUBLIC_MEDIA_BASE.replace(/\/$/, "");
 
-  const { results } = await c.env.DB.prepare(
-    "SELECT key, value FROM app_settings WHERE app_id = ?"
-  ).bind(appId).all();
-
-  const settings: Record<string, string> = {};
-  for (const row of results as any[]) {
-    settings[row.key] = row.value;
-  }
+  const payload = await loadCatalog<{ settings: Record<string, string> }>(
+    c.env.CACHE,
+    catKey("settings", appId),
+    () => buildSettings(c.env, appId),
+    { waitUntil: (p) => c.executionCtx?.waitUntil?.(p) },
+  );
+  // If both KV and D1 are unavailable, defaults keep clients working.
+  const settings = payload?.settings ?? {};
 
   return c.json({
     api_base: apiBase,

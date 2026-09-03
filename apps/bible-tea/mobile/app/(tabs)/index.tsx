@@ -107,7 +107,7 @@ const PlaylistRow = React.memo(function PlaylistRow({
         initialNumToRender={4}
         maxToRenderPerBatch={4}
         windowSize={3}
-        removeClippedSubviews
+        removeClippedSubviews={false}
         getItemLayout={(_, index) => ({
           length: CARD_STRIDE,
           offset: CARD_STRIDE * index,
@@ -342,7 +342,7 @@ export default function HomeScreen() {
       initialNumToRender={3}
       maxToRenderPerBatch={2}
       windowSize={5}
-      removeClippedSubviews
+      removeClippedSubviews={false}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{
         paddingBottom: 120,

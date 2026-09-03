@@ -1,49 +1,33 @@
 import { Hono } from "hono";
 import type { Env } from "../types";
-import { mediaUrl } from "../lib/media";
 import { resolvePublicAppId } from "../lib/request-app";
+import { catKey, loadCatalog } from "../lib/catalog-store";
+import { buildSpeakers } from "../lib/catalog-builder";
 
 export const speakersRoutes = new Hono<{ Bindings: Env }>();
 
+async function loadSpeakers(c: any, appId: string) {
+  return loadCatalog<{ speakers: any[] }>(
+    c.env.CACHE,
+    catKey("speakers", appId),
+    () => buildSpeakers(c.env, appId),
+    { waitUntil: (p) => c.executionCtx?.waitUntil?.(p) },
+  );
+}
+
 speakersRoutes.get("/", async (c) => {
   const appId = resolvePublicAppId(c);
-  const result = await c.env.DB.prepare(
-    `SELECT sp.*, COUNT(sa.id) as story_count
-     FROM speakers sp
-     LEFT JOIN story_audio sa ON sp.id = sa.speaker_id
-     WHERE sp.app_id = ?
-     GROUP BY sp.id
-     ORDER BY sp.is_default DESC, sp.name ASC`
-  )
-    .bind(appId)
-    .all();
-
-  return c.json({
-    speakers: result.results.map((s: any) => ({
-      ...s,
-      avatar_url: mediaUrl(c.env, s.avatar_key, appId),
-    })),
-  });
+  const catalog = await loadSpeakers(c, appId);
+  return c.json(catalog ?? { speakers: [] });
 });
 
 speakersRoutes.get("/:id", async (c) => {
   const appId = resolvePublicAppId(c);
   const id = c.req.param("id");
 
-  const speaker = await c.env.DB.prepare(
-    "SELECT * FROM speakers WHERE id = ? AND app_id = ?"
-  )
-    .bind(id, appId)
-    .first();
+  const catalog = await loadSpeakers(c, appId);
+  const speaker = catalog?.speakers?.find((s) => s.id === id);
+  if (!speaker) return c.json({ error: "Speaker not found" }, 404);
 
-  if (!speaker) {
-    return c.json({ error: "Speaker not found" }, 404);
-  }
-
-  return c.json({
-    speaker: {
-      ...(speaker as any),
-      avatar_url: mediaUrl(c.env, (speaker as any).avatar_key, appId),
-    },
-  });
+  return c.json({ speaker });
 });

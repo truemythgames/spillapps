@@ -17,7 +17,7 @@ import { configRoute } from "./routes/config";
 import { chatRoutes } from "./routes/chat";
 import { charactersRoutes } from "./routes/characters";
 import { prayersRoutes } from "./routes/prayers";
-import { parseAllowedAppIds } from "./middleware/auth";
+import { rebuildAllCatalogs } from "./lib/catalog-builder";
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -69,41 +69,9 @@ app.onError((err, c) => {
 
 export default {
   fetch: app.fetch,
-  async scheduled(event: ScheduledEvent, env: Env) {
-    await refreshDailyFeatures(env);
+  // Nightly (midnight UTC): re-materialize every app's catalog from D1 into
+  // KV — including the new day's story-of-the-day. Public routes read only KV.
+  async scheduled(_event: ScheduledEvent, env: Env) {
+    await rebuildAllCatalogs(env);
   },
 };
-
-async function refreshDailyFeatures(env: Env) {
-  const today = new Date().toISOString().split("T")[0];
-
-  for (const appId of parseAllowedAppIds(env)) {
-    const feature = await env.DB.prepare(
-      "SELECT * FROM daily_features WHERE feature_date = ? AND app_id = ?"
-    )
-      .bind(today, appId)
-      .first();
-
-    if (feature) {
-      await env.CACHE.put(`story-of-the-day:${appId}`, JSON.stringify(feature), {
-        expirationTtl: 86400,
-      });
-    }
-
-    const playlist = await env.DB.prepare(
-      "SELECT * FROM playlists WHERE is_featured = 1 AND app_id = ? LIMIT 1"
-    )
-      .bind(appId)
-      .first();
-
-    if (playlist) {
-      await env.CACHE.put(
-        `playlist-of-the-week:${appId}`,
-        JSON.stringify(playlist),
-        {
-          expirationTtl: 604800,
-        }
-      );
-    }
-  }
-}

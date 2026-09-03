@@ -4,27 +4,28 @@ import { mediaUrl } from "../lib/media";
 import { resolvePublicAppId } from "../lib/request-app";
 import { resolveLocale, overlayTranslations } from "../lib/locale";
 import { resolveStoryId } from "../lib/story";
+import { catKey, loadCatalog } from "../lib/catalog-store";
+import { buildPrayers } from "../lib/catalog-builder";
 
 export const prayersRoutes = new Hono<{ Bindings: Env }>();
+
+async function loadPrayers(c: any, appId: string, locale: string) {
+  return loadCatalog<{ categories: any[]; prayers: any[] }>(
+    c.env.CACHE,
+    catKey("prayers", appId, locale),
+    () => buildPrayers(c.env, appId, locale),
+    {
+      waitUntil: (p) => c.executionCtx?.waitUntil?.(p),
+      fallbackKeys: locale === "en" ? [] : [catKey("prayers", appId, "en")],
+    },
+  );
+}
 
 prayersRoutes.get("/categories", async (c) => {
   const appId = resolvePublicAppId(c);
   const locale = resolveLocale(c);
-
-  const result = await c.env.DB.prepare(
-    `SELECT * FROM prayer_categories WHERE app_id = ? ORDER BY sort_order ASC`
-  )
-    .bind(appId)
-    .all();
-
-  let categories = await overlayTranslations(c.env.DB, result.results as any[], {
-    entityType: "prayer_category",
-    appId,
-    locale,
-    fields: ["name", "description"],
-  });
-
-  return c.json({ categories });
+  const catalog = await loadPrayers(c, appId, locale);
+  return c.json({ categories: catalog?.categories ?? [] });
 });
 
 prayersRoutes.get("/", async (c) => {
@@ -34,32 +35,13 @@ prayersRoutes.get("/", async (c) => {
   const limit = parseInt(c.req.query("limit") || "50");
   const offset = parseInt(c.req.query("offset") || "0");
 
-  let query = `
-    SELECT p.*, pc.name as category_name, pc.slug as category_slug, pc.icon as category_icon
-    FROM prayers p
-    JOIN prayer_categories pc ON p.category_id = pc.id
-    WHERE p.is_published = 1 AND p.app_id = ?
-  `;
-  const params: any[] = [appId];
+  const catalog = await loadPrayers(c, appId, locale);
+  if (!catalog) return c.json({ prayers: [] });
 
-  if (categoryId) {
-    query += " AND p.category_id = ?";
-    params.push(categoryId);
-  }
+  let prayers = catalog.prayers;
+  if (categoryId) prayers = prayers.filter((p) => p.category_id === categoryId);
 
-  query += " ORDER BY pc.sort_order ASC, p.sort_order ASC LIMIT ? OFFSET ?";
-  params.push(limit, offset);
-
-  const result = await c.env.DB.prepare(query).bind(...params).all();
-
-  let prayers = await overlayTranslations(c.env.DB, result.results as any[], {
-    entityType: "prayer",
-    appId,
-    locale,
-    fields: ["title", "description"],
-  });
-
-  return c.json({ prayers });
+  return c.json({ prayers: prayers.slice(offset, offset + limit) });
 });
 
 prayersRoutes.get("/:id", async (c) => {

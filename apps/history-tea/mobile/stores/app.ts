@@ -196,23 +196,19 @@ export const useAppStore = create<AppState>((set, get) => ({
         return null;
       }).catch((e) => { console.error("[loadRemoteData] sotd error:", e); return null; });
 
-      const playlistsP = api.getPlaylists().then(async (res) => {
+      const playlistsP = api.getPlaylists().then((res) => {
         if (!res.playlists?.length) return null;
-        const plResults = await Promise.allSettled(
-          res.playlists.map(async (pl: any) => {
-            const detail = await api.getPlaylist(pl.id);
-            return {
-              id: pl.id,
-              name: pl.name,
-              cover_image_url: pl.cover_image_url,
-              stories: detail.stories.map(apiStoryToCover),
-            } as Playlist;
-          }),
-        );
-        const apiPlaylists = plResults
-          .filter((r): r is PromiseFulfilledResult<Playlist> => r.status === "fulfilled")
-          .map((r) => r.value)
-          .filter((p) => p.stories.length > 0);
+        const apiPlaylists = res.playlists
+          .filter((pl: any) => Array.isArray(pl.stories) && pl.stories.length > 0)
+          .map(
+            (pl: any) =>
+              ({
+                id: pl.id,
+                name: pl.name,
+                cover_image_url: pl.cover_image_url,
+                stories: pl.stories.map(apiStoryToCover),
+              }) as Playlist,
+          );
         if (apiPlaylists.length) {
           set({ playlists: apiPlaylists });
           return apiPlaylists;

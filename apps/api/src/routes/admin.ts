@@ -4,10 +4,32 @@ import { requireAuth, requireAdmin } from "../middleware/auth";
 import { mediaUrl } from "../lib/media";
 import { normalizeKeyForDb, normalizeStorageKeyForApp } from "../lib/storage-keys";
 import { resolveAdminTargetAppId } from "../lib/request-app";
+import { rebuildCatalog } from "../lib/catalog-builder";
 
 export const adminRoutes = new Hono<{ Bindings: Env }>();
 
 adminRoutes.use("*", requireAuth, requireAdmin);
+
+// Any successful admin mutation re-materializes the public catalog into KV.
+// Public routes never read D1, so this is what makes edits go live.
+adminRoutes.use("*", async (c, next) => {
+  await next();
+  if (c.req.method !== "GET" && c.res.status < 400) {
+    const appId = resolveAdminTargetAppId(c);
+    c.executionCtx?.waitUntil?.(
+      rebuildCatalog(c.env, appId).catch((err) =>
+        console.error("catalog rebuild after admin write failed:", err),
+      ),
+    );
+  }
+});
+
+/** Manual full rebuild (e.g. after bulk SQL imports outside the API). */
+adminRoutes.post("/catalog/rebuild", async (c) => {
+  const appId = resolveAdminTargetAppId(c);
+  const written = await rebuildCatalog(c.env, appId);
+  return c.json({ success: true, written });
+});
 
 adminRoutes.post("/stories", async (c) => {
   const appId = resolveAdminTargetAppId(c);
