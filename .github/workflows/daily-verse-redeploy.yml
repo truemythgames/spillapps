@@ -24,7 +24,8 @@ jobs:
         working-directory: .
 
       - name: Fix platform-specific binaries
-        run: npm install @rollup/rollup-linux-x64-gnu
+        # Optional native deps often miss the Linux binary on ubuntu-latest.
+        run: npm install @rollup/rollup-linux-x64-gnu sharp
         working-directory: .
 
       - name: Build & Deploy
