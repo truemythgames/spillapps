@@ -249,7 +249,7 @@ async function storyDetailFromD1(
 /**
  * D1-free story detail: story row from the stories catalog in KV, audio
  * versions discovered by listing R2 (narration-<speaker>[-es].mp3),
- * characters derived from the characters catalog. No transcript.
+ * characters from the characters catalog, transcript from the transcripts map.
  */
 async function storyDetailFallback(
   c: any,

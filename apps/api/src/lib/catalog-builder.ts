@@ -231,10 +231,34 @@ export async function buildPrayers(env: Env, appId: string, locale: string) {
     entityType: "prayer",
     appId,
     locale,
-    fields: ["title", "description"],
+    fields: ["title", "description", "transcript"],
   });
 
   return { categories, prayers };
+}
+
+/** Story body text, kept off the list catalog so home payloads stay small. */
+export async function buildTranscripts(env: Env, appId: string, locale: string) {
+  const { results } = await env.DB.prepare(
+    `SELECT id, transcript FROM stories
+     WHERE app_id = ? AND is_published = 1
+       AND transcript IS NOT NULL AND transcript != ''`,
+  )
+    .bind(appId)
+    .all();
+
+  const rows = await overlayTranslations(env.DB, results as any[], {
+    entityType: "story",
+    appId,
+    locale,
+    fields: ["transcript"],
+  });
+
+  const transcripts: Record<string, string> = {};
+  for (const row of rows) {
+    if (row.transcript) transcripts[row.id] = row.transcript;
+  }
+  return { transcripts };
 }
 
 export async function buildSettings(env: Env, appId: string) {
@@ -347,6 +371,7 @@ export async function rebuildCatalog(env: Env, appId: string): Promise<string[]>
     await put(catKey("characters", appId, locale), () => buildCharacters(env, appId, locale));
     await put(catKey("seasons", appId, locale), () => buildSeasons(env, appId, locale));
     await put(catKey("prayers", appId, locale), () => buildPrayers(env, appId, locale));
+    await put(catKey("transcripts", appId, locale), () => buildTranscripts(env, appId, locale));
     // Dated key: expires on its own, rebuilt nightly by the cron.
     await put(
       catKey("sotd", appId, locale, today),
