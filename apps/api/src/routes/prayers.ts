@@ -4,7 +4,7 @@ import { mediaUrl } from "../lib/media";
 import { resolvePublicAppId } from "../lib/request-app";
 import { resolveLocale, overlayTranslations } from "../lib/locale";
 import { resolveStoryId } from "../lib/story";
-import { catKey, loadCatalog } from "../lib/catalog-store";
+import { catKey, loadCatalog, readCatalog } from "../lib/catalog-store";
 import { buildPrayers } from "../lib/catalog-builder";
 
 export const prayersRoutes = new Hono<{ Bindings: Env }>();
@@ -49,6 +49,85 @@ prayersRoutes.get("/:id", async (c) => {
   const locale = resolveLocale(c);
   const id = c.req.param("id");
 
+  try {
+    return await prayerDetailFromD1(c, appId, locale, id);
+  } catch (err) {
+    // D1 down: prayer (incl. transcript) from the prayers catalog in KV,
+    // audio discovered by listing R2. Related content omitted.
+    console.error("prayer detail D1 failed, using KV+R2 fallback:", err);
+    const fallback = await prayerDetailFallback(c, appId, locale, id);
+    if (fallback) return c.json(fallback);
+    return c.json({ error: "Prayer temporarily unavailable" }, 503);
+  }
+});
+
+async function prayerDetailFallback(
+  c: any,
+  appId: string,
+  locale: string,
+  id: string,
+): Promise<Record<string, unknown> | null> {
+  const catalog = await loadPrayers(c, appId, locale);
+  const prayer = catalog?.prayers?.find((p) => p.id === id || p.slug === id);
+  if (!prayer) return null;
+
+  const speakersPayload = await readCatalog<{ speakers: any[] }>(
+    c.env.CACHE,
+    catKey("speakers", appId),
+  );
+  const speakerByKey = new Map(
+    (speakersPayload?.speakers ?? []).map((sp: any) => [
+      String(sp.name ?? "").toLowerCase(),
+      sp,
+    ]),
+  );
+
+  const listing = await c.env.MEDIA.list({
+    prefix: `${appId}/prayers/${prayer.slug}/`,
+  });
+  const audioObjects = (listing.objects ?? []).filter((o: any) =>
+    /\/narration-[^/]+\.mp3$/.test(o.key),
+  );
+  const esFiles = audioObjects.filter((o: any) => /-es\.mp3$/.test(o.key));
+  const enFiles = audioObjects.filter((o: any) => !/-es\.mp3$/.test(o.key));
+  const chosen = locale === "es" && esFiles.length ? esFiles : enFiles;
+
+  const audio_versions = chosen
+    .map((o: any) => {
+      const m = o.key.match(/narration-([^/]+?)(?:-es)?\.mp3$/);
+      const speakerKey = m?.[1] ?? "narrator";
+      const sp = speakerByKey.get(speakerKey);
+      // Unregistered takes in R2 (e.g. narration-grace-v2.mp3) are not published.
+      if (!sp) return null;
+      return {
+        id: `fallback-${prayer.slug}-${speakerKey}`,
+        prayer_id: prayer.id,
+        speaker_id: sp?.id ?? speakerKey,
+        audio_key: o.key,
+        duration_seconds: prayer.duration_seconds ?? 0,
+        speaker_name: sp?.name ?? speakerKey.charAt(0).toUpperCase() + speakerKey.slice(1),
+        speaker_avatar: sp?.avatar_key ?? null,
+        audio_url: mediaUrl(c.env, o.key, appId) ?? "",
+        speaker_avatar_url: sp ? mediaUrl(c.env, sp.avatar_key, appId) : null,
+        is_default: Number(sp?.is_default ?? 0),
+      };
+    })
+    .filter(Boolean)
+    // Match the D1 route: default speaker (Grace) first, then by name.
+    .sort(
+      (a: any, b: any) =>
+        b.is_default - a.is_default || a.speaker_name.localeCompare(b.speaker_name),
+    );
+
+  return {
+    prayer,
+    audio_versions,
+    related_stories: [],
+    related_characters: [],
+  };
+}
+
+async function prayerDetailFromD1(c: any, appId: string, locale: string, id: string) {
   let prayer = await c.env.DB.prepare(
     `SELECT p.*, pc.name as category_name, pc.slug as category_slug
      FROM prayers p
@@ -141,31 +220,38 @@ prayersRoutes.get("/:id", async (c) => {
     })),
     related_characters: translatedRelatedChars,
   });
-});
+}
 
 prayersRoutes.get("/for-story/:storyId", async (c) => {
   const appId = resolvePublicAppId(c);
   const locale = resolveLocale(c);
   const rawId = c.req.param("storyId");
-  const storyId = (await resolveStoryId(c.env.DB, appId, rawId)) ?? rawId;
 
-  const result = await c.env.DB.prepare(
-    `SELECT p.id, p.title, p.slug, p.description, pc.name as category_name, pc.icon as category_icon
-     FROM prayers p
-     JOIN prayer_stories ps ON p.id = ps.prayer_id
-     JOIN prayer_categories pc ON p.category_id = pc.id
-     WHERE ps.story_id = ? AND p.app_id = ? AND p.is_published = 1
-     ORDER BY p.sort_order ASC`
-  )
-    .bind(storyId, appId)
-    .all();
+  try {
+    const storyId = (await resolveStoryId(c.env.DB, appId, rawId)) ?? rawId;
 
-  const prayers = await overlayTranslations(c.env.DB, result.results as any[], {
-    entityType: "prayer",
-    appId,
-    locale,
-    fields: ["title", "description"],
-  });
+    const result = await c.env.DB.prepare(
+      `SELECT p.id, p.title, p.slug, p.description, pc.name as category_name, pc.icon as category_icon
+       FROM prayers p
+       JOIN prayer_stories ps ON p.id = ps.prayer_id
+       JOIN prayer_categories pc ON p.category_id = pc.id
+       WHERE ps.story_id = ? AND p.app_id = ? AND p.is_published = 1
+       ORDER BY p.sort_order ASC`
+    )
+      .bind(storyId, appId)
+      .all();
 
-  return c.json({ prayers });
+    const prayers = await overlayTranslations(c.env.DB, result.results as any[], {
+      entityType: "prayer",
+      appId,
+      locale,
+      fields: ["title", "description"],
+    });
+
+    return c.json({ prayers });
+  } catch (err) {
+    // Non-critical section on the story screen; empty beats a 500.
+    console.error("prayers for-story D1 failed:", err);
+    return c.json({ prayers: [] });
+  }
 });

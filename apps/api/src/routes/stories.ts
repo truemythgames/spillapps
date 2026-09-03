@@ -79,8 +79,8 @@ storiesRoutes.get("/:id", async (c) => {
   const id = c.req.param("id");
 
   const edgeKey = new Request(
-    // story2: bumped so payloads cached before transcripts existed are skipped.
-    `https://catalog.cache/${encodeURIComponent(`cat3edge:story2:${appId}:${locale}:${id}`)}`,
+    // story4: bumped so payloads cached with unpublished takes are skipped.
+    `https://catalog.cache/${encodeURIComponent(`cat3edge:story4:${appId}:${locale}:${id}`)}`,
   );
   try {
     const hit = await edgeCache().match(edgeKey);
@@ -299,22 +299,32 @@ async function storyDetailFallback(
   const enFiles = audioObjects.filter((o: any) => !/-es\.mp3$/.test(o.key));
   const chosen = wantEs && esFiles.length ? esFiles : enFiles;
 
-  const audio_versions = chosen.map((o: any) => {
-    const m = o.key.match(/narration-([^/]+?)(?:-es)?\.mp3$/);
-    const speakerKey = m?.[1] ?? "narrator";
-    const sp = speakerByKey.get(speakerKey);
-    return {
-      id: `fallback-${story.slug}-${speakerKey}`,
-      story_id: story.id,
-      speaker_id: sp?.id ?? speakerKey,
-      audio_key: o.key,
-      duration_seconds: story.duration_seconds ?? 0,
-      speaker_name: sp?.name ?? speakerKey.charAt(0).toUpperCase() + speakerKey.slice(1),
-      speaker_avatar: sp?.avatar_key ?? null,
-      audio_url: mediaUrl(c.env, o.key, appId) ?? "",
-      speaker_avatar_url: sp ? mediaUrl(c.env, sp.avatar_key, appId) : null,
-    };
-  });
+  const audio_versions = chosen
+    .map((o: any) => {
+      const m = o.key.match(/narration-([^/]+?)(?:-es)?\.mp3$/);
+      const speakerKey = m?.[1] ?? "narrator";
+      const sp = speakerByKey.get(speakerKey);
+      // Unregistered takes in R2 (e.g. narration-grace-v2.mp3) are not published.
+      if (!sp) return null;
+      return {
+        id: `fallback-${story.slug}-${speakerKey}`,
+        story_id: story.id,
+        speaker_id: sp?.id ?? speakerKey,
+        audio_key: o.key,
+        duration_seconds: story.duration_seconds ?? 0,
+        speaker_name: sp?.name ?? speakerKey.charAt(0).toUpperCase() + speakerKey.slice(1),
+        speaker_avatar: sp?.avatar_key ?? null,
+        audio_url: mediaUrl(c.env, o.key, appId) ?? "",
+        speaker_avatar_url: sp ? mediaUrl(c.env, sp.avatar_key, appId) : null,
+        is_default: Number(sp?.is_default ?? 0),
+      };
+    })
+    .filter(Boolean)
+    // Match the D1 route: default speaker (Grace) first, then by name.
+    .sort(
+      (a: any, b: any) =>
+        b.is_default - a.is_default || a.speaker_name.localeCompare(b.speaker_name),
+    );
 
   const charactersPayload = await readCatalog<{ characters: any[] }>(
     c.env.CACHE,
