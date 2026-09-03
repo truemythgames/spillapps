@@ -1,0 +1,892 @@
+---
+import Base from "../layouts/Base.astro";
+import StoreButtons from "../components/StoreButtons.astro";
+import CoverImg from "../components/CoverImg.astro";
+import { getImage } from "astro:assets";
+import { APP_STORE_URL, PLAY_STORE_URL, getCatalog, getPlaylists, hasCover } from "../lib/stories";
+import { getLocale, localePath, t } from "../lib/i18n";
+import { clampTitle, clampDescription } from "../lib/seo";
+import { getVerseOfTheDay } from "../lib/daily-verses";
+import shotHomeEn from "../assets/screens/screenshot-home.webp";
+import shotDiscoverEn from "../assets/screens/screenshot-discover.webp";
+import shotChatEn from "../assets/screens/screenshot-chat.webp";
+import shotPrayers from "../assets/screens/screenshot-prayers.webp";
+import shotPlayer from "../assets/screens/screenshot-player.webp";
+import shotHomeEs from "../assets/screens/screenshot-home-es.png";
+import shotDiscoverEs from "../assets/screens/screenshot-discover-es.png";
+import shotChatEs from "../assets/screens/screenshot-chat-es.png";
+
+const locale = getLocale(Astro.currentLocale);
+
+const catalog = getCatalog(locale);
+const catalogMap = new Map(catalog.map((s) => [s.id, s]));
+const playlists = await getPlaylists(catalog, locale);
+
+const title = clampTitle(t(locale, "home.title"));
+const description = clampDescription(t(locale, "home.description"));
+
+// Shown on the page and in the schema below, so the two can never drift apart.
+const RATING = "4.8";
+const RATING_COUNT = 5000;
+const PRAYER_COUNT = 60;
+// Round down so the claim stays true as the catalog grows.
+const storyCount = Math.floor(catalog.length / 50) * 50;
+
+const homeLd = {
+  "@context": "https://schema.org",
+  "@type": "MobileApplication",
+  name: "Bible Tea",
+  operatingSystem: "iOS, Android",
+  applicationCategory: "ReligionApplication",
+  url: "https://bibletea.app/",
+  image: "https://bibletea.app/icon.png",
+  description,
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: RATING,
+    ratingCount: String(RATING_COUNT),
+    bestRating: "5",
+  },
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+};
+
+// No Spanish capture of the Prayers screen yet, so it falls back to English.
+const shots = locale === "es"
+  ? { home: shotHomeEs, discover: shotDiscoverEs, chat: shotChatEs, prayers: shotPrayers, player: shotPlayer }
+  : { home: shotHomeEn, discover: shotDiscoverEn, chat: shotChatEn, prayers: shotPrayers, player: shotPlayer };
+
+// Render at native size rather than upscaling, and use getImage (not <Image>)
+// so the hero preload href matches exactly. Heights differ per screenshot
+// because each was cropped to the same headroom above its content.
+const renderShot = async (source: typeof shotHomeEn) => {
+  const out = await getImage({ src: source, width: source.width, format: "webp", quality: 72 });
+  return { src: out.src, width: source.width, height: source.height };
+};
+const [heroShot, discoverShot, chatShot, prayersShot, playerShot] = await Promise.all([
+  renderShot(shots.home),
+  renderShot(shots.discover),
+  renderShot(shots.chat),
+  renderShot(shots.prayers),
+  renderShot(shots.player),
+]);
+
+// The home screen is already the hero image, so this section shows the two
+// screens the hero doesn't. Rendered as uniform copy-then-phone rows; CSS
+// flips every other row.
+const screens = [
+  { img: playerShot, title: t(locale, "home.screen5Title"), desc: t(locale, "home.screen5Desc") },
+  { img: discoverShot, title: t(locale, "home.screen2Title"), desc: t(locale, "home.screen2Desc") },
+  { img: prayersShot, title: t(locale, "home.screen4Title"), desc: t(locale, "home.screen4Desc") },
+  { img: chatShot, title: t(locale, "home.screen3Title"), desc: t(locale, "home.screen3Desc") },
+];
+
+const featuredIds = [
+  "creation", "adam-and-eve", "david-and-goliath", "jonah-and-the-whale",
+  "the-prodigal-son", "crossing-the-red-sea", "daniel-and-the-lions-den",
+  "the-resurrection", "samson-and-delilah", "ruth-and-naomi",
+];
+const storyCards = featuredIds
+  .map((id) => catalogMap.get(id))
+  .filter(Boolean)
+  .map((s) => ({ id: s!.id, title: s!.title, ref: s!.bibleRef }));
+
+const playlistCards = playlists
+  .map((p) => {
+    const cover = p.stories.find((s) => hasCover(s.id))?.id;
+    return cover ? { id: p.id, name: p.name, cover } : null;
+  })
+  .filter((p): p is { id: string; name: string; cover: string } => p != null);
+
+const stats = [
+  { value: `${storyCount}+`, label: t(locale, "home.stat1Label") },
+  { value: t(locale, "home.stat2Value"), label: t(locale, "home.stat2Label") },
+  { value: `${PRAYER_COUNT}`, label: t(locale, "home.stat3Label") },
+  { value: t(locale, "home.stat4Value"), label: t(locale, "home.stat4Label") },
+];
+
+const featureIcons = [
+  '<path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="2" y="13.5" width="5" height="7.5" rx="2"/><rect x="17" y="13.5" width="5" height="7.5" rx="2"/>',
+  '<rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="9" r="1.8"/><path d="M20.5 15.5L16 11 5 21"/>',
+  '<path d="M12 6.5C10.5 5 8.5 4.5 6 4.5H4v14h2c2.5 0 4.5.5 6 2 1.5-1.5 3.5-2 6-2h2v-14h-2c-2.5 0-4.5.5-6 2z"/><path d="M12 6.5v14"/>',
+  '<circle cx="12" cy="8" r="3.5"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/>',
+  '<path d="M3 6h11M3 11h11M3 16h7"/><circle cx="17" cy="17.5" r="2.8"/><path d="M19.8 17.5V8.5l3 1"/>',
+  '<circle cx="12" cy="12" r="4"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8L6 18M18 6l1.8-1.8"/>',
+  '<path d="M12 20.5s-7.5-4.8-7.5-10A4.5 4.5 0 0 1 12 7.5a4.5 4.5 0 0 1 7.5 3c0 5.2-7.5 10-7.5 10z"/>',
+  '<circle cx="12" cy="12" r="9"/><path d="M8.5 14.5a4.5 4.5 0 0 0 7 0"/><circle cx="9" cy="9.5" r="1.1" fill="currentColor" stroke="none"/><circle cx="15" cy="9.5" r="1.1" fill="currentColor" stroke="none"/>',
+  '<path d="M20 15a3 3 0 0 1-3 3H8l-4 3V6a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3z"/>',
+  '<rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/>',
+];
+const features = featureIcons.map((icon, i) => ({
+  icon,
+  title: t(locale, `home.feature${i + 1}Title` as any),
+  desc: t(locale, `home.feature${i + 1}Desc` as any),
+}));
+
+const reviewsByLocale = {
+  en: [
+    { text: "This app completely changed how I engage with the Bible. The narrations are beautiful and the artwork for each story is stunning. I listen every morning with my coffee.", name: "Sarah M.", initial: "S", date: "May 2026" },
+    { text: "Finally an app that makes Bible stories feel alive. My kids love listening to it before bed. The Story of the Day feature keeps us coming back every single day.", name: "James R.", initial: "J", date: "June 2026" },
+    { text: "I've tried so many Bible apps and this is the first one that actually made me excited to open it. The playlists are perfectly curated and the audio quality is incredible.", name: "Maria L.", initial: "M", date: "May 2026" },
+    { text: "Love the 'Spill the Tea' vibe — it makes scripture feel so approachable. I listen during my commute and it's become the best part of my day. Highly recommend!", name: "David K.", initial: "D", date: "July 2026" },
+    { text: "The character profiles are such a smart feature. Following Moses across different stories gives you so much more context. Beautiful design too — dark mode is perfect.", name: "Anna T.", initial: "A", date: "June 2026" },
+    { text: "As someone who grew up with these stories, hearing them narrated with such care and emotion brought tears to my eyes. This is how scripture should be experienced.", name: "Robert P.", initial: "R", date: "May 2026" },
+  ],
+  es: [
+    { text: "Esta app cambió completamente la forma en que me acerco a la Biblia. Las narraciones son hermosas y las ilustraciones de cada historia son impresionantes. La escucho cada mañana con mi café.", name: "Sarah M.", initial: "S", date: "Mayo 2026" },
+    { text: "Por fin una app que hace que las historias bíblicas cobren vida. A mis hijos les encanta escucharla antes de dormir. La Historia del Día nos hace volver cada día.", name: "James R.", initial: "J", date: "Junio 2026" },
+    { text: "He probado muchas apps de la Biblia y esta es la primera que realmente me emociona abrir. Las listas están perfectamente curadas y la calidad del audio es increíble.", name: "Maria L.", initial: "M", date: "Mayo 2026" },
+    { text: "Me encanta el estilo 'Spill the Tea' — hace que las Escrituras se sientan muy accesibles. La escucho durante mi viaje al trabajo y se ha convertido en la mejor parte de mi día. ¡Muy recomendada!", name: "David K.", initial: "D", date: "Julio 2026" },
+    { text: "Los perfiles de personajes son una función muy inteligente. Seguir a Moisés a través de diferentes historias te da mucho más contexto. El diseño también es hermoso — el modo oscuro es perfecto.", name: "Anna T.", initial: "A", date: "Junio 2026" },
+    { text: "Como alguien que creció con estas historias, escucharlas narradas con tanto cuidado y emoción me hizo llorar. Así es como se deberían experimentar las Escrituras.", name: "Robert P.", initial: "R", date: "Mayo 2026" },
+  ],
+};
+const reviews = reviewsByLocale[locale] ?? reviewsByLocale.en;
+
+const verse = getVerseOfTheDay(new Date(), locale === "es" ? "es" : "en");
+const votdHref = locale === "es" ? "/es/versiculo-del-dia/" : "/verse-of-the-day/";
+const iconAlt = locale === "es" ? "Ícono de Bible Tea" : "Bible Tea App Icon";
+---
+
+<Base title={title} description={description} canonicalPath="/" jsonLd={homeLd} preloadImage={heroShot.src}>
+  <style>
+    /* Phone frame — shared by hero and screens */
+    .phone {
+      position: relative;
+      padding: 9px;
+      border-radius: 40px;
+      background: linear-gradient(160deg, #35354a 0%, #14141f 45%, #0b0b12 100%);
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    }
+    .phone-screen {
+      overflow: hidden;
+      border-radius: 32px;
+      background: #05050a;
+    }
+    .phone-screen img { display: block; width: 100%; height: auto; }
+    /* Coloured bloom behind each device so the shots don't read as flat cards. */
+    .hero-phone, .screen-phone { position: relative; }
+    .hero-phone::after, .screen-phone::after {
+      content: '';
+      position: absolute;
+      inset: -12% -22%;
+      z-index: -1;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(200, 162, 255, 0.2) 0%, transparent 68%);
+      filter: blur(26px);
+      pointer-events: none;
+    }
+    .screen-row:nth-child(2) .screen-phone::after {
+      background: radial-gradient(circle, rgba(255, 209, 102, 0.16) 0%, transparent 68%);
+    }
+    .screen-row:nth-child(3) .screen-phone::after {
+      background: radial-gradient(circle, rgba(107, 92, 231, 0.3) 0%, transparent 68%);
+    }
+    .screen-row:nth-child(4) .screen-phone::after {
+      background: radial-gradient(circle, rgba(200, 162, 255, 0.22) 0%, transparent 68%);
+    }
+
+    /* Scroll-reveal. Only armed once JS confirms it can un-hide the content. */
+    @media (prefers-reduced-motion: no-preference) {
+      :global(html.js-anim) .reveal {
+        opacity: 0;
+        transform: translateY(22px);
+        transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      :global(html.js-anim) .reveal.in { opacity: 1; transform: none; }
+      .hero-phone .phone { animation: float 7s ease-in-out infinite; }
+      @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-12px); }
+      }
+    }
+
+    /* Hero */
+    .hero { padding: 7rem 2rem 4rem; position: relative; }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 900px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(200, 162, 255, 0.09) 0%, transparent 68%);
+      pointer-events: none;
+    }
+    .hero-grid {
+      position: relative;
+      max-width: 1120px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      background: rgba(200, 162, 255, 0.1);
+      border: 1px solid rgba(200, 162, 255, 0.25);
+      color: var(--primary);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      margin-bottom: 1.5rem;
+    }
+    .hero-badge::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #4ade80;
+      box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.18);
+    }
+    .hero h1 {
+      font-size: clamp(2.4rem, 4.8vw, 3.9rem);
+      line-height: 1.08;
+      margin-bottom: 1.25rem;
+      background: linear-gradient(135deg, var(--text) 0%, var(--primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      font-size: clamp(1rem, 1.3vw, 1.15rem);
+      color: var(--text-secondary);
+      max-width: 34rem;
+      margin-bottom: 2rem;
+      line-height: 1.7;
+    }
+    .hero-download :global(.store-buttons) { justify-content: flex-start; }
+    .hero-proof {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-top: 1.25rem;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    .hero-proof .stars { color: var(--accent); letter-spacing: 1px; }
+    .hero-proof strong { color: var(--text); font-weight: 700; }
+    .hero-proof .dot { color: var(--surface-border); }
+    .hero-phone { justify-self: center; width: 100%; max-width: 292px; }
+
+    /* Stat strip */
+    .stats {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 2rem 5rem;
+    }
+    .stats-inner {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--surface-border);
+      border: 1px solid var(--surface-border);
+      border-radius: 18px;
+      overflow: hidden;
+    }
+    .stat {
+      background: var(--surface);
+      padding: 1.6rem 1rem;
+      text-align: center;
+    }
+    .stat-value {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.5rem, 2.6vw, 2rem);
+      font-weight: 700;
+      color: var(--primary);
+      line-height: 1.1;
+    }
+    .stat-label {
+      margin-top: 0.35rem;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    /* Screens */
+    .screens { padding: 2rem 2rem 6rem; max-width: 1120px; margin: 0 auto; }
+    .section-title {
+      text-align: center;
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      margin-bottom: 0.6rem;
+    }
+    .section-sub {
+      text-align: center;
+      color: var(--text-secondary);
+      margin-bottom: 3.5rem;
+      font-size: 1rem;
+    }
+    .screens-grid { display: flex; flex-direction: column; gap: 4.5rem; }
+    .screen-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 4rem;
+      align-items: center;
+    }
+    /* Zig-zag: every other row puts the phone on the left. */
+    .screen-row:nth-child(even) .screen-phone { order: -1; }
+    .screen-copy h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.3rem, 2.2vw, 1.75rem);
+      margin-bottom: 0.75rem;
+      line-height: 1.25;
+    }
+    .screen-copy p { color: var(--text-secondary); line-height: 1.75; font-size: 0.98rem; }
+    .screen-phone { justify-self: center; width: 100%; max-width: 272px; }
+
+    /* Showcase */
+    .showcase { padding: 2rem 0 5rem; overflow: hidden; }
+    .card-scroll {
+      display: flex;
+      gap: 1.25rem;
+      animation: scroll-left 40s linear infinite;
+      width: max-content;
+    }
+    .card-scroll:hover { animation-play-state: paused; }
+    @keyframes scroll-left {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .card-scroll-reverse {
+      display: flex;
+      gap: 1.25rem;
+      animation: scroll-right 45s linear infinite;
+      width: max-content;
+      margin-top: 1.5rem;
+    }
+    .card-scroll-reverse:hover { animation-play-state: paused; }
+    @keyframes scroll-right {
+      0% { transform: translateX(-50%); }
+      100% { transform: translateX(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .card-scroll, .card-scroll-reverse { animation: none; }
+    }
+    .story-card {
+      flex-shrink: 0;
+      width: 200px;
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      transition: transform 0.3s, border-color 0.3s;
+      display: block;
+      text-decoration: none;
+      color: inherit;
+    }
+    .story-card:hover { transform: translateY(-4px); border-color: var(--primary); }
+    .story-card :global(img) { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; display: block; }
+    .story-card-body { padding: 1rem; }
+    .story-card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+    .story-card-ref { font-size: 0.75rem; color: var(--text-muted); }
+    .playlist-card {
+      flex-shrink: 0;
+      width: 240px;
+      height: 120px;
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid var(--surface-border);
+      transition: transform 0.3s, border-color 0.3s;
+      display: block;
+      text-decoration: none;
+      color: inherit;
+    }
+    .playlist-card:hover { transform: translateY(-4px); border-color: var(--primary); }
+    .playlist-card :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .playlist-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(10,10,15,0.75) 0%, rgba(10,10,15,0.4) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1rem 1.25rem;
+    }
+    .playlist-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--accent);
+      margin-bottom: 0.2rem;
+    }
+    .playlist-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    /* Features */
+    .features { padding: 4rem 2rem 5rem; max-width: 1120px; margin: 0 auto; }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+    }
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .feature-card:hover { border-color: rgba(200, 162, 255, 0.35); transform: translateY(-2px); }
+    .feature-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(200, 162, 255, 0.1);
+      border: 1px solid rgba(200, 162, 255, 0.18);
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+    .feature-icon :global(svg) { width: 21px; height: 21px; }
+    .feature-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      margin-bottom: 0.4rem;
+    }
+    .feature-card p { color: var(--text-secondary); font-size: 0.88rem; line-height: 1.65; }
+
+    /* Verse of the Day */
+    .votd-home { padding: 2rem 2rem 5rem; max-width: 700px; margin: 0 auto; }
+    .votd-inner {
+      text-align: center;
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 20px;
+      padding: 3rem 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .votd-inner::before {
+      content: '';
+      position: absolute;
+      top: -40%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(200, 162, 255, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .votd-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+    .votd-text {
+      font-size: clamp(1.25rem, 3vw, 1.75rem);
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+    .votd-ref { font-size: 0.95rem; font-weight: 600; color: var(--primary); margin-bottom: 1.5rem; }
+    .votd-link {
+      display: inline-block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .votd-link:hover { color: var(--primary); }
+
+    /* Reviews */
+    .reviews { padding: 2rem 2rem 5rem; max-width: 1120px; margin: 0 auto; }
+    .reviews-stars {
+      display: flex;
+      justify-content: center;
+      gap: 0.25rem;
+      margin-bottom: 0.5rem;
+      font-size: 1.25rem;
+      color: var(--accent);
+    }
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+    }
+    .review-card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 16px;
+      padding: 1.6rem;
+      transition: border-color 0.3s;
+    }
+    .review-card:hover { border-color: rgba(200, 162, 255, 0.3); }
+    .review-stars { display: flex; gap: 2px; margin-bottom: 0.75rem; color: var(--accent); font-size: 0.9rem; }
+    .review-text {
+      color: var(--text-secondary);
+      font-size: 0.93rem;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+    .review-author { display: flex; align-items: center; gap: 0.75rem; }
+    .review-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .review-name { font-weight: 600; font-size: 0.88rem; color: var(--text); }
+    .review-date { font-size: 0.75rem; color: var(--text-muted); }
+
+    /* Final CTA */
+    .cta-section { padding: 5rem 2rem 6rem; text-align: center; position: relative; }
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(107, 92, 231, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-inner { position: relative; }
+    .cta-icon {
+      width: 76px;
+      height: 76px;
+      border-radius: 20px;
+      margin: 0 auto 1.5rem;
+      display: block;
+      box-shadow: 0 16px 40px rgba(200, 162, 255, 0.2);
+    }
+    .cta-section h2 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); margin-bottom: 1rem; }
+    .cta-section p {
+      color: var(--text-secondary);
+      margin: 0 auto 2rem;
+      font-size: 1.05rem;
+      max-width: 34rem;
+    }
+
+    /* Sticky mobile download bar */
+    .sticky-cta {
+      display: none;
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 60;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.7rem 1rem calc(0.7rem + env(safe-area-inset-bottom));
+      background: rgba(14, 14, 22, 0.92);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-top: 1px solid var(--surface-border);
+      transform: translateY(110%);
+      transition: transform 0.28s ease;
+    }
+    .sticky-cta.visible { transform: translateY(0); }
+    .sticky-cta img { width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0; }
+    .sticky-meta { flex: 1; min-width: 0; }
+    .sticky-name { font-weight: 700; font-size: 0.92rem; line-height: 1.2; }
+    .sticky-tag {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .sticky-btn {
+      flex-shrink: 0;
+      padding: 0.65rem 1.5rem;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.92rem;
+      text-decoration: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .hero { padding: 6.5rem 1.5rem 3rem; text-align: center; }
+      .hero-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .hero-sub { margin-inline: auto; }
+      .hero-download :global(.store-buttons) { justify-content: center; }
+      .hero-proof { justify-content: center; }
+      .screens-grid { gap: 3.25rem; }
+      .screen-row { grid-template-columns: 1fr; gap: 1.25rem; }
+      .screen-copy { text-align: center; max-width: 32rem; margin-inline: auto; }
+      .screens-grid .screen-row .screen-phone { order: -1; }
+      .screen-phone { max-width: 220px; margin-inline: auto; }
+    }
+    @media (max-width: 640px) {
+      .hero { padding: 5.5rem 1.25rem 2.5rem; }
+      .hero h1 { font-size: 2.1rem; }
+      .hero-badge { margin-bottom: 1.1rem; }
+      .hero-sub { font-size: 0.95rem; margin-bottom: 1.25rem; }
+      .hero-phone { max-width: 260px; }
+      .stats { padding: 0 1.25rem 4rem; }
+      .stats-inner { grid-template-columns: repeat(2, 1fr); }
+      .stat { padding: 1.25rem 0.75rem; }
+      .screens { padding: 1rem 1.25rem 4rem; }
+      .section-sub { margin-bottom: 2.5rem; }
+      .features { padding: 3rem 1.25rem 4rem; }
+      .features-grid, .reviews-grid { grid-template-columns: 1fr; }
+      .votd-home { padding: 1rem 1.25rem 4rem; }
+      .votd-inner { padding: 2.25rem 1.5rem; }
+      .reviews { padding: 1rem 1.25rem 4rem; }
+      .cta-section { padding: 3.5rem 1.25rem 5rem; }
+      .story-card { width: 160px; }
+    }
+    @media (max-width: 720px) {
+      .sticky-cta { display: flex; }
+      /* Room for the sticky bar so it never covers the footer. */
+      :global(footer) { padding-bottom: 6.5rem; }
+    }
+  </style>
+
+  <script is:inline>
+    // Only arm the reveal animation when we can actually undo it, so the page
+    // never gets stuck invisible without JS or IntersectionObserver.
+    if ('IntersectionObserver' in window) document.documentElement.classList.add('js-anim');
+  </script>
+
+  <section class="hero">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <div class="hero-badge">{t(locale, "home.badge")}</div>
+        <h1 class="heading">{t(locale, "home.h1a")}<br />{t(locale, "home.h1b")}</h1>
+        <p class="hero-sub">{t(locale, "home.subtitle")}</p>
+        <div class="hero-download"><StoreButtons variant="hero" /></div>
+        <div class="hero-proof">
+          <span class="stars" aria-hidden="true">★★★★★</span>
+          <span><strong>{RATING}</strong> {t(locale, "home.proofAvg")}</span>
+          <span class="dot" aria-hidden="true">•</span>
+          <span>{RATING_COUNT}+ {t(locale, "home.proofRatings")}</span>
+        </div>
+      </div>
+      <div class="hero-phone">
+        <div class="phone">
+          <div class="phone-screen">
+            <img
+              src={heroShot.src}
+              alt={t(locale, "home.screen1Title")}
+              width={heroShot.width}
+              height={heroShot.height}
+              fetchpriority="high"
+              decoding="async"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="stats-inner">
+      {stats.map((s) => (
+        <div class="stat reveal">
+          <div class="stat-value" data-value={s.value}>{s.value}</div>
+          <div class="stat-label">{s.label}</div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="screens">
+    <h2 class="heading section-title">{t(locale, "home.screensTitle")}</h2>
+    <p class="section-sub">{t(locale, "home.screensSub")}</p>
+    <div class="screens-grid">
+      {screens.map((s) => (
+        <div class="screen-row reveal">
+          <div class="screen-copy">
+            <h3>{s.title}</h3>
+            <p>{s.desc}</p>
+          </div>
+          <div class="screen-phone">
+            <div class="phone">
+              <div class="phone-screen">
+                <img src={s.img.src} alt={s.title} width={s.img.width} height={s.img.height} loading="lazy" decoding="async" />
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="showcase">
+    <h2 class="heading section-title">{t(locale, "home.showcaseTitle")}</h2>
+    <p class="section-sub">{t(locale, "home.showcaseSub")}</p>
+    <div style="overflow: hidden;">
+      <div class="card-scroll">
+        {storyCards.concat(storyCards).map((s) => (
+          <a href={localePath(`/stories/${s.id}`, locale)} class="story-card">
+            <CoverImg storyId={s.id} alt={s.title} width={200} height={200} />
+            <div class="story-card-body">
+              <div class="story-card-title">{s.title}</div>
+              <div class="story-card-ref">{s.ref}</div>
+            </div>
+          </a>
+        ))}
+      </div>
+      <div class="card-scroll-reverse">
+        {playlistCards.concat(playlistCards).map((p) => (
+          <a href={localePath(`/playlists/${p.id}`, locale)} class="playlist-card">
+            <CoverImg storyId={p.cover} alt={p.name} width={240} height={120} />
+            <div class="playlist-overlay">
+              <div class="playlist-label">{t(locale, "home.playlistLabel")}</div>
+              <div class="playlist-name">{p.name}</div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <h2 class="heading section-title" style="margin-bottom: 3rem;">{t(locale, "home.featuresTitle")}</h2>
+    <div class="features-grid">
+      {features.map((f) => (
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={f.icon} />
+          </div>
+          <h3>{f.title}</h3>
+          <p>{f.desc}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="votd-home">
+    <div class="votd-inner">
+      <div class="votd-label">{t(locale, "home.votdLabel")}</div>
+      <blockquote class="votd-text heading">"{verse.text}"</blockquote>
+      <p class="votd-ref">{verse.ref}</p>
+      <a href={votdHref} class="votd-link">{t(locale, "home.votdLink")} →</a>
+    </div>
+  </section>
+
+  <section class="reviews">
+    <h2 class="heading section-title">{t(locale, "home.reviewsTitle")}</h2>
+    <div class="reviews-stars" aria-hidden="true">★★★★★</div>
+    <p class="section-sub">{t(locale, "home.reviewsSub")}</p>
+    <div class="reviews-grid">
+      {reviews.map((r) => (
+        <div class="review-card reveal">
+          <div class="review-stars" aria-hidden="true">★★★★★</div>
+          <p class="review-text">"{r.text}"</p>
+          <div class="review-author">
+            <div class="review-avatar" aria-hidden="true">{r.initial}</div>
+            <div>
+              <div class="review-name">{r.name}</div>
+              <div class="review-date">{r.date}</div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="cta-inner">
+      <img src="/icon-sm.webp" alt={iconAlt} class="cta-icon" width="76" height="76" loading="lazy" decoding="async" />
+      <h2 class="heading">{t(locale, "home.ctaTitle")}</h2>
+      <p>{t(locale, "home.ctaSub")}</p>
+      <StoreButtons variant="light" />
+    </div>
+  </section>
+
+  <div id="sticky-cta" class="sticky-cta" aria-hidden="true">
+    <img src="/icon-sm.webp" alt="" width="40" height="40" loading="lazy" decoding="async" />
+    <div class="sticky-meta">
+      <div class="sticky-name">Bible Tea</div>
+      <div class="sticky-tag">{t(locale, "home.stickyTag")}</div>
+    </div>
+    <a href={APP_STORE_URL} class="sticky-btn nav-store-apple" aria-label={t(locale, "nav.appStore")}>{t(locale, "home.stickyCta")}</a>
+    <a href={PLAY_STORE_URL} class="sticky-btn nav-store-play" aria-label={t(locale, "nav.googlePlay")}>{t(locale, "home.stickyCta")}</a>
+  </div>
+
+  <script is:inline>
+    (function () {
+      var io = 'IntersectionObserver' in window;
+
+      var hero = document.querySelector('.hero');
+      var bar = document.getElementById('sticky-cta');
+      if (hero && bar && io) {
+        new IntersectionObserver(function (entries) {
+          var show = !entries[0].isIntersecting;
+          bar.classList.toggle('visible', show);
+          bar.setAttribute('aria-hidden', show ? 'false' : 'true');
+        }).observe(hero);
+      }
+
+      var motion = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // Fade sections in as they scroll into view. Staggered per group so grids
+      // cascade instead of all landing at once.
+      if (io && motion) {
+        var revealed = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            var el = entry.target;
+            var siblings = Array.prototype.slice.call(el.parentNode.children);
+            el.style.transitionDelay = Math.min(siblings.indexOf(el), 5) * 70 + 'ms';
+            el.classList.add('in');
+            revealed.unobserve(el);
+          });
+        }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+        document.querySelectorAll('.reveal').forEach(function (el) { revealed.observe(el); });
+      }
+
+      // Count the numeric stats up the first time they appear.
+      if (io && motion) {
+        var counters = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            var el = entry.target;
+            counters.unobserve(el);
+            var raw = el.getAttribute('data-value') || '';
+            var match = raw.match(/^(\d+)(.*)$/);
+            if (!match) return;
+            var target = parseInt(match[1], 10);
+            var suffix = match[2];
+            var start = performance.now();
+            (function step(now) {
+              var p = Math.min((now - start) / 900, 1);
+              var eased = 1 - Math.pow(1 - p, 3);
+              el.textContent = Math.round(target * eased) + suffix;
+              if (p < 1) requestAnimationFrame(step);
+            })(start);
+          });
+        }, { threshold: 0.5 });
+        document.querySelectorAll('.stat-value').forEach(function (el) { counters.observe(el); });
+      }
+
+    })();
+  </script>
+</Base>

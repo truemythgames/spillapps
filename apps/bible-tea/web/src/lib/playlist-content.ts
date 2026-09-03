@@ -31,7 +31,7 @@ export const PLAYLIST_CONTENT: Record<string, LocalizedEditorial> = {
     en: {
       intro: [
         "Who said the Bible isn't romantic? The love stories in the Bible have everything — arranged marriages that turn into real love, a man who works fourteen years for the woman he can't stop thinking about, a foreign widow whose loyalty rewrites a royal family tree. But Scripture's idea of love is bigger than romance: it's covenant love that keeps promises decades later, a father who sprints down the road to hug the son who wasted everything, and a Messiah who offers living water to the woman everyone else crossed the street to avoid.",
-        "This collection gathers the greatest love stories in the Bible — romantic, familial, and divine — each retold as a short immersive audio episode. Same story you know from Scripture, told like your best friend spilling the tea. Listen to every one free in the Bible Tea app.",
+        "This collection gathers the greatest love stories in the Bible — romantic, familial, and divine — each retold as a short immersive audio episode. Same story you know from Scripture, told like your best friend spilling the tea. Listen in the Bible Tea app.",
       ],
       guideTitle: "Every love story in this collection, story by story",
       guide: [
@@ -80,7 +80,7 @@ export const PLAYLIST_CONTENT: Record<string, LocalizedEditorial> = {
     es: {
       intro: [
         "¿Quién dijo que la Biblia no es romántica? Las historias de amor en la Biblia lo tienen todo: matrimonios arreglados que se convierten en amor verdadero, un hombre que trabaja catorce años por la mujer que ama, una viuda extranjera cuya lealtad reescribe un árbol genealógico real. Pero el amor en las Escrituras va más allá del romance: es amor de pacto que cumple promesas décadas después, un padre que corre por el camino para abrazar al hijo que lo malgastó todo, y un Mesías que ofrece agua viva a la mujer que todos evitaban.",
-        "Esta colección reúne las historias de amor más grandes de la Biblia — románticas, familiares y divinas — cada una narrada como un episodio de audio inmersivo. La misma historia de las Escrituras, contada como si tu mejor amiga te estuviera contando el chisme. Escúchalas todas gratis en la app de Bible Tea.",
+        "Esta colección reúne las historias de amor más grandes de la Biblia — románticas, familiares y divinas — cada una narrada como un episodio de audio inmersivo. La misma historia de las Escrituras, contada como si tu mejor amiga te estuviera contando el chisme. Escúchalas en la app de Bible Tea.",
       ],
       guideTitle: "Cada historia de amor de esta colección, una por una",
       guide: [
@@ -132,7 +132,7 @@ export const PLAYLIST_CONTENT: Record<string, LocalizedEditorial> = {
     en: {
       intro: [
         "If the Bible has a favorite plot, it's this one: the person nobody bet on wins. A baby floating in a basket outlasts an empire. A shepherd kid drops a nine-foot champion with a sling. An orphan girl becomes queen and out-maneuvers a genocide. Scripture goes out of its way — over and over — to pick the youngest, the smallest, the foreign, the overlooked, and put them at the center of the story.",
-        "These are the greatest underdog stories in the Bible, from Exodus to Acts, each retold as a short immersive audio episode with the drama fully intact. Listen free in the Bible Tea app.",
+        "These are the greatest underdog stories in the Bible, from Exodus to Acts, each retold as a short immersive audio episode with the drama fully intact. Listen in the Bible Tea app.",
       ],
       guideTitle: "The Bible's greatest underdogs, story by story",
       guide: [
@@ -189,7 +189,7 @@ export const PLAYLIST_CONTENT: Record<string, LocalizedEditorial> = {
     es: {
       intro: [
         "Si la Biblia tiene una trama favorita, es esta: gana la persona por la que nadie apostaba. Un bebé flotando en una canasta sobrevive a un imperio. Un pastorcito derriba a un campeón de casi tres metros con una honda. Una huérfana se convierte en reina y desbarata un genocidio. Las Escrituras eligen una y otra vez al más joven, al más pequeño, al extranjero, al ignorado — y lo ponen en el centro de la historia.",
-        "Estas son las mejores historias de los menospreciados de la Biblia, desde Éxodo hasta Hechos, cada una narrada como un episodio de audio inmersivo con todo el drama intacto. Escúchalas gratis en la app de Bible Tea.",
+        "Estas son las mejores historias de los menospreciados de la Biblia, desde Éxodo hasta Hechos, cada una narrada como un episodio de audio inmersivo con todo el drama intacto. Escúchalas en la app de Bible Tea.",
       ],
       guideTitle: "Los grandes menospreciados de la Biblia, historia por historia",
       guide: [
@@ -249,7 +249,7 @@ export const PLAYLIST_CONTENT: Record<string, LocalizedEditorial> = {
     en: {
       intro: [
         "From the first \"let there be light\" to tongues of fire at Pentecost, the miracles in the Bible aren't random magic tricks — they're signs, each one making a claim about who God is. The sea splits to free slaves. Bread falls from the sky in a desert. A wedding runs out of wine and gets a better vintage than it started with. A man four days dead walks out of his own tomb.",
-        "This collection walks through the Bible's most famous miracles in order, Old Testament to New, each retold as a short immersive audio episode. Listen to every one free in the Bible Tea app.",
+        "This collection walks through the Bible's most famous miracles in order, Old Testament to New, each retold as a short immersive audio episode. Listen in the Bible Tea app.",
       ],
       guideTitle: "The miracles, in the order they happened",
       guide: [
@@ -322,7 +322,7 @@ export const PLAYLIST_CONTENT: Record<string, LocalizedEditorial> = {
     es: {
       intro: [
         "Desde el primer \"sea la luz\" hasta las lenguas de fuego en Pentecostés, los milagros de la Biblia no son trucos de magia al azar — son señales, y cada una dice algo sobre quién es Dios. El mar se parte para liberar esclavos. Cae pan del cielo en un desierto. Una boda se queda sin vino y recibe uno mejor del que tenía. Un hombre con cuatro días de muerto sale caminando de su propia tumba.",
-        "Esta colección recorre los milagros más famosos de la Biblia en orden, del Antiguo al Nuevo Testamento, cada uno narrado como un episodio de audio inmersivo. Escúchalos todos gratis en la app de Bible Tea.",
+        "Esta colección recorre los milagros más famosos de la Biblia en orden, del Antiguo al Nuevo Testamento, cada uno narrado como un episodio de audio inmersivo. Escúchalos en la app de Bible Tea.",
       ],
       guideTitle: "Los milagros, en el orden en que sucedieron",
       guide: [
@@ -398,7 +398,7 @@ export const PLAYLIST_CONTENT: Record<string, LocalizedEditorial> = {
     en: {
       intro: [
         "One week changed everything. Holy Week — from the palm branches of Sunday to the empty tomb and beyond — is the most documented, most dramatic stretch of the entire Bible: a rigged trial at midnight, a best friend's betrayal for thirty silver coins, a governor washing his hands of the whole thing, and a Sunday morning nobody saw coming.",
-        "This collection tells the complete Easter story in chronological order, sixteen episodes from Palm Sunday to the Ascension, each retold as a short immersive audio episode. Listen free in the Bible Tea app.",
+        "This collection tells the complete Easter story in chronological order, sixteen episodes from Palm Sunday to the Ascension, each retold as a short immersive audio episode. Listen in the Bible Tea app.",
       ],
       guideTitle: "Holy Week, day by day",
       guide: [
@@ -471,7 +471,7 @@ export const PLAYLIST_CONTENT: Record<string, LocalizedEditorial> = {
     es: {
       intro: [
         "Una semana lo cambió todo. La Semana Santa — desde las palmas del domingo hasta la tumba vacía y más allá — es el tramo más documentado y más dramático de toda la Biblia: un juicio amañado a medianoche, la traición de un mejor amigo por treinta monedas de plata, un gobernador lavándose las manos, y un domingo por la mañana que nadie vio venir.",
-        "Esta colección cuenta la historia completa de la Pascua en orden cronológico, dieciséis episodios desde el Domingo de Ramos hasta la Ascensión, cada uno narrado como un episodio de audio inmersivo. Escúchalos gratis en la app de Bible Tea.",
+        "Esta colección cuenta la historia completa de la Pascua en orden cronológico, dieciséis episodios desde el Domingo de Ramos hasta la Ascensión, cada uno narrado como un episodio de audio inmersivo. Escúchalos en la app de Bible Tea.",
       ],
       guideTitle: "La Semana Santa, día a día",
       guide: [
@@ -547,7 +547,7 @@ export const PLAYLIST_CONTENT: Record<string, LocalizedEditorial> = {
     en: {
       intro: [
         "The most influential life ever lived, told in order. From a birth announcement delivered to shepherds on a night shift, to a baptism that opened the sky, to parables that still shape how we talk about grace, to a cross, an empty tomb, and a cloud — this is the complete arc of the life of Jesus in eighteen episodes.",
-        "Each story is retold as a short immersive audio episode — faithful to the gospels, zero stained-glass distance. Whether you're reading the gospels for the first time or the fiftieth, this is the story in one place, start to finish. Listen free in the Bible Tea app.",
+        "Each story is retold as a short immersive audio episode — faithful to the gospels, zero stained-glass distance. Whether you're reading the gospels for the first time or the fiftieth, this is the story in one place, start to finish. Listen in the Bible Tea app.",
       ],
       guideTitle: "The life of Jesus, in order",
       guide: [
@@ -628,7 +628,7 @@ export const PLAYLIST_CONTENT: Record<string, LocalizedEditorial> = {
     es: {
       intro: [
         "La vida más influyente jamás vivida, contada en orden. Desde un anuncio de nacimiento entregado a pastores en turno de noche, pasando por un bautismo que abrió el cielo, parábolas que todavía definen cómo hablamos de la gracia, hasta una cruz, una tumba vacía y una nube — este es el arco completo de la vida de Jesús en dieciocho episodios.",
-        "Cada historia está narrada como un episodio de audio inmersivo — fiel a los evangelios, sin distancia de vitral. Ya sea que leas los evangelios por primera vez o por quincuagésima, esta es la historia completa en un solo lugar, de principio a fin. Escúchala gratis en la app de Bible Tea.",
+        "Cada historia está narrada como un episodio de audio inmersivo — fiel a los evangelios, sin distancia de vitral. Ya sea que leas los evangelios por primera vez o por quincuagésima, esta es la historia completa en un solo lugar, de principio a fin. Escúchala en la app de Bible Tea.",
       ],
       guideTitle: "La vida de Jesús, en orden",
       guide: [
@@ -715,3 +715,23 @@ export function playlistContent(
 ): PlaylistEditorial | undefined {
   return PLAYLIST_CONTENT[id]?.[locale];
 }
+
+/** Named couples shown above the fold on the love-stories playlist. */
+export const LOVE_COUPLES: Record<Locale, { id: string; label: string }[]> = {
+  en: [
+    { id: "isaac-and-rebekah", label: "Isaac & Rebekah" },
+    { id: "jacob-rachel-and-leah", label: "Jacob & Rachel" },
+    { id: "ruth-and-naomi", label: "Ruth & Boaz" },
+    { id: "the-prodigal-son", label: "The Prodigal Son" },
+    { id: "the-woman-at-the-well", label: "The Woman at the Well" },
+    { id: "hosea-and-gomer", label: "Hosea & Gomer" },
+  ],
+  es: [
+    { id: "isaac-and-rebekah", label: "Isaac y Rebeca" },
+    { id: "jacob-rachel-and-leah", label: "Jacob y Raquel" },
+    { id: "ruth-and-naomi", label: "Rut y Booz" },
+    { id: "the-prodigal-son", label: "El hijo pródigo" },
+    { id: "the-woman-at-the-well", label: "La samaritana" },
+    { id: "hosea-and-gomer", label: "Oseas y Gomer" },
+  ],
+};

@@ -76,16 +76,33 @@ const webPageLd = {
 
 <Base title={title} description={description} canonicalPath="/verse-of-the-day" esPath="/versiculo-del-dia" jsonLd={[breadcrumbLd, quoteLd, faqLd, appLd, webPageLd]}>
   <style>
-    .votd-page { max-width: 1200px; margin: 0 auto; padding: 7rem 2rem 4rem; }
-    .breadcrumb { display: flex; gap: 0.5rem; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 2rem; }
-    .breadcrumb a { color: var(--primary); text-decoration: none; }
-    .breadcrumb a:hover { text-decoration: underline; }
-    .votd-hero { text-align: center; margin-bottom: 3rem; }
+    .bc { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--text-muted); max-width: 1200px; margin: 0 auto; padding: 6.5rem 2rem 0; }
+    .bc a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .bc a:hover { color: var(--primary); }
+    .bc .sep { opacity: 0.4; }
+    .votd-hero {
+      padding: 2rem 2rem 2rem;
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto;
+    }
     .votd-date { font-size: 0.85rem; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 1rem; }
-    .votd-hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.15; margin-bottom: 1rem; }
-    .votd-hero-sub { color: var(--text-secondary); font-size: 1.1rem; max-width: 560px; margin: 0 auto 1.5rem; line-height: 1.7; }
-    .hero-stars { display: flex; justify-content: center; gap: 0.25rem; margin-bottom: 0.5rem; font-size: 1.25rem; color: var(--accent); }
-    .hero-proof { text-align: center; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; }
+    .votd-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin-bottom: 0.75rem;
+      background: linear-gradient(135deg, var(--text) 0%, var(--primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .votd-hero p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+    .votd-content { max-width: 1200px; margin: 0 auto; padding: 0 2rem 4rem; }
     .verse-card { background: var(--surface); border: 1px solid var(--surface-border); border-radius: 20px; padding: 3rem 2.5rem; text-align: center; margin-bottom: 1.5rem; position: relative; overflow: hidden; }
     .verse-card::before { content: ''; position: absolute; top: -40%; left: 50%; transform: translateX(-50%); width: 400px; height: 400px; background: radial-gradient(circle, rgba(200, 162, 255, 0.06) 0%, transparent 70%); pointer-events: none; }
     .verse-quote { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; }
@@ -145,7 +162,9 @@ const webPageLd = {
     .why-section h2 { font-size: 1.5rem; margin-bottom: 1rem; }
     .why-section p { color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem; font-size: 1rem; }
     @media (max-width: 640px) {
-      .votd-page { padding: 6rem 1.5rem 3rem; }
+      .bc { padding: 5.5rem 1.25rem 0; }
+      .votd-hero { padding: 1.5rem 1.25rem; }
+      .votd-content { padding: 0 1.25rem 3rem; }
       .verse-card { padding: 2rem 1.5rem; }
       .widget-promo { padding: 2rem 1.5rem; }
       .widget-features { flex-direction: column; align-items: center; gap: 0.75rem; }
@@ -154,21 +173,19 @@ const webPageLd = {
     }
   </style>
 
-  <div class="votd-page">
-    <div class="breadcrumb" role="navigation" aria-label="Breadcrumb">
-      <a href={localePath("/", locale)}>{t(locale, "votd.breadcrumbHome")}</a>
-      <span>›</span>
+  <main>
+    <div class="bc" role="navigation" aria-label="Breadcrumb">
+      <a href={localePath("/", locale)}>{t(locale, "votd.breadcrumbHome")}</a><span class="sep">/</span>
       <span>{t(locale, "votd.breadcrumbVerse")}</span>
     </div>
-
     <div class="votd-hero">
       <p class="votd-date">{today}</p>
-      <h1 class="heading">{t(locale, "votd.h1")}</h1>
-      <p class="votd-hero-sub">{t(locale, "votd.subtitle")}</p>
-      <div class="hero-stars">★★★★★</div>
-      <div class="hero-proof">{t(locale, "votd.proofStars")}</div>
+      <h1>{t(locale, "votd.h1")}</h1>
+      <div class="hero-download"><StoreButtons variant="hero" /></div>
+      <p>{t(locale, "votd.subtitle")}</p>
     </div>
 
+    <div class="votd-content">
     <div class="verse-card">
       <p class="verse-quote">{t(locale, "votd.verseLabel")}</p>
       <blockquote>
@@ -260,5 +277,6 @@ const webPageLd = {
       <div class="final-cta-proof">{t(locale, "votd.proofStars")}</div>
       <StoreButtons variant="light" />
     </section>
-  </div>
+    </div>
+  </main>
 </Base>

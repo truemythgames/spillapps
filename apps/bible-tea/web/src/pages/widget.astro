@@ -102,11 +102,8 @@ const votdHref = locale === "es" ? "/es/versiculo-del-dia/" : "/verse-of-the-day
       color: var(--text-secondary);
       font-size: 1.1rem;
       line-height: 1.7;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
     }
-
-    .hero-stars { display: flex; justify-content: center; gap: 0.25rem; margin-bottom: 0.5rem; font-size: 1.25rem; color: var(--accent); }
-    .hero-proof { text-align: center; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; margin-bottom: 1.5rem; }
 
     .widget-content {
       max-width: 1200px;
@@ -208,10 +205,8 @@ const votdHref = locale === "es" ? "/es/versiculo-del-dia/" : "/verse-of-the-day
 
     <div class="widget-hero">
       <h1>{t(locale, "widget.h1")}</h1>
+      <div class="hero-download"><StoreButtons variant="hero" /></div>
       <p>{t(locale, "widget.subtitle")}</p>
-      <div class="hero-stars">★★★★★</div>
-      <div class="hero-proof">{t(locale, "widget.proofStars")}</div>
-      <StoreButtons variant="hero" />
     </div>
 
     <div class="widget-content">

@@ -115,9 +115,9 @@ type LocalizedSeo = Partial<Record<Locale, SeoOverride>>;
 export const STORY_SEO: Record<string, LocalizedSeo> = {
   "john-the-baptists-last-words": {
     en: {
-      title: "John the Baptist's Last Words — What He Really Said - Bible Tea",
+      title: "What Were John the Baptist's Last Words? - Bible Tea",
       description:
-        "What were John the Baptist's last words? \"He must increase, I must decrease\" (John 3:30). The story behind his final recorded words — and how he died.",
+        "What were John the Baptist's last words? \"He must increase, I must decrease\" (John 3:30). The story behind them — and how he died. Listen on Bible Tea.",
     },
     es: {
       title: "Las Últimas Palabras de Juan el Bautista — Juan 3:30 - Bible Tea",
@@ -139,14 +139,14 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
   },
   "peters-miracles": {
     en: {
-      title: "Peter's Miracles in the Bible — Acts 9:32-43 - Bible Tea",
+      title: "What Miracles Did Peter Perform in the Bible? - Bible Tea",
       description:
-        "What miracles did Peter perform? He heals paralyzed Aeneas in Lydda and raises Tabitha from the dead in Joppa. Every miracle of Peter, retold as audio.",
+        "What miracles did Peter perform? He heals paralyzed Aeneas in Lydda and raises Tabitha from the dead in Joppa. Every miracle of Peter — listen free.",
     },
     es: {
-      title: "Los Milagros de Pedro en la Biblia — Hechos 9:32-43 - Bible Tea",
+      title: "¿Qué milagros hizo Pedro en la Biblia? - Bible Tea",
       description:
-        "¿Qué milagros hizo Pedro? Sana al paralítico Eneas en Lida y resucita a Tabita en Jope. Los milagros de Pedro en la Biblia, narrados como audio inmersivo.",
+        "¿Qué milagros hizo Pedro? Sana al paralítico Eneas en Lida y resucita a Tabita en Jope. Todos los milagros de Pedro, narrados como audio.",
     },
   },
   "walking-on-water": {
@@ -170,14 +170,14 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
   },
   "zacchaeus-climbs-a-tree": {
     en: {
-      title: "Zacchaeus: The Man Who Climbed a Tree to See Jesus - Bible Tea",
+      title: "Who Climbed a Tree to See Jesus? Zacchaeus - Bible Tea",
       description:
-        "Who climbed a tree to see Jesus? Zacchaeus — a short, rich tax collector who scaled a sycamore in Jericho (Luke 19:1-10). And Jesus invited himself over.",
+        "Who climbed a tree to see Jesus? Zacchaeus — a short, rich tax collector who scaled a sycamore in Jericho (Luke 19:1-10). Jesus invited himself over. Listen on Bible Tea.",
     },
     es: {
-      title: "Zaqueo, el Hombre que Subió a un Árbol para Ver a Jesús - Bible Tea",
+      title: "¿Quién subió a un árbol para ver a Jesús? Zaqueo - Bible Tea",
       description:
-        "¿Quién subió a un árbol para ver a Jesús? Zaqueo — un recaudador de impuestos bajo y rico que trepó un sicómoro en Jericó (Lucas 19:1-10).",
+        "¿Quién subió a un árbol para ver a Jesús? Zaqueo — un recaudador bajo y rico que trepó un sicómoro en Jericó (Lucas 19:1-10). Jesús se invitó a su casa.",
     },
   },
   "the-rich-man-and-lazarus": {
@@ -194,7 +194,7 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
   },
   "elijah-on-mount-carmel": {
     en: {
-      title: "Elijah vs 450 Prophets of Baal — Fire from Heaven - Bible Tea",
+      title: "What Happened on Mount Carmel? Elijah vs Baal - Bible Tea",
       description:
         "One prophet vs 450. Two altars, one challenge: the god who answers with fire wins. Elijah on Mount Carmel (1 Kings 18) — listen free on Bible Tea.",
     },
@@ -263,7 +263,7 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
     es: {
       title: "El Niño Jesús en el Templo, a los 12 Años — Lucas 2:41-52 - Bible Tea",
       description:
-        "Jesús a los 12 años desaparece por tres días — sus padres lo encuentran en el templo, asombrando a los maestros. Lucas 2:41-52 — audio gratis.",
+        "Jesús a los 12 años desaparece por tres días — sus padres lo encuentran en el templo, asombrando a los maestros. Lucas 2:41-52 — audio en Bible Tea.",
     },
   },
   "solomon-builds-the-temple": {
@@ -277,7 +277,7 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
     en: {
       title: "The Fish with a Coin in Its Mouth — Matthew 17:24-27 - Bible Tea",
       description:
-        "Jesus tells Peter to go catch a fish — the first one has a coin in its mouth to pay the tax. One of Jesus' strangest miracles. Listen free.",
+        "Jesus tells Peter to go catch a fish — the first one has a coin in its mouth to pay the tax. One of Jesus' strangest miracles. Listen on Bible Tea.",
     },
   },
   "absaloms-rebellion": {
@@ -313,9 +313,9 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
         "Moses is gone 40 days and Israel melts its jewelry into a golden calf — a false god. The golden calf story (Exodus 32), retold as immersive audio.",
     },
     es: {
-      title: "El Becerro de Oro — El Falso Dios de Éxodo 32 - Bible Tea",
+      title: "¿Qué es el becerro de oro en la Biblia? - Bible Tea",
       description:
-        "El becerro de oro era un falso dios: Moisés tardó 40 días y el pueblo fundió sus joyas para adorar un ídolo. Éxodo 32, narrado como nunca antes.",
+        "¿Qué es el becerro de oro? Un ídolo: Moisés tardó 40 días y el pueblo fundió sus joyas para adorar un falso dios. Éxodo 32, narrado.",
     },
   },
   "saul-meets-jesus": {
@@ -372,9 +372,9 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
         "Who fell out a window while Paul preached? Eutychus — he fell asleep, dropped from a third story, and Paul brought him back. Acts 20, retold as audio.",
     },
     es: {
-      title: "Eutico, el Joven que se Cayó de la Ventana — Hechos 20 - Bible Tea",
+      title: "¿Quién es Éutico? El que se cayó de la ventana - Bible Tea",
       description:
-        "¿Cómo se llama el que se cayó de la ventana en la Biblia? Eutico — se durmió en el sermón de Pablo, cayó de un tercer piso y volvió a la vida.",
+        "¿Cómo se llama el que se cayó de la ventana en la Biblia? Éutico — se durmió en el sermón de Pablo, cayó de un tercer piso y volvió a la vida.",
     },
   },
   "elijah-and-the-widow": {
@@ -419,21 +419,21 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
         "A man is beaten and left for dead. A priest and a Levite walk past. The despised outsider stops. The Good Samaritan parable (Luke 10:25-37) and what it means.",
     },
     es: {
-      title: "El Buen Samaritano — Lucas 10:25-37 Explicado - Bible Tea",
+      title: "El buen samaritano en la Biblia — Lucas 10 - Bible Tea",
       description:
-        "Un hombre asaltado, religiosos que pasan de largo, y el forastero despreciado que se detiene. La parábola del buen samaritano y su significado.",
+        "¿Qué es el buen samaritano en la Biblia? Un hombre asaltado, religiosos que pasan de largo, y el forastero que se detiene. Lucas 10:25-37.",
     },
   },
   "a-talking-donkey-and-a-hired-prophet": {
     en: {
-      title: "Balaam's Talking Donkey — Numbers 22 - Bible Tea",
+      title: "Which Bible Character Talked to a Donkey? - Bible Tea",
       description:
         "Which Bible character was spoken to by a donkey? Balaam — hired to curse Israel, until his donkey saw the angel he couldn't. Numbers 22, retold as audio.",
     },
     es: {
-      title: "El Burro que Habla y el Profeta Balaam — Números 22 - Bible Tea",
+      title: "¿El burro que habló en la Biblia? - Bible Tea",
       description:
-        "¿A qué personaje de la Biblia le habló un burro? A Balaam — contratado para maldecir a Israel, hasta que su burra vio al ángel. Números 22, narrado.",
+        "¿El burro que habló en la Biblia? Balaam — contratado para maldecir a Israel, hasta que su burra vio al ángel que él no veía. Números 22, narrado.",
     },
   },
   "jesus-stops-a-storm": {
@@ -536,7 +536,7 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
     en: {
       title: "Hosea & Gomer — The Bible's Most Heartbreaking Love Story - Bible Tea",
       description:
-        "God tells Hosea to marry Gomer. She leaves — and he buys her back. The story of Hosea and Gomer (Hosea 1-3) and what it means. Listen free.",
+        "God tells Hosea to marry Gomer. She leaves — and he buys her back. The story of Hosea and Gomer (Hosea 1-3) and what it means. Listen on Bible Tea.",
     },
     es: {
       title: "Oseas y Gomer — La Historia de Amor Más Dolorosa - Bible Tea",
@@ -584,7 +584,7 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
     en: {
       title: "Isaac & Rebekah — The Bible's First Love Story (Genesis 24) - Bible Tea",
       description:
-        "A servant, a prayer, camels at a well, and a woman who says yes. How Isaac and Rebekah met — the Bible's original love story. Listen free.",
+        "A servant, a prayer, camels at a well, and a woman who says yes. How Isaac and Rebekah met — the Bible's original love story. Listen on Bible Tea.",
     },
     es: {
       title: "Isaac y Rebeca — La Primera Historia de Amor (Génesis 24) - Bible Tea",
@@ -684,12 +684,12 @@ export const PLAYLIST_SEO: Record<string, LocalizedSeo> = {
     en: {
       title: "The Life of Jesus — Every Story in Order - Bible Tea",
       description:
-        "The complete life of Jesus in 18 stories, from the manger to the ascension — birth, baptism, miracles, parables, cross and resurrection. Listen free.",
+        "The complete life of Jesus in 18 stories, from the manger to the ascension — birth, baptism, miracles, parables, cross and resurrection. Listen on Bible Tea.",
     },
     es: {
       title: "La Vida de Jesús — Todas las Historias en Orden - Bible Tea",
       description:
-        "La vida completa de Jesús en 18 historias, del pesebre a la ascensión — nacimiento, bautismo, milagros, parábolas, cruz y resurrección. Escucha gratis.",
+        "La vida completa de Jesús en 18 historias, del pesebre a la ascensión — nacimiento, bautismo, milagros, parábolas, cruz y resurrección. Escucha en Bible Tea.",
     },
   },
 };
@@ -754,16 +754,16 @@ export function verseOfTheDaySeo(
 
   if (locale === "es") {
     return {
-      title: clampTitle(`Versículo de hoy (${verse.ref}) — ${dateLabel} | Bible Tea`),
+      title: clampTitle(`Versículo de hoy — ${dateLabel} | Bible Tea`),
       description: clampDescription(
         `Versículo del día de hoy (${verse.ref}): “${snippet}” Léelo aquí o en el widget gratis para tu pantalla.`,
       ),
     };
   }
   return {
-    title: clampTitle(`Verse of the Day (${verse.ref}) — ${dateLabel} | Bible Tea`),
+    title: clampTitle(`Bible Verse of the Day — ${dateLabel} | Bible Tea`),
     description: clampDescription(
-      `Today's Bible verse of the day (${verse.ref}): “${snippet}” Read it here or on the free home-screen widget.`,
+      `Today's Bible verse of the day (${verse.ref}): “${snippet}” Read it here, or download the app for the free home-screen widget.`,
     ),
   };
 }

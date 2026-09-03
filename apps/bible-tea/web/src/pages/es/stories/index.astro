@@ -56,7 +56,7 @@ const appLd = {
 const listingFaqs = [
   {
     q: "¿Qué es Bible Tea?",
-    a: `Bible Tea es una app gratuita para iOS y Android que narra cada historia bíblica como audio inmersivo. Con más de ${catalog.length} historias del Génesis al Apocalipsis y narración profesional, puedes escuchar la Biblia como un podcast — en cualquier lugar y momento.`,
+    a: `Bible Tea es una app para iOS y Android que narra cada historia bíblica como audio inmersivo. Con más de ${catalog.length} historias del Génesis al Apocalipsis y narración profesional, puedes escuchar la Biblia como un podcast — en cualquier lugar y momento.`,
   },
   {
     q: "¿Cuántas historias bíblicas tiene Bible Tea?",
@@ -64,11 +64,11 @@ const listingFaqs = [
   },
   {
     q: "¿Es Bible Tea gratis?",
-    a: "¡Sí! Bible Tea es completamente gratuita para descargar y escuchar. Todas las historias y narraciones están disponibles sin costo en iOS y Android.",
+    a: "La app se descarga gratis. Escuchar empieza con una prueba gratis; el acceso completo a la biblioteca es una suscripción. Sin anuncios ni cuenta para probar.",
   },
   {
     q: "¿Puedo leer historias bíblicas en el sitio web?",
-    a: "Puedes ver una vista previa de cada historia y sus puntos clave en nuestro sitio web. Para el texto completo y la narración inmersiva, descarga la app gratuita Bible Tea en iOS o Android.",
+    a: "Puedes ver una vista previa de cada historia y sus puntos clave en nuestro sitio web. Para el texto completo y la narración inmersiva, descarga Bible Tea en iOS o Android.",
   },
   {
     q: "¿Qué traducción de la Biblia usa Bible Tea?",
@@ -113,9 +113,6 @@ const jsonLdArray = [collectionLd, itemListLd, appLd, faqLd, breadcrumbLd];
     .bc a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
     .bc a:hover { color: var(--primary); }
     .bc .sep { opacity: 0.4; }
-
-    .hero-stars { display: flex; justify-content: center; gap: 0.25rem; margin-bottom: 0.5rem; font-size: 1.25rem; color: var(--accent); }
-    .hero-proof { text-align: center; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; margin-bottom: 1.5rem; }
 
     .stories-hero {
       padding: 2rem 2rem 2rem;
@@ -329,12 +326,10 @@ const jsonLdArray = [collectionLd, itemListLd, appLd, faqLd, breadcrumbLd];
     </div>
     <div class="stories-hero">
       <h1>{t(locale, "stories.h1")}</h1>
+      <div class="hero-download"><StoreButtons variant="hero" /></div>
       <p>
         {t(locale, "stories.subtitle")}
       </p>
-      <div class="hero-stars">★★★★★</div>
-      <div class="hero-proof">{t(locale, "home.stars")}</div>
-      <StoreButtons variant="hero" />
     </div>
 
     <section class="all-stories">

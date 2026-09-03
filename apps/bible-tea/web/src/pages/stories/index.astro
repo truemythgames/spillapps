@@ -56,7 +56,7 @@ const appLd = {
 const listingFaqs = [
   {
     q: "What is Bible Tea?",
-    a: `Bible Tea is a free app for iOS and Android that retells every Bible story as immersive audio. With ${catalog.length}+ stories from Genesis to Revelation and professional narration, you can listen to the Bible like a podcast — anywhere, anytime.`,
+    a: `Bible Tea is an iOS and Android app that retells every Bible story as immersive audio. With ${catalog.length}+ stories from Genesis to Revelation and professional narration, you can listen to the Bible like a podcast — anywhere, anytime.`,
   },
   {
     q: "How many Bible stories does Bible Tea have?",
@@ -64,11 +64,11 @@ const listingFaqs = [
   },
   {
     q: "Is Bible Tea free?",
-    a: "Yes! Bible Tea is completely free to download and listen to. All stories and audio narrations are available at no cost on iOS and Android.",
+    a: "The app is free to download. Listening starts with a free trial; full access to the story library is a subscription. No ads, no account required to try.",
   },
   {
     q: "Can I read Bible stories on the website?",
-    a: "You can preview each story's setup and key takeaways on our website. For the full story text and immersive audio narration, download the free Bible Tea app on iOS or Android.",
+    a: "You can preview each story's setup and key takeaways on our website. For the full story text and immersive audio narration, download Bible Tea on iOS or Android.",
   },
   {
     q: "What Bible translation does Bible Tea use?",
@@ -113,9 +113,6 @@ const jsonLdArray = [collectionLd, itemListLd, appLd, faqLd, breadcrumbLd];
     .bc a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
     .bc a:hover { color: var(--primary); }
     .bc .sep { opacity: 0.4; }
-
-    .hero-stars { display: flex; justify-content: center; gap: 0.25rem; margin-bottom: 0.5rem; font-size: 1.25rem; color: var(--accent); }
-    .hero-proof { text-align: center; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; margin-bottom: 1.5rem; }
 
     .stories-hero {
       padding: 2rem 2rem 2rem;
@@ -329,12 +326,10 @@ const jsonLdArray = [collectionLd, itemListLd, appLd, faqLd, breadcrumbLd];
     </div>
     <div class="stories-hero">
       <h1>{t(locale, "stories.h1")}</h1>
+      <div class="hero-download"><StoreButtons variant="hero" /></div>
       <p>
         {t(locale, "stories.subtitle")}
       </p>
-      <div class="hero-stars">★★★★★</div>
-      <div class="hero-proof">{t(locale, "home.stars")}</div>
-      <StoreButtons variant="hero" />
     </div>
 
     <section class="all-stories">

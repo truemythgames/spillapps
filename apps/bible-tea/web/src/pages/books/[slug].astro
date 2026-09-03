@@ -302,8 +302,8 @@ const otherSeasons = allSeasons.filter((s) => s.id !== season.id);
 
     @media (max-width: 640px) {
       .book-page { padding: 6rem 1.5rem 0; }
-      .book-hero { flex-direction: column; text-align: center; gap: 1.5rem; }
-      .book-cover, .book-cover-ph { width: 160px; height: 160px; }
+      .book-hero { flex-direction: column; text-align: center; gap: 1rem; }
+      .book-cover, .book-cover-ph { width: 120px; height: 120px; }
       .stories-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; }
       .other-books { padding: 2rem 1.5rem; }
       .book-card { width: 180px; }
@@ -329,9 +329,9 @@ const otherSeasons = allSeasons.filter((s) => s.id !== season.id);
         <div class="book-info">
           <div class="book-testament">{season.testament?.toLowerCase() === "old" ? t(locale, "books.oldTestament") : t(locale, "books.newTestament")}</div>
           <h1>{season.name}</h1>
+          <div class="hero-download"><StoreButtons variant="hero" /></div>
           <p class="book-meta">{stories.length} {t(locale, "books.storyCount")}</p>
           {season.description && <p class="book-desc">{season.description}</p>}
-          <StoreButtons variant="hero" />
         </div>
       </div>
 

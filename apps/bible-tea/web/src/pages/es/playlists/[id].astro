@@ -10,7 +10,7 @@ import {
 } from "../../../lib/stories";
 import { getLocale, localePath, t } from "../../../lib/i18n";
 import { playlistSeo, localizeBibleRef, clampTitle, clampDescription } from "../../../lib/seo";
-import { playlistContent } from "../../../lib/playlist-content";
+import { playlistContent, LOVE_COUPLES } from "../../../lib/playlist-content";
 
 export async function getStaticPaths() {
   const catalog = getCatalog("es");
@@ -104,6 +104,9 @@ const storyById = new Map(stories.map((s) => [s.id, s]));
 const guideEntries = (editorial?.guide ?? [])
   .map((g) => ({ ...g, story: storyById.get(g.id) }))
   .filter((g) => g.story);
+const loveCouples = playlist.id === "pl-love"
+  ? LOVE_COUPLES[locale].filter((c) => storyById.has(c.id))
+  : [];
 ---
 
 <Base
@@ -166,6 +169,28 @@ const guideEntries = (editorial?.guide ?? [])
       color: var(--text-muted);
       margin-bottom: 1.5rem;
     }
+
+    .couple-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      margin: 1rem 0 0;
+    }
+
+    .couple-chip {
+      display: inline-block;
+      padding: 0.4rem 0.85rem;
+      border-radius: 999px;
+      border: 1px solid var(--surface-border);
+      background: var(--surface);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .couple-chip:hover { border-color: var(--primary); color: var(--primary); }
 
     .hero-cta {
       display: inline-flex;
@@ -482,9 +507,16 @@ const guideEntries = (editorial?.guide ?? [])
 
       <div class="playlist-hero">
         <h1>{playlist.name}</h1>
+        <div class="hero-download"><StoreButtons variant="hero" /></div>
         <p>{playlist.description}</p>
+        {loveCouples.length > 0 && (
+          <div class="couple-list">
+            {loveCouples.map((c) => (
+              <a href={localePath(`/stories/${c.id}`, locale)} class="couple-chip">{c.label}</a>
+            ))}
+          </div>
+        )}
         <p class="playlist-meta">{stories.length} {t(locale, "playlists.storyCount")}</p>
-        <StoreButtons variant="hero" />
       </div>
 
       {editorial && (

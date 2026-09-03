@@ -56,7 +56,7 @@ const faqs = [
   },
   {
     q: "Is Bible Tea free?",
-    a: `Yes! All ${totalStories} stories across every book are completely free to listen to. Download Bible Tea on iOS or Android to start listening.`,
+    a: `The app is free to download. Listening starts with a free trial; full access to all ${totalStories} stories is a subscription. Available on iOS and Android.`,
   },
 ];
 
@@ -84,9 +84,6 @@ const jsonLdArray = [collectionLd, itemListLd, breadcrumbLd, faqLd];
     .bc a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
     .bc a:hover { color: var(--primary); }
     .bc .sep { opacity: 0.4; }
-
-    .hero-stars { display: flex; justify-content: center; gap: 0.25rem; margin-bottom: 0.5rem; font-size: 1.25rem; color: var(--accent); }
-    .hero-proof { text-align: center; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; margin-bottom: 1.5rem; }
 
     .books-hero {
       padding: 2rem 2rem 2rem;
@@ -219,10 +216,8 @@ const jsonLdArray = [collectionLd, itemListLd, breadcrumbLd, faqLd];
     </div>
     <div class="books-hero">
       <h1>{t(locale, "books.h1")}</h1>
+      <div class="hero-download"><StoreButtons variant="hero" /></div>
       <p>{t(locale, "books.subtitle")}</p>
-      <div class="hero-stars">★★★★★</div>
-      <div class="hero-proof">{t(locale, "home.stars")}</div>
-      <StoreButtons variant="hero" />
     </div>
 
     <div class="books-page">

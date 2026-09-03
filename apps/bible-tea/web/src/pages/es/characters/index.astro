@@ -47,11 +47,11 @@ const breadcrumbLd = {
 const faqs = [
   {
     q: "¿Quiénes son los personajes principales de la Biblia?",
-    a: `Bible Tea presenta ${characters.length} personajes bíblicos clave incluyendo ${characters.slice(0, 6).map((c) => c.name).join(", ")} y más. Cada página de personaje enlaza con las historias en las que aparecen, disponibles como audio inmersivo gratuito.`,
+    a: `Bible Tea presenta ${characters.length} personajes bíblicos clave incluyendo ${characters.slice(0, 6).map((c) => c.name).join(", ")} y más. Cada página de personaje enlaza con las historias en las que aparecen, disponibles como audio inmersivo.`,
   },
   {
     q: "¿Puedo escuchar historias de personajes bíblicos gratis?",
-    a: "¡Sí! Cada historia de personaje en Bible Tea es completamente gratuita. Descarga la app en iOS o Android y escucha el arco completo de cualquier personaje con narración profesional.",
+    a: "Puedes empezar con una prueba gratis. El acceso completo a cada historia de personaje es una suscripción. Descarga Bible Tea en iOS o Android para escuchar.",
   },
   {
     q: "¿Cuántos personajes bíblicos cubre Bible Tea?",
@@ -83,9 +83,6 @@ const jsonLdArray = [collectionLd, itemListLd, breadcrumbLd, faqLd];
     .bc a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
     .bc a:hover { color: var(--primary); }
     .bc .sep { opacity: 0.4; }
-
-    .hero-stars { display: flex; justify-content: center; gap: 0.25rem; margin-bottom: 0.5rem; font-size: 1.25rem; color: var(--accent); }
-    .hero-proof { text-align: center; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; margin-bottom: 1.5rem; }
 
     .characters-hero {
       padding: 2rem 2rem 2rem;
@@ -212,10 +209,8 @@ const jsonLdArray = [collectionLd, itemListLd, breadcrumbLd, faqLd];
     </div>
     <div class="characters-hero">
       <h1>{t(locale, "characters.h1")}</h1>
+      <div class="hero-download"><StoreButtons variant="hero" /></div>
       <p>{t(locale, "characters.subtitle")}</p>
-      <div class="hero-stars">★★★★★</div>
-      <div class="hero-proof">{t(locale, "home.stars")}</div>
-      <StoreButtons variant="hero" />
     </div>
 
     <div class="characters-page">

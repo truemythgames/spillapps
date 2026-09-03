@@ -47,11 +47,11 @@ const breadcrumbLd = {
 const faqs = [
   {
     q: "Who are the main characters in the Bible?",
-    a: `Bible Tea features ${characters.length} key Bible characters including ${characters.slice(0, 6).map((c) => c.name).join(", ")} and more. Each character page links to the stories they appear in, available as free immersive audio.`,
+    a: `Bible Tea features ${characters.length} key Bible characters including ${characters.slice(0, 6).map((c) => c.name).join(", ")} and more. Each character page links to the stories they appear in, available as immersive audio.`,
   },
   {
     q: "Can I listen to Bible character stories for free?",
-    a: "Yes! Every character story on Bible Tea is completely free. Download the app on iOS or Android and listen to any character's full story arc with professional narration.",
+    a: "You can start with a free trial. Full access to every character story is a subscription. Download Bible Tea on iOS or Android to listen.",
   },
   {
     q: "How many Bible characters does Bible Tea cover?",
@@ -83,9 +83,6 @@ const jsonLdArray = [collectionLd, itemListLd, breadcrumbLd, faqLd];
     .bc a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
     .bc a:hover { color: var(--primary); }
     .bc .sep { opacity: 0.4; }
-
-    .hero-stars { display: flex; justify-content: center; gap: 0.25rem; margin-bottom: 0.5rem; font-size: 1.25rem; color: var(--accent); }
-    .hero-proof { text-align: center; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; margin-bottom: 1.5rem; }
 
     .characters-hero {
       padding: 2rem 2rem 2rem;
@@ -212,10 +209,8 @@ const jsonLdArray = [collectionLd, itemListLd, breadcrumbLd, faqLd];
     </div>
     <div class="characters-hero">
       <h1>{t(locale, "characters.h1")}</h1>
+      <div class="hero-download"><StoreButtons variant="hero" /></div>
       <p>{t(locale, "characters.subtitle")}</p>
-      <div class="hero-stars">★★★★★</div>
-      <div class="hero-proof">{t(locale, "home.stars")}</div>
-      <StoreButtons variant="hero" />
     </div>
 
     <div class="characters-page">

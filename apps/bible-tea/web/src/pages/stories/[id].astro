@@ -133,8 +133,8 @@ const bibleRef = localizeBibleRef(story.bibleRef, locale);
 const seoOverride = storySeo(story.id, locale);
 const pageTitle = clampTitle(seoOverride.title ?? `${story.title} — ${bibleRef} - Bible Tea`);
 const pageDesc = clampDescription(seoOverride.description ?? (locale === "es"
-  ? `${story.description} Escucha gratis en Bible Tea — sin anuncios ni registro.`
-  : `${story.description} Listen free on Bible Tea — no ads, no sign-up.`));
+  ? `${story.description} Escúchala en Bible Tea — prueba gratis, sin anuncios.`
+  : `${story.description} Listen on Bible Tea — start a free trial, no ads.`));
 const pageUrl = `https://bibletea.app/stories/${story.id}/`;
 
 function faqT(key: string): string {
@@ -718,10 +718,10 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
       .story-hero-card {
         flex-direction: column;
         text-align: center;
-        padding: 1.5rem;
-        gap: 1.5rem;
+        padding: 1.25rem;
+        gap: 1rem;
       }
-      .hero-cover, .hero-cover-placeholder { width: 180px; height: 180px; }
+      .hero-cover, .hero-cover-placeholder { width: 120px; height: 120px; }
       .gate-features { flex-direction: column; align-items: center; gap: 0.6rem; }
       .related { padding: 1.5rem 1.5rem 1rem; }
       .related-card { width: 130px; }
@@ -759,6 +759,7 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
             <div class="hero-section">{story.section}</div>
           )}
           <h1>{story.title}</h1>
+          <div class="hero-download"><StoreButtons variant="hero" /></div>
           <div class="hero-meta">
             <span class="hero-ref">{bibleRef}</span>
             {readingMinutes > 0 && <span class="hero-time">{t(locale, "story.readTime").replace("{min}", String(readingMinutes))} · {t(locale, "story.listenTime").replace("{min}", String(listeningMinutes))}</span>}
@@ -774,7 +775,6 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
               ))}
             </div>
           )}
-          <StoreButtons variant="hero" />
         </div>
       </div>
 
