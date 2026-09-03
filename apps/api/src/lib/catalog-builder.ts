@@ -218,7 +218,12 @@ export async function buildPrayers(env: Env, appId: string, locale: string) {
   });
 
   const { results: prayerRows } = await env.DB.prepare(
-    `SELECT p.*, pc.name as category_name, pc.slug as category_slug, pc.icon as category_icon
+    `SELECT p.*, pc.name as category_name, pc.slug as category_slug, pc.icon as category_icon,
+            COALESCE(
+              (SELECT MAX(pa.duration_seconds) FROM prayer_audio pa WHERE pa.prayer_id = p.id),
+              p.duration_seconds,
+              0
+            ) as audio_duration_seconds
      FROM prayers p
      JOIN prayer_categories pc ON p.category_id = pc.id
      WHERE p.is_published = 1 AND p.app_id = ?
@@ -227,11 +232,19 @@ export async function buildPrayers(env: Env, appId: string, locale: string) {
     .bind(appId)
     .all();
 
-  const prayers = await overlayTranslations(env.DB, prayerRows as any[], {
-    entityType: "prayer",
-    appId,
-    locale,
-    fields: ["title", "description", "transcript"],
+  const prayers = (
+    await overlayTranslations(env.DB, prayerRows as any[], {
+      entityType: "prayer",
+      appId,
+      locale,
+      fields: ["title", "description", "transcript"],
+    })
+  ).map((p) => {
+    const { audio_duration_seconds, ...rest } = p;
+    return {
+      ...rest,
+      duration_seconds: Number(audio_duration_seconds) || Number(p.duration_seconds) || 0,
+    };
   });
 
   return { categories, prayers };

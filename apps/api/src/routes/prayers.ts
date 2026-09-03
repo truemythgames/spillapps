@@ -4,8 +4,9 @@ import { mediaUrl } from "../lib/media";
 import { resolvePublicAppId } from "../lib/request-app";
 import { resolveLocale, overlayTranslations } from "../lib/locale";
 import { resolveStoryId } from "../lib/story";
-import { catKey, loadCatalog, readCatalog } from "../lib/catalog-store";
+import { catKey, loadCatalog, readCatalog, edgeCache } from "../lib/catalog-store";
 import { buildPrayers } from "../lib/catalog-builder";
+import { durationFromR2Mp3 } from "../lib/mp3-duration";
 
 export const prayersRoutes = new Hono<{ Bindings: Env }>();
 
@@ -49,14 +50,37 @@ prayersRoutes.get("/:id", async (c) => {
   const locale = resolveLocale(c);
   const id = c.req.param("id");
 
+  const edgeKey = new Request(
+    `https://catalog.cache/${encodeURIComponent(`cat3edge:prayer2:${appId}:${locale}:${id}`)}`,
+  );
   try {
-    return await prayerDetailFromD1(c, appId, locale, id);
+    const hit = await edgeCache().match(edgeKey);
+    if (hit) return c.json(await hit.json());
+  } catch {}
+
+  try {
+    return await prayerDetailFromD1(c, appId, locale, id, edgeKey);
   } catch (err) {
     // D1 down: prayer (incl. transcript) from the prayers catalog in KV,
     // audio discovered by listing R2. Related content omitted.
     console.error("prayer detail D1 failed, using KV+R2 fallback:", err);
     const fallback = await prayerDetailFallback(c, appId, locale, id);
-    if (fallback) return c.json(fallback);
+    if (fallback) {
+      c.executionCtx?.waitUntil?.(
+        edgeCache()
+          .put(
+            edgeKey,
+            new Response(JSON.stringify(fallback), {
+              headers: {
+                "Content-Type": "application/json",
+                "Cache-Control": "public, max-age=1800",
+              },
+            }),
+          )
+          .catch(() => {}),
+      );
+      return c.json(fallback);
+    }
     return c.json({ error: "Prayer temporarily unavailable" }, 503);
   }
 });
@@ -92,26 +116,30 @@ async function prayerDetailFallback(
   const enFiles = audioObjects.filter((o: any) => !/-es\.mp3$/.test(o.key));
   const chosen = locale === "es" && esFiles.length ? esFiles : enFiles;
 
-  const audio_versions = chosen
-    .map((o: any) => {
-      const m = o.key.match(/narration-([^/]+?)(?:-es)?\.mp3$/);
-      const speakerKey = m?.[1] ?? "narrator";
-      const sp = speakerByKey.get(speakerKey);
-      // Unregistered takes in R2 (e.g. narration-grace-v2.mp3) are not published.
-      if (!sp) return null;
-      return {
-        id: `fallback-${prayer.slug}-${speakerKey}`,
-        prayer_id: prayer.id,
-        speaker_id: sp?.id ?? speakerKey,
-        audio_key: o.key,
-        duration_seconds: prayer.duration_seconds ?? 0,
-        speaker_name: sp?.name ?? speakerKey.charAt(0).toUpperCase() + speakerKey.slice(1),
-        speaker_avatar: sp?.avatar_key ?? null,
-        audio_url: mediaUrl(c.env, o.key, appId) ?? "",
-        speaker_avatar_url: sp ? mediaUrl(c.env, sp.avatar_key, appId) : null,
-        is_default: Number(sp?.is_default ?? 0),
-      };
-    })
+  const audio_versions = (
+    await Promise.all(
+      chosen.map(async (o: any) => {
+        const m = o.key.match(/narration-([^/]+?)(?:-es)?\.mp3$/);
+        const speakerKey = m?.[1] ?? "narrator";
+        const sp = speakerByKey.get(speakerKey);
+        // Unregistered takes in R2 (e.g. narration-grace-v2.mp3) are not published.
+        if (!sp) return null;
+        const fromFile = await durationFromR2Mp3(c.env.MEDIA, o.key, Number(o.size) || 0);
+        return {
+          id: `fallback-${prayer.slug}-${speakerKey}`,
+          prayer_id: prayer.id,
+          speaker_id: sp?.id ?? speakerKey,
+          audio_key: o.key,
+          duration_seconds: fromFile || Number(prayer.duration_seconds) || 0,
+          speaker_name: sp?.name ?? speakerKey.charAt(0).toUpperCase() + speakerKey.slice(1),
+          speaker_avatar: sp?.avatar_key ?? null,
+          audio_url: mediaUrl(c.env, o.key, appId) ?? "",
+          speaker_avatar_url: sp ? mediaUrl(c.env, sp.avatar_key, appId) : null,
+          is_default: Number(sp?.is_default ?? 0),
+        };
+      }),
+    )
+  )
     .filter(Boolean)
     // Match the D1 route: default speaker (Grace) first, then by name.
     .sort(
@@ -119,15 +147,29 @@ async function prayerDetailFallback(
         b.is_default - a.is_default || a.speaker_name.localeCompare(b.speaker_name),
     );
 
+  const fromAudio = Math.max(
+    0,
+    ...audio_versions.map((a: any) => Number(a.duration_seconds) || 0),
+  );
+
   return {
-    prayer,
+    prayer: {
+      ...prayer,
+      duration_seconds: fromAudio || Number(prayer.duration_seconds) || 0,
+    },
     audio_versions,
     related_stories: [],
     related_characters: [],
   };
 }
 
-async function prayerDetailFromD1(c: any, appId: string, locale: string, id: string) {
+async function prayerDetailFromD1(
+  c: any,
+  appId: string,
+  locale: string,
+  id: string,
+  edgeKey: Request,
+) {
   let prayer = await c.env.DB.prepare(
     `SELECT p.*, pc.name as category_name, pc.slug as category_slug
      FROM prayers p
@@ -205,21 +247,43 @@ async function prayerDetailFromD1(c: any, appId: string, locale: string, id: str
     fields: ["name", "description"],
   });
 
-  return c.json({
+  const audio_versions = audioVersions.results.map((a: any) => ({
+    ...a,
+    audio_url: mediaUrl(c.env, a.audio_key, appId) ?? "",
+    speaker_avatar_url: mediaUrl(c.env, a.speaker_avatar, appId),
+  }));
+  const fromAudio = Math.max(
+    0,
+    ...audio_versions.map((a: any) => Number(a.duration_seconds) || 0),
+  );
+  const payload = {
     prayer: {
       ...(prayer as any),
+      duration_seconds: fromAudio || Number((prayer as any).duration_seconds) || 0,
     },
-    audio_versions: audioVersions.results.map((a: any) => ({
-      ...a,
-      audio_url: mediaUrl(c.env, a.audio_key, appId) ?? "",
-      speaker_avatar_url: mediaUrl(c.env, a.speaker_avatar, appId),
-    })),
+    audio_versions,
     related_stories: translatedStories.map((s: any) => ({
       ...s,
       cover_image_url: mediaUrl(c.env, s.cover_image_key, appId),
     })),
     related_characters: translatedRelatedChars,
-  });
+  };
+
+  c.executionCtx?.waitUntil?.(
+    edgeCache()
+      .put(
+        edgeKey,
+        new Response(JSON.stringify(payload), {
+          headers: {
+            "Content-Type": "application/json",
+            "Cache-Control": "public, max-age=3600",
+          },
+        }),
+      )
+      .catch(() => {}),
+  );
+
+  return c.json(payload);
 }
 
 prayersRoutes.get("/for-story/:storyId", async (c) => {
