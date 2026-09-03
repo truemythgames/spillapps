@@ -79,7 +79,8 @@ storiesRoutes.get("/:id", async (c) => {
   const id = c.req.param("id");
 
   const edgeKey = new Request(
-    `https://catalog.cache/${encodeURIComponent(`cat3edge:story:${appId}:${locale}:${id}`)}`,
+    // story2: bumped so payloads cached before transcripts existed are skipped.
+    `https://catalog.cache/${encodeURIComponent(`cat3edge:story2:${appId}:${locale}:${id}`)}`,
   );
   try {
     const hit = await edgeCache().match(edgeKey);
@@ -262,6 +263,19 @@ async function storyDetailFallback(
   const story = catalog?.stories?.find((s) => s.id === id || s.slug === id);
   if (!story) return null;
 
+  // Transcript from the materialized transcripts map (locale, then en).
+  let transcript: string | null = null;
+  for (const loc of locale === "en" ? ["en"] : [locale, "en"]) {
+    const map = await readCatalog<{ transcripts: Record<string, string> }>(
+      c.env.CACHE,
+      catKey("transcripts", appId, loc),
+    );
+    if (map?.transcripts?.[story.id]) {
+      transcript = map.transcripts[story.id];
+      break;
+    }
+  }
+
   const speakersPayload = await readCatalog<{ speakers: any[] }>(
     c.env.CACHE,
     catKey("speakers", appId),
@@ -314,7 +328,7 @@ async function storyDetailFallback(
     }));
 
   return {
-    story: { ...story, transcript: null },
+    story: { ...story, transcript },
     audio_versions,
     characters,
     related_prayers: [],
