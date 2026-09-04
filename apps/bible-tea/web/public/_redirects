@@ -47,6 +47,14 @@
 /verses/:slug /verses/:slug/ 301
 /es/versiculos/:slug /es/versiculos/:slug/ 301
 
-# Legacy capitalised URLs Google still ranks (Ahrefs, Sep 2026)
-/Bible /stories/jacob-wrestles-god/ 301
+# /Bible is a front-door URL: send it to the Bible books hub.
+/Bible /books/ 301
+/Bible/ /books/ 301
+/bible /books/ 301
+/bible/ /books/ 301
+/es/Bible /es/books/ 301
+/es/bible /es/books/ 301
+/es/bible/ /es/books/ 301
+
+# Legacy capitalised URL Google still indexes
 /Playlists /playlists/ 301
