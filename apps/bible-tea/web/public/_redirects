@@ -46,3 +46,7 @@
 /es/books/:slug /es/books/:slug/ 301
 /verses/:slug /verses/:slug/ 301
 /es/versiculos/:slug /es/versiculos/:slug/ 301
+
+# Legacy capitalised URLs Google still ranks (Ahrefs, Sep 2026)
+/Bible /stories/jacob-wrestles-god/ 301
+/Playlists /playlists/ 301

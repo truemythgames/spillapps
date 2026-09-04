@@ -606,8 +606,14 @@ const iconAlt = locale === "es" ? "Ícono de Bible Tea" : "Bible Tea App Icon";
       border-top: 1px solid var(--surface-border);
       transform: translateY(110%);
       transition: transform 0.28s ease;
+      visibility: hidden;
+      pointer-events: none;
     }
-    .sticky-cta.visible { transform: translateY(0); }
+    .sticky-cta.visible {
+      transform: translateY(0);
+      visibility: visible;
+      pointer-events: auto;
+    }
     .sticky-cta img { width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0; }
     .sticky-meta { flex: 1; min-width: 0; }
     .sticky-name { font-weight: 700; font-size: 0.92rem; line-height: 1.2; }
@@ -666,6 +672,8 @@ const iconAlt = locale === "es" ? "Ícono de Bible Tea" : "Bible Tea App Icon";
       /* Room for the sticky bar so it never covers the footer. */
       :global(footer) { padding-bottom: 6.5rem; }
     }
+    /* Win over the mobile `display: flex` so a hidden bar cannot stay focusable. */
+    .sticky-cta[hidden] { display: none !important; }
   </style>
 
   <script is:inline>
@@ -821,7 +829,7 @@ const iconAlt = locale === "es" ? "Ícono de Bible Tea" : "Bible Tea App Icon";
     </div>
   </section>
 
-  <div id="sticky-cta" class="sticky-cta" aria-hidden="true">
+  <div id="sticky-cta" class="sticky-cta" hidden inert>
     <img src="/icon-sm.webp" alt="" width="40" height="40" loading="lazy" decoding="async" />
     <div class="sticky-meta">
       <div class="sticky-name">Bible Tea</div>
@@ -837,12 +845,27 @@ const iconAlt = locale === "es" ? "Ícono de Bible Tea" : "Bible Tea App Icon";
 
       var hero = document.querySelector('.hero');
       var bar = document.getElementById('sticky-cta');
-      if (hero && bar && io) {
-        new IntersectionObserver(function (entries) {
-          var show = !entries[0].isIntersecting;
+      if (hero && bar) {
+        var compact = window.matchMedia('(max-width: 720px)');
+        var pastHero = false;
+        var setBarShown = function (show) {
           bar.classList.toggle('visible', show);
-          bar.setAttribute('aria-hidden', show ? 'false' : 'true');
-        }).observe(hero);
+          bar.toggleAttribute('hidden', !show);
+          bar.toggleAttribute('inert', !show);
+        };
+        var syncBar = function () { setBarShown(compact.matches && pastHero); };
+        if (io) {
+          new IntersectionObserver(function (entries) {
+            pastHero = !entries[0].isIntersecting;
+            syncBar();
+          }).observe(hero);
+        }
+        if (typeof compact.addEventListener === 'function') {
+          compact.addEventListener('change', syncBar);
+        } else if (typeof compact.addListener === 'function') {
+          compact.addListener(syncBar);
+        }
+        syncBar();
       }
 
       var motion = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;

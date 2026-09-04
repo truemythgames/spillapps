@@ -1260,14 +1260,14 @@ export function prayerForTodaySeo(
     return {
       title: clampTitle("Oración de hoy | Bible Tea"),
       description: clampDescription(
-        `Oración de hoy (${dateLabel}): ${prayerTitle}. Léela aquí o escúchala con narración en Bible Tea.`,
+        `Oración de hoy (${dateLabel}): ${prayerTitle}. Una oración guiada nueva cada día. Léela aquí o escúchala con narración en Bible Tea.`,
       ),
     };
   }
   return {
     title: clampTitle("Prayer for Today | Bible Tea"),
     description: clampDescription(
-      `Prayer for today (${dateLabel}): ${prayerTitle}. Read it here, or listen with narration on Bible Tea.`,
+      `Prayer for today (${dateLabel}): ${prayerTitle}. A new guided prayer every day. Read it here, or listen with narration on Bible Tea.`,
     ),
   };
 }

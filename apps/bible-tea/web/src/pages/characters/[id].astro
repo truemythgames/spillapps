@@ -8,6 +8,8 @@ import {
 } from "../../lib/stories";
 import { getLocale, localePath, t } from "../../lib/i18n";
 import { clampTitle, clampDescription, characterSeo } from "../../lib/seo";
+import { getStoryPage } from "../../lib/story-pages";
+import { marked } from "marked";
 
 export async function getStaticPaths() {
   const characters = await getCharacters();
@@ -28,7 +30,9 @@ const stories = character.stories;
 
 const seoOverride = characterSeo(character.id, locale);
 const pageTitle = clampTitle(seoOverride.title ?? t(locale, "character.pageTitle").replace("{name}", character.name));
-const pageDesc = clampDescription(seoOverride.description ?? t(locale, "character.pageDesc").replace(/\{description\}/g, character.description).replace(/\{count\}/g, String(stories.length > 1 ? stories.length : "")).replace(/\{name\}/g, character.name).replace(/\s{2,}/g, " "));
+// The catalog "description" is a short epithet ("Son of God") with no terminal punctuation.
+const epithet = character.description.trim().replace(/[.!?]?$/, ".");
+const pageDesc = clampDescription(seoOverride.description ?? t(locale, "character.pageDesc").replace(/\{description\}/g, epithet).replace(/\{count\}/g, String(stories.length > 1 ? stories.length : "")).replace(/\{name\}/g, character.name).replace(/\s{2,}/g, " "));
 const pageUrl = `https://bibletea.app/characters/${character.id}/`;
 const ogImage = character.image_url || "https://bibletea.app/icon.png";
 
@@ -77,22 +81,35 @@ const breadcrumbLd = {
   ],
 };
 
+// Long-form written content (src/content/story-pages/<id>.<locale>.md), same
+// system as story pages. When present it replaces the templated FAQs below.
+const storyPage = getStoryPage(character.id, locale);
+const pageHtml = storyPage
+  ? {
+      passage: await marked.parse(storyPage.passage),
+      story: await marked.parse(storyPage.story),
+      meaning: await marked.parse(storyPage.meaning),
+    }
+  : null;
+
 function faqT(key: string): string {
   return t(locale, key as any).replace(/\{name\}/g, character.name).replace(/\{description\}/g, character.description).replace(/\{count\}/g, String(stories.length));
 }
-const faqs = [
-  {
-    q: faqT("character.faqQ1"),
-    a: stories.length > 0 ? faqT("character.faqA1Stories") : faqT("character.faqA1"),
-  },
-  {
-    q: faqT("character.faqQ2"),
-    a: stories.length > 0
-      ? faqT("character.faqA2").replace("{stories}", stories.map((s) => s.title).join(", "))
-      : faqT("character.faqA2None"),
-  },
-  { q: faqT("character.faqQ3"), a: faqT("character.faqA3") },
-];
+const faqs: { q: string; a: string; html?: string }[] = storyPage
+  ? await Promise.all(storyPage.faqs.map(async (f) => ({ q: f.q, a: f.aPlain, html: await marked.parse(f.a) })))
+  : [
+      {
+        q: faqT("character.faqQ1"),
+        a: stories.length > 0 ? faqT("character.faqA1Stories") : faqT("character.faqA1"),
+      },
+      {
+        q: faqT("character.faqQ2"),
+        a: stories.length > 0
+          ? faqT("character.faqA2").replace("{stories}", stories.map((s) => s.title).join(", "))
+          : faqT("character.faqA2None"),
+      },
+      { q: faqT("character.faqQ3"), a: faqT("character.faqA3") },
+    ];
 
 const faqLd = {
   "@context": "https://schema.org",
@@ -247,6 +264,20 @@ const otherCharacters = allCharacters.filter((c) => c.id !== character.id).slice
     .no-stories { text-align: center; padding: 3rem 2rem; color: var(--text-secondary); }
     .no-stories p { margin-bottom: 1.5rem; }
 
+    /* Long-form web content (story-pages). Body HTML comes from set:html, so
+       descendant rules must be :global() to escape Astro's scoped-style cid. */
+    .story-longform { max-width: 700px; margin: 0 auto 2.5rem; }
+    .story-longform :global(h2) { font-family: 'Playfair Display', serif; font-size: 1.45rem; margin: 2.25rem 0 1rem; color: var(--text); }
+    .story-longform :global(section:first-child h2) { margin-top: 0; }
+    .story-longform :global(p), .story-longform :global(li) { color: var(--text-secondary); font-size: 1.02rem; line-height: 1.85; margin-bottom: 1rem; }
+    .story-longform :global(strong) { color: var(--text); }
+    .story-longform :global(.passage-note) { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 1rem; }
+    .story-longform :global(blockquote) { margin: 0 0 1rem; padding: 1.25rem 1.5rem; border-left: 3px solid var(--accent); background: var(--surface); border-radius: 0 14px 14px 0; }
+    .story-longform :global(blockquote p) { font-size: 1.02rem; line-height: 1.9; color: var(--text); }
+    .story-longform :global(blockquote p:last-child) { margin-bottom: 0; }
+    .story-longform :global(blockquote strong) { font-size: 0.7rem; vertical-align: super; color: var(--accent); margin-right: 0.15rem; }
+    .faq-item :global(p) { padding: 0 1.25rem 1rem; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+
     .faq-section { max-width: 700px; margin: 0 auto; padding: 3rem 2rem; border-top: 1px solid var(--surface-border); }
     .faq-section h2 { font-family: 'Playfair Display', serif; font-size: 1.35rem; margin-bottom: 1rem; }
     .faq-item { background: var(--surface); border: 1px solid var(--surface-border); border-radius: 12px; margin-bottom: 0.6rem; overflow: hidden; transition: border-color 0.2s; }
@@ -340,6 +371,24 @@ const otherCharacters = allCharacters.filter((c) => c.id !== character.id).slice
         </div>
       </div>
 
+      {pageHtml && (
+        <article class="story-longform">
+          <section class="story-passage">
+            <h2>{t(locale, "story.passageHeading")}</h2>
+            <p class="passage-note">{t(locale, "story.passageNote").replace("{ref}", storyPage!.passageRef).replace("{translation}", storyPage!.translation)}</p>
+            <Fragment set:html={pageHtml.passage} />
+          </section>
+          <section class="story-prose">
+            <h2>{t(locale, "story.storyHeading")}</h2>
+            <Fragment set:html={pageHtml.story} />
+          </section>
+          <section class="story-prose">
+            <h2>{t(locale, "story.meaningHeading")}</h2>
+            <Fragment set:html={pageHtml.meaning} />
+          </section>
+        </article>
+      )}
+
       {stories.length > 0 ? (
         <div class="stories-grid">
           {stories.map((s) => (
@@ -399,7 +448,7 @@ const otherCharacters = allCharacters.filter((c) => c.id !== character.id).slice
       {faqs.map((f) => (
         <details class="faq-item">
           <summary>{f.q}</summary>
-          <p>{f.a}</p>
+          {f.html ? <Fragment set:html={f.html} /> : <p>{f.a}</p>}
         </details>
       ))}
     </section>

@@ -33,3 +33,24 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Ping IndexNow for the pages that change daily
+        # Bing/Yandex/DuckDuckGo (and ChatGPT search via Bing) re-crawl these
+        # within minutes instead of days. Key file lives at public/<key>.txt.
+        run: |
+          curl -sS -o /dev/null -w "IndexNow HTTP %{http_code}\n" \
+            -X POST https://api.indexnow.org/indexnow \
+            -H "Content-Type: application/json; charset=utf-8" \
+            -d '{
+              "host": "bibletea.app",
+              "key": "8c4d1549-b85a-4ca8-9dfe-305b967fa4e8",
+              "keyLocation": "https://bibletea.app/8c4d1549-b85a-4ca8-9dfe-305b967fa4e8.txt",
+              "urlList": [
+                "https://bibletea.app/verse-of-the-day/",
+                "https://bibletea.app/es/versiculo-del-dia/",
+                "https://bibletea.app/prayer-for-today/",
+                "https://bibletea.app/es/oracion-de-hoy/",
+                "https://bibletea.app/",
+                "https://bibletea.app/es/"
+              ]
+            }'

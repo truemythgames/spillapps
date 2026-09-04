@@ -18,6 +18,7 @@ import {
 import { getLocale, localePath, t } from "../../lib/i18n";
 import { localizeBibleRef, storySeo, clampTitle, clampDescription } from "../../lib/seo";
 import { storyAnswer } from "../../lib/story-answers";
+import { getStoryPage } from "../../lib/story-pages";
 
 export async function getStaticPaths() {
   const catalog = getCatalog();
@@ -81,6 +82,18 @@ const { story, catalog, storyPlaylist, playlistSiblings, storySeason, storyChara
 const locale = getLocale(Astro.currentLocale);
 
 const transcript = await getTranscript(story.id, locale);
+
+// Long-form web content (src/content/story-pages). When present, the page
+// answers the query in full and the app gate moves below the content.
+const storyPage = getStoryPage(story.id, locale);
+const pageHtml = storyPage
+  ? {
+      passage: await marked.parse(storyPage.passage),
+      story: await marked.parse(storyPage.story),
+      meaning: await marked.parse(storyPage.meaning),
+      faqs: await Promise.all(storyPage.faqs.map(async (f) => ({ q: f.q, html: await marked.parse(f.a) }))),
+    }
+  : null;
 const hasImage = hasCover(story.id);
 const cover = coverUrl(story.id);
 
@@ -114,8 +127,14 @@ let readingMinutes = 0;
 let listeningMinutes = 0;
 if (transcript) {
   storyWordCount = transcript.split(/\s+/).length;
-  readingMinutes = Math.max(1, Math.round(storyWordCount / 238));
+  // Listening time is the narrated episode only.
   listeningMinutes = Math.max(1, Math.round(storyWordCount / 150));
+}
+if (storyPage) {
+  storyWordCount += storyPage.wordCount;
+}
+if (storyWordCount > 0) {
+  readingMinutes = Math.max(1, Math.round(storyWordCount / 238));
 }
 
 // Related stories: same playlist first, fall back to same section
@@ -165,7 +184,7 @@ const articleLd = {
   description: story.description,
   image: hasImage ? cover : "https://bibletea.app/icon.png",
   datePublished: "2026-04-01",
-  dateModified: "2026-04-13",
+  dateModified: storyPage ? "2026-09-05" : "2026-04-13",
   wordCount: storyWordCount,
   author: { "@type": "Organization", name: "Bible Tea", url: "https://bibletea.app" },
   publisher: {
@@ -184,6 +203,7 @@ const faqLd = {
   "@type": "FAQPage",
   mainEntity: [
     ...(quickAnswer ? [{ q: quickAnswer.question, a: quickAnswer.answer }] : []),
+    ...(storyPage ? storyPage.faqs.map((f) => ({ q: f.q, a: f.aPlain })) : []),
     ...faqs,
   ].map((f) => ({
     "@type": "Question",
@@ -437,6 +457,72 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
     }
 
     /* Locked content gate */
+    /* Long-form web content (story-pages). Body HTML comes from set:html, so
+       descendant rules must be :global() to escape Astro's scoped-style cid. */
+    .story-longform {
+      max-width: 700px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .story-longform :global(h2) {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.45rem;
+      margin: 2.25rem 0 1rem;
+      color: var(--text);
+    }
+
+    .story-longform :global(section:first-child h2) { margin-top: 0; }
+
+    .story-longform :global(p),
+    .story-longform :global(li) {
+      color: var(--text-secondary);
+      font-size: 1.02rem;
+      line-height: 1.85;
+      margin-bottom: 1rem;
+    }
+
+    .story-longform :global(strong) { color: var(--text); }
+
+    .story-longform :global(.passage-note) {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .story-longform :global(blockquote) {
+      margin: 0 0 1rem;
+      padding: 1.25rem 1.5rem;
+      border-left: 3px solid var(--accent);
+      background: var(--surface);
+      border-radius: 0 14px 14px 0;
+    }
+
+    .story-longform :global(blockquote p) {
+      font-size: 1.02rem;
+      line-height: 1.9;
+      color: var(--text);
+    }
+
+    .story-longform :global(blockquote p:last-child) { margin-bottom: 0; }
+
+    .story-longform :global(blockquote strong) {
+      font-size: 0.7rem;
+      vertical-align: super;
+      color: var(--accent);
+      margin-right: 0.15rem;
+    }
+
+    .story-longform :global(.story-question) { margin-bottom: 1.5rem; }
+
+    .story-longform :global(.story-question h3) {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
     .content-gate {
       max-width: 700px;
       margin: 0 auto 3rem;
@@ -786,7 +872,36 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
       )}
     </div>
 
-    {setupHtml && (
+    {pageHtml && (
+      <article class="story-longform">
+        <section class="story-passage">
+          <h2>{t(locale, "story.passageHeading")}</h2>
+          <p class="passage-note">{t(locale, "story.passageNote").replace("{ref}", storyPage!.passageRef).replace("{translation}", storyPage!.translation)}</p>
+          <Fragment set:html={pageHtml.passage} />
+        </section>
+        <section class="story-prose">
+          <h2>{t(locale, "story.storyHeading")}</h2>
+          <Fragment set:html={pageHtml.story} />
+        </section>
+        <section class="story-prose">
+          <h2>{t(locale, "story.meaningHeading")}</h2>
+          <Fragment set:html={pageHtml.meaning} />
+        </section>
+        {pageHtml.faqs.length > 0 && (
+          <section class="story-prose story-questions">
+            <h2>{t(locale, "story.questionsHeading")}</h2>
+            {pageHtml.faqs.map((f) => (
+              <div class="story-question">
+                <h3>{f.q}</h3>
+                <Fragment set:html={f.html} />
+              </div>
+            ))}
+          </section>
+        )}
+      </article>
+    )}
+
+    {!pageHtml && setupHtml && (
       <div class="setup-teaser">
         <h2>{t(locale, "story.theSetup")}</h2>
         <Fragment set:html={setupHtml} />
@@ -794,10 +909,10 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
     )}
 
     <div class="content-gate">
-      {setupHtml && <div class="gate-fade" />}
+      {!pageHtml && setupHtml && <div class="gate-fade" />}
       <div class="gate-card">
         <div class="gate-icon">🎧</div>
-        <h3>{t(locale, "story.gateHeading")}</h3>
+        <h3>{pageHtml ? t(locale, "story.gateNarrated") : t(locale, "story.gateHeading")}</h3>
         <p>{t(locale, "story.gateDesc").replace("{title}", story.title)}</p>
         <div class="gate-features">
           <span class="gate-feature"><span class="check">✓</span> {t(locale, "story.gateAudio")}</span>
