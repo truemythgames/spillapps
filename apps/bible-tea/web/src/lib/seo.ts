@@ -568,6 +568,13 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
         "Atrapados entre el ejército de Faraón y el mar, Moisés alza su vara — y el mar se parte. El cruce del Mar Rojo, narrado como audio inmersivo.",
     },
   },
+  gethsemane: {
+    en: {
+      title: "Gethsemane — Jesus Prays in the Garden (Matthew 26:36-46) - Bible Tea",
+      description:
+        "Jesus prays three times in Gethsemane: let this cup pass, then not my will. Matthew 26:36-46 — the garden, the cup, and what it means.",
+    },
+  },
   "the-witch-of-endor": {
     en: {
       title: "The Witch of Endor — Saul's Séance (1 Samuel 28) - Bible Tea",
