@@ -39,6 +39,7 @@
     "dev:web:spillapps": "npm run dev --workspace=@spillapps/web",
     "deploy:web:spillapps": "npm run deploy --workspace=@spillapps/web",
     "deploy:cms": "npm run deploy --workspace=@spillapps/cms",
+    "test:api": "npm run test --workspace=@spillapps/api",
     "db:generate": "npm run generate --workspace=@spillapps/db",
     "db:migrate": "npm run migrate --workspace=@spillapps/db",
     "db:seed": "npm run seed --workspace=@spillapps/db",

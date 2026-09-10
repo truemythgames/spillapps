@@ -219,18 +219,49 @@ export async function buildPrayers(env: Env, appId: string, locale: string) {
 
   const { results: prayerRows } = await env.DB.prepare(
     `SELECT p.*, pc.name as category_name, pc.slug as category_slug, pc.icon as category_icon,
-            COALESCE(
-              (SELECT MAX(pa.duration_seconds) FROM prayer_audio pa WHERE pa.prayer_id = p.id),
-              p.duration_seconds,
-              0
-            ) as audio_duration_seconds
+            COALESCE(d.max_dur, p.duration_seconds, 0) as audio_duration_seconds
      FROM prayers p
      JOIN prayer_categories pc ON p.category_id = pc.id
+     LEFT JOIN (
+       SELECT prayer_id, MAX(duration_seconds) AS max_dur
+       FROM prayer_audio
+       GROUP BY prayer_id
+     ) d ON d.prayer_id = p.id
      WHERE p.is_published = 1 AND p.app_id = ?
      ORDER BY pc.sort_order ASC, p.sort_order ASC`
   )
     .bind(appId)
     .all();
+
+  const [{ results: storyLinks }, { results: charLinks }] = await Promise.all([
+    env.DB.prepare(
+      `SELECT ps.prayer_id, ps.story_id
+       FROM prayer_stories ps
+       JOIN prayers p ON p.id = ps.prayer_id AND p.app_id = ?`,
+    )
+      .bind(appId)
+      .all(),
+    env.DB.prepare(
+      `SELECT pch.prayer_id, pch.character_id
+       FROM prayer_characters pch
+       JOIN prayers p ON p.id = pch.prayer_id AND p.app_id = ?`,
+    )
+      .bind(appId)
+      .all(),
+  ]);
+
+  const storiesByPrayer = new Map<string, string[]>();
+  for (const row of storyLinks as any[]) {
+    const list = storiesByPrayer.get(row.prayer_id) ?? [];
+    list.push(row.story_id);
+    storiesByPrayer.set(row.prayer_id, list);
+  }
+  const charsByPrayer = new Map<string, string[]>();
+  for (const row of charLinks as any[]) {
+    const list = charsByPrayer.get(row.prayer_id) ?? [];
+    list.push(row.character_id);
+    charsByPrayer.set(row.prayer_id, list);
+  }
 
   const prayers = (
     await overlayTranslations(env.DB, prayerRows as any[], {
@@ -244,6 +275,8 @@ export async function buildPrayers(env: Env, appId: string, locale: string) {
     return {
       ...rest,
       duration_seconds: Number(audio_duration_seconds) || Number(p.duration_seconds) || 0,
+      related_story_ids: storiesByPrayer.get(p.id) ?? [],
+      related_character_ids: charsByPrayer.get(p.id) ?? [],
     };
   });
 

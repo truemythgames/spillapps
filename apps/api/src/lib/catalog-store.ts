@@ -11,11 +11,25 @@
  * persistent (no TTL) unless a TTL is passed (used for dated keys like SOTD).
  */
 
-const EDGE_TTL = 600;
+const EDGE_TTL = 3600;
 
 /** Workers runtime cache; `default` is missing from lib.dom's CacheStorage type. */
-const edgeCache = (): Cache => (caches as any).default as Cache;
-export { edgeCache };
+const noopCache: Cache = {
+  match: async () => undefined,
+  put: async () => undefined,
+  delete: async () => false,
+  keys: async () => [],
+} as unknown as Cache;
+
+export function edgeCache(): Cache {
+  try {
+    const store = (globalThis as { caches?: { default?: Cache } }).caches?.default;
+    if (store) return store;
+  } catch {
+    // Cache API is optional — never fail a request because it is missing.
+  }
+  return noopCache;
+}
 
 export function catKey(
   name: string,
@@ -62,14 +76,15 @@ export async function readCatalog<T>(
 }
 
 /**
- * Read a catalog payload; if the key was never materialized, bootstrap it
- * from D1 via `build` and persist. If D1 is down too, fall back to the
- * given alternate keys (e.g. the "en" payload for an "es" request).
+ * Read a catalog payload from edge cache / KV only.
+ * Public routes must not touch D1 — a miss used to bootstrap via `build`,
+ * and that path burned the free-tier rows_read cap. Cron + admin rebuild
+ * are the only writers. `build` is kept so call sites stay unchanged.
  */
 export async function loadCatalog<T>(
   kv: KVNamespace,
   key: string,
-  build: () => Promise<T>,
+  _build: () => Promise<T>,
   opts: {
     waitUntil?: (p: Promise<unknown>) => void;
     fallbackKeys?: string[];
@@ -79,20 +94,11 @@ export async function loadCatalog<T>(
   const cached = await readCatalog<T>(kv, key);
   if (cached) return cached;
 
-  try {
-    const data = await build();
-    const write = writeCatalog(kv, key, data, opts.ttlSeconds);
-    if (opts.waitUntil) opts.waitUntil(write);
-    else await write;
-    return data;
-  } catch (err) {
-    console.error(`catalog bootstrap failed for ${key}:`, err);
-    for (const alt of opts.fallbackKeys ?? []) {
-      const fallback = await readCatalog<T>(kv, alt);
-      if (fallback) return fallback;
-    }
-    return null;
+  for (const alt of opts.fallbackKeys ?? []) {
+    const fallback = await readCatalog<T>(kv, alt);
+    if (fallback) return fallback;
   }
+  return null;
 }
 
 /** Persistent by default; pass ttlSeconds only for dated keys (e.g. SOTD). */

@@ -3,6 +3,7 @@
   "compilerOptions": {
     "rootDir": "./src",
     "noEmit": true,
+    "lib": ["ES2022"],
     "types": ["@cloudflare/workers-types"],
     "typeRoots": ["../../node_modules/@types", "../../node_modules"],
     "jsx": "react-jsx",
