@@ -189,7 +189,7 @@ const morePrayers = allPrayers.filter((p) => p.slug !== detail.slug).slice(0, 8)
         <div class="prayer-label">{t(locale, "prayer.label")}</div>
       )}
       <h1>{pageH1}</h1>
-      <div class="hero-download"><StoreButtons variant="hero" /></div>
+      <div class="hero-download"><StoreButtons variant="hero" campaign="es-prayer" /></div>
       {detail.description && <p>{detail.description}</p>}
     </div>
 
@@ -273,7 +273,7 @@ const morePrayers = allPrayers.filter((p) => p.slug !== detail.slug).slice(0, 8)
     <section class="bottom-cta">
       <h2>{t(locale, "prayer.listenOn")}</h2>
       <p>{t(locale, "prayer.listenOnDesc")}</p>
-      <StoreButtons variant="hero" />
+      <StoreButtons variant="hero" campaign="es-prayer" />
     </section>
   </main>
 </Base>

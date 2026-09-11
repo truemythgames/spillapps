@@ -1,13 +1,13 @@
 ---
 import Base from "../../layouts/Base.astro";
 import StoreButtons from "../../components/StoreButtons.astro";
-import { APP_STORE_URL } from "../../lib/stories";
 import { getLocale, localePath, t } from "../../lib/i18n";
 import { verseOfTheDaySeo } from "../../lib/seo";
 import { getVerseOfTheDay, getUpcomingVerses } from "../../lib/daily-verses";
 import { getVerseReflection } from "../../lib/verse-reflections";
 
 const locale = getLocale(Astro.currentLocale);
+const storeCampaign = "es-votd";
 const now = new Date();
 const verse = getVerseOfTheDay(now, locale);
 const verseEn = getVerseOfTheDay(now, "en");
@@ -111,8 +111,7 @@ const webPageLd = {
     .verse-quote { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; }
     .verse-text { font-family: 'Playfair Display', serif; font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; line-height: 1.4; margin-bottom: 1.25rem; color: var(--text); }
     .verse-ref { font-size: 1rem; font-weight: 600; color: var(--primary); }
-    .verse-cta { text-align: center; margin-bottom: 3rem; }
-    .verse-cta-text { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem; }
+    .verse-cta-text { font-size: 0.9rem; color: var(--text-secondary); margin: 1rem 0 0; }
     .widget-promo { background: linear-gradient(135deg, rgba(200, 162, 255, 0.1) 0%, rgba(107, 92, 231, 0.1) 100%); border: 1px solid rgba(200, 162, 255, 0.25); border-radius: 20px; padding: 2.5rem; margin-bottom: 4rem; text-align: center; }
     .widget-promo-badge { display: inline-block; background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)); color: #000; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; padding: 0.35rem 1rem; border-radius: 999px; margin-bottom: 1.25rem; }
     .widget-promo h2 { font-size: 1.5rem; margin-bottom: 0.75rem; }
@@ -162,15 +161,47 @@ const webPageLd = {
       font-style: italic;
       margin-bottom: 1.25rem;
     }
-    .reflection-related {
-      display: block;
-      color: var(--primary);
-      font-weight: 600;
+    .reflection-related-label { display: block; color: var(--text-muted); font-size: 0.8rem; font-weight: 600; margin-bottom: 0.6rem; font-style: normal; }
+    .story-pay-cta {
+      display: inline-block;
+      padding: 0.95rem 1.6rem;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      color: #fff;
+      font-weight: 700;
       text-decoration: none;
-      font-size: 0.95rem;
+      font-size: 1rem;
+      box-shadow: 0 8px 28px rgba(200, 162, 255, 0.28);
     }
-    .reflection-related:hover { text-decoration: underline; }
-    .reflection-related-label { display: block; color: var(--text-muted); font-size: 0.8rem; font-weight: 600; margin-bottom: 0.35rem; font-style: normal; }
+    .story-pay-cta:hover { filter: brightness(1.05); }
+    .cross-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      margin: -0.25rem 0 2rem;
+    }
+    .cross-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.7rem 1.25rem;
+      border-radius: 999px;
+      border: 1px solid var(--surface-border);
+      background: var(--surface);
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.92rem;
+      line-height: 1.3;
+      text-align: center;
+      text-decoration: none;
+      transition: transform 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .cross-btn:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
     .why-section { margin-bottom: 4rem; }
     .why-section h2 { font-size: 1.5rem; margin-bottom: 1rem; }
     .why-section p { color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem; font-size: 1rem; }
@@ -194,7 +225,7 @@ const webPageLd = {
     <div class="votd-hero">
       <p class="votd-date">{today}</p>
       <h1>{t(locale, "votd.h1")}</h1>
-      <div class="hero-download"><StoreButtons variant="hero" /></div>
+      <div class="hero-download"><StoreButtons variant="hero" campaign={storeCampaign} /></div>
       <p>{t(locale, "votd.subtitle")}</p>
     </div>
 
@@ -206,35 +237,19 @@ const webPageLd = {
       </blockquote>
       <p class="verse-ref">{verse.ref}</p>
     </div>
-    <p style="text-align:center;margin:-0.5rem 0 2rem;">
-      <a href={localePath("/prayer-for-today", locale)} style="color:var(--primary);font-weight:600;text-decoration:none;margin-right:1.25rem;">{t(locale, "votd.pftLink")}</a>
-      <a href={localePath("/verses", locale)} style="color:var(--primary);font-weight:600;text-decoration:none;">{t(locale, "votd.versesLink")}</a>
-    </p>
+    <div class="cross-links">
+      <a class="cross-btn" href={localePath("/prayer-for-today", locale)}>{t(locale, "votd.pftLink")}</a>
+      <a class="cross-btn" href={localePath("/verses", locale)}>{t(locale, "votd.versesLink")}</a>
+    </div>
 
     <section class="reflection">
       <h2 class="heading">{t(locale, "votd.reflectionTitle")}</h2>
       <p class="reflection-body">{reflection.body}</p>
       <div class="reflection-q">{reflection.question}</div>
       <span class="reflection-related-label">{t(locale, "votd.relatedStory")}</span>
-      <a class="reflection-related" href={reflection.related.href}>{t(locale, "votd.relatedStoryCta").replace("{title}", reflection.related.label)}</a>
-    </section>
-
-    <div class="verse-cta">
+      <a class="story-pay-cta" href={reflection.related.href}>{t(locale, "votd.relatedStoryCta").replace("{title}", reflection.related.label)}</a>
       <p class="verse-cta-text">{t(locale, "votd.listenCta")}</p>
-      <StoreButtons variant="hero" />
-    </div>
-
-    <div class="widget-promo">
-      <div class="widget-promo-badge">{t(locale, "votd.widgetBadge")}</div>
-      <h2 class="heading">{t(locale, "votd.widgetTitle")}</h2>
-      <p class="widget-promo-desc">{t(locale, "votd.widgetDesc")}</p>
-      <div class="widget-features">
-        <div class="widget-feature"><span class="widget-feature-check">✓</span> {t(locale, "votd.widgetF1")}</div>
-        <div class="widget-feature"><span class="widget-feature-check">✓</span> {t(locale, "votd.widgetF2")}</div>
-        <div class="widget-feature"><span class="widget-feature-check">✓</span> {t(locale, "votd.widgetF3")}</div>
-      </div>
-      <StoreButtons variant="hero" />
-    </div>
+    </section>
 
     <section class="upcoming">
       <h2 class="heading">{t(locale, "votd.upcomingTitle")}</h2>
@@ -254,8 +269,20 @@ const webPageLd = {
     <section class="mid-cta">
       <h2 class="heading">{t(locale, "votd.midCtaTitle")}</h2>
       <p>{t(locale, "votd.midCtaDesc")}</p>
-      <StoreButtons variant="light" />
+      <StoreButtons variant="light" campaign={storeCampaign} />
     </section>
+
+    <div class="widget-promo">
+      <div class="widget-promo-badge">{t(locale, "votd.widgetBadge")}</div>
+      <h2 class="heading">{t(locale, "votd.widgetTitle")}</h2>
+      <p class="widget-promo-desc">{t(locale, "votd.widgetDesc")}</p>
+      <div class="widget-features">
+        <div class="widget-feature"><span class="widget-feature-check">✓</span> {t(locale, "votd.widgetF1")}</div>
+        <div class="widget-feature"><span class="widget-feature-check">✓</span> {t(locale, "votd.widgetF2")}</div>
+        <div class="widget-feature"><span class="widget-feature-check">✓</span> {t(locale, "votd.widgetF3")}</div>
+      </div>
+      <StoreButtons variant="hero" campaign={`${storeCampaign}-widget`} />
+    </div>
 
     <section class="about-section">
       <h2 class="heading">{t(locale, "votd.aboutTitle")}</h2>
@@ -291,7 +318,7 @@ const webPageLd = {
       <p class="final-cta-sub">{t(locale, "votd.finalCtaDesc")}</p>
       <div class="final-cta-stars">★★★★★</div>
       <div class="final-cta-proof">{t(locale, "votd.proofStars")}</div>
-      <StoreButtons variant="light" />
+      <StoreButtons variant="light" campaign={storeCampaign} />
     </section>
     </div>
   </main>

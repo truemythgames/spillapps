@@ -348,7 +348,7 @@ const otherCharacters = allCharacters.filter((c) => c.id !== character.id).slice
         <div class="character-info">
           <div class="character-label">{t(locale, "character.label")}</div>
           <h1>{t(locale, "character.h1").replace("{name}", character.name)}</h1>
-          <div class="hero-download"><StoreButtons variant="hero" /></div>
+          <div class="hero-download"><StoreButtons variant="hero" campaign="es-character" /></div>
           <p class="character-desc">{character.description}</p>
           {stories.length > 0 && <p class="character-meta">{stories.length} {t(locale, "characters.storyCount")}</p>}
         </div>
@@ -408,7 +408,7 @@ const otherCharacters = allCharacters.filter((c) => c.id !== character.id).slice
       ) : (
         <div class="no-stories">
           <p>Las historias de {character.name} están disponibles como audio inmersivo en la app Bible Tea.</p>
-          <StoreButtons variant="hero" />
+          <StoreButtons variant="hero" campaign="es-character" />
         </div>
       )}
     </div>
@@ -475,7 +475,7 @@ const otherCharacters = allCharacters.filter((c) => c.id !== character.id).slice
     <section class="bottom-cta">
       <h2>{t(locale, "character.listenOn")}</h2>
       <p>{t(locale, "character.listenOnDesc")}</p>
-      <StoreButtons variant="hero" />
+      <StoreButtons variant="hero" campaign="es-character" />
     </section>
   </main>
 </Base>

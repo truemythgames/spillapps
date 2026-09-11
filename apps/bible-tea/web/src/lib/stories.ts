@@ -20,6 +20,24 @@ export const APP_STORE_URL =
 export const PLAY_STORE_URL =
   "https://play.google.com/store/apps/details?id=app.bibletea";
 
+/** Campaign token so App Store / Play can attribute installs (e.g. es-votd). */
+export function appStoreUrl(campaign?: string): string {
+  if (!campaign) return APP_STORE_URL;
+  const u = new URL(APP_STORE_URL);
+  u.searchParams.set("ct", campaign);
+  return u.toString();
+}
+
+export function playStoreUrl(campaign?: string): string {
+  if (!campaign) return PLAY_STORE_URL;
+  const u = new URL(PLAY_STORE_URL);
+  u.searchParams.set(
+    "referrer",
+    `utm_source=bibletea.app&utm_medium=web&utm_campaign=${campaign}`,
+  );
+  return u.toString();
+}
+
 export function getCatalog(locale: Locale = "en"): CatalogStory[] {
   if (locale !== "en") {
     const locPath = join(CONTENT_DIR, `story-catalog.${locale}.json`);

@@ -304,10 +304,47 @@ const RELATED: Record<string, { slug: string; en: string; es: string }> = {
   Luke: { slug: "the-good-samaritan", en: "The Good Samaritan", es: "El buen samaritano" },
   John: { slug: "the-woman-at-the-well", en: "The woman at the well", es: "La mujer en el pozo" },
   Acts: { slug: "peters-miracles", en: "Peter's miracles", es: "Los milagros de Pedro" },
-  Romans: { slug: "saul-meets-jesus", en: "Saul meets Jesus", es: "Saulo se encuentra con Jesús" },
+  Romans: { slug: "pauls-letter-to-rome", en: "Paul's letter to Rome", es: "La carta de Pablo a Roma" },
+  "1 Corinthians": { slug: "saul-meets-jesus", en: "Saul meets Jesus", es: "Saulo se encuentra con Jesús" },
+  "2 Corinthians": { slug: "saul-meets-jesus", en: "Saul meets Jesus", es: "Saulo se encuentra con Jesús" },
+  Galatians: { slug: "saul-meets-jesus", en: "Saul meets Jesus", es: "Saulo se encuentra con Jesús" },
+  Ephesians: { slug: "saul-meets-jesus", en: "Saul meets Jesus", es: "Saulo se encuentra con Jesús" },
+  Philippians: { slug: "earthquake-at-philippi", en: "The earthquake at Philippi", es: "Terremoto en Filipos" },
+  Colossians: { slug: "paul-under-house-arrest", en: "Paul under house arrest", es: "Pablo bajo arresto domiciliario" },
+  "1 Thessalonians": { slug: "thessalonica-riot-and-berea", en: "The riot in Thessalonica", es: "Disturbio en Tesalónica" },
+  "2 Thessalonians": { slug: "thessalonica-riot-and-berea", en: "The riot in Thessalonica", es: "Disturbio en Tesalónica" },
+  "1 Timothy": { slug: "paul-and-timothy", en: "Paul and Timothy", es: "Pablo y Timoteo" },
+  "2 Timothy": { slug: "pauls-last-letter", en: "Paul's last letter", es: "La última carta de Pablo" },
+  Titus: { slug: "paul-and-timothy", en: "Paul and Timothy", es: "Pablo y Timoteo" },
+  Philemon: { slug: "paul-under-house-arrest", en: "Paul under house arrest", es: "Pablo bajo arresto domiciliario" },
   Hebrews: { slug: "the-centurions-faith", en: "The centurion's faith", es: "La fe del centurión" },
   James: { slug: "faith-without-works", en: "Faith without works", es: "Fe sin obras" },
+  "1 Peter": { slug: "peters-final-letter", en: "Peter's final letter", es: "La última carta de Pedro" },
+  "2 Peter": { slug: "peters-final-letter", en: "Peter's final letter", es: "La última carta de Pedro" },
+  "1 John": { slug: "the-good-shepherd", en: "The good shepherd", es: "El buen pastor" },
+  "2 John": { slug: "the-good-shepherd", en: "The good shepherd", es: "El buen pastor" },
+  "3 John": { slug: "the-good-shepherd", en: "The good shepherd", es: "El buen pastor" },
+  Jude: { slug: "guard-the-truth", en: "Guard the truth", es: "Guarda la verdad" },
   Revelation: { slug: "the-fall-of-babylon", en: "The fall of Babylon", es: "La caída de Babilonia" },
+  Leviticus: { slug: "offerings-and-sacrifices", en: "Offerings and sacrifices", es: "Ofrendas y sacrificios" },
+  "1 Chronicles": { slug: "solomon-builds-the-temple", en: "Solomon builds the temple", es: "Salomón construye el templo" },
+  "2 Chronicles": { slug: "solomon-builds-the-temple", en: "Solomon builds the temple", es: "Salomón construye el templo" },
+  Ezra: { slug: "the-restored-temple", en: "The restored temple", es: "El templo restaurado" },
+  Nehemiah: { slug: "the-restored-temple", en: "The restored temple", es: "El templo restaurado" },
+  Ecclesiastes: { slug: "solomons-wisdom", en: "Solomon's wisdom", es: "La sabiduría de Salomón" },
+  Lamentations: { slug: "jeremiah-the-weeping-prophet", en: "Jeremiah the weeping prophet", es: "Jeremías, el profeta llorón" },
+  Ezekiel: { slug: "valley-of-dry-bones", en: "The valley of dry bones", es: "El valle de los huesos secos" },
+  Joel: { slug: "pentecost", en: "Pentecost", es: "Pentecostés" },
+  Amos: { slug: "isaiahs-call", en: "Isaiah's call", es: "El llamado de Isaías" },
+  Obadiah: { slug: "jerusalem-burns", en: "Jerusalem burns", es: "Jerusalén arde" },
+  Micah: { slug: "isaiahs-call", en: "Isaiah's call", es: "El llamado de Isaías" },
+  Nahum: { slug: "jerusalem-burns", en: "Jerusalem burns", es: "Jerusalén arde" },
+  Habakkuk: { slug: "god-answers-job", en: "God answers Job", es: "Dios responde a Job" },
+  Zephaniah: { slug: "isaiahs-call", en: "Isaiah's call", es: "El llamado de Isaías" },
+  Haggai: { slug: "the-restored-temple", en: "The restored temple", es: "El templo restaurado" },
+  Zechariah: { slug: "immanuel-prophecy", en: "The Immanuel prophecy", es: "La profecía de Emanuel" },
+  Malachi: { slug: "offerings-and-sacrifices", en: "Offerings and sacrifices", es: "Ofrendas y sacrificios" },
+  "Song of Solomon": { slug: "isaac-and-rebekah", en: "Isaac and Rebekah", es: "Isaac y Rebeca" },
 };
 
 const THEMES: { test: RegExp; en: string; es: string; qEn: string; qEs: string }[] = [
@@ -377,7 +414,11 @@ const FALLBACK = {
 };
 
 function parseBook(enRef: string): string {
-  const m = enRef.match(/^((?:\d\s)?[A-Za-z]+(?:\s[A-Za-z]+)?)\s+\d/);
+  const song = enRef.match(/^(Song of (?:Solomon|Songs))\s+\d/i);
+  if (song) return "Song of Solomon";
+  const numbered = enRef.match(/^(\d\s+[A-Za-z]+)\s+\d/);
+  if (numbered) return numbered[1];
+  const m = enRef.match(/^([A-Za-z]+)\s+\d/);
   return m?.[1] ?? enRef;
 }
 
@@ -407,8 +448,8 @@ export function getVerseReflection(
   const quote = localVerse.text.replace(/\s+/g, " ").trim();
   const body =
     locale === "es"
-      ? `El versículo del día de hoy es ${localVerse.ref}: «${quote}» ${ctx} ${apply} Quédate con esta frase un momento. Luego llévala en el widget gratis de Bible Tea, o escucha la historia detrás del pasaje como audio inmersivo.`
-      : `Today's Bible verse of the day is ${localVerse.ref}: “${quote}” ${ctx} ${apply} Stay with this sentence a minute. Then put it on your home screen with the free Bible Tea widget, or hear the story behind the passage as immersive audio.`;
+      ? `El versículo del día de hoy es ${localVerse.ref}: «${quote}» ${ctx} ${apply} Quédate con esta frase un momento. Luego descarga Bible Tea gratis y escucha la historia detrás del pasaje.`
+      : `Today's Bible verse of the day is ${localVerse.ref}: “${quote}” ${ctx} ${apply} Stay with this sentence a minute. Then download Bible Tea for free and hear the story behind the passage.`;
 
   return {
     body: body.replace(/\s+/g, " ").trim(),

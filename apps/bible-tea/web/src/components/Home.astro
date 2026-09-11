@@ -3,20 +3,17 @@ import Base from "../layouts/Base.astro";
 import StoreButtons from "../components/StoreButtons.astro";
 import CoverImg from "../components/CoverImg.astro";
 import { getImage } from "astro:assets";
-import { APP_STORE_URL, PLAY_STORE_URL, getCatalog, getPlaylists, hasCover } from "../lib/stories";
+import { appStoreUrl, playStoreUrl, getCatalog, getPlaylists, hasCover } from "../lib/stories";
 import { getLocale, localePath, t } from "../lib/i18n";
 import { clampTitle, clampDescription } from "../lib/seo";
 import { getVerseOfTheDay } from "../lib/daily-verses";
 import shotHomeEn from "../assets/screens/screenshot-home.webp";
-import shotDiscoverEn from "../assets/screens/screenshot-discover.webp";
-import shotChatEn from "../assets/screens/screenshot-chat.webp";
-import shotPrayers from "../assets/screens/screenshot-prayers.webp";
-import shotPlayer from "../assets/screens/screenshot-player.webp";
 import shotHomeEs from "../assets/screens/screenshot-home-es.png";
-import shotDiscoverEs from "../assets/screens/screenshot-discover-es.png";
-import shotChatEs from "../assets/screens/screenshot-chat-es.png";
 
 const locale = getLocale(Astro.currentLocale);
+const homeCampaign = locale === "es" ? "es-home" : "en-home";
+const homeApple = appStoreUrl(homeCampaign);
+const homePlay = playStoreUrl(homeCampaign);
 
 const catalog = getCatalog(locale);
 const catalogMap = new Map(catalog.map((s) => [s.id, s]));
@@ -50,40 +47,25 @@ const homeLd = {
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
 };
 
-// No Spanish capture of the Prayers screen yet, so it falls back to English.
-const shots = locale === "es"
-  ? { home: shotHomeEs, discover: shotDiscoverEs, chat: shotChatEs, prayers: shotPrayers, player: shotPlayer }
-  : { home: shotHomeEn, discover: shotDiscoverEn, chat: shotChatEn, prayers: shotPrayers, player: shotPlayer };
-
+const heroSource = locale === "es" ? shotHomeEs : shotHomeEn;
 // Render at native size rather than upscaling, and use getImage (not <Image>)
-// so the hero preload href matches exactly. Heights differ per screenshot
-// because each was cropped to the same headroom above its content.
-const renderShot = async (source: typeof shotHomeEn) => {
-  const out = await getImage({ src: source, width: source.width, format: "webp", quality: 72 });
-  return { src: out.src, width: source.width, height: source.height };
-};
-const [heroShot, discoverShot, chatShot, prayersShot, playerShot] = await Promise.all([
-  renderShot(shots.home),
-  renderShot(shots.discover),
-  renderShot(shots.chat),
-  renderShot(shots.prayers),
-  renderShot(shots.player),
-]);
+// so the hero preload href matches exactly.
+const heroOut = await getImage({ src: heroSource, width: heroSource.width, format: "webp", quality: 72 });
+const heroShot = { src: heroOut.src, width: heroSource.width, height: heroSource.height };
 
-// The home screen is already the hero image, so this section shows the two
-// screens the hero doesn't. Rendered as uniform copy-then-phone rows; CSS
-// flips every other row.
-const screens = [
-  { img: playerShot, title: t(locale, "home.screen5Title"), desc: t(locale, "home.screen5Desc") },
-  { img: discoverShot, title: t(locale, "home.screen2Title"), desc: t(locale, "home.screen2Desc") },
-  { img: prayersShot, title: t(locale, "home.screen4Title"), desc: t(locale, "home.screen4Desc") },
-  { img: chatShot, title: t(locale, "home.screen3Title"), desc: t(locale, "home.screen3Desc") },
-];
+const snapIds = ["noahs-ark", "david-and-goliath", "daniel-and-the-lions-den", "the-resurrection"];
+const snapStories = snapIds
+  .map((id) => catalogMap.get(id))
+  .filter((s): s is NonNullable<typeof s> => Boolean(s && hasCover(s.id)));
+const playStory = catalogMap.get("the-prodigal-son");
+const prayerStory = catalogMap.get("gethsemane");
 
 const featuredIds = [
-  "creation", "adam-and-eve", "david-and-goliath", "jonah-and-the-whale",
-  "the-prodigal-son", "crossing-the-red-sea", "daniel-and-the-lions-den",
-  "the-resurrection", "samson-and-delilah", "ruth-and-naomi",
+  "creation", "adam-and-eve", "noahs-ark", "david-and-goliath",
+  "jonah-and-the-whale", "the-prodigal-son", "crossing-the-red-sea",
+  "daniel-and-the-lions-den", "the-resurrection", "samson-and-delilah",
+  "ruth-and-naomi", "gethsemane", "the-good-samaritan", "jacobs-ladder",
+  "isaac-and-rebekah", "hosea-and-gomer",
 ];
 const storyCards = featuredIds
   .map((id) => catalogMap.get(id))
@@ -116,38 +98,67 @@ const featureIcons = [
   '<path d="M20 15a3 3 0 0 1-3 3H8l-4 3V6a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3z"/>',
   '<rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/>',
 ];
-const features = featureIcons.map((icon, i) => ({
-  icon,
-  title: t(locale, `home.feature${i + 1}Title` as any),
-  desc: t(locale, `home.feature${i + 1}Desc` as any),
-}));
+const gridFeatures = [
+  { icon: featureIcons[0], title: t(locale, "home.feature1Title"), desc: t(locale, "home.feature1Desc") },
+  { icon: featureIcons[5], title: t(locale, "home.feature6Title"), desc: t(locale, "home.feature6Desc") },
+  { icon: featureIcons[9], title: t(locale, "home.feature10Title"), desc: t(locale, "home.feature10Desc") },
+  { icon: featureIcons[6], title: t(locale, "home.feature7Title"), desc: t(locale, "home.feature7Desc") },
+  { icon: featureIcons[3], title: t(locale, "home.feature4Title"), desc: t(locale, "home.feature4Desc") },
+  { icon: featureIcons[8], title: t(locale, "home.screen3Title"), desc: t(locale, "home.screen3Desc") },
+];
+
+const names = locale === "es"
+  ? [
+      { id: "ch-moses", name: "Moisés" }, { id: "ch-david", name: "David" }, { id: "ch-ruth", name: "Rut" },
+      { id: "ch-jonah", name: "Jonás" }, { id: "ch-mary", name: "María" }, { id: "ch-paul", name: "Pablo" },
+      { id: "ch-esther", name: "Ester" }, { id: "ch-noah", name: "Noé" }, { id: "ch-abraham", name: "Abraham" },
+      { id: "ch-jesus", name: "Jesús" },
+    ]
+  : [
+      { id: "ch-moses", name: "Moses" }, { id: "ch-david", name: "David" }, { id: "ch-ruth", name: "Ruth" },
+      { id: "ch-jonah", name: "Jonah" }, { id: "ch-mary", name: "Mary" }, { id: "ch-paul", name: "Paul" },
+      { id: "ch-esther", name: "Esther" }, { id: "ch-noah", name: "Noah" }, { id: "ch-abraham", name: "Abraham" },
+      { id: "ch-jesus", name: "Jesus" },
+    ];
+
+const faqs = [
+  { q: t(locale, "home.faqQ1"), a: t(locale, "home.faqA1") },
+  { q: t(locale, "home.faqQ2"), a: t(locale, "home.faqA2") },
+  { q: t(locale, "home.faqQ3"), a: t(locale, "home.faqA3") },
+  { q: t(locale, "home.faqQ4"), a: t(locale, "home.faqA4") },
+];
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
 
 const reviewsByLocale = {
   en: [
-    { text: "This app completely changed how I engage with the Bible. The narrations are beautiful and the artwork for each story is stunning. I listen every morning with my coffee.", name: "Sarah M.", initial: "S", date: "May 2026" },
-    { text: "Finally an app that makes Bible stories feel alive. My kids love listening to it before bed. The Story of the Day feature keeps us coming back every single day.", name: "James R.", initial: "J", date: "June 2026" },
-    { text: "I've tried so many Bible apps and this is the first one that actually made me excited to open it. The playlists are perfectly curated and the audio quality is incredible.", name: "Maria L.", initial: "M", date: "May 2026" },
-    { text: "Love the 'Spill the Tea' vibe — it makes scripture feel so approachable. I listen during my commute and it's become the best part of my day. Highly recommend!", name: "David K.", initial: "D", date: "July 2026" },
-    { text: "The character profiles are such a smart feature. Following Moses across different stories gives you so much more context. Beautiful design too — dark mode is perfect.", name: "Anna T.", initial: "A", date: "June 2026" },
-    { text: "As someone who grew up with these stories, hearing them narrated with such care and emotion brought tears to my eyes. This is how scripture should be experienced.", name: "Robert P.", initial: "R", date: "May 2026" },
+    { text: "The narrations are beautiful and the artwork is stunning. I listen every morning with my coffee.", name: "Sarah M.", initial: "S", role: "Morning" },
+    { text: "My kids love it before bed. The Story of the Day keeps us coming back.", name: "James R.", initial: "J", role: "Parent" },
+    { text: "I listen on my commute. Best part of the day.", name: "David K.", initial: "D", role: "Commute" },
   ],
   es: [
-    { text: "Esta app cambió completamente la forma en que me acerco a la Biblia. Las narraciones son hermosas y las ilustraciones de cada historia son impresionantes. La escucho cada mañana con mi café.", name: "Sarah M.", initial: "S", date: "Mayo 2026" },
-    { text: "Por fin una app que hace que las historias bíblicas cobren vida. A mis hijos les encanta escucharla antes de dormir. La Historia del Día nos hace volver cada día.", name: "James R.", initial: "J", date: "Junio 2026" },
-    { text: "He probado muchas apps de la Biblia y esta es la primera que realmente me emociona abrir. Las listas están perfectamente curadas y la calidad del audio es increíble.", name: "Maria L.", initial: "M", date: "Mayo 2026" },
-    { text: "Me encanta el estilo 'Spill the Tea' — hace que las Escrituras se sientan muy accesibles. La escucho durante mi viaje al trabajo y se ha convertido en la mejor parte de mi día. ¡Muy recomendada!", name: "David K.", initial: "D", date: "Julio 2026" },
-    { text: "Los perfiles de personajes son una función muy inteligente. Seguir a Moisés a través de diferentes historias te da mucho más contexto. El diseño también es hermoso — el modo oscuro es perfecto.", name: "Anna T.", initial: "A", date: "Junio 2026" },
-    { text: "Como alguien que creció con estas historias, escucharlas narradas con tanto cuidado y emoción me hizo llorar. Así es como se deberían experimentar las Escrituras.", name: "Robert P.", initial: "R", date: "Mayo 2026" },
+    { text: "Las narraciones son hermosas y el arte es impresionante. La escucho cada mañana con mi café.", name: "Sarah M.", initial: "S", role: "Mañana" },
+    { text: "A mis hijos les encanta antes de dormir. La Historia del Día nos hace volver.", name: "James R.", initial: "J", role: "Padre" },
+    { text: "La escucho en el viaje al trabajo. La mejor parte del día.", name: "David K.", initial: "D", role: "Viaje" },
   ],
 };
 const reviews = reviewsByLocale[locale] ?? reviewsByLocale.en;
 
 const verse = getVerseOfTheDay(new Date(), locale === "es" ? "es" : "en");
 const votdHref = locale === "es" ? "/es/versiculo-del-dia/" : "/verse-of-the-day/";
+const widgetHref = localePath("/widget", locale);
 const iconAlt = locale === "es" ? "Ícono de Bible Tea" : "Bible Tea App Icon";
 ---
 
-<Base title={title} description={description} canonicalPath="/" jsonLd={homeLd} preloadImage={heroShot.src}>
+<Base title={title} description={description} canonicalPath="/" jsonLd={[homeLd, faqLd]} preloadImage={heroShot.src}>
   <style>
     /* Phone frame — shared by hero and screens */
     .phone {
@@ -164,8 +175,8 @@ const iconAlt = locale === "es" ? "Ícono de Bible Tea" : "Bible Tea App Icon";
     }
     .phone-screen img { display: block; width: 100%; height: auto; }
     /* Coloured bloom behind each device so the shots don't read as flat cards. */
-    .hero-phone, .screen-phone { position: relative; }
-    .hero-phone::after, .screen-phone::after {
+    .hero-phone, .spotlight-visual, .dive-photo { position: relative; }
+    .hero-phone::after, .spotlight-visual::after, .dive-photo::after {
       content: '';
       position: absolute;
       inset: -12% -22%;
@@ -174,15 +185,6 @@ const iconAlt = locale === "es" ? "Ícono de Bible Tea" : "Bible Tea App Icon";
       background: radial-gradient(circle, rgba(200, 162, 255, 0.2) 0%, transparent 68%);
       filter: blur(26px);
       pointer-events: none;
-    }
-    .screen-row:nth-child(2) .screen-phone::after {
-      background: radial-gradient(circle, rgba(255, 209, 102, 0.16) 0%, transparent 68%);
-    }
-    .screen-row:nth-child(3) .screen-phone::after {
-      background: radial-gradient(circle, rgba(107, 92, 231, 0.3) 0%, transparent 68%);
-    }
-    .screen-row:nth-child(4) .screen-phone::after {
-      background: radial-gradient(circle, rgba(200, 162, 255, 0.22) 0%, transparent 68%);
     }
 
     /* Scroll-reveal. Only armed once JS confirms it can un-hide the content. */
@@ -261,6 +263,15 @@ const iconAlt = locale === "es" ? "Ícono de Bible Tea" : "Bible Tea App Icon";
       line-height: 1.7;
     }
     .hero-download :global(.store-buttons) { justify-content: flex-start; }
+    .hero-jump {
+      display: inline-block;
+      margin-top: 1rem;
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+    }
+    .hero-jump:hover { text-decoration: underline; }
     .hero-proof {
       display: flex;
       align-items: center;
@@ -309,6 +320,122 @@ const iconAlt = locale === "es" ? "Ícono de Bible Tea" : "Bible Tea App Icon";
       line-height: 1.4;
     }
 
+    .trust-names {
+      overflow: hidden;
+      margin-top: 1.25rem;
+      mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    }
+    .trust-track {
+      display: flex;
+      gap: 2rem;
+      width: max-content;
+      animation: scroll-left var(--marquee-duration, 80s) linear infinite;
+    }
+    .trust-track:hover { animation-play-state: paused; }
+    .trust-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .trust-name:hover { color: var(--primary); }
+
+    .steps { padding: 1rem 2rem 5rem; max-width: 1120px; margin: 0 auto; scroll-margin-top: 6rem; }
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+    .step-card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 16px;
+      padding: 1.6rem 1.4rem;
+    }
+    .step-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(200, 162, 255, 0.12);
+      border: 1px solid rgba(200, 162, 255, 0.22);
+      color: var(--primary);
+      margin-bottom: 1.1rem;
+    }
+    .step-icon svg { width: 26px; height: 26px; }
+    .step-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+    .step-card p { color: var(--text-secondary); font-size: 0.92rem; line-height: 1.65; }
+
+    .spotlight {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 1rem 2rem 5.5rem;
+      scroll-margin-top: 6rem;
+    }
+    .spotlight-row {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .spotlight-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(200, 162, 255, 0.1);
+      border: 1px solid rgba(200, 162, 255, 0.25);
+      color: var(--primary);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      margin-bottom: 1.1rem;
+    }
+    .spotlight-title {
+      font-size: clamp(2rem, 4.2vw, 3.1rem);
+      line-height: 1.08;
+      margin-bottom: 1.15rem;
+    }
+    .spotlight-copy p {
+      color: var(--text-secondary);
+      line-height: 1.75;
+      font-size: 1.05rem;
+      max-width: 34rem;
+    }
+    .spotlight-visual { width: 100%; max-width: 460px; justify-self: end; }
+    .spotlight-mosaic {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      position: relative;
+    }
+    .spotlight-tile {
+      display: block;
+      overflow: hidden;
+      border-radius: 1.5rem;
+      aspect-ratio: 1;
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      text-decoration: none;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+    .spotlight-tile:nth-child(even) { margin-top: 1.5rem; }
+    .spotlight-tile:hover { transform: translateY(-3px); border-color: var(--primary); }
+    .spotlight-tile :global(img) {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
     /* Screens */
     .screens { padding: 2rem 2rem 6rem; max-width: 1120px; margin: 0 auto; }
     .section-title {
@@ -329,8 +456,9 @@ const iconAlt = locale === "es" ? "Ícono de Bible Tea" : "Bible Tea App Icon";
       gap: 4rem;
       align-items: center;
     }
-    /* Zig-zag: every other row puts the phone on the left. */
-    .screen-row:nth-child(even) .screen-phone { order: -1; }
+    /* Zig-zag: every other row puts the proof visual on the left. */
+    .screen-row:nth-child(even) .dive-photo,
+    .screen-row:nth-child(even) .dive-verse { order: -1; }
     .screen-copy h3 {
       font-family: 'Playfair Display', serif;
       font-size: clamp(1.3rem, 2.2vw, 1.75rem);
@@ -338,14 +466,75 @@ const iconAlt = locale === "es" ? "Ícono de Bible Tea" : "Bible Tea App Icon";
       line-height: 1.25;
     }
     .screen-copy p { color: var(--text-secondary); line-height: 1.75; font-size: 0.98rem; }
-    .screen-phone { justify-self: center; width: 100%; max-width: 272px; }
+    .dive-list { list-style: none; padding: 0; margin: 1.15rem 0 0; }
+    .dive-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      color: var(--text);
+      font-size: 0.92rem;
+      font-weight: 600;
+      line-height: 1.45;
+      margin-bottom: 0.7rem;
+      text-align: left;
+    }
+    .dive-list li::before {
+      content: '';
+      flex: 0 0 1.35rem;
+      width: 1.35rem;
+      height: 1.35rem;
+      margin-top: 0.05rem;
+      border-radius: 50%;
+      background-color: rgba(200, 162, 255, 0.14);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c8a2ff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5L20 6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 0.72rem;
+    }
+    .dive-link {
+      display: inline-block;
+      margin-top: 1rem;
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .dive-link:hover { text-decoration: underline; }
+    .dive-photo {
+      display: block;
+      width: 100%;
+      max-width: 380px;
+      justify-self: center;
+      overflow: hidden;
+      border-radius: 1.75rem;
+      aspect-ratio: 4 / 5;
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      text-decoration: none;
+    }
+    .dive-photo :global(img) {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .dive-verse {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 20px;
+      padding: 2.25rem 1.75rem;
+      text-align: center;
+      max-width: 26rem;
+      margin-inline: auto;
+    }
+    .dive-verse .votd-label { margin-bottom: 1rem; }
+    .dive-verse .votd-text { font-size: clamp(1.15rem, 2.4vw, 1.45rem); margin-bottom: 0.75rem; }
 
     /* Showcase */
     .showcase { padding: 2rem 0 5rem; overflow: hidden; }
     .card-scroll {
       display: flex;
       gap: 1.25rem;
-      animation: scroll-left 40s linear infinite;
+      animation: scroll-left var(--marquee-duration, 80s) linear infinite;
       width: max-content;
     }
     .card-scroll:hover { animation-play-state: paused; }
@@ -356,7 +545,7 @@ const iconAlt = locale === "es" ? "Ícono de Bible Tea" : "Bible Tea App Icon";
     .card-scroll-reverse {
       display: flex;
       gap: 1.25rem;
-      animation: scroll-right 45s linear infinite;
+      animation: scroll-right var(--marquee-duration, 80s) linear infinite;
       width: max-content;
       margin-top: 1.5rem;
     }
@@ -366,7 +555,7 @@ const iconAlt = locale === "es" ? "Ícono de Bible Tea" : "Bible Tea App Icon";
       100% { transform: translateX(0); }
     }
     @media (prefers-reduced-motion: reduce) {
-      .card-scroll, .card-scroll-reverse { animation: none; }
+      .trust-track, .card-scroll, .card-scroll-reverse { animation: none; }
     }
     .story-card {
       flex-shrink: 0;
@@ -557,7 +746,35 @@ const iconAlt = locale === "es" ? "Ícono de Bible Tea" : "Bible Tea App Icon";
       flex-shrink: 0;
     }
     .review-name { font-weight: 600; font-size: 0.88rem; color: var(--text); }
-    .review-date { font-size: 0.75rem; color: var(--text-muted); }
+    .review-role { font-size: 0.75rem; color: var(--text-muted); }
+
+    .offer { padding: 1rem 2rem 3rem; max-width: 640px; margin: 0 auto; }
+    .offer-card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 20px;
+      padding: 2.25rem 2rem;
+      text-align: center;
+    }
+    .offer-card h2 { font-size: clamp(1.5rem, 3vw, 2rem); margin-bottom: 0.75rem; }
+    .offer-card > p { color: var(--text-secondary); margin-bottom: 1.25rem; line-height: 1.65; }
+    .offer-list { list-style: none; padding: 0; margin: 0 auto 1.75rem; max-width: 22rem; text-align: left; }
+    .offer-list li {
+      padding: 0.45rem 0;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .offer-list li::before { content: '✓ '; color: var(--primary); }
+
+    .home-faq { padding: 1rem 2rem 4rem; max-width: 760px; margin: 0 auto; }
+    .faq-item { background: var(--surface); border: 1px solid var(--surface-border); border-radius: 12px; margin-bottom: 0.6rem; overflow: hidden; }
+    .faq-item:hover { border-color: var(--primary); }
+    .faq-item summary { padding: 1rem 1.25rem; cursor: pointer; font-weight: 600; font-size: 0.95rem; color: var(--text); list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after { content: '+'; font-size: 1.25rem; color: var(--primary); flex-shrink: 0; }
+    .faq-item[open] summary::after { content: '−'; }
+    .faq-item p { padding: 0 1.25rem 1rem; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
 
     /* Final CTA */
     .cta-section { padding: 5rem 2rem 6rem; text-align: center; position: relative; }
@@ -642,11 +859,23 @@ const iconAlt = locale === "es" ? "Ícono de Bible Tea" : "Bible Tea App Icon";
       .hero-sub { margin-inline: auto; }
       .hero-download :global(.store-buttons) { justify-content: center; }
       .hero-proof { justify-content: center; }
+      .steps-grid { grid-template-columns: 1fr; }
+      .spotlight { padding: 1rem 1.5rem 4rem; text-align: center; }
+      .spotlight-row { grid-template-columns: 1fr; gap: 1.5rem; }
+      .spotlight-copy p { margin-inline: auto; }
+      .spotlight-copy .dive-list,
+      .screen-copy .dive-list {
+        width: fit-content;
+        max-width: 100%;
+        margin-inline: auto;
+      }
+      .spotlight-visual { order: -1; max-width: 380px; justify-self: center; margin-inline: auto; }
       .screens-grid { gap: 3.25rem; }
       .screen-row { grid-template-columns: 1fr; gap: 1.25rem; }
       .screen-copy { text-align: center; max-width: 32rem; margin-inline: auto; }
-      .screens-grid .screen-row .screen-phone { order: -1; }
-      .screen-phone { max-width: 220px; margin-inline: auto; }
+      .screens-grid .screen-row .dive-photo,
+      .screens-grid .screen-row .dive-verse { order: -1; }
+      .dive-photo { max-width: 280px; margin-inline: auto; }
     }
     @media (max-width: 640px) {
       .hero { padding: 5.5rem 1.25rem 2.5rem; }
@@ -661,8 +890,9 @@ const iconAlt = locale === "es" ? "Ícono de Bible Tea" : "Bible Tea App Icon";
       .section-sub { margin-bottom: 2.5rem; }
       .features { padding: 3rem 1.25rem 4rem; }
       .features-grid, .reviews-grid { grid-template-columns: 1fr; }
-      .votd-home { padding: 1rem 1.25rem 4rem; }
-      .votd-inner { padding: 2.25rem 1.5rem; }
+      .steps { padding: 1rem 1.25rem 4rem; }
+      .spotlight { padding: 0.5rem 1.25rem 3.5rem; }
+      .offer, .home-faq { padding-left: 1.25rem; padding-right: 1.25rem; }
       .reviews { padding: 1rem 1.25rem 4rem; }
       .cta-section { padding: 3.5rem 1.25rem 5rem; }
       .story-card { width: 160px; }
@@ -688,7 +918,8 @@ const iconAlt = locale === "es" ? "Ícono de Bible Tea" : "Bible Tea App Icon";
         <div class="hero-badge">{t(locale, "home.badge")}</div>
         <h1 class="heading">{t(locale, "home.h1a")}<br />{t(locale, "home.h1b")}</h1>
         <p class="hero-sub">{t(locale, "home.subtitle")}</p>
-        <div class="hero-download"><StoreButtons variant="hero" /></div>
+        <div class="hero-download"><StoreButtons variant="hero" campaign={homeCampaign} /></div>
+        <a class="hero-jump" href="#how-it-works">{t(locale, "home.seeHow")} →</a>
         <div class="hero-proof">
           <span class="stars" aria-hidden="true">★★★★★</span>
           <span><strong>{RATING}</strong> {t(locale, "home.proofAvg")}</span>
@@ -722,33 +953,151 @@ const iconAlt = locale === "es" ? "Ícono de Bible Tea" : "Bible Tea App Icon";
         </div>
       ))}
     </div>
+    <div class="trust-names">
+      <div class="trust-track">
+        {names.concat(names).map((n) => (
+          <a href={localePath(`/characters/${n.id}`, locale)} class="trust-name">{n.name}</a>
+        ))}
+      </div>
+    </div>
   </section>
 
-  <section class="screens">
-    <h2 class="heading section-title">{t(locale, "home.screensTitle")}</h2>
-    <p class="section-sub">{t(locale, "home.screensSub")}</p>
-    <div class="screens-grid">
-      {screens.map((s) => (
-        <div class="screen-row reveal">
-          <div class="screen-copy">
-            <h3>{s.title}</h3>
-            <p>{s.desc}</p>
+  <section class="steps" id="how-it-works">
+    <h2 class="heading section-title">{t(locale, "home.stepsTitle")}</h2>
+    <p class="section-sub">{t(locale, "home.stepsSub")}</p>
+    <div class="steps-grid">
+      <div class="step-card reveal">
+        <div class="step-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="7" y="2.5" width="10" height="19" rx="2.2"/>
+            <path d="M11 18.5h2"/>
+          </svg>
+        </div>
+        <h3>{t(locale, "home.step1Title")}</h3>
+        <p>{t(locale, "home.step1Desc")}</p>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M10 8.8l6 3.2-6 3.2V8.8z" fill="currentColor" stroke="none"/>
+          </svg>
+        </div>
+        <h3>{t(locale, "home.step2Title")}</h3>
+        <p>{t(locale, "home.step2Desc")}</p>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 20.5s-7.5-4.8-7.5-10A4.5 4.5 0 0 1 12 7.5a4.5 4.5 0 0 1 7.5 3c0 5.2-7.5 10-7.5 10z"/>
+          </svg>
+        </div>
+        <h3>{t(locale, "home.step3Title")}</h3>
+        <p>{t(locale, "home.step3Desc")}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="spotlight" id="hear">
+    <div class="spotlight-row reveal">
+      <div class="spotlight-copy">
+        <div class="spotlight-badge">{t(locale, "home.snapBadge")}</div>
+        <h2 class="heading spotlight-title">{t(locale, "home.snapTitleA")}<br />{t(locale, "home.snapTitleB")}</h2>
+        <p>{t(locale, "home.snapDesc")}</p>
+        <ul class="dive-list">
+          <li>{t(locale, "home.snapB1")}</li>
+          <li>{t(locale, "home.snapB2")}</li>
+          <li>{t(locale, "home.snapB3")}</li>
+        </ul>
+      </div>
+      <div class="spotlight-visual">
+        <div class="spotlight-mosaic">
+          {snapStories.map((s) => (
+            <a class="spotlight-tile" href={localePath(`/stories/${s.id}`, locale)}>
+              <CoverImg storyId={s.id} alt={s.title} width={300} height={300} />
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features" id="features">
+    <h2 class="heading section-title">{t(locale, "home.gridTitle")}</h2>
+    <p class="section-sub">{t(locale, "home.gridSub")}</p>
+    <div class="features-grid">
+      {gridFeatures.map((f) => (
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={f.icon} />
           </div>
-          <div class="screen-phone">
-            <div class="phone">
-              <div class="phone-screen">
-                <img src={s.img.src} alt={s.title} width={s.img.width} height={s.img.height} loading="lazy" decoding="async" />
-              </div>
-            </div>
-          </div>
+          <h3>{f.title}</h3>
+          <p>{f.desc}</p>
         </div>
       ))}
     </div>
   </section>
 
+  <section class="screens" id="stories">
+    <div class="screens-grid">
+      <div class="screen-row reveal">
+        <div class="screen-copy">
+          <h3>{t(locale, "home.screen5Title")}</h3>
+          <p>{t(locale, "home.screen5Desc")}</p>
+          <ul class="dive-list">
+            <li>{t(locale, "home.dive1b1")}</li>
+            <li>{t(locale, "home.dive1b2")}</li>
+            <li>{t(locale, "home.dive1b3")}</li>
+          </ul>
+        </div>
+        {playStory && hasCover(playStory.id) && (
+          <a class="dive-photo" href={localePath(`/stories/${playStory.id}`, locale)}>
+            <CoverImg storyId={playStory.id} alt={playStory.title} width={400} height={500} />
+          </a>
+        )}
+      </div>
+
+      <div class="screen-row reveal" id="widget">
+        <div class="screen-copy">
+          <h3>{t(locale, "home.dive2Title")}</h3>
+          <p>{t(locale, "home.dive2Desc")}</p>
+          <ul class="dive-list">
+            <li>{t(locale, "home.dive2b1")}</li>
+            <li>{t(locale, "home.dive2b2")}</li>
+            <li>{t(locale, "home.dive2b3")}</li>
+          </ul>
+          <a class="dive-link" href={widgetHref}>{t(locale, "home.dive2Link")} →</a>
+        </div>
+        <div class="dive-verse">
+          <div class="votd-label">{t(locale, "home.votdLabel")}</div>
+          <blockquote class="votd-text heading">"{verse.text}"</blockquote>
+          <p class="votd-ref">{verse.ref}</p>
+          <a href={votdHref} class="votd-link">{t(locale, "home.votdLink")} →</a>
+        </div>
+      </div>
+
+      <div class="screen-row reveal" id="prayers">
+        <div class="screen-copy">
+          <h3>{t(locale, "home.screen4Title")}</h3>
+          <p>{t(locale, "home.screen4Desc")}</p>
+          <ul class="dive-list">
+            <li>{t(locale, "home.dive3b1")}</li>
+            <li>{t(locale, "home.dive3b2")}</li>
+            <li>{t(locale, "home.dive3b3")}</li>
+          </ul>
+        </div>
+        {prayerStory && hasCover(prayerStory.id) && (
+          <a class="dive-photo" href={localePath(`/stories/${prayerStory.id}`, locale)}>
+            <CoverImg storyId={prayerStory.id} alt={prayerStory.title} width={400} height={500} />
+          </a>
+        )}
+      </div>
+    </div>
+  </section>
+
   <section class="showcase">
-    <h2 class="heading section-title">{t(locale, "home.showcaseTitle")}</h2>
-    <p class="section-sub">{t(locale, "home.showcaseSub")}</p>
+    <h2 class="heading section-title">{t(locale, "home.galleryTitle")}</h2>
+    <p class="section-sub">{t(locale, "home.gallerySub")}</p>
     <div style="overflow: hidden;">
       <div class="card-scroll">
         {storyCards.concat(storyCards).map((s) => (
@@ -775,44 +1124,19 @@ const iconAlt = locale === "es" ? "Ícono de Bible Tea" : "Bible Tea App Icon";
     </div>
   </section>
 
-  <section class="features">
-    <h2 class="heading section-title" style="margin-bottom: 3rem;">{t(locale, "home.featuresTitle")}</h2>
-    <div class="features-grid">
-      {features.map((f) => (
-        <div class="feature-card reveal">
-          <div class="feature-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={f.icon} />
-          </div>
-          <h3>{f.title}</h3>
-          <p>{f.desc}</p>
-        </div>
-      ))}
-    </div>
-  </section>
-
-  <section class="votd-home">
-    <div class="votd-inner">
-      <div class="votd-label">{t(locale, "home.votdLabel")}</div>
-      <blockquote class="votd-text heading">"{verse.text}"</blockquote>
-      <p class="votd-ref">{verse.ref}</p>
-      <a href={votdHref} class="votd-link">{t(locale, "home.votdLink")} →</a>
-    </div>
-  </section>
-
-  <section class="reviews">
+  <section class="reviews" id="reviews">
     <h2 class="heading section-title">{t(locale, "home.reviewsTitle")}</h2>
     <div class="reviews-stars" aria-hidden="true">★★★★★</div>
     <p class="section-sub">{t(locale, "home.reviewsSub")}</p>
     <div class="reviews-grid">
       {reviews.map((r) => (
         <div class="review-card reveal">
-          <div class="review-stars" aria-hidden="true">★★★★★</div>
           <p class="review-text">"{r.text}"</p>
           <div class="review-author">
             <div class="review-avatar" aria-hidden="true">{r.initial}</div>
             <div>
               <div class="review-name">{r.name}</div>
-              <div class="review-date">{r.date}</div>
+              <div class="review-role">{r.role}</div>
             </div>
           </div>
         </div>
@@ -820,12 +1144,35 @@ const iconAlt = locale === "es" ? "Ícono de Bible Tea" : "Bible Tea App Icon";
     </div>
   </section>
 
+  <section class="offer">
+    <div class="offer-card reveal">
+      <h2 class="heading">{t(locale, "home.offerTitle")}</h2>
+      <p>{t(locale, "home.offerLead")}</p>
+      <ul class="offer-list">
+        <li>{t(locale, "home.offer1")}</li>
+        <li>{t(locale, "home.offer2")}</li>
+        <li>{t(locale, "home.offer3")}</li>
+      </ul>
+      <StoreButtons variant="hero" campaign={homeCampaign} />
+    </div>
+  </section>
+
+  <section class="home-faq">
+    <h2 class="heading section-title">{t(locale, "home.faqTitle")}</h2>
+    {faqs.map((f) => (
+      <details class="faq-item">
+        <summary>{f.q}</summary>
+        <p>{f.a}</p>
+      </details>
+    ))}
+  </section>
+
   <section class="cta-section">
     <div class="cta-inner">
       <img src="/icon-sm.webp" alt={iconAlt} class="cta-icon" width="76" height="76" loading="lazy" decoding="async" />
       <h2 class="heading">{t(locale, "home.ctaTitle")}</h2>
       <p>{t(locale, "home.ctaSub")}</p>
-      <StoreButtons variant="light" />
+      <StoreButtons variant="light" campaign={homeCampaign} />
     </div>
   </section>
 
@@ -835,8 +1182,8 @@ const iconAlt = locale === "es" ? "Ícono de Bible Tea" : "Bible Tea App Icon";
       <div class="sticky-name">Bible Tea</div>
       <div class="sticky-tag">{t(locale, "home.stickyTag")}</div>
     </div>
-    <a href={APP_STORE_URL} class="sticky-btn nav-store-apple" aria-label={t(locale, "nav.appStore")}>{t(locale, "home.stickyCta")}</a>
-    <a href={PLAY_STORE_URL} class="sticky-btn nav-store-play" aria-label={t(locale, "nav.googlePlay")}>{t(locale, "home.stickyCta")}</a>
+    <a href={homeApple} class="sticky-btn nav-store-apple" aria-label={t(locale, "nav.appStore")}>{t(locale, "home.stickyCta")}</a>
+    <a href={homePlay} class="sticky-btn nav-store-play" aria-label={t(locale, "nav.googlePlay")}>{t(locale, "home.stickyCta")}</a>
   </div>
 
   <script is:inline>
@@ -908,6 +1255,25 @@ const iconAlt = locale === "es" ? "Ícono de Bible Tea" : "Bible Tea App Icon";
           });
         }, { threshold: 0.5 });
         document.querySelectorAll('.stat-value').forEach(function (el) { counters.observe(el); });
+      }
+
+      // Same pixels-per-second on every strip so the long cover row
+      // does not race the short name ticker.
+      if (motion) {
+        var marquees = document.querySelectorAll('.trust-track, .card-scroll, .card-scroll-reverse');
+        var syncMarquees = function () {
+          marquees.forEach(function (el) {
+            var distance = el.scrollWidth / 2;
+            if (distance < 10) return;
+            el.style.setProperty('--marquee-duration', (distance / 40) + 's');
+          });
+        };
+        syncMarquees();
+        window.addEventListener('load', syncMarquees);
+        if (window.ResizeObserver) {
+          var ro = new ResizeObserver(syncMarquees);
+          marquees.forEach(function (el) { ro.observe(el); });
+        }
       }
 
     })();

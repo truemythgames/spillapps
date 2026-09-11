@@ -64,7 +64,7 @@ const listingFaqs = [
   },
   {
     q: "Is Bible Tea free?",
-    a: "The app is free to download. Listening starts with a free trial; full access to the story library is a subscription. No ads, no account required to try.",
+    a: "Download Bible Tea for free on iOS or Android and hear the stories. No ads.",
   },
   {
     q: "Can I read Bible stories on the website?",
@@ -326,7 +326,7 @@ const jsonLdArray = [collectionLd, itemListLd, appLd, faqLd, breadcrumbLd];
     </div>
     <div class="stories-hero">
       <h1>{t(locale, "stories.h1")}</h1>
-      <div class="hero-download"><StoreButtons variant="hero" /></div>
+      <div class="hero-download"><StoreButtons variant="hero" campaign="en-stories" /></div>
       <p>
         {t(locale, "stories.subtitle")}
       </p>
@@ -364,7 +364,7 @@ const jsonLdArray = [collectionLd, itemListLd, appLd, faqLd, breadcrumbLd];
     <section class="bottom-cta">
       <h2 class="heading">{t(locale, "stories.ctaTitle")}</h2>
       <p>{t(locale, "stories.ctaDesc")}</p>
-      <StoreButtons variant="hero" />
+      <StoreButtons variant="hero" campaign="en-stories" />
     </section>
   </main>
 </Base>

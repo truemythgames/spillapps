@@ -507,7 +507,7 @@ const loveCouples = playlist.id === "pl-love"
 
       <div class="playlist-hero">
         <h1>{playlist.name}</h1>
-        <div class="hero-download"><StoreButtons variant="hero" /></div>
+        <div class="hero-download"><StoreButtons variant="hero" campaign="es-playlist" /></div>
         <p>{playlist.description}</p>
         {loveCouples.length > 0 && (
           <div class="couple-list">
@@ -599,7 +599,7 @@ const loveCouples = playlist.id === "pl-love"
     <section class="bottom-cta">
       <h2>{t(locale, "playlist.listenOn")}</h2>
       <p>{t(locale, "playlist.listenOnDesc")}</p>
-      <StoreButtons variant="hero" />
+      <StoreButtons variant="hero" campaign="es-playlist" />
     </section>
   </main>
 </Base>

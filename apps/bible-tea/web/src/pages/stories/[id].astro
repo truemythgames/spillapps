@@ -80,6 +80,7 @@ interface Props {
 
 const { story, catalog, storyPlaylist, playlistSiblings, storySeason, storyCharacters } = Astro.props;
 const locale = getLocale(Astro.currentLocale);
+const storeCampaign = "en-story";
 
 const transcript = await getTranscript(story.id, locale);
 
@@ -152,8 +153,8 @@ const bibleRef = localizeBibleRef(story.bibleRef, locale);
 const seoOverride = storySeo(story.id, locale);
 const pageTitle = clampTitle(seoOverride.title ?? `${story.title} — ${bibleRef} - Bible Tea`);
 const pageDesc = clampDescription(seoOverride.description ?? (locale === "es"
-  ? `${story.description} Escúchala en Bible Tea — prueba gratis, sin anuncios.`
-  : `${story.description} Listen on Bible Tea — start a free trial, no ads.`));
+  ? `${story.description} Descarga Bible Tea gratis y escúchala.`
+  : `${story.description} Download Bible Tea for free and hear it.`));
 const pageUrl = `https://bibletea.app/stories/${story.id}/`;
 
 function faqT(key: string): string {
@@ -845,7 +846,7 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
             <div class="hero-section">{story.section}</div>
           )}
           <h1>{story.title}</h1>
-          <div class="hero-download"><StoreButtons variant="hero" /></div>
+          <div class="hero-download"><StoreButtons variant="hero" campaign={storeCampaign} /></div>
           <div class="hero-meta">
             <span class="hero-ref">{bibleRef}</span>
             {readingMinutes > 0 && <span class="hero-time">{t(locale, "story.readTime").replace("{min}", String(readingMinutes))} · {t(locale, "story.listenTime").replace("{min}", String(listeningMinutes))}</span>}
@@ -919,7 +920,7 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
           <span class="gate-feature"><span class="check">✓</span> {t(locale, "story.gateNarrator")}</span>
           <span class="gate-feature"><span class="check">✓</span> {t(locale, "story.gateTranscript")}</span>
         </div>
-        <StoreButtons variant="hero" />
+        <StoreButtons variant="hero" campaign={storeCampaign} />
       </div>
     </div>
 

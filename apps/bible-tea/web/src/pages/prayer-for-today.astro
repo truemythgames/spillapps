@@ -76,9 +76,26 @@ const faqLd = {
     .prayer-body :global(p) { color: var(--text); font-size: 1.08rem; line-height: 1.9; margin-bottom: 1.1rem; }
     .prayer-body :global(p:last-child) { margin-bottom: 0; }
 
-    .cta-inline { margin-bottom: 3rem; display: flex; flex-wrap: wrap; gap: 1.25rem; }
-    .cta-inline a { color: var(--primary); font-weight: 600; text-decoration: none; }
-    .cta-inline a:hover { text-decoration: underline; }
+    .cta-inline { margin-bottom: 3rem; display: flex; flex-wrap: wrap; gap: 0.75rem; }
+    .cta-inline a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.7rem 1.25rem;
+      border-radius: 999px;
+      border: 1px solid var(--surface-border);
+      background: var(--surface);
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.92rem;
+      text-decoration: none;
+      transition: transform 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .cta-inline a:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
 
     .faq-section { padding: 3rem 0; border-top: 1px solid var(--surface-border); }
     .faq-section h2 { font-family: 'Playfair Display', serif; font-size: 1.35rem; margin-bottom: 1rem; }
@@ -114,7 +131,7 @@ const faqLd = {
   <div class="pft-hero">
     <p class="pft-date">{today}</p>
     <h1>{t(locale, "pft.h1")}</h1>
-    <div class="hero-download"><StoreButtons variant="hero" /></div>
+    <div class="hero-download"><StoreButtons variant="hero" campaign="en-pft" /></div>
     <p>{t(locale, "pft.subtitle")}</p>
   </div>
 
@@ -144,6 +161,6 @@ const faqLd = {
   <section class="bottom-cta">
     <h2>{t(locale, "prayer.listenOn")}</h2>
     <p>{t(locale, "pft.listen")}</p>
-    <StoreButtons variant="hero" />
+    <StoreButtons variant="hero" campaign="en-pft" />
   </section>
 </Base>
