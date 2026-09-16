@@ -7,17 +7,7 @@ import { StatusBar } from "expo-status-bar";
 import { MiniPlayer } from "@/components/MiniPlayer";
 import { usePlayerStore } from "@/stores/player";
 import * as SplashScreen from "expo-splash-screen";
-import {
-  useFonts,
-  Inter_400Regular,
-  Inter_500Medium,
-  Inter_600SemiBold,
-  Inter_700Bold,
-} from "@expo-google-fonts/inter";
-import {
-  PlayfairDisplay_500Medium,
-  PlayfairDisplay_700Bold,
-} from "@expo-google-fonts/playfair-display";
+import { useFonts } from "expo-font";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useAppStore } from "@/stores/app";
 import { setupPlayer } from "@/stores/player";
@@ -28,7 +18,6 @@ import { initPurchases } from "@/lib/purchases";
 import { initAnalytics } from "@/lib/analytics";
 import { getSession } from "@/lib/identity";
 import { UpdatePrompt } from "@/components/UpdatePrompt";
-import { Image as ExpoImage } from "expo-image";
 import { storyIdFromUrl } from "@/lib/widget-linking";
 
 SplashScreen.preventAutoHideAsync();
@@ -79,12 +68,12 @@ export default function RootLayout() {
   }, [pathname]);
 
   const [fontsLoaded] = useFonts({
-    Inter_400Regular,
-    Inter_500Medium,
-    Inter_600SemiBold,
-    Inter_700Bold,
-    PlayfairDisplay_500Medium,
-    PlayfairDisplay_700Bold,
+    "Inter-Regular": require("@/assets/fonts/Inter-Regular.ttf"),
+    "Inter-Medium": require("@/assets/fonts/Inter-Medium.ttf"),
+    "Inter-SemiBold": require("@/assets/fonts/Inter-SemiBold.ttf"),
+    "Inter-Bold": require("@/assets/fonts/Inter-Bold.ttf"),
+    "PlayfairDisplay-Medium": require("@/assets/fonts/PlayfairDisplay-Medium.ttf"),
+    "PlayfairDisplay-Bold": require("@/assets/fonts/PlayfairDisplay-Bold.ttf"),
   });
 
   useEffect(() => {
@@ -95,18 +84,18 @@ export default function RootLayout() {
       }
       setHydrated(true);
       loadInitialData();
-      const heroReady = ExpoImage.prefetch(require("@/assets/onboarding/teastories.webp"));
-      ExpoImage.prefetch(require("@/assets/onboarding/noahs-ark.webp"));
-      await Promise.all([
-        setupPlayer(),
-        initPurchases(),
-        initAnalytics(),
-        getSession(),
-        heroReady,
-      ]);
-      setAppReady(true);
+      try {
+        await Promise.all([
+          setupPlayer(),
+          initPurchases(),
+          initAnalytics(),
+          getSession(),
+        ]);
+      } finally {
+        setAppReady(true);
+      }
     }
-    init();
+    init().catch(() => setAppReady(true));
   }, []);
 
   useEffect(() => {

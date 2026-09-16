@@ -12,6 +12,7 @@ import { useGate } from "@/lib/useGate";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 import { VerseShareButton } from "@/components/VerseShareCard";
 import { CoverImage } from "@/components/CoverImage";
+import { coverUrl } from "@/lib/content";
 
 export default function VerseScreen() {
   const { t, i18n } = useTranslation();
@@ -117,13 +118,16 @@ export default function VerseScreen() {
                   style={styles.storyRow}
                   onPress={() => guardedPush(`/story/${story.id}`)}
                 >
-                  <CoverImage
-                    uri={story.cover_image_url}
-                    storyId={story.id}
-                    displayWidth={240}
-                    style={styles.storyCover}
-                    contentFit="cover"
-                  />
+                  <View style={styles.storyCoverWrap}>
+                    <CoverImage
+                      uri={story.cover_image_url || coverUrl(story.id)}
+                      storyId={story.id}
+                      displayWidth={160}
+                      style={styles.storyCover}
+                      contentFit="cover"
+                      transition={0}
+                    />
+                  </View>
                   <View style={styles.storyCopy}>
                     <Text style={styles.storyTitle} numberOfLines={2}>
                       {story.title}
@@ -294,11 +298,16 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: colors.surfaceBorder,
   },
-  storyCover: {
+  storyCoverWrap: {
     width: 64,
     height: 64,
     borderRadius: radius.md,
+    overflow: "hidden",
     backgroundColor: colors.surfaceLight,
+  },
+  storyCover: {
+    width: 64,
+    height: 64,
   },
   storyCopy: {
     flex: 1,

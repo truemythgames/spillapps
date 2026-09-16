@@ -1,4 +1,6 @@
-import { withLayoutContext, useRouter } from "expo-router";
+import { Platform } from "react-native";
+import { withLayoutContext, useRouter, Tabs } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 import {
   createNavigatorFactory,
   TabRouter,
@@ -8,17 +10,31 @@ import {
   type TabNavigationState,
 } from "@react-navigation/native";
 import { BottomTabs, BottomTabsScreen } from "react-native-screens";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import { useAppStore } from "@/stores/app";
 
 const GATED_TABS = new Set(["explore", "playlists", "prayers", "profile"]);
+const TAB_ORDER = ["index", "explore", "prayers", "playlists", "profile"] as const;
+const CREAM = "#E8D6B8";
 
-const ICONS: Record<string, { default: string; selected: string }> = {
+const IOS_ICONS: Record<string, { default: string; selected: string }> = {
   index: { default: "house", selected: "house.fill" },
   explore: { default: "book", selected: "book.fill" },
   prayers: { default: "heart", selected: "heart.fill" },
   playlists: { default: "safari", selected: "safari.fill" },
   profile: { default: "sparkles", selected: "sparkles" },
+};
+
+const ANDROID_ICONS: Record<
+  string,
+  { default: keyof typeof Ionicons.glyphMap; selected: keyof typeof Ionicons.glyphMap }
+> = {
+  index: { default: "home-outline", selected: "home" },
+  explore: { default: "book-outline", selected: "book" },
+  prayers: { default: "heart-outline", selected: "heart" },
+  playlists: { default: "compass-outline", selected: "compass" },
+  profile: { default: "chatbubble-ellipses-outline", selected: "chatbubble-ellipses" },
 };
 
 type TabOptions = {
@@ -60,11 +76,9 @@ function NativeBottomTabNavigator({
       <BottomTabs
         tabBarMinimizeBehavior="never"
         tabBarControllerMode="tabBar"
-        tabBarTintColor="#E8D6B8"
+        tabBarTintColor={CREAM}
         onNativeFocusChange={(e) => {
-          const route = state.routes.find(
-            (r) => r.key === e.nativeEvent.tabKey,
-          );
+          const route = state.routes.find((r) => r.key === e.nativeEvent.tabKey);
           if (!route) return;
           if (GATED_TABS.has(route.name) && !isSubscribed) {
             router.push("/paywall");
@@ -78,7 +92,7 @@ function NativeBottomTabNavigator({
       >
         {state.routes.map((route, index) => {
           const { options, render } = descriptors[route.key];
-          const icons = ICONS[route.name] ?? ICONS.index;
+          const icons = IOS_ICONS[route.name] ?? IOS_ICONS.index;
           return (
             <BottomTabsScreen
               key={route.key}
@@ -101,31 +115,85 @@ const NativeTabs = withLayoutContext(
   createNavigatorFactory(NativeBottomTabNavigator)().Navigator,
 );
 
-export default function TabLayout() {
+function useTabLabels() {
   const { t } = useTranslation();
-
-  const labels: Record<string, string> = {
+  return {
     index: t("tabs.home"),
     explore: t("tabs.stories"),
     prayers: t("tabs.prayers"),
     playlists: t("tabs.discover"),
     profile: t("tabs.chat"),
-  };
+  } as Record<(typeof TAB_ORDER)[number], string>;
+}
 
+function IosTabLayout() {
+  const labels = useTabLabels();
   return (
     <NativeTabs>
-      {(["index", "explore", "prayers", "playlists", "profile"] as const).map(
-        (name) => (
-          <NativeTabs.Screen
+      {TAB_ORDER.map((name) => (
+        <NativeTabs.Screen
+          key={name}
+          name={name}
+          options={{ title: labels[name], tabBarLabel: labels[name] }}
+        />
+      ))}
+    </NativeTabs>
+  );
+}
+
+function AndroidTabLayout() {
+  const labels = useTabLabels();
+  const router = useRouter();
+  const insets = useSafeAreaInsets();
+  const isSubscribed = useAppStore((s) => s.isSubscribed);
+
+  return (
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: CREAM,
+        tabBarInactiveTintColor: "rgba(232,214,184,0.45)",
+        tabBarStyle: {
+          backgroundColor: "#0F0D0B",
+          borderTopColor: "rgba(232,214,184,0.14)",
+          height: 56 + insets.bottom,
+          paddingBottom: insets.bottom,
+          paddingTop: 6,
+        },
+        tabBarLabelStyle: { fontSize: 11, fontWeight: "600" },
+      }}
+    >
+      {TAB_ORDER.map((name) => {
+        const icons = ANDROID_ICONS[name];
+        return (
+          <Tabs.Screen
             key={name}
             name={name}
             options={{
               title: labels[name],
-              tabBarLabel: labels[name],
+              tabBarIcon: ({ color, focused }) => (
+                <Ionicons
+                  name={focused ? icons.selected : icons.default}
+                  size={22}
+                  color={color}
+                />
+              ),
+            }}
+            listeners={{
+              tabPress: (e) => {
+                if (GATED_TABS.has(name) && !isSubscribed) {
+                  e.preventDefault();
+                  router.push("/paywall");
+                }
+              },
             }}
           />
-        ),
-      )}
-    </NativeTabs>
+        );
+      })}
+    </Tabs>
   );
+}
+
+export default function TabLayout() {
+  return Platform.OS === "ios" ? <IosTabLayout /> : <AndroidTabLayout />;
 }

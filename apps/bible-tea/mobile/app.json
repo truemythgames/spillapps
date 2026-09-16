@@ -19,7 +19,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "app.bibletea",
-      "buildNumber": "79",
+      "buildNumber": "86",
       "appleTeamId": "T8QBXL5U75",
       "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
@@ -35,7 +35,7 @@
         "backgroundColor": "#0A0A0F"
       },
       "package": "app.bibletea",
-      "versionCode": 79,
+      "versionCode": 86,
       "googleServicesFile": "./google-services.json",
       "edgeToEdgeEnabled": true
     },
@@ -52,7 +52,19 @@
       ],
       "expo-dev-client",
       "expo-router",
-      "expo-font",
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/Inter-Regular.ttf",
+            "./assets/fonts/Inter-Medium.ttf",
+            "./assets/fonts/Inter-SemiBold.ttf",
+            "./assets/fonts/Inter-Bold.ttf",
+            "./assets/fonts/PlayfairDisplay-Medium.ttf",
+            "./assets/fonts/PlayfairDisplay-Bold.ttf"
+          ]
+        }
+      ],
       "expo-secure-store",
       [
         "expo-splash-screen",

@@ -19,8 +19,13 @@ export function sizedMedia(url: string, width: number, quality = 72): string {
   }
 }
 
+export function mediaStoryId(storyId: string): string {
+  const id = String(storyId ?? "").trim();
+  return id.startsWith("st-") ? id.slice(3) : id;
+}
+
 export function coverUrl(storyId: string, width?: number): string {
-  const url = `${MEDIA_BASE}/${APP_ID}/stories/${storyId}/cover.webp`;
+  const url = `${MEDIA_BASE}/${APP_ID}/stories/${mediaStoryId(storyId)}/cover.webp`;
   return width ? sizedMedia(url, width) : url;
 }
 

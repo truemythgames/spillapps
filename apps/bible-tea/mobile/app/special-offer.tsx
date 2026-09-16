@@ -31,6 +31,7 @@ import {
   getOfferings,
   purchasePackage,
   restorePurchases,
+  findWeeklyOfferPackage,
   PRODUCT_IDS,
   type PurchasesPackage,
 } from "@/lib/purchases";
@@ -76,11 +77,7 @@ export default function SpecialOfferScreen() {
       p.identifier === "yearly_offer" ||
       p.product?.identifier?.startsWith(PRODUCT_IDS.yearlyOffer)
   );
-  const weekly = packages.find(
-    (p) =>
-      p.identifier === "weekly_offer" ||
-      p.product?.identifier?.startsWith(PRODUCT_IDS.weeklyOffer)
-  );
+  const weekly = findWeeklyOfferPackage(packages);
 
   const pricePerWeek = yearly?.product?.pricePerWeekString;
   const yearlyPrice = yearly?.product?.priceString;

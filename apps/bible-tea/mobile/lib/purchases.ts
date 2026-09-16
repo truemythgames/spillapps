@@ -102,16 +102,213 @@ export async function initPurchases(userId?: string): Promise<void> {
   getOfferings();
 }
 
-export async function getOfferings(): Promise<PurchasesOffering | null> {
+function idsOf(pkg: PurchasesPackage): { id: string; pid: string } {
+  return {
+    id: String(pkg?.identifier ?? ""),
+    pid: String(pkg?.product?.identifier ?? ""),
+  };
+}
+
+export function matchPackage(
+  packages: PurchasesPackage[],
+  rcIdentifier: string,
+  productId: string,
+): PurchasesPackage | undefined {
+  return packages.find((p) => {
+    const { id, pid } = idsOf(p);
+    return (
+      id === rcIdentifier ||
+      id === productId ||
+      pid === productId ||
+      pid.startsWith(productId) ||
+      id.startsWith(productId) ||
+      id.includes(rcIdentifier) ||
+      pid.includes(productId)
+    );
+  });
+}
+
+function blob(pkg: PurchasesPackage): string {
+  const { id, pid } = idsOf(pkg);
+  return `${id} ${pid} ${pkg?.packageType ?? ""}`.toLowerCase();
+}
+
+function isWeeklyPeriod(pkg: PurchasesPackage): boolean {
+  const period = String(pkg?.product?.subscriptionPeriod ?? "").toUpperCase();
+  const type = String(pkg?.packageType ?? "").toUpperCase();
+  if (type === "WEEKLY") return true;
+  if (period === "P1W" || period === "P7D") return true;
+  const text = blob(pkg);
+  return text.includes("$rc_weekly") || text.includes("weekly") || /:p1w\b/.test(text);
+}
+
+function isTrialSku(pkg: PurchasesPackage): boolean {
+  return /freetrial|free_trial|free-trial|3day|30day/.test(blob(pkg));
+}
+
+function numericPrice(pkg: PurchasesPackage): number {
+  const product = pkg?.product;
+  const n = Number(product?.price);
+  if (n > 0) return n;
+  const micros = Number(product?.defaultOption?.fullPricePhase?.price?.amountMicros);
+  if (micros > 0) return micros / 1_000_000;
+  return Number(product?.pricePerWeek) || 0;
+}
+
+/** Start-small sheet: any weekly product, whatever RC/Play named it. */
+export function findWeeklyOfferPackage(packages: PurchasesPackage[]): PurchasesPackage | undefined {
+  if (!packages?.length) return undefined;
+
+  const named =
+    matchPackage(packages, "weekly_offer", PRODUCT_IDS.weeklyOffer) ||
+    packages.find((p) => /weekly[_-]?offer/.test(blob(p)));
+  if (named) return named;
+
+  const weeklies = packages.filter(isWeeklyPeriod);
+  return (
+    weeklies.find((p) => !isTrialSku(p)) ||
+    weeklies[0] ||
+    packages
+      .filter((p) => numericPrice(p) > 0 && !/year|annual|quarter|month/.test(blob(p)))
+      .sort((a, b) => numericPrice(a) - numericPrice(b))[0]
+  );
+}
+
+function isZeroPrice(raw: string): boolean {
+  const s = raw.trim();
+  if (!s) return true;
+  return /^(free|gratis)?\s*([$€£₹]|us\$|ca\$|a\$|r\$|mx\$)?\s*0([.,]00)?\s*([$€£₹])?$/i.test(s);
+}
+
+function formatAmount(amount: number, currency?: string): string {
+  if (!amount || amount <= 0) return "";
+  try {
+    return new Intl.NumberFormat(undefined, {
+      style: "currency",
+      currency: currency || "USD",
+    }).format(amount);
+  } catch {
+    return String(amount);
+  }
+}
+
+function phasePrice(phase: any): { text: string; amount: number; currency?: string } | null {
+  const price = phase?.price;
+  if (!price) return null;
+  const text = String(price.formatted ?? price.priceString ?? "").trim();
+  const micros = Number(price.amountMicros);
+  const amount = Number(price.amount ?? (Number.isFinite(micros) ? micros / 1_000_000 : 0));
+  return { text, amount, currency: price.currencyCode };
+}
+
+function fullPriceFromOptions(product: any): { text: string; amount: number; currency?: string } | null {
+  const options = [
+    product?.defaultOption,
+    ...(Array.isArray(product?.subscriptionOptions) ? product.subscriptionOptions : []),
+  ].filter(Boolean);
+
+  for (const opt of options) {
+    const phase = opt.fullPricePhase ?? opt.pricingPhases?.find((p: any) => Number(p?.price?.amountMicros) > 0);
+    const picked = phasePrice(phase);
+    if (picked && (picked.amount > 0 || (picked.text && !isZeroPrice(picked.text)))) return picked;
+  }
+  return null;
+}
+
+export function formatStorePrice(product: any): string {
+  if (!product) return "";
+
+  const raw = String(product.priceString ?? "").trim();
+  if (raw && !isZeroPrice(raw)) return raw;
+
+  const n = Number(product.price);
+  if (n > 0) return formatAmount(n, product.currencyCode);
+
+  const fromOption = fullPriceFromOptions(product);
+  if (fromOption?.text && !isZeroPrice(fromOption.text)) return fromOption.text;
+  if (fromOption?.amount) return formatAmount(fromOption.amount, fromOption.currency || product.currencyCode);
+
+  const weekly = String(product.pricePerWeekString ?? "").trim();
+  if (weekly && !isZeroPrice(weekly)) return weekly;
+
+  return formatAmount(Number(product.pricePerWeek), product.currencyCode);
+}
+
+function collectPackages(offerings: any): PurchasesPackage[] {
+  const seen = new Set<string>();
+  const list: PurchasesPackage[] = [];
+  const add = (pkgs: PurchasesPackage[] | undefined) => {
+    for (const p of pkgs ?? []) {
+      const { id, pid } = idsOf(p);
+      const key = `${id}|${pid}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      list.push(p);
+    }
+  };
+  add(offerings?.current?.availablePackages);
+  for (const off of Object.values(offerings?.all ?? {}) as any[]) {
+    add(off?.availablePackages);
+  }
+  return list;
+}
+
+async function fetchStoreProducts(): Promise<any[]> {
+  const ids = Object.values(PRODUCT_IDS);
+  const type = Purchases.PRODUCT_CATEGORY?.SUBSCRIPTION ?? "SUBSCRIPTION";
+  try {
+    const subs = await Purchases.getProducts(ids, type);
+    if (subs?.length) return subs;
+  } catch (e) {
+    console.warn("[Purchases] getProducts SUBSCRIPTION failed:", e);
+  }
+  try {
+    return (await Purchases.getProducts(ids)) ?? [];
+  } catch (e) {
+    console.warn("[Purchases] getProducts failed:", e);
+    return [];
+  }
+}
+
+function mergeStoreProducts(packages: PurchasesPackage[], products: any[]): PurchasesPackage[] {
+  const next = [...packages];
+  for (const product of products ?? []) {
+    const pid = String(product?.identifier ?? "");
+    if (!pid) continue;
+    if (matchPackage(next, pid, pid)) continue;
+    next.push({
+      identifier: pid,
+      product,
+      offeringIdentifier: "store",
+    });
+  }
+  return next;
+}
+
+export async function getOfferings(opts?: { force?: boolean }): Promise<PurchasesOffering | null> {
   if (!Purchases) return null;
-  if (cachedOffering) return cachedOffering;
+  if (!opts?.force && cachedOffering?.availablePackages?.length) return cachedOffering;
   if (offeringPromise) return offeringPromise;
 
   offeringPromise = (async () => {
     try {
       const offerings = await Purchases.getOfferings();
-      cachedOffering = offerings.current;
-      return cachedOffering;
+      const current =
+        offerings?.current ??
+        (offerings?.all ? (Object.values(offerings.all)[0] as PurchasesOffering) : null);
+
+      let packages = collectPackages(offerings);
+      const weekly = findWeeklyOfferPackage(packages);
+      if (!weekly || !formatStorePrice(weekly.product)) {
+        packages = mergeStoreProducts(packages, await fetchStoreProducts());
+      }
+
+      if (packages.length) {
+        cachedOffering = { ...(current ?? {}), availablePackages: packages };
+        return cachedOffering;
+      }
+
+      return current ?? null;
     } catch (e) {
       console.warn("[Purchases] Failed to fetch offerings:", e);
       return null;
@@ -126,7 +323,14 @@ export async function getOfferings(): Promise<PurchasesOffering | null> {
 export async function purchasePackage(pkg: PurchasesPackage): Promise<boolean> {
   if (!Purchases) return false;
   try {
-    const { customerInfo } = await Purchases.purchasePackage(pkg);
+    let customerInfo: CustomerInfo;
+    try {
+      ({ customerInfo } = await Purchases.purchasePackage(pkg));
+    } catch (e: any) {
+      if (e?.userCancelled) return false;
+      if (!pkg?.product) throw e;
+      ({ customerInfo } = await Purchases.purchaseStoreProduct(pkg.product));
+    }
     const isActive = hasActiveEntitlement(customerInfo);
     if (isActive) {
       const price = pkg.product.price;

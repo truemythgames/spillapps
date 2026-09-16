@@ -53,12 +53,12 @@ export const radius = {
 };
 
 export const fonts = {
-  heading: "PlayfairDisplay_700Bold",
-  headingMedium: "PlayfairDisplay_500Medium",
-  body: "Inter_400Regular",
-  bodyMedium: "Inter_500Medium",
-  bodySemiBold: "Inter_600SemiBold",
-  bodyBold: "Inter_700Bold",
+  heading: "PlayfairDisplay-Bold",
+  headingMedium: "PlayfairDisplay-Medium",
+  body: "Inter-Regular",
+  bodyMedium: "Inter-Medium",
+  bodySemiBold: "Inter-SemiBold",
+  bodyBold: "Inter-Bold",
 };
 
 export const fontSize = {

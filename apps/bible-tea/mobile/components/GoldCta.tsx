@@ -15,9 +15,9 @@ import Animated, {
 } from "react-native-reanimated";
 import { fonts, fontSize } from "@/lib/theme";
 
-export const GOLD = "#D4A94A";
-export const GOLD_LIGHT = "#F0CF7A";
-export const GOLD_DARK = "#A67C2E";
+export const GOLD = "#E8C35A";
+export const GOLD_LIGHT = "#F6E08A";
+export const GOLD_DARK = "#D4A94A";
 export const CTA_INK = "#1A1408";
 
 type Props = {
@@ -83,7 +83,7 @@ export function GoldCta({ label, onPress, busy, disabled, style }: Props) {
       >
         <LinearGradient
           colors={[GOLD_LIGHT, GOLD, GOLD_DARK]}
-          locations={[0, 0.45, 1]}
+          locations={[0, 0.55, 1]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={StyleSheet.absoluteFill}

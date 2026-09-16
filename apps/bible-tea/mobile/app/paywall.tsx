@@ -16,7 +16,16 @@ import { useTranslation } from "react-i18next";
 import { GoldCta, GOLD, GOLD_LIGHT } from "@/components/GoldCta";
 import { useAppStore } from "@/stores/app";
 import { storage, StorageKeys } from "@/lib/storage";
-import { getOfferings, purchasePackage, restorePurchases, type PurchasesPackage } from "@/lib/purchases";
+import {
+  getOfferings,
+  purchasePackage,
+  restorePurchases,
+  matchPackage,
+  findWeeklyOfferPackage,
+  formatStorePrice,
+  PRODUCT_IDS,
+  type PurchasesPackage,
+} from "@/lib/purchases";
 import { colors, fonts, fontSize, spacing, radius } from "@/lib/theme";
 
 const { height: SCREEN_H } = Dimensions.get("window");
@@ -48,11 +57,23 @@ export default function PaywallScreen() {
 
   useEffect(() => {
     s1Y.value = withSpring(0, { damping: 22, stiffness: 90 });
-    getOfferings().then((offering) => {
-      if (offering?.availablePackages) {
-        setPackages(offering.availablePackages);
+    let cancelled = false;
+    (async () => {
+      for (let i = 0; i < 5; i++) {
+        const offering = await getOfferings({ force: i > 0 });
+        if (cancelled) return;
+        const pkgs = offering?.availablePackages ?? [];
+        if (pkgs.length) {
+          setPackages(pkgs);
+          const weekly = findWeeklyOfferPackage(pkgs);
+          if (weekly && formatStorePrice(weekly.product)) return;
+        }
+        await new Promise((r) => setTimeout(r, 700 * (i + 1)));
       }
-    });
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   function goBack() {
@@ -108,36 +129,36 @@ export default function PaywallScreen() {
     goBack();
   }
 
-  function findPackage(identifier: string): PurchasesPackage | undefined {
-    return packages.find((p) => p.identifier === identifier);
+  function findPkg(rcId: string, productId: string): PurchasesPackage | undefined {
+    return matchPackage(packages, rcId, productId);
   }
 
   function getTargetPackage(): PurchasesPackage | undefined {
     if (step === 2) {
-      return findPackage("weekly_offer");
+      return findWeeklyOfferPackage(packages);
     }
     if (returning) {
       return plan === "weekly"
-        ? findPackage("weekly_freetrial")
-        : findPackage("quarterly_3day");
+        ? findPkg("weekly_freetrial", PRODUCT_IDS.weeklyFreeTrial)
+        : findPkg("quarterly_3day", PRODUCT_IDS.quarterly3DayTrial);
     }
     return plan === "weekly"
-      ? findPackage("quarterly_onboarding")
-      : findPackage("quarterly_30day");
+      ? findPkg("quarterly_onboarding", PRODUCT_IDS.quarterlyOnboarding3DayTrial)
+      : findPkg("quarterly_30day", PRODUCT_IDS.quarterly30DayTrial);
   }
 
-  // Resolved prices from the RevenueCat packages — never hardcoded.
-  const weeklyFreetrial = findPackage("weekly_freetrial");
-  const quarterly3day = findPackage("quarterly_3day");
-  const quarterlyOnboarding = findPackage("quarterly_onboarding");
-  const quarterly30day = findPackage("quarterly_30day");
-  const weeklyOffer = findPackage("weekly_offer");
+  // Resolved prices from the store — never hardcoded.
+  const weeklyFreetrial = findPkg("weekly_freetrial", PRODUCT_IDS.weeklyFreeTrial);
+  const quarterly3day = findPkg("quarterly_3day", PRODUCT_IDS.quarterly3DayTrial);
+  const quarterlyOnboarding = findPkg("quarterly_onboarding", PRODUCT_IDS.quarterlyOnboarding3DayTrial);
+  const quarterly30day = findPkg("quarterly_30day", PRODUCT_IDS.quarterly30DayTrial);
+  const weeklyOffer = findWeeklyOfferPackage(packages);
 
   function priceOf(pkg?: PurchasesPackage): string {
-    return pkg?.product?.priceString ?? "";
+    return formatStorePrice(pkg?.product);
   }
   function introPriceOf(pkg?: PurchasesPackage): string {
-    return pkg?.product?.introPrice?.priceString ?? "";
+    return formatStorePrice(pkg?.product?.introPrice);
   }
 
   const weeklyFullPrice = priceOf(weeklyFreetrial);
@@ -150,7 +171,7 @@ export default function PaywallScreen() {
   async function subscribe() {
     if (busy || purchasing) return;
 
-    const pkg = getTargetPackage() ?? packages[0];
+    const pkg = getTargetPackage() ?? (step === 2 ? undefined : packages[0]);
 
     if (!pkg) {
       Alert.alert(t("paywall.purchaseFailed"), t("paywall.purchaseError"));
@@ -280,8 +301,14 @@ export default function PaywallScreen() {
                 disabled={purchasing}
               >
                 <View style={{ flex: 1 }}>
-                  <Text style={styles.planName}>{quarterly30dayIntroPrice || "—"}</Text>
-                  <Text style={styles.planPrice}>{t("paywall.thirtyDayTrial")}</Text>
+                  <Text style={styles.planName}>
+                    {quarterly30dayIntroPrice || t("paywall.thirtyDayTrial")}
+                  </Text>
+                  <Text style={styles.planPrice}>
+                    {quarterly30dayIntroPrice
+                      ? t("paywall.thirtyDayTrial")
+                      : t("paywall.cancelAnytime")}
+                  </Text>
                 </View>
                 <View style={styles.radio}>
                   {plan === "quarterly" && <View style={styles.radioDot} />}
@@ -294,7 +321,7 @@ export default function PaywallScreen() {
                     ? t("paywall.tryForFreeLower")
                     : quarterly30dayIntroPrice
                       ? t("paywall.redeemThirtyDaysFor", { price: quarterly30dayIntroPrice })
-                      : t("paywall.redeemThirtyDays")
+                      : t("paywall.tryForFreeLower")
                 }
                 onPress={subscribe}
                 busy={purchasing}

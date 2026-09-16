@@ -42,8 +42,9 @@ const { width: SCREEN_W } = Dimensions.get("window");
 const INK = "#0F0D0B";
 const CREAM = "#E8D6B8";
 const CREAM_DIM = "rgba(232,214,184,0.62)";
-const GOLD = "#D4A94A";
-const GOLD_DARK = "#A67C2E";
+const GOLD = "#E8C35A";
+const GOLD_LIGHT = "#F6E08A";
+const GOLD_DARK = "#D4A94A";
 const GLASS = "rgba(18,16,12,0.58)";
 const GLASS_BORDER = "rgba(232,214,184,0.22)";
 const WHITE_CARD = "rgba(255,255,255,0.9)";
@@ -132,8 +133,6 @@ const PROGRESS_STEPS = STEP_ORDER.slice(1, SHOWCASE_START_IDX);
 
 /* ---------- pieces ---------- */
 
-type Fit = "cover" | "contain";
-
 /**
  * Backdrop that cross-dissolves between covers while one slow zoom keeps
  * running underneath — the zoom never resets, so a change reads as a
@@ -141,26 +140,41 @@ type Fit = "cover" | "contain";
  */
 const BACKDROP_FADE_MS = 1100;
 
-/** Bundled PNG-style decode — on screen from the first frame, no expo-image fade. */
+/**
+ * Fills whatever slot the welcome column gives it, then draws a square
+ * that fits that box (SE, Pro Max, iPad). Never uses the raw 1500px size.
+ */
 function WelcomeHero() {
+  const [box, setBox] = useState({ w: 0, h: 0 });
+  const size = Math.max(0, Math.min(box.w, box.h));
   const scale = useSharedValue(1);
   useEffect(() => {
     scale.value = withRepeat(
-      withTiming(1.06, { duration: 14000, easing: Easing.inOut(Easing.sin) }),
+      withTiming(1.03, { duration: 14000, easing: Easing.inOut(Easing.sin) }),
       -1,
       true,
     );
   }, []);
   const zoom = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
   return (
-    <Animated.View style={[StyleSheet.absoluteFill, zoom]}>
-      <RNImage
-        source={HERO_IMAGE}
-        style={StyleSheet.absoluteFill}
-        resizeMode="contain"
-        fadeDuration={0}
-      />
-    </Animated.View>
+    <View
+      style={styles.heroSlot}
+      onLayout={(e) => {
+        const { width, height } = e.nativeEvent.layout;
+        setBox({ w: width, h: height });
+      }}
+    >
+      {size > 0 ? (
+        <Animated.View style={[{ width: size, height: size }, zoom]}>
+          <RNImage
+            source={HERO_IMAGE}
+            style={{ width: size, height: size }}
+            resizeMode="contain"
+            fadeDuration={0}
+          />
+        </Animated.View>
+      ) : null}
+    </View>
   );
 }
 
@@ -654,6 +668,7 @@ export default function OnboardingScreen() {
       case "welcome":
         return (
           <View style={styles.welcome}>
+            <WelcomeHero />
             <Animated.Text entering={FadeInUp.duration(800)} style={styles.welcomeText}>
               {t("onboarding.welcome")}
             </Animated.Text>
@@ -743,7 +758,6 @@ export default function OnboardingScreen() {
 
   return (
     <View style={styles.root}>
-      <WelcomeHero />
       {currentStep !== "welcome" && <Backdrop source={bg} />}
       <LinearGradient
         colors={overlay}
@@ -803,7 +817,10 @@ export default function OnboardingScreen() {
           <Animated.View
             style={[
               styles.content,
-              { paddingTop: insets.top + 72, paddingBottom: insets.bottom + spacing.lg },
+              {
+                paddingTop: insets.top + (currentStep === "welcome" ? 12 : 72),
+                paddingBottom: insets.bottom + spacing.lg,
+              },
             ]}
           >
             <View style={styles.inner}>
@@ -841,7 +858,7 @@ function Cta({ label, onPress, disabled }: { label: string; onPress: () => void;
   return (
     <Pressable onPress={onPress} disabled={disabled} style={({ pressed }) => [{ opacity: disabled ? 0.35 : pressed ? 0.9 : 1 }]}>
       <LinearGradient
-        colors={[GOLD, GOLD_DARK]}
+        colors={[GOLD_LIGHT, GOLD, GOLD_DARK]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.cta}
@@ -856,6 +873,13 @@ function Cta({ label, onPress, disabled }: { label: string; onPress: () => void;
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: "#000" },
+  heroSlot: {
+    flex: 1,
+    minHeight: 0,
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   content: { flex: 1 },
   inner: { flex: 1, justifyContent: "center" },
   stepLayer: { flex: 1, justifyContent: "center" },
@@ -881,7 +905,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  welcome: { flex: 1, justifyContent: "flex-end", paddingHorizontal: spacing.lg },
+  welcome: {
+    flex: 1,
+    minHeight: 0,
+    justifyContent: "flex-end",
+    paddingHorizontal: spacing.lg,
+  },
   welcomeText: {
     fontFamily: fonts.heading,
     fontSize: 30,

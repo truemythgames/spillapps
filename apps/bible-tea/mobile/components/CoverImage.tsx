@@ -17,45 +17,41 @@ interface CoverImageProps extends Omit<ImageProps, "source" | "onError"> {
  * Prevents blank gray boxes when the CDN is slow or returns an error.
  */
 export function CoverImage({ uri, storyId, displayWidth = 360, retryKey, ...props }: CoverImageProps) {
-  const [useFallback, setUseFallback] = useState(false);
-  const [retries, setRetries] = useState(0);
+  const [step, setStep] = useState(0);
 
   useEffect(() => {
-    setUseFallback(false);
-    setRetries(0);
+    setStep(0);
   }, [uri, storyId, retryKey, displayWidth]);
 
+  const candidates: string[] = [];
+  const add = (value?: string | null) => {
+    const next = value?.trim();
+    if (next && !candidates.includes(next)) candidates.push(next);
+  };
+
+  if (uri) {
+    add(sizedMedia(uri, displayWidth));
+    add(uri);
+  }
+  if (storyId) {
+    add(coverUrl(storyId, displayWidth));
+    add(coverUrl(storyId));
+  }
+
+  const current = candidates[Math.min(step, Math.max(candidates.length - 1, 0))];
+  if (!current) return null;
+
   const handleError = useCallback(() => {
-    if (!useFallback && storyId) {
-      setUseFallback(true);
-      return;
-    }
-    if (retries < 2) {
-      setRetries((n) => n + 1);
-    }
-  }, [useFallback, storyId, retries]);
-
-  const sizedUri = uri ? sizedMedia(uri, displayWidth) : undefined;
-  const fallbackUri = storyId ? coverUrl(storyId, displayWidth) : undefined;
-
-  const source =
-    useFallback && fallbackUri
-      ? { uri: fallbackUri }
-      : sizedUri
-        ? { uri: sizedUri }
-        : fallbackUri
-          ? { uri: fallbackUri }
-          : undefined;
-
-  if (!source) return null;
+    setStep((n) => (n < candidates.length - 1 ? n + 1 : n));
+  }, [candidates.length]);
 
   return (
     <Image
       {...props}
-      key={`${source.uri}:${retries}:${retryKey ?? ""}`}
-      source={source}
+      key={`${current}:${retryKey ?? ""}`}
+      source={{ uri: current }}
       onError={handleError}
-      recyclingKey={`${storyId ?? source.uri}:${retries}:${retryKey ?? ""}`}
+      recyclingKey={`${storyId ?? current}:${step}:${retryKey ?? ""}`}
       cachePolicy="memory-disk"
     />
   );
