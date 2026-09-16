@@ -11,7 +11,9 @@ import Animated, {
   withSpring,
   withSequence,
 } from "react-native-reanimated";
+import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
+import { GoldCta, GOLD, GOLD_LIGHT } from "@/components/GoldCta";
 import { useAppStore } from "@/stores/app";
 import { storage, StorageKeys } from "@/lib/storage";
 import { getOfferings, purchasePackage, restorePurchases, type PurchasesPackage } from "@/lib/purchases";
@@ -198,7 +200,7 @@ export default function PaywallScreen() {
       {/* STEP 1 */}
       <Animated.View style={[styles.page, s1Style]}>
         <Hero source={require("@/assets/onboarding/noahs-ark.webp")} />
-        <XBtn onPress={dismiss} disabled={busy || purchasing} top={insets.top + 8} />
+        <XBtn onPress={dismiss} disabled={busy || purchasing} top={insets.top - 6} />
 
         <View style={[styles.body, { paddingBottom: insets.bottom + 16 }]}>
           <Text style={styles.title}>{t("paywall.title")}</Text>
@@ -246,17 +248,7 @@ export default function PaywallScreen() {
                 </View>
               </Pressable>
 
-              <Pressable
-                style={[styles.cta, purchasing && styles.ctaDisabled]}
-                onPress={subscribe}
-                disabled={purchasing}
-              >
-                {purchasing ? (
-                  <ActivityIndicator color={colors.background} />
-                ) : (
-                  <Text style={styles.ctaText}>{t("paywall.tryForFree")}</Text>
-                )}
-              </Pressable>
+              <GoldCta label={t("paywall.tryForFree")} onPress={subscribe} busy={purchasing} style={styles.ctaGap} />
               <Legal onRestore={handleRestore} restoring={restoring} disabled={purchasing} />
             </>
           ) : (
@@ -296,23 +288,18 @@ export default function PaywallScreen() {
                 </View>
               </Pressable>
 
-              <Pressable
-                style={[styles.cta, purchasing && styles.ctaDisabled]}
+              <GoldCta
+                label={
+                  plan === "weekly"
+                    ? t("paywall.tryForFreeLower")
+                    : quarterly30dayIntroPrice
+                      ? t("paywall.redeemThirtyDaysFor", { price: quarterly30dayIntroPrice })
+                      : t("paywall.redeemThirtyDays")
+                }
                 onPress={subscribe}
-                disabled={purchasing}
-              >
-                {purchasing ? (
-                  <ActivityIndicator color={colors.background} />
-                ) : (
-                  <Text style={styles.ctaText}>
-                    {plan === "weekly"
-                      ? t("paywall.tryForFreeLower")
-                      : quarterly30dayIntroPrice
-                        ? t("paywall.redeemThirtyDaysFor", { price: quarterly30dayIntroPrice })
-                        : t("paywall.redeemThirtyDays")}
-                  </Text>
-                )}
-              </Pressable>
+                busy={purchasing}
+                style={styles.ctaGap}
+              />
               <Text style={styles.pricingNote}>
                 {plan === "weekly"
                   ? quarterlyFullPriceOnboarding
@@ -339,45 +326,58 @@ export default function PaywallScreen() {
           <Animated.View
             style={[styles.sheet, { paddingBottom: insets.bottom + 20 }, s2Style]}
           >
+            <LinearGradient
+              colors={["#221B12", "#141009", "#0C0A07"]}
+              locations={[0, 0.5, 1]}
+              style={styles.sheetBg}
+            />
+            <View style={styles.sheetHairline} pointerEvents="none" />
+            <View style={styles.sheetGrabber} pointerEvents="none" />
+
             <Pressable
               style={styles.sheetX}
               onPress={goBack}
               hitSlop={12}
               disabled={purchasing}
             >
-              <Text style={styles.sheetXText}>✕</Text>
+              <Ionicons name="close" size={16} color="rgba(232,214,184,0.8)" />
             </Pressable>
 
             {/* Swallow taps on the sheet so they don't hit the backdrop. */}
             <Pressable style={{ width: "100%" }}>
-            <Text style={styles.sheetTitle}>{t("paywall.sheetTitle")}</Text>
-            <Text style={styles.sheetSub}>
-              {t("paywall.sheetSub")}<Text style={styles.sheetBold}>{t("paywall.sheetBold")}</Text>{t("paywall.sheetSubEnd")}
-            </Text>
-
-            <View style={styles.sheetPlan}>
-              <Text style={styles.sheetPlanName}>{t("paywall.weeklyPlan")}</Text>
-              <Text style={styles.sheetPlanPrice}>
-                {weeklyOfferPrice ? `${weeklyOfferPrice}/week` : ""}
+              <Text style={styles.sheetKicker}>{t("paywall.sheetKicker")}</Text>
+              <Text style={styles.sheetTitle}>{t("paywall.sheetTitle")}</Text>
+              <Text style={styles.sheetSub}>
+                {t("paywall.sheetSub")}
+                <Text style={styles.sheetBold}>{t("paywall.sheetBold")}</Text>
+                {t("paywall.sheetSubEnd")}
               </Text>
-            </View>
 
-            <View style={styles.sheetCheck}>
-              <Text style={styles.sheetCheckIcon}>✓</Text>
-              <Text style={styles.sheetCheckText}>{t("paywall.noCommitment")}</Text>
-            </View>
+              <View style={styles.sheetPlan}>
+                <LinearGradient
+                  colors={["rgba(212,169,74,0.18)", "rgba(212,169,74,0.04)"]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={StyleSheet.absoluteFill}
+                />
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.sheetPlanName}>{t("paywall.weeklyPlan")}</Text>
+                  <View style={styles.sheetPill}>
+                    <Text style={styles.sheetPillText}>{t("paywall.sheetPill")}</Text>
+                  </View>
+                </View>
+                <View style={{ alignItems: "flex-end" }}>
+                  <Text style={styles.sheetPlanPrice}>{weeklyOfferPrice ?? ""}</Text>
+                  <Text style={styles.sheetPlanPer}>{t("paywall.perWeek")}</Text>
+                </View>
+              </View>
 
-            <Pressable
-              style={[styles.sheetCta, purchasing && styles.ctaDisabled]}
-              onPress={subscribe}
-              disabled={purchasing}
-            >
-              {purchasing ? (
-                <ActivityIndicator color="#fff" />
-              ) : (
-                <Text style={styles.sheetCtaText}>{t("paywall.unlock")}</Text>
-              )}
-            </Pressable>
+              <View style={styles.sheetCheck}>
+                <Ionicons name="checkmark-circle" size={16} color={GOLD} />
+                <Text style={styles.sheetCheckText}>{t("paywall.noCommitment")}</Text>
+              </View>
+
+              <GoldCta label={t("paywall.unlock")} onPress={subscribe} busy={purchasing} style={styles.ctaGap} />
             </Pressable>
           </Animated.View>
         </>
@@ -400,8 +400,8 @@ function Hero({ source }: { source: number }) {
 
 function XBtn({ onPress, disabled, top }: { onPress: () => void; disabled: boolean; top: number }) {
   return (
-    <Pressable style={[styles.x, { top }]} onPress={onPress} disabled={disabled} hitSlop={12}>
-      <Text style={styles.xText}>✕</Text>
+    <Pressable style={[styles.x, { top }]} onPress={onPress} disabled={disabled} hitSlop={16}>
+      <Ionicons name="close" size={24} color="rgba(232,214,184,0.32)" />
     </Pressable>
   );
 }
@@ -453,16 +453,13 @@ const styles = StyleSheet.create({
 
   x: {
     position: "absolute",
-    right: 20,
+    left: 16,
     zIndex: 20,
-    width: 34,
-    height: 34,
-    borderRadius: 17,
-    backgroundColor: "rgba(0,0,0,0.4)",
+    width: 40,
+    height: 40,
     justifyContent: "center",
     alignItems: "center",
   },
-  xText: { fontSize: 15, color: "#fff", fontWeight: "600" },
 
   body: {
     flex: 1,
@@ -516,8 +513,8 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   planOn: {
-    borderColor: colors.primary,
-    backgroundColor: colors.primary + "10",
+    borderColor: GOLD,
+    backgroundColor: "rgba(212,169,74,0.10)",
   },
   radio: {
     width: 22,
@@ -532,7 +529,7 @@ const styles = StyleSheet.create({
     width: 12,
     height: 12,
     borderRadius: 6,
-    backgroundColor: colors.primary,
+    backgroundColor: GOLD,
   },
   planName: { fontFamily: fonts.bodySemiBold, fontSize: fontSize.md, color: colors.text },
   planPrice: { fontFamily: fonts.body, fontSize: fontSize.sm, color: colors.textMuted, marginTop: 2 },
@@ -550,17 +547,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.3,
   },
 
-  cta: {
-    backgroundColor: colors.primary,
-    borderRadius: 14,
-    paddingVertical: 16,
-    alignItems: "center",
-    marginTop: 20,
-    minHeight: 56,
-    justifyContent: "center",
-  },
-  ctaDisabled: { opacity: 0.7 },
-  ctaText: { fontFamily: fonts.bodySemiBold, fontSize: fontSize.lg, color: colors.background },
+  ctaGap: { marginTop: 20 },
 
   pricingNote: {
     fontFamily: fonts.bodyMedium,
@@ -590,86 +577,135 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     zIndex: 40,
-    backgroundColor: "#FFF8F0",
-    borderTopLeftRadius: 28,
-    borderTopRightRadius: 28,
-    paddingHorizontal: 28,
-    paddingTop: 24,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    paddingHorizontal: 24,
+    paddingTop: 30,
+    overflow: "hidden",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: -10 },
+    shadowOpacity: 0.5,
+    shadowRadius: 24,
+    elevation: 20,
+  },
+  sheetBg: {
+    ...StyleSheet.absoluteFillObject,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+  },
+  sheetHairline: {
+    ...StyleSheet.absoluteFillObject,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    borderWidth: 1,
+    borderBottomWidth: 0,
+    borderColor: "rgba(212,169,74,0.35)",
+  },
+  sheetGrabber: {
+    alignSelf: "center",
+    width: 40,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: "rgba(232,214,184,0.28)",
+    marginTop: -18,
+    marginBottom: 18,
   },
   sheetX: {
     position: "absolute",
     top: 16,
     right: 16,
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: "rgba(0,0,0,0.08)",
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: "rgba(232,214,184,0.10)",
+    borderWidth: 1,
+    borderColor: "rgba(232,214,184,0.18)",
     justifyContent: "center",
     alignItems: "center",
     zIndex: 50,
   },
-  sheetXText: { fontSize: 13, color: "#666", fontWeight: "600" },
+  sheetKicker: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: 11,
+    letterSpacing: 2.2,
+    color: GOLD,
+    textAlign: "center",
+    marginBottom: 8,
+  },
   sheetTitle: {
     fontFamily: fonts.heading,
-    fontSize: 22,
-    color: "#1A1A2E",
+    fontSize: 28,
+    lineHeight: 34,
+    color: "#F3E7D0",
     textAlign: "center",
-    marginBottom: 6,
+    marginBottom: 8,
   },
   sheetSub: {
     fontFamily: fonts.body,
     fontSize: fontSize.md,
-    color: "#555",
+    color: "rgba(232,214,184,0.68)",
     textAlign: "center",
-    marginBottom: 20,
+    marginBottom: 22,
   },
   sheetBold: {
     fontFamily: fonts.bodySemiBold,
-    textDecorationLine: "underline",
+    color: "#F3E7D0",
   },
   sheetPlan: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
-    borderWidth: 2,
-    borderColor: "#C49A3C",
-    borderRadius: 14,
-    paddingHorizontal: 20,
+    borderWidth: 1.5,
+    borderColor: GOLD,
+    borderRadius: 18,
+    paddingHorizontal: 18,
     paddingVertical: 16,
-    backgroundColor: "#fff",
     marginBottom: 14,
+    overflow: "hidden",
+    gap: 12,
   },
   sheetPlanName: {
     fontFamily: fonts.bodySemiBold,
     fontSize: fontSize.lg,
-    color: "#1A1A2E",
+    color: "#F3E7D0",
+  },
+  sheetPill: {
+    alignSelf: "flex-start",
+    marginTop: 6,
+    paddingHorizontal: 9,
+    paddingVertical: 3,
+    borderRadius: 999,
+    backgroundColor: "rgba(212,169,74,0.16)",
+    borderWidth: 1,
+    borderColor: "rgba(212,169,74,0.45)",
+  },
+  sheetPillText: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: 10,
+    letterSpacing: 0.6,
+    color: GOLD_LIGHT,
+    textTransform: "uppercase",
   },
   sheetPlanPrice: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: fontSize.md,
-    color: "#555",
+    fontFamily: fonts.heading,
+    fontSize: 26,
+    color: GOLD_LIGHT,
+  },
+  sheetPlanPer: {
+    fontFamily: fonts.bodyMedium,
+    fontSize: fontSize.sm,
+    color: "rgba(232,214,184,0.6)",
+    marginTop: 2,
   },
   sheetCheck: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     gap: 6,
-    marginBottom: 20,
+    marginBottom: 2,
   },
-  sheetCheckIcon: { fontSize: 16, color: colors.success, fontWeight: "700" },
-  sheetCheckText: { fontFamily: fonts.bodyMedium, fontSize: fontSize.sm, color: "#555" },
-  sheetCta: {
-    backgroundColor: "#C49A3C",
-    borderRadius: 14,
-    paddingVertical: 16,
-    alignItems: "center",
-    marginBottom: 8,
-    minHeight: 56,
-    justifyContent: "center",
-  },
-  sheetCtaText: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: fontSize.lg,
-    color: "#fff",
+  sheetCheckText: {
+    fontFamily: fonts.bodyMedium,
+    fontSize: fontSize.sm,
+    color: "rgba(232,214,184,0.75)",
   },
 });
