@@ -340,7 +340,7 @@ export default function PaywallScreen() {
               hitSlop={12}
               disabled={purchasing}
             >
-              <Ionicons name="close" size={16} color="rgba(232,214,184,0.8)" />
+              <Ionicons name="close" size={22} color="rgba(232,214,184,0.32)" />
             </Pressable>
 
             {/* Swallow taps on the sheet so they don't hit the backdrop. */}
@@ -612,14 +612,10 @@ const styles = StyleSheet.create({
   },
   sheetX: {
     position: "absolute",
-    top: 16,
-    right: 16,
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    backgroundColor: "rgba(232,214,184,0.10)",
-    borderWidth: 1,
-    borderColor: "rgba(232,214,184,0.18)",
+    top: 12,
+    left: 12,
+    width: 36,
+    height: 36,
     justifyContent: "center",
     alignItems: "center",
     zIndex: 50,

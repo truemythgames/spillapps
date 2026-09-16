@@ -7,6 +7,7 @@ import {
   Dimensions,
   FlatList,
   ViewToken,
+  Image as RNImage,
 } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
@@ -140,10 +141,33 @@ type Fit = "cover" | "contain";
  */
 const BACKDROP_FADE_MS = 1100;
 
-function Backdrop({ source, fit }: { source: number; fit: Fit }) {
+/** Bundled PNG-style decode — on screen from the first frame, no expo-image fade. */
+function WelcomeHero() {
   const scale = useSharedValue(1);
-  const [layers, setLayers] = useState<{ key: number; source: number; fit: Fit }[]>([
-    { key: 0, source, fit },
+  useEffect(() => {
+    scale.value = withRepeat(
+      withTiming(1.06, { duration: 14000, easing: Easing.inOut(Easing.sin) }),
+      -1,
+      true,
+    );
+  }, []);
+  const zoom = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
+  return (
+    <Animated.View style={[StyleSheet.absoluteFill, zoom]}>
+      <RNImage
+        source={HERO_IMAGE}
+        style={StyleSheet.absoluteFill}
+        resizeMode="contain"
+        fadeDuration={0}
+      />
+    </Animated.View>
+  );
+}
+
+function Backdrop({ source }: { source: number }) {
+  const scale = useSharedValue(1);
+  const [layers, setLayers] = useState<{ key: number; source: number }[]>([
+    { key: 0, source },
   ]);
   const keyRef = useRef(0);
 
@@ -157,19 +181,13 @@ function Backdrop({ source, fit }: { source: number; fit: Fit }) {
 
   useEffect(() => {
     const top = layers[layers.length - 1];
-    if (top.source === source && top.fit === fit) return;
+    if (top.source === source) return;
     keyRef.current += 1;
-    const next = { key: keyRef.current, source, fit };
-    if (fit === "contain") {
-      // Transparent hero: the old cover must actually leave, not sit underneath
-      setLayers([next]);
-      return;
-    }
-    // Full-bleed cover: fade in over the old one, then drop the old one
+    const next = { key: keyRef.current, source };
     setLayers((l) => [...l.slice(-1), next]);
     const id = setTimeout(() => setLayers((l) => l.slice(-1)), BACKDROP_FADE_MS + 100);
     return () => clearTimeout(id);
-  }, [source, fit]);
+  }, [source]);
 
   const zoom = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
 
@@ -178,15 +196,17 @@ function Backdrop({ source, fit }: { source: number; fit: Fit }) {
       {layers.map((l) => (
         <Animated.View
           key={l.key}
-          entering={
-            l.key === 0
-              ? undefined
-              : FadeIn.duration(BACKDROP_FADE_MS).easing(Easing.inOut(Easing.quad))
-          }
+          entering={FadeIn.duration(BACKDROP_FADE_MS).easing(Easing.inOut(Easing.quad))}
           exiting={FadeOut.duration(BACKDROP_FADE_MS).easing(Easing.inOut(Easing.quad))}
           style={StyleSheet.absoluteFill}
         >
-          <Image source={l.source} style={StyleSheet.absoluteFill} contentFit={l.fit} />
+          <Image
+            source={l.source}
+            style={StyleSheet.absoluteFill}
+            contentFit="cover"
+            transition={0}
+            priority="high"
+          />
         </Animated.View>
       ))}
     </Animated.View>
@@ -723,7 +743,8 @@ export default function OnboardingScreen() {
 
   return (
     <View style={styles.root}>
-      <Backdrop source={bg} fit={currentStep === "welcome" ? "contain" : "cover"} />
+      <WelcomeHero />
+      {currentStep !== "welcome" && <Backdrop source={bg} />}
       <LinearGradient
         colors={overlay}
         locations={currentStep === "welcome" ? [0, 0.5, 0.75, 1] : [0, 0.3, 0.62, 1]}

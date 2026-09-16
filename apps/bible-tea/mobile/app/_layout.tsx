@@ -95,13 +95,14 @@ export default function RootLayout() {
       }
       setHydrated(true);
       loadInitialData();
-      ExpoImage.prefetch(require("@/assets/onboarding/teastories.webp"));
+      const heroReady = ExpoImage.prefetch(require("@/assets/onboarding/teastories.webp"));
       ExpoImage.prefetch(require("@/assets/onboarding/noahs-ark.webp"));
       await Promise.all([
         setupPlayer(),
         initPurchases(),
         initAnalytics(),
         getSession(),
+        heroReady,
       ]);
       setAppReady(true);
     }
