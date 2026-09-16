@@ -339,8 +339,6 @@ export default function PaywallScreen() {
           <Animated.View
             style={[styles.sheet, { paddingBottom: insets.bottom + 20 }, s2Style]}
           >
-            {/* Swallow taps on the sheet so they don't hit the backdrop. */}
-            <Pressable style={{ width: "100%" }}>
             <Pressable
               style={styles.sheetX}
               onPress={goBack}
@@ -350,6 +348,8 @@ export default function PaywallScreen() {
               <Text style={styles.sheetXText}>✕</Text>
             </Pressable>
 
+            {/* Swallow taps on the sheet so they don't hit the backdrop. */}
+            <Pressable style={{ width: "100%" }}>
             <Text style={styles.sheetTitle}>{t("paywall.sheetTitle")}</Text>
             <Text style={styles.sheetSub}>
               {t("paywall.sheetSub")}<Text style={styles.sheetBold}>{t("paywall.sheetBold")}</Text>{t("paywall.sheetSubEnd")}
@@ -599,14 +599,14 @@ const styles = StyleSheet.create({
   sheetX: {
     position: "absolute",
     top: 16,
-    right: 20,
+    right: 16,
     width: 28,
     height: 28,
     borderRadius: 14,
     backgroundColor: "rgba(0,0,0,0.08)",
     justifyContent: "center",
     alignItems: "center",
-    zIndex: 10,
+    zIndex: 50,
   },
   sheetXText: { fontSize: 13, color: "#666", fontWeight: "600" },
   sheetTitle: {

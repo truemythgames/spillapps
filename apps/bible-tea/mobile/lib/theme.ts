@@ -28,7 +28,9 @@ export const colors = {
   gradientEnd: "#6B5CE7",
 };
 
-export const TAB_BAR_HEIGHT = 85;
+export const TAB_BAR_INNER_HEIGHT = 49;
+export const TAB_BAR_FLOAT_GAP = 12;
+export const TAB_BAR_HEIGHT = TAB_BAR_INNER_HEIGHT + TAB_BAR_FLOAT_GAP;
 
 export const spacing = {
   xs: 4,

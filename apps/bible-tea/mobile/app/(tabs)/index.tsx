@@ -21,8 +21,9 @@ import { sizedMedia } from "@/lib/content";
 import { Skeleton, SkeletonText } from "@/components/Skeleton";
 import { WidgetCard } from "@/components/WidgetPrompt";
 import { CoverImage } from "@/components/CoverImage";
-import { VerseOfTheDayCard } from "@/components/VerseShareCard";
+import { VerseOfTheDay } from "@/components/VerseOfTheDay";
 import { everydayWordPlaylist, homePlaylistRows } from "@/lib/home-playlists";
+import { requestPendingOnboardingReview } from "@/lib/review";
 
 const CARD_WIDTH = 150;
 const CARD_IMAGE_HEIGHT = 150;
@@ -180,6 +181,12 @@ function SkeletonHome({ paddingTop }: { paddingTop: number }) {
         <Text style={styles.headerTeaIcon}>🍵</Text>
       </View>
 
+      <View style={styles.votdSkeleton}>
+        <SkeletonText width={140} height={11} />
+        <SkeletonText width="90%" height={16} style={{ marginTop: spacing.sm }} />
+        <SkeletonText width={80} height={13} style={{ marginTop: 6 }} />
+      </View>
+
       <View style={[styles.sotdCard, { backgroundColor: colors.surface }]}>
         <Skeleton width="100%" height={220} borderRadius={0} />
       </View>
@@ -258,6 +265,10 @@ export default function HomeScreen() {
   }, []);
 
   useEffect(() => {
+    requestPendingOnboardingReview();
+  }, []);
+
+  useEffect(() => {
     const firstRow = sortedPlaylists[0]?.stories.slice(0, 6) ?? [];
     const urls = firstRow
       .map((s) => s.cover_image_url)
@@ -292,6 +303,8 @@ export default function HomeScreen() {
         </Pressable>
       </View>
 
+      <VerseOfTheDay onPress={() => router.push("/verse")} />
+
       {storyOfTheDay && (
         <Pressable
           style={styles.sotdCard}
@@ -323,15 +336,7 @@ export default function HomeScreen() {
       data={sortedPlaylists}
       keyExtractor={(item) => item.id}
       ListHeaderComponent={listHeader}
-      ListFooterComponent={
-        <>
-          <VerseOfTheDayCard
-            storyId={storyOfTheDay?.id}
-            coverImageUrl={storyOfTheDay?.cover_image_url}
-          />
-          <WidgetCard />
-        </>
-      }
+      ListFooterComponent={<WidgetCard />}
       renderItem={({ item }) => (
         <PlaylistRow
           playlist={item}
@@ -381,6 +386,16 @@ const styles = StyleSheet.create({
   },
   headerTeaIcon: {
     fontSize: 28,
+  },
+  votdSkeleton: {
+    marginHorizontal: spacing.lg,
+    marginBottom: spacing.lg,
+    backgroundColor: colors.surface,
+    borderRadius: radius.md,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.md,
+    borderWidth: 1,
+    borderColor: colors.surfaceBorder,
   },
 
   sotdCard: {

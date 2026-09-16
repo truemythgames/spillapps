@@ -29,7 +29,13 @@
     "today": "TODAY",
     "everydayWord": "Everyday Word",
     "noConnection": "No connection",
-    "noConnectionDesc": "Check your internet and try again"
+    "noConnectionDesc": "Check your internet and try again",
+    "verseAbout": "What this is saying",
+    "verseBook": "The book",
+    "verseSit": "Sit with this",
+    "verseAsk": "Take this with you",
+    "verseComing": "Coming up",
+    "relatedStories": "Hear the story"
   },
   "share": {
     "verseOfTheDay": "VERSE OF THE DAY",

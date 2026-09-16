@@ -29,7 +29,13 @@
     "today": "HOY",
     "everydayWord": "Palabra de Cada Día",
     "noConnection": "Sin conexión",
-    "noConnectionDesc": "Revisa tu internet e inténtalo de nuevo"
+    "noConnectionDesc": "Revisa tu internet e inténtalo de nuevo",
+    "verseAbout": "Qué está diciendo",
+    "verseBook": "El libro",
+    "verseSit": "Quédate con esto",
+    "verseAsk": "Llévatelo",
+    "verseComing": "Próximos",
+    "relatedStories": "Escucha la historia"
   },
   "share": {
     "verseOfTheDay": "VERSÍCULO DEL DÍA",

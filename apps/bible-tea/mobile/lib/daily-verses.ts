@@ -378,3 +378,17 @@ export function getVerseOfTheDay(date: Date = new Date(), lang: "en" | "es" = "e
   const index = (dayOfYear - 1 + 365) % DAILY_VERSES.length;
   return DAILY_VERSES[index][lang];
 }
+
+export function getUpcomingVerses(
+  lang: "en" | "es" = "en",
+  count = 3,
+  from: Date = new Date(),
+): { date: Date; text: string; ref: string }[] {
+  const out: { date: Date; text: string; ref: string }[] = [];
+  for (let i = 1; i <= count; i++) {
+    const date = new Date(from);
+    date.setDate(from.getDate() + i);
+    out.push({ date, ...getVerseOfTheDay(date, lang) });
+  }
+  return out;
+}

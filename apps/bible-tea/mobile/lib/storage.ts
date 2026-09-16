@@ -14,6 +14,7 @@ export const StorageKeys = {
   PRAYER_STREAK_DATA: "prayer_streak_data",
   WIDGET_PROMPT_DISMISSED: "widget_prompt_dismissed",
   HAS_REQUESTED_REVIEW: "has_requested_review",
+  PENDING_ONBOARDING_REVIEW: "pending_onboarding_review",
   LAUNCH_COUNT: "launch_count",
 } as const;
 

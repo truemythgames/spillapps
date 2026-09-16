@@ -224,6 +224,10 @@ export default function RootLayout() {
               options={{ animation: "slide_from_right" }}
             />
             <Stack.Screen
+              name="verse"
+              options={{ animation: "slide_from_bottom" }}
+            />
+            <Stack.Screen
               name="character/[name]"
               options={{ animation: "slide_from_right" }}
             />

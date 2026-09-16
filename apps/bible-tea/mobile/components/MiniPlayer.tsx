@@ -19,7 +19,9 @@ export function MiniPlayer() {
   if (!currentStory) return null;
 
   const isOnTabs = TAB_ROUTES.includes(pathname);
-  const bottomOffset = isOnTabs ? TAB_BAR_HEIGHT + 4 : insets.bottom + spacing.sm;
+  const bottomOffset = isOnTabs
+    ? TAB_BAR_HEIGHT + insets.bottom
+    : insets.bottom + spacing.sm;
 
   const progress = duration > 0 ? position / duration : 0;
 

@@ -52,7 +52,6 @@ function CaptureCard({
   const markReady = useCallback(() => {
     if (readyFired.current) return;
     readyFired.current = true;
-    // Let layout settle before capture
     requestAnimationFrame(() => setTimeout(onReady, 80));
   }, [onReady]);
 
@@ -91,10 +90,9 @@ function CaptureCard({
 }
 
 /**
- * Home-screen Verse of the Day card with a single share icon.
- * Captures a branded image via a brief modal (reliable on iOS/Android).
+ * Branded verse image share. Used if a screen wants the capture modal.
  */
-export function VerseOfTheDayCard({
+export function VerseShareButton({
   storyId,
   coverImageUrl,
 }: {
@@ -175,7 +173,7 @@ export function VerseOfTheDayCard({
   }, [sharing, verse.ref]);
 
   return (
-    <View style={styles.wrap}>
+    <View>
       <Modal
         visible={showCapture}
         transparent
@@ -201,37 +199,25 @@ export function VerseOfTheDayCard({
         </View>
       </Modal>
 
-      <View style={styles.card}>
-        <View style={styles.cardHeader}>
-          <Text style={styles.cardLabel}>{t("share.verseOfTheDay")}</Text>
-          <Pressable
-            style={styles.shareBtn}
-            onPress={handleShare}
-            disabled={sharing}
-            hitSlop={8}
-            accessibilityRole="button"
-            accessibilityLabel={t("share.button")}
-          >
-            {sharing ? (
-              <ActivityIndicator size="small" color={colors.textMuted} />
-            ) : (
-              <Ionicons name="share-outline" size={18} color={colors.textMuted} />
-            )}
-          </Pressable>
-        </View>
-
-        <Text style={styles.verseText}>"{verse.text}"</Text>
-        <Text style={styles.verseRef}>{verse.ref}</Text>
-      </View>
+      <Pressable
+        style={styles.shareBtn}
+        onPress={handleShare}
+        disabled={sharing}
+        hitSlop={8}
+        accessibilityRole="button"
+        accessibilityLabel={t("share.button")}
+      >
+        {sharing ? (
+          <ActivityIndicator size="small" color={colors.textMuted} />
+        ) : (
+          <Ionicons name="share-outline" size={18} color={colors.textMuted} />
+        )}
+      </Pressable>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  wrap: {
-    marginHorizontal: spacing.lg,
-    marginBottom: spacing.lg,
-  },
   captureModal: {
     flex: 1,
     backgroundColor: "rgba(0,0,0,0.55)",
@@ -244,44 +230,12 @@ const styles = StyleSheet.create({
     top: 0,
     opacity: 0.02,
   },
-  card: {
-    backgroundColor: colors.surface,
-    borderRadius: radius.md,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.md,
-    borderWidth: 1,
-    borderColor: colors.surfaceBorder,
-  },
-  cardHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: spacing.sm,
-  },
-  cardLabel: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: fontSize.xs,
-    color: colors.textMuted,
-    letterSpacing: 1,
-  },
   shareBtn: {
     width: 32,
     height: 32,
     borderRadius: 16,
     alignItems: "center",
     justifyContent: "center",
-  },
-  verseText: {
-    fontFamily: fonts.headingMedium,
-    fontSize: fontSize.md,
-    color: colors.textSecondary,
-    lineHeight: 22,
-    marginBottom: spacing.xs,
-  },
-  verseRef: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: fontSize.sm,
-    color: colors.textMuted,
   },
 });
 

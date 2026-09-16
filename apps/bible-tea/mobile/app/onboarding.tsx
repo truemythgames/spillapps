@@ -27,6 +27,7 @@ import Animated, {
 import { storage, StorageKeys } from "@/lib/storage";
 import { colors, fonts, fontSize, spacing } from "@/lib/theme";
 import { requestATT } from "@/lib/analytics";
+import { markReviewAfterOnboarding } from "@/lib/review";
 
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get("window");
 
@@ -202,6 +203,7 @@ export default function OnboardingScreen() {
 
   function completeOnboarding() {
     storage.set(StorageKeys.HAS_ONBOARDED, true);
+    markReviewAfterOnboarding();
     router.replace("/paywall");
   }
 
