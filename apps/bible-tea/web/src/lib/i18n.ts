@@ -810,7 +810,7 @@ const translations = {
     "stories.ctaDesc": "Descarga Bible Tea y oye cada historia bíblica con narración. La biblioteca completa está en la app.",
     "stories.faqTitle": "Historias bíblicas",
     "stories.aboutTitle": "Historias bíblicas que sí se oyen",
-    "stories.aboutP1": "Quien busca historias bíblicas quiere la trama, no un temario. La creación. David. Jonás. El samaritano. El huerto. Pascua. Bible Tea las cuenta en audio corto — unos cinco minutos — con voz de amiga.",
+    "stories.aboutP1": "Quien busca historias bíblicas quiere la trama, no un temario. La creación. David. Jonás. El samaritano. El huerto. Pascua. Bible Tea las cuenta en audio corto — unos cinco minutos — como té, no como un sermón.",
     "stories.aboutP2": "Esta página es el catálogo completo. Algunas historias tienen relato escrito y el pasaje en el sitio. La voz está en la app. No es un libro infantil. Adultos y principiantes empiezan aquí.",
     "stories.featuredTitle": "Historias con el relato completo",
     "stories.featuredSub": "Lee el pasaje y la historia aquí. Óyelas en Bible Tea.",
