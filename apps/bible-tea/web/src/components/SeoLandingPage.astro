@@ -182,6 +182,9 @@ const description = clampDescription(landing.description);
       <div class="links">
         <a href={localePath("/bible-app", locale)}>{landing.linkApp}</a>
         <a href={localePath("/stories", locale)}>{landing.linkStories}</a>
+        <a href={localePath("/prayers", locale)}>{t(locale, "nav.prayers")}</a>
+        <a href={localePath("/verse-of-the-day", locale)}>{t(locale, "nav.verseOfTheDay")}</a>
+        <a href={localePath("/widget", locale)}>{t(locale, "widget.breadcrumbWidget")}</a>
         <a href={localePath("/bible-stories-for-sleep", locale)}>{landing.linkSleep}</a>
       </div>
 
