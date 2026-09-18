@@ -237,9 +237,8 @@ const EN: Record<LandingId, Omit<LandingCopy, "canonicalPath" | "esPath" | "camp
     midDesc: "Download Bible Tea. Play a story. Then ask what it means. Prayer and a daily verse widget are in the same app.",
     aboutTitle: "Bible Tea vs Haven",
     about: [
-      "Haven — Bible Chat is a separate AI Bible app. People search it for study, prayer, and a chatbot. Their site and store listings are theirs. This page is Bible Tea.",
-      "Bible Tea leads with the story: short audio, the actual plot, a written retelling on the site. The in-app companion will talk about a passage or help you pray. It will not pretend to be God, a pastor, or a therapist.",
-      "If you want a chat window as the whole product, Haven may be what you searched for. If you want to hear the Bible like tea and then ask a question, download Bible Tea.",
+      "Haven is a different app. Bible Tea is stories first: short audio, then prayers, verse of the day, a home-screen widget, and chat if you want to ask what it means.",
+      "If you searched Haven looking for the stories too, download Bible Tea.",
     ],
     compare: {
       title: "Side by side",
@@ -442,9 +441,8 @@ const ES: Record<LandingId, Omit<LandingCopy, "canonicalPath" | "esPath" | "camp
     midDesc: "Descarga Bible Tea. Pon una historia. Luego pregunta qué significa. Oración y widget de versículo diario están en la misma app.",
     aboutTitle: "Bible Tea frente a Haven",
     about: [
-      "Haven — Bible Chat es otra app de Biblia con IA. La buscan para estudiar, orar y hablar con un chatbot. Su sitio y sus fichas son de ellos. Esta página es Bible Tea.",
-      "Bible Tea empieza por la historia: audio corto, la trama, un relato escrito en el sitio. El compañero de la app habla del pasaje o te ayuda a orar. No finge ser Dios, pastor ni terapeuta.",
-      "Si quieres una ventana de chat como producto entero, Haven puede ser lo que buscaste. Si quieres oír la Biblia como té y luego preguntar, descarga Bible Tea.",
+      "Haven es otra app. Bible Tea es primero historias: audio corto, oraciones, versículo del día, widget en la pantalla y chat si quieres preguntar.",
+      "Si buscabas Haven y también querías las historias, descarga Bible Tea.",
     ],
     compare: {
       title: "Lado a lado",
