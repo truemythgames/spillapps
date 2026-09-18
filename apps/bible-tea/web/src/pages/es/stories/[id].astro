@@ -187,7 +187,7 @@ const articleLd = {
   description: story.description,
   image: hasImage ? cover : "https://bibletea.app/icon.png",
   datePublished: "2026-04-01",
-  dateModified: storyPage ? "2026-09-05" : "2026-04-13",
+  dateModified: storyPage?.updated ?? (storyPage ? "2026-09-05" : "2026-04-13"),
   wordCount: storyWordCount,
   author: { "@type": "Organization", name: "Bible Tea", url: "https://bibletea.app" },
   publisher: {

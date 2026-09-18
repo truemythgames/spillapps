@@ -40,6 +40,8 @@ export interface StoryPageFaq {
 export interface StoryPage {
   passageRef: string;
   translation: string;
+  /** ISO date from frontmatter; used as schema dateModified. */
+  updated?: string;
   /** Markdown */
   passage: string;
   /** Markdown */
@@ -97,6 +99,7 @@ function parse(raw: string): StoryPage {
   const page: StoryPage = {
     passageRef: meta.passageRef ?? "",
     translation: meta.translation ?? "",
+    updated: meta.updated,
     passage: sections["passage"] ?? "",
     story: sections["the story"] ?? "",
     meaning: sections["what it means"] ?? "",

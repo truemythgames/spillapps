@@ -150,6 +150,14 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
         "¿Qué milagros hizo Pedro? Sana al paralítico Eneas en Lida y resucita a Tabita en Jope. Todos los milagros de Pedro, narrados como audio.",
     },
   },
+  "the-woman-at-the-well": {
+    en: {
+      title: "Woman at the Well — John 4:1-42 - Bible Tea",
+      h1: "The Woman at the Well",
+      description:
+        "John 4:1-42: a Samaritan woman meets Jesus at Jacob's well. Living water, five husbands, and the first witness in her town.",
+    },
+  },
   "walking-on-water": {
     en: {
       title: "Jesus Walks on Water — Full Story (Matthew 14:22-33) - Bible Tea",
