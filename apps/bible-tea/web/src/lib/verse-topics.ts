@@ -28,11 +28,11 @@ export const VERSE_TOPICS: VerseTopic[] = [
     slug: "strength",
     esSlug: "fortaleza",
     label: { en: "Strength", es: "Fortaleza" },
-    h1: { en: "Bible Verses About Strength", es: "Versículos de fortaleza" },
-    title: { en: "Bible Verses About Strength | Bible Tea", es: "Versículos de fortaleza | Bible Tea" },
+    h1: { en: "Bible Verse of the Day About Strength", es: "Versículo del día sobre fortaleza" },
+    title: { en: "Bible Verse of the Day About Strength | Bible Tea", es: "Versículo del día sobre fortaleza | Bible Tea" },
     description: {
-      en: "Bible verses about strength and courage when you are tired. Read them here, then pray and hear the story behind them on Bible Tea.",
-      es: "Versículos de fortaleza y valor cuando estás cansado. Léelos aquí, ora y escucha la historia detrás en Bible Tea.",
+      en: "Bible verse of the day about strength — plus the verses people reach for when they are tired. Read them here, then hear the story on Bible Tea.",
+      es: "Versículo del día sobre fortaleza, más los versículos que se buscan cuando estás cansado. Léelos aquí y escucha la historia en Bible Tea.",
     },
     intro: {
       en: "These are the verses people reach for when the week is heavier than their arms. Strength in scripture is not hype. It is God staying in the room after you have nothing left to prove.",

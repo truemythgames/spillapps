@@ -4,6 +4,7 @@ import StoreButtons from "../../../components/StoreButtons.astro";
 import { getLocale, localePath, t } from "../../../lib/i18n";
 import { clampTitle, clampDescription } from "../../../lib/seo";
 import { getVerseTopics, topicCopy, verseRef, verseText } from "../../../lib/verse-topics";
+import { dayOfYear } from "../../../lib/daily-verses";
 
 export function getStaticPaths() {
   return getVerseTopics().map((topic) => ({
@@ -20,6 +21,8 @@ const h1 = topicCopy(topic, "h1", locale);
 const label = topicCopy(topic, "label", locale);
 const pageUrl = `https://bibletea.app/es/versiculos/${topic.esSlug}/`;
 const others = getVerseTopics().filter((item) => item.slug !== topic.slug);
+const featured = topic.verses[(dayOfYear() - 1 + topic.verses.length) % topic.verses.length];
+const todayLabel = t(locale, "verses.todayLabel").replace("{topic}", label.toLowerCase());
 
 const breadcrumbLd = {
   "@context": "https://schema.org",
@@ -95,6 +98,8 @@ const faqLd = {
     .crosslink-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-bottom: 0.35rem; }
     .crosslink-title { color: var(--primary); font-weight: 600; font-size: 1rem; }
 
+    .verse.featured { border-color: var(--primary); }
+    .verse .today { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-bottom: 0.45rem; }
     .verse {
       background: var(--surface);
       border: 1px solid var(--surface-border);
@@ -170,6 +175,13 @@ const faqLd = {
         <div class="crosslink-title">{topicCopy(topic, "storyCta", locale)}</div>
       </a>
     </div>
+
+    <article class="verse featured">
+      <div class="today">{todayLabel}</div>
+      <div class="ref">{verseRef(featured, locale)}</div>
+      <blockquote>“{verseText(featured, locale)}”</blockquote>
+      <p class="note">{t(locale, "verses.todayNote")}</p>
+    </article>
 
     {topic.verses.map((v) => (
       <article class="verse">

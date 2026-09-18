@@ -9,6 +9,8 @@ const NO_TRAILING_SLASH = new Set(["/feed.xml"]);
 /** Pages where the Spanish slug differs from the English one. */
 const ES_SLUG_OVERRIDES: Record<string, string> = {
   "/verse-of-the-day": "/versiculo-del-dia",
+  "/kjv-verse-of-the-day": "/versiculo-del-dia-kjv",
+  "/bible-app": "/app-biblia",
   "/prayer-for-today": "/oracion-de-hoy",
   "/verses": "/versiculos",
   ...Object.fromEntries(getVerseTopics().map((t) => [`/verses/${t.slug}`, `/versiculos/${t.esSlug}`])),
@@ -48,6 +50,8 @@ export const GET: APIRoute = async () => {
     { path: "/prayers", lastmod: today, changefreq: "weekly", priority: 0.8 },
     { path: "/books", lastmod: today, changefreq: "weekly", priority: 0.8 },
     { path: "/verse-of-the-day", lastmod: today, changefreq: "daily", priority: 0.9 },
+    { path: "/kjv-verse-of-the-day", lastmod: today, changefreq: "daily", priority: 0.85 },
+    { path: "/bible-app", lastmod: today, changefreq: "weekly", priority: 0.95 },
     { path: "/prayer-for-today", lastmod: today, changefreq: "daily", priority: 0.9 },
     { path: "/verses", lastmod: today, changefreq: "weekly", priority: 0.85 },
     { path: "/widget", lastmod: today, changefreq: "monthly", priority: 0.8 },

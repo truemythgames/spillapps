@@ -51,6 +51,10 @@ jobs:
                 "https://bibletea.app/prayer-for-today/",
                 "https://bibletea.app/es/oracion-de-hoy/",
                 "https://bibletea.app/",
-                "https://bibletea.app/es/"
+                "https://bibletea.app/es/",
+                "https://bibletea.app/bible-app/",
+                "https://bibletea.app/es/app-biblia/",
+                "https://bibletea.app/kjv-verse-of-the-day/",
+                "https://bibletea.app/es/versiculo-del-dia-kjv/"
               ]
             }'

@@ -1,0 +1,232 @@
+---
+import Base from "../layouts/Base.astro";
+import StoreButtons from "./StoreButtons.astro";
+import CoverImg from "./CoverImg.astro";
+import { getLocale, localePath, t } from "../lib/i18n";
+import { bibleAppSeo } from "../lib/seo";
+import { getCatalog, hasCover } from "../lib/stories";
+
+const locale = getLocale(Astro.currentLocale);
+const storeCampaign = locale === "es" ? "es-app-biblia" : "en-bible-app";
+const { title, description } = bibleAppSeo(locale);
+const catalog = getCatalog(locale);
+const catalogMap = new Map(catalog.map((s) => [s.id, s]));
+const featuredIds = [
+  "noahs-ark",
+  "david-and-goliath",
+  "the-prodigal-son",
+  "the-resurrection",
+  "jonah-and-the-whale",
+  "crossing-the-red-sea",
+  "daniel-and-the-lions-den",
+  "the-good-samaritan",
+];
+const stories = featuredIds
+  .map((id) => catalogMap.get(id))
+  .filter((s): s is NonNullable<typeof s> => Boolean(s && hasCover(s.id)));
+
+const faqItems = [
+  { q: t(locale, "appPage.faqQ1"), a: t(locale, "appPage.faqA1") },
+  { q: t(locale, "appPage.faqQ2"), a: t(locale, "appPage.faqA2") },
+  { q: t(locale, "appPage.faqQ3"), a: t(locale, "appPage.faqA3") },
+  { q: t(locale, "appPage.faqQ4"), a: t(locale, "appPage.faqA4") },
+  { q: t(locale, "appPage.faqQ5"), a: t(locale, "appPage.faqA5") },
+];
+
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: t(locale, "votd.breadcrumbHome"), item: locale === "es" ? "https://bibletea.app/es/" : "https://bibletea.app/" },
+    { "@type": "ListItem", position: 2, name: t(locale, "appPage.breadcrumb"), item: locale === "es" ? "https://bibletea.app/es/app-biblia/" : "https://bibletea.app/bible-app/" },
+  ],
+};
+
+const appLd = {
+  "@context": "https://schema.org",
+  "@type": "MobileApplication",
+  name: "Bible Tea",
+  operatingSystem: "iOS, Android",
+  applicationCategory: "ReligionApplication",
+  url: locale === "es" ? "https://bibletea.app/es/app-biblia/" : "https://bibletea.app/bible-app/",
+  image: "https://bibletea.app/icon.png",
+  description,
+  aggregateRating: { "@type": "AggregateRating", ratingValue: "5", ratingCount: "50", bestRating: "5" },
+  featureList: "Audio Bible Stories, Bible Stories App, Guided Prayers, Daily Bible Verse Widget",
+};
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqItems.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+---
+
+<Base title={title} description={description} canonicalPath="/bible-app" esPath="/app-biblia" jsonLd={[breadcrumbLd, appLd, faqLd]}>
+  <style>
+    .bc { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--text-muted); max-width: 1200px; margin: 0 auto; padding: 6.5rem 2rem 0; }
+    .bc a { color: var(--text-muted); text-decoration: none; }
+    .bc a:hover { color: var(--primary); }
+    .bc .sep { opacity: 0.4; }
+    .hero { padding: 2rem 2rem 1.5rem; text-align: center; max-width: 760px; margin: 0 auto; }
+    .hero h1 {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(2rem, 5vw, 3.1rem);
+      margin-bottom: 0.85rem;
+      background: linear-gradient(135deg, var(--text) 0%, var(--primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p { color: var(--text-secondary); font-size: 1.1rem; line-height: 1.7; margin-bottom: 1.5rem; }
+    .content { max-width: 1200px; margin: 0 auto; padding: 0 2rem 4rem; }
+    .stories-head { text-align: center; margin: 1rem 0 1.25rem; }
+    .stories-head h2 { font-family: "Playfair Display", serif; font-size: 1.55rem; margin: 0 0 0.4rem; }
+    .stories-head p { color: var(--text-secondary); margin: 0; }
+    .story-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.85rem; margin-bottom: 1.25rem; }
+    .story-card { text-decoration: none; color: inherit; }
+    .story-card img, .story-card :global(img) { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 14px; display: block; }
+    .story-card h3 { font-size: 0.92rem; margin: 0.55rem 0 0.15rem; }
+    .story-card span { color: var(--text-muted); font-size: 0.78rem; }
+    .stories-more { display: block; text-align: center; color: var(--primary); font-weight: 600; text-decoration: none; margin: 0 0 2rem; }
+    .stories-more:hover { text-decoration: underline; }
+    .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 0 0 2rem; }
+    .feature { background: var(--surface); border: 1px solid var(--surface-border); border-radius: 16px; padding: 1.4rem 1.25rem; }
+    .feature h2 { font-family: "Playfair Display", serif; font-size: 1.2rem; margin: 0 0 0.55rem; }
+    .feature p { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.65; margin: 0; }
+    .mid-cta, .final-cta {
+      text-align: center;
+      padding: 2.25rem 1.75rem;
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 20px;
+      margin: 2rem 0;
+    }
+    .mid-cta h2, .final-cta h2, .compare h2, .faq h2, .extra h2 {
+      font-family: "Playfair Display", serif;
+      font-size: 1.45rem;
+      margin: 0 0 0.65rem;
+    }
+    .mid-cta p, .final-cta p { color: var(--text-secondary); margin: 0 0 1.15rem; }
+    .compare { margin: 2.5rem 0; }
+    .compare p { color: var(--text-secondary); line-height: 1.75; margin: 0 0 1rem; }
+    .extra { margin: 2rem 0; padding: 1.5rem 1.35rem; background: var(--surface); border: 1px solid var(--surface-border); border-radius: 16px; }
+    .extra p { color: var(--text-secondary); line-height: 1.7; margin: 0 0 0.75rem; }
+    .extra a { color: var(--primary); font-weight: 600; text-decoration: none; }
+    .extra a:hover { text-decoration: underline; }
+    .faq { margin: 2.5rem 0 1rem; }
+    .faq-item { margin-bottom: 1.35rem; }
+    .faq-item h3 { font-size: 1rem; margin: 0 0 0.4rem; }
+    .faq-item p { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7; margin: 0; }
+    .links { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin: 0 0 2rem; }
+    .links a {
+      display: inline-flex;
+      padding: 0.7rem 1.2rem;
+      border-radius: 999px;
+      border: 1px solid var(--surface-border);
+      background: var(--surface);
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.92rem;
+      text-decoration: none;
+    }
+    .links a:hover { border-color: var(--primary); color: var(--primary); }
+    @media (max-width: 900px) {
+      .story-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 800px) {
+      .features { grid-template-columns: 1fr; }
+      .bc, .hero { padding-left: 1.25rem; padding-right: 1.25rem; }
+      .content { padding: 0 1.25rem 3rem; }
+    }
+  </style>
+
+  <main>
+    <div class="bc" role="navigation" aria-label="Breadcrumb">
+      <a href={localePath("/", locale)}>{t(locale, "votd.breadcrumbHome")}</a><span class="sep">/</span>
+      <span>{t(locale, "appPage.breadcrumb")}</span>
+    </div>
+    <div class="hero">
+      <h1>{t(locale, "appPage.h1")}</h1>
+      <p>{t(locale, "appPage.subtitle")}</p>
+      <StoreButtons variant="hero" campaign={storeCampaign} />
+    </div>
+
+    <div class="content">
+      <div class="stories-head">
+        <h2>{t(locale, "appPage.storiesTitle")}</h2>
+        <p>{t(locale, "appPage.storiesSub")}</p>
+      </div>
+      <div class="story-grid">
+        {stories.map((story) => (
+          <a class="story-card" href={localePath(`/stories/${story.id}`, locale)}>
+            <CoverImg storyId={story.id} alt={story.title} width={280} height={280} />
+            <h3>{story.title}</h3>
+            <span>{story.bibleRef}</span>
+          </a>
+        ))}
+      </div>
+      <a class="stories-more" href={localePath("/stories", locale)}>{t(locale, "appPage.storiesCta")}</a>
+
+      <div class="features">
+        <article class="feature">
+          <h2>{t(locale, "appPage.f1Title")}</h2>
+          <p>{t(locale, "appPage.f1Body")}</p>
+        </article>
+        <article class="feature">
+          <h2>{t(locale, "appPage.f2Title")}</h2>
+          <p>{t(locale, "appPage.f2Body")}</p>
+        </article>
+        <article class="feature">
+          <h2>{t(locale, "appPage.f3Title")}</h2>
+          <p>{t(locale, "appPage.f3Body")}</p>
+        </article>
+      </div>
+
+      <section class="mid-cta">
+        <h2>{t(locale, "appPage.midTitle")}</h2>
+        <p>{t(locale, "appPage.midDesc")}</p>
+        <StoreButtons variant="light" campaign={storeCampaign} />
+      </section>
+
+      <section class="compare">
+        <h2>{t(locale, "appPage.compareTitle")}</h2>
+        <p>{t(locale, "appPage.compareP1")}</p>
+        <p>{t(locale, "appPage.compareP2")}</p>
+      </section>
+
+      <section class="extra">
+        <h2>{t(locale, "appPage.extraTitle")}</h2>
+        <p>{t(locale, "appPage.extraBody")}</p>
+        <a href={localePath("/verse-of-the-day", locale)}>{t(locale, "appPage.votdLink")}</a>
+      </section>
+
+      <div class="links">
+        <a href={localePath("/stories", locale)}>{t(locale, "appPage.linkStories")}</a>
+        <a href={localePath("/playlists", locale)}>{t(locale, "appPage.linkPlaylists")}</a>
+        <a href={localePath("/verse-of-the-day", locale)}>{t(locale, "appPage.linkVotd")}</a>
+        <a href={localePath("/widget", locale)}>{t(locale, "appPage.linkWidget")}</a>
+      </div>
+
+      <section class="faq">
+        <h2>{t(locale, "appPage.faqTitle")}</h2>
+        {faqItems.map((f) => (
+          <div class="faq-item">
+            <h3>{f.q}</h3>
+            <p>{f.a}</p>
+          </div>
+        ))}
+      </section>
+
+      <section class="final-cta">
+        <h2>{t(locale, "appPage.finalTitle")}</h2>
+        <p>{t(locale, "appPage.finalDesc")}</p>
+        <StoreButtons variant="light" campaign={storeCampaign} />
+      </section>
+    </div>
+  </main>
+</Base>

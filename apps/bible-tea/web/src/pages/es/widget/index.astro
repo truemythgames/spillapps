@@ -166,6 +166,7 @@ const votdHref = locale === "es" ? "/es/versiculo-del-dia/" : "/verse-of-the-day
     }
     .more-section h2 { font-family: 'Playfair Display', serif; font-size: 1.35rem; margin-bottom: 0.75rem; }
     .more-section p { color: var(--text-secondary); font-size: 1rem; line-height: 1.7; max-width: 520px; margin: 0 auto 1rem; }
+    .more-links { display: flex; flex-wrap: wrap; gap: 0.85rem 1.25rem; justify-content: center; }
     .more-link { color: var(--primary); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
     .more-link:hover { text-decoration: underline; }
 
@@ -231,7 +232,10 @@ const votdHref = locale === "es" ? "/es/versiculo-del-dia/" : "/verse-of-the-day
       <section class="more-section">
         <h2>{t(locale, "widget.moreTitle")}</h2>
         <p>{t(locale, "widget.moreDesc")}</p>
-        <a href={votdHref} class="more-link">{t(locale, "nav.verseOfTheDay")} →</a>
+        <div class="more-links">
+          <a href={votdHref} class="more-link">{t(locale, "nav.verseOfTheDay")} →</a>
+          <a href={localePath("/bible-app", locale)} class="more-link">{t(locale, "votd.appLink")} →</a>
+        </div>
       </section>
     </div>
 

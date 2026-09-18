@@ -104,6 +104,7 @@ export function localizeBibleRef(ref: string, locale: Locale): string {
 export interface SeoOverride {
   title?: string;
   description?: string;
+  h1?: string;
 }
 
 type LocalizedSeo = Partial<Record<Locale, SeoOverride>>;
@@ -237,9 +238,10 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
         "A Roman centurion tells Jesus: \"just say the word and my servant will be healed.\" Why Jesus called it the greatest faith in Israel. Retold as audio.",
     },
     es: {
-      title: "La Fe del Centurión Romano — Mateo 8:5-13 Explicado - Bible Tea",
+      title: "La fe del centurión — Mateo 8 - Bible Tea",
+      h1: "La fe del centurión",
       description:
-        "Un centurión romano le dice a Jesús: \"solo di la palabra y mi siervo sanará.\" Por qué Jesús la llamó la fe más grande de Israel. Narrado como audio.",
+        "La fe del centurión: un romano le dice a Jesús “solo di la palabra” y el siervo sana. Mateo 8:5-13, narrado como audio.",
     },
   },
   "feeding-4000": {
@@ -379,9 +381,10 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
   },
   "elijah-and-the-widow": {
     es: {
-      title: "Elías y la Viuda de Sarepta — 1 Reyes 17:8-24 - Bible Tea",
+      title: "Elías y la viuda — 1 Reyes 17 - Bible Tea",
+      h1: "Elías y la viuda",
       description:
-        "Una viuda con su último puñado de harina, un profeta que pide pan, y un milagro que no se acaba. Elías y la viuda (1 Reyes 17:8-24), narrado.",
+        "Elías y la viuda de Sarepta: su último puñado de harina, un profeta que pide pan, y un milagro que no se acaba. 1 Reyes 17, narrado.",
     },
   },
   "achans-hidden-sin": {
@@ -419,9 +422,10 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
         "A man is beaten and left for dead. A priest and a Levite walk past. The despised outsider stops. The Good Samaritan parable (Luke 10:25-37) and what it means.",
     },
     es: {
-      title: "El buen samaritano en la Biblia — Lucas 10 - Bible Tea",
+      title: "El buen samaritano biblia — Lucas 10 - Bible Tea",
+      h1: "El buen samaritano",
       description:
-        "¿Qué es el buen samaritano en la Biblia? Un hombre asaltado, religiosos que pasan de largo, y el forastero que se detiene. Lucas 10:25-37.",
+        "El buen samaritano en la biblia: un hombre asaltado, religiosos que pasan de largo, y el forastero que se detiene. Lucas 10:25-37.",
     },
   },
   "a-talking-donkey-and-a-hired-prophet": {
@@ -431,9 +435,10 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
         "Which Bible character was spoken to by a donkey? Balaam — hired to curse Israel, until his donkey saw the angel he couldn't. Numbers 22, retold as audio.",
     },
     es: {
-      title: "¿El burro que habló en la Biblia? - Bible Tea",
+      title: "El burro que habló — Números 22 - Bible Tea",
+      h1: "El burro que habló",
       description:
-        "¿El burro que habló en la Biblia? Balaam — contratado para maldecir a Israel, hasta que su burra vio al ángel que él no veía. Números 22, narrado.",
+        "El burro que habló en la Biblia: Balaam, contratado para maldecir a Israel, hasta que su burra vio al ángel. Números 22, narrado.",
     },
   },
   "jesus-stops-a-storm": {
@@ -551,9 +556,10 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
         "Professional fishermen catch nothing all night. Jesus says try again — and the nets nearly break. The miraculous catch of fish, retold as audio.",
     },
     es: {
-      title: "La Pesca Milagrosa — Lucas 5:1-11 - Bible Tea",
+      title: "La pesca milagrosa — Lucas 5 - Bible Tea",
+      h1: "La pesca milagrosa",
       description:
-        "Pescadores profesionales no pescan nada en toda la noche. Jesús dice inténtenlo de nuevo — y las redes casi se rompen. Lucas 5:1-11, narrado.",
+        "La pesca milagrosa: pescadores sin nada en toda la noche. Jesús dice inténtenlo de nuevo — y las redes casi se rompen. Lucas 5:1-11.",
     },
   },
   "crossing-the-red-sea": {
@@ -1242,14 +1248,60 @@ export function verseOfTheDaySeo(
     return {
       title: clampTitle(`Versículo del día de hoy — ${verse.ref} | Bible Tea`),
       description: clampDescription(
-        `Versículo del día de hoy (${dateLabel}, ${verse.ref}): “${snippet}” Léelo aquí o ponlo en tu pantalla con el widget gratis.`,
+        `Versículo del día de hoy (${dateLabel}, ${verse.ref}): “${snippet}” Léelo aquí o ponlo en tu pantalla con el widget.`,
       ),
     };
   }
   return {
-    title: clampTitle(`Bible Verse of the Day — ${verse.ref} | Bible Tea`),
+    title: clampTitle(`Verse of the day — ${verse.ref} | Bible Tea`),
     description: clampDescription(
-      `Today's Bible verse of the day (${dateLabel}, ${verse.ref}): “${snippet}” Read it here, or add the free home-screen widget.`,
+      `Today's verse of the day (${dateLabel}, ${verse.ref}): “${snippet}” Read it here, or add the bible verse widget.`,
+    ),
+  };
+}
+
+export function bibleAppSeo(locale: Locale): { title: string; description: string } {
+  if (locale === "es") {
+    return {
+      title: clampTitle("App biblia — Historias en audio | Bible Tea"),
+      description: clampDescription(
+        "App biblia para iPhone y Android. Historias bíblicas en audio de cinco minutos, oraciones y un widget. Descarga Bible Tea y escúchalas.",
+      ),
+    };
+  }
+  return {
+    title: clampTitle("Bible App — Audio Bible Stories | Bible Tea"),
+    description: clampDescription(
+      "Bible app for iPhone and Android. Listen to Bible stories in about five minutes, plus prayers and a verse widget. Download Bible Tea and hear them.",
+    ),
+  };
+}
+
+export function kjvVerseSeo(
+  locale: Locale,
+  verse: { text: string; ref: string },
+  date: Date,
+): { title: string; description: string } {
+  const dateLabel =
+    locale === "es"
+      ? date.toLocaleDateString("es-ES", { day: "numeric", month: "short", year: "numeric" })
+      : date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  const snippet =
+    verse.text.length > 90
+      ? `${verse.text.slice(0, 87).replace(/\s+\S*$/, "")}…`
+      : verse.text;
+  if (locale === "es") {
+    return {
+      title: clampTitle(`Versículo del día KJV — ${verse.ref} | Bible Tea`),
+      description: clampDescription(
+        `Versículo del día en KJV (${dateLabel}, ${verse.ref}): “${snippet}” Texto King James en dominio público.`,
+      ),
+    };
+  }
+  return {
+    title: clampTitle(`KJV verse of the day — ${verse.ref} | Bible Tea`),
+    description: clampDescription(
+      `KJV verse of the day (${dateLabel}, ${verse.ref}): “${snippet}” Public-domain King James text.`,
     ),
   };
 }

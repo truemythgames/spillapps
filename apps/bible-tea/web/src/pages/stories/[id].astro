@@ -152,6 +152,7 @@ const next = idx < catalog.length - 1 ? catalog[idx + 1] : null;
 const bibleRef = localizeBibleRef(story.bibleRef, locale);
 const seoOverride = storySeo(story.id, locale);
 const pageTitle = clampTitle(seoOverride.title ?? `${story.title} — ${bibleRef} - Bible Tea`);
+const pageH1 = seoOverride.h1 ?? story.title;
 const pageDesc = clampDescription(seoOverride.description ?? (locale === "es"
   ? `${story.description} Descarga Bible Tea gratis y escúchala.`
   : `${story.description} Download Bible Tea for free and hear it.`));
@@ -845,7 +846,7 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
           ) : (
             <div class="hero-section">{story.section}</div>
           )}
-          <h1>{story.title}</h1>
+          <h1>{pageH1}</h1>
           <div class="hero-download"><StoreButtons variant="hero" campaign={storeCampaign} /></div>
           <div class="hero-meta">
             <span class="hero-ref">{bibleRef}</span>
