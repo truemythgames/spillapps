@@ -55,6 +55,8 @@ jobs:
                 "https://bibletea.app/bible-app/",
                 "https://bibletea.app/es/app-biblia/",
                 "https://bibletea.app/kjv-verse-of-the-day/",
-                "https://bibletea.app/es/versiculo-del-dia-kjv/"
+                "https://bibletea.app/es/versiculo-del-dia-kjv/",
+                "https://bibletea.app/bible-stories-for-sleep/",
+                "https://bibletea.app/es/historias-biblicas-para-dormir/"
               ]
             }'

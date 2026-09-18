@@ -1,0 +1,212 @@
+---
+import Base from "../layouts/Base.astro";
+import StoreButtons from "./StoreButtons.astro";
+import CoverImg from "./CoverImg.astro";
+import { getLocale, localePath, t } from "../lib/i18n";
+import { sleepStoriesSeo } from "../lib/seo";
+import { getCatalog, hasCover } from "../lib/stories";
+
+const locale = getLocale(Astro.currentLocale);
+const storeCampaign = locale === "es" ? "es-sleep" : "en-sleep";
+const { title, description } = sleepStoriesSeo(locale);
+const catalog = getCatalog(locale);
+const catalogMap = new Map(catalog.map((s) => [s.id, s]));
+const featuredIds = [
+  "creation",
+  "jacobs-ladder",
+  "jesus-stops-a-storm",
+  "psalm-91-gods-protection",
+  "songs-in-the-night",
+  "birth-of-jesus",
+  "ruth-and-naomi",
+  "bread-from-heaven",
+];
+const stories = featuredIds
+  .map((id) => catalogMap.get(id))
+  .filter((s): s is NonNullable<typeof s> => Boolean(s && hasCover(s.id)));
+
+const prayers = [
+  { slug: "cant-sleep", titleKey: "sleepPage.pr1" as const },
+  { slug: "nighttime-peace", titleKey: "sleepPage.pr2" as const },
+  { slug: "rest-for-weary", titleKey: "sleepPage.pr3" as const },
+  { slug: "surrender-before-sleep", titleKey: "sleepPage.pr4" as const },
+];
+
+const faqItems = [
+  { q: t(locale, "sleepPage.faqQ1"), a: t(locale, "sleepPage.faqA1") },
+  { q: t(locale, "sleepPage.faqQ2"), a: t(locale, "sleepPage.faqA2") },
+  { q: t(locale, "sleepPage.faqQ3"), a: t(locale, "sleepPage.faqA3") },
+  { q: t(locale, "sleepPage.faqQ4"), a: t(locale, "sleepPage.faqA4") },
+];
+
+const pageUrl = locale === "es"
+  ? "https://bibletea.app/es/historias-biblicas-para-dormir/"
+  : "https://bibletea.app/bible-stories-for-sleep/";
+
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: t(locale, "votd.breadcrumbHome"), item: locale === "es" ? "https://bibletea.app/es/" : "https://bibletea.app/" },
+    { "@type": "ListItem", position: 2, name: t(locale, "sleepPage.breadcrumb"), item: pageUrl },
+  ],
+};
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqItems.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+---
+
+<Base title={title} description={description} canonicalPath="/bible-stories-for-sleep" esPath="/historias-biblicas-para-dormir" jsonLd={[breadcrumbLd, faqLd]}>
+  <style>
+    .bc { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--text-muted); max-width: 1200px; margin: 0 auto; padding: 6.5rem 2rem 0; }
+    .bc a { color: var(--text-muted); text-decoration: none; }
+    .bc a:hover { color: var(--primary); }
+    .bc .sep { opacity: 0.4; }
+    .hero { padding: 2rem 2rem 1.5rem; text-align: center; max-width: 760px; margin: 0 auto; }
+    .hero h1 {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(2rem, 5vw, 3.1rem);
+      margin-bottom: 0.85rem;
+      color: var(--text);
+    }
+    .hero p { color: var(--text-secondary); font-size: 1.1rem; line-height: 1.7; margin-bottom: 1.5rem; }
+    .content { max-width: 1200px; margin: 0 auto; padding: 0 2rem 4rem; }
+    .stories-head, .prayers-head { text-align: center; margin: 1rem 0 1.25rem; }
+    .stories-head h2, .prayers-head h2, .mid-cta h2, .final-cta h2, .about h2, .faq h2 {
+      font-family: "Playfair Display", serif;
+      font-size: 1.5rem;
+      margin: 0 0 0.45rem;
+    }
+    .stories-head p, .prayers-head p { color: var(--text-secondary); margin: 0; }
+    .story-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.85rem; margin-bottom: 1.25rem; }
+    .story-card { text-decoration: none; color: inherit; }
+    .story-card :global(img) { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 14px; display: block; }
+    .story-card h3 { font-size: 0.92rem; margin: 0.55rem 0 0.15rem; }
+    .story-card span { color: var(--text-muted); font-size: 0.78rem; }
+    .prayer-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin-bottom: 2rem; }
+    .prayer-card {
+      display: block;
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 14px;
+      padding: 1.15rem 1.2rem;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 600;
+    }
+    .prayer-card:hover { border-color: var(--primary); color: var(--primary); }
+    .mid-cta, .final-cta {
+      text-align: center;
+      padding: 2.25rem 1.75rem;
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 20px;
+      margin: 2rem 0;
+    }
+    .mid-cta p, .final-cta p, .about p, .faq p { color: var(--text-secondary); line-height: 1.75; margin: 0 0 1.1rem; }
+    .about { margin: 2.25rem 0; }
+    .faq { margin: 2.25rem 0 1rem; }
+    .faq-item { margin-bottom: 1.25rem; }
+    .faq-item h3 { font-size: 1rem; margin: 0 0 0.4rem; }
+    .links { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin: 0 0 2rem; }
+    .links a {
+      display: inline-flex;
+      padding: 0.7rem 1.2rem;
+      border-radius: 999px;
+      border: 1px solid var(--surface-border);
+      background: var(--surface);
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.92rem;
+      text-decoration: none;
+    }
+    .links a:hover { border-color: var(--primary); color: var(--primary); }
+    @media (max-width: 900px) {
+      .story-grid, .prayer-list { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .story-grid, .prayer-list { grid-template-columns: 1fr; }
+      .bc, .hero { padding-left: 1.25rem; padding-right: 1.25rem; }
+      .content { padding: 0 1.25rem 3rem; }
+    }
+  </style>
+
+  <main>
+    <div class="bc" role="navigation" aria-label="Breadcrumb">
+      <a href={localePath("/", locale)}>{t(locale, "votd.breadcrumbHome")}</a><span class="sep">/</span>
+      <span>{t(locale, "sleepPage.breadcrumb")}</span>
+    </div>
+    <div class="hero">
+      <h1>{t(locale, "sleepPage.h1")}</h1>
+      <p>{t(locale, "sleepPage.subtitle")}</p>
+      <StoreButtons variant="hero" campaign={storeCampaign} />
+    </div>
+
+    <div class="content">
+      <div class="stories-head">
+        <h2>{t(locale, "sleepPage.storiesTitle")}</h2>
+        <p>{t(locale, "sleepPage.storiesSub")}</p>
+      </div>
+      <div class="story-grid">
+        {stories.map((story) => (
+          <a class="story-card" href={localePath(`/stories/${story.id}`, locale)}>
+            <CoverImg storyId={story.id} alt={story.title} width={280} height={280} />
+            <h3>{story.title}</h3>
+            <span>{story.bibleRef}</span>
+          </a>
+        ))}
+      </div>
+
+      <section class="mid-cta">
+        <h2>{t(locale, "sleepPage.midTitle")}</h2>
+        <p>{t(locale, "sleepPage.midDesc")}</p>
+        <StoreButtons variant="light" campaign={storeCampaign} />
+      </section>
+
+      <div class="prayers-head">
+        <h2>{t(locale, "sleepPage.prayersTitle")}</h2>
+        <p>{t(locale, "sleepPage.prayersSub")}</p>
+      </div>
+      <div class="prayer-list">
+        {prayers.map((prayer) => (
+          <a class="prayer-card" href={localePath(`/prayers/${prayer.slug}`, locale)}>{t(locale, prayer.titleKey)}</a>
+        ))}
+      </div>
+
+      <section class="about">
+        <h2>{t(locale, "sleepPage.aboutTitle")}</h2>
+        <p>{t(locale, "sleepPage.aboutP1")}</p>
+        <p>{t(locale, "sleepPage.aboutP2")}</p>
+      </section>
+
+      <div class="links">
+        <a href={localePath("/bible-app", locale)}>{t(locale, "sleepPage.linkApp")}</a>
+        <a href={localePath("/stories", locale)}>{t(locale, "sleepPage.linkStories")}</a>
+        <a href={localePath("/prayers", locale)}>{t(locale, "sleepPage.linkPrayers")}</a>
+      </div>
+
+      <section class="faq">
+        <h2>{t(locale, "sleepPage.faqTitle")}</h2>
+        {faqItems.map((f) => (
+          <div class="faq-item">
+            <h3>{f.q}</h3>
+            <p>{f.a}</p>
+          </div>
+        ))}
+      </section>
+
+      <section class="final-cta">
+        <h2>{t(locale, "sleepPage.finalTitle")}</h2>
+        <p>{t(locale, "sleepPage.finalDesc")}</p>
+        <StoreButtons variant="light" campaign={storeCampaign} />
+      </section>
+    </div>
+  </main>
+</Base>

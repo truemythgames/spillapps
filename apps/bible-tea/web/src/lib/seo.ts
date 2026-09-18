@@ -1260,6 +1260,23 @@ export function verseOfTheDaySeo(
   };
 }
 
+export function sleepStoriesSeo(locale: Locale): { title: string; description: string } {
+  if (locale === "es") {
+    return {
+      title: clampTitle("Historias bíblicas para dormir | Bible Tea"),
+      description: clampDescription(
+        "Historias bíblicas para dormir: audio corto para la noche, más oraciones de descanso. Descarga Bible Tea y escúchalas.",
+      ),
+    };
+  }
+  return {
+    title: clampTitle("Bible Stories for Sleep | Bible Tea"),
+    description: clampDescription(
+      "Bible stories for sleep — short audio for tonight, plus rest prayers. Download Bible Tea and hear them in bed.",
+    ),
+  };
+}
+
 export function bibleAppSeo(locale: Locale): { title: string; description: string } {
   if (locale === "es") {
     return {
