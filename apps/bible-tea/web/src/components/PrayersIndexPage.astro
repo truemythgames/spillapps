@@ -1,0 +1,258 @@
+---
+import Base from "../layouts/Base.astro";
+import StoreButtons from "./StoreButtons.astro";
+import { getPrayerCategories, getPrayers, type Prayer } from "../lib/stories";
+import { getLocale, localePath, t } from "../lib/i18n";
+
+const locale = getLocale(Astro.currentLocale);
+const [categories, prayers] = await Promise.all([
+  getPrayerCategories(locale),
+  getPrayers(locale),
+]);
+const storeCampaign = locale === "es" ? "es-prayers" : "en-prayers";
+const pageUrl = locale === "es" ? "https://bibletea.app/es/prayers/" : "https://bibletea.app/prayers/";
+const homeUrl = locale === "es" ? "https://bibletea.app/es/" : "https://bibletea.app/";
+
+const CATEGORY_EMOJI: Record<string, string> = {
+  "cloud-rain": "🌧️",
+  moon: "🌙",
+  sun: "☀️",
+  "heart-pulse": "💗",
+  shield: "🛡️",
+  flame: "🔥",
+  heart: "❤️",
+  users: "🤝",
+  compass: "🧭",
+  sunrise: "🌅",
+  sprout: "🌱",
+  star: "⭐",
+  cross: "✝️",
+  hand: "🙏",
+};
+function catEmoji(icon: string | undefined): string {
+  return (icon && CATEGORY_EMOJI[icon]) || "🙏";
+}
+
+const prayersByCategory = new Map<string, Prayer[]>();
+for (const p of prayers) {
+  const arr = prayersByCategory.get(p.category_id) || [];
+  arr.push(p);
+  prayersByCategory.set(p.category_id, arr);
+}
+const orderedCategories = categories.filter((c) => (prayersByCategory.get(c.id) || []).length > 0);
+
+const featuredIds = [
+  "pr-anxious-thoughts",
+  "pr-cant-sleep",
+  "pr-physical-healing",
+  "pr-asking-forgiveness",
+  "pr-facing-giants",
+  "pr-lost-someone",
+  "pr-overwhelmed",
+  "pr-nighttime-peace",
+];
+const prayerMap = new Map(prayers.map((p) => [p.id, p]));
+const featured = featuredIds.map((id) => prayerMap.get(id)).filter((p): p is Prayer => Boolean(p));
+
+const title = t(locale, "prayers.title");
+const description = t(locale, "prayers.description");
+const count = String(prayers.length);
+const cats = String(orderedCategories.length);
+
+const faqs = [
+  { q: t(locale, "prayers.faqQ1"), a: t(locale, "prayers.faqA1").replace("{count}", count).replace("{cats}", cats) },
+  { q: t(locale, "prayers.faqQ2"), a: t(locale, "prayers.faqA2") },
+  { q: t(locale, "prayers.faqQ3"), a: t(locale, "prayers.faqA3") },
+  { q: t(locale, "prayers.faqQ4"), a: t(locale, "prayers.faqA4") },
+  { q: t(locale, "prayers.faqQ5"), a: t(locale, "prayers.faqA5") },
+  { q: t(locale, "prayers.faqQ6"), a: t(locale, "prayers.faqA6") },
+];
+
+const collectionLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: t(locale, "prayers.h1"),
+  description,
+  url: pageUrl,
+  publisher: {
+    "@type": "Organization",
+    name: "Bible Tea",
+    logo: { "@type": "ImageObject", url: "https://bibletea.app/icon.png" },
+  },
+};
+
+const itemListLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: t(locale, "prayers.h1"),
+  numberOfItems: prayers.length,
+  itemListElement: prayers.map((p, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    item: { "@type": "WebPage", name: p.title, url: `https://bibletea.app${localePath(`/prayers/${p.slug}`, locale)}` },
+  })),
+};
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: t(locale, "prayer.breadcrumbHome"), item: homeUrl },
+    { "@type": "ListItem", position: 2, name: t(locale, "prayer.breadcrumbPrayers"), item: pageUrl },
+  ],
+};
+---
+
+<Base title={title} description={description} canonicalPath="/prayers" jsonLd={[collectionLd, itemListLd, faqLd, breadcrumbLd]}>
+  <style>
+    .bc { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--text-muted); max-width: 1200px; margin: 0 auto; padding: 6.5rem 2rem 0; }
+    .bc a { color: var(--text-muted); text-decoration: none; }
+    .bc a:hover { color: var(--primary); }
+    .bc .sep { opacity: 0.4; }
+    .prayers-hero { padding: 2rem 2rem 1.25rem; text-align: center; max-width: 760px; margin: 0 auto; }
+    .prayers-hero h1 {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin-bottom: 0.75rem;
+      background: linear-gradient(135deg, var(--text) 0%, var(--primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .prayers-hero p { color: var(--text-secondary); font-size: 1.1rem; line-height: 1.7; margin: 1.25rem 0 0; }
+    .about { max-width: 760px; margin: 0 auto 2rem; padding: 0 2rem; }
+    .about h2, .featured h2, .faq-section h2, .bottom-cta h2, .cat-title { font-family: "Playfair Display", serif; }
+    .about h2, .featured h2, .faq-section h2 { font-size: 1.5rem; margin: 0 0 0.6rem; }
+    .about p { color: var(--text-secondary); line-height: 1.75; margin: 0 0 1rem; }
+    .links { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin: 0 0 2.25rem; padding: 0 2rem; }
+    .links a {
+      display: inline-flex;
+      padding: 0.7rem 1.2rem;
+      border-radius: 999px;
+      border: 1px solid var(--surface-border);
+      background: var(--surface);
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.92rem;
+      text-decoration: none;
+    }
+    .links a:hover { border-color: var(--primary); color: var(--primary); }
+    .featured { max-width: 1200px; margin: 0 auto; padding: 0 2rem 1.5rem; }
+    .featured p { color: var(--text-secondary); margin: 0 0 1.1rem; }
+    .prayer-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+    .prayer-card {
+      display: block; text-decoration: none; background: var(--surface);
+      border: 1px solid var(--surface-border); border-radius: 14px; padding: 1.25rem 1.35rem;
+    }
+    .prayer-card:hover { transform: translateY(-4px); border-color: var(--primary); }
+    .prayer-card-title { font-family: "Playfair Display", serif; font-size: 1.05rem; font-weight: 700; color: var(--text); line-height: 1.3; margin-bottom: 0.4rem; }
+    .prayer-card-desc { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .prayers-page { max-width: 1200px; margin: 0 auto; padding: 2rem 2rem 0; }
+    .cat-block { margin-bottom: 3rem; }
+    .cat-head { display: flex; align-items: center; gap: 0.85rem; margin-bottom: 0.35rem; }
+    .cat-emoji {
+      width: 48px; height: 48px; flex-shrink: 0; border-radius: 14px;
+      background: var(--surface-light); display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; border: 1px solid var(--surface-border);
+    }
+    .cat-title { font-size: 1.4rem; font-weight: 700; }
+    .cat-desc { color: var(--text-muted); font-size: 0.9rem; margin: 0 0 1.25rem 0; }
+    .faq-section { max-width: 700px; margin: 0 auto; padding: 1rem 2rem 3rem; }
+    .faq-item { margin-bottom: 1.25rem; }
+    .faq-item h3 { font-size: 1rem; margin: 0 0 0.4rem; }
+    .faq-item p { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7; margin: 0; }
+    .bottom-cta { text-align: center; padding: 3rem 2rem 4rem; }
+    .bottom-cta h2 { font-size: clamp(1.5rem, 3vw, 2rem); margin-bottom: 0.75rem; }
+    .bottom-cta p { color: var(--text-secondary); margin-bottom: 1.5rem; max-width: 450px; margin-left: auto; margin-right: auto; }
+    @media (max-width: 640px) {
+      .prayers-hero, .about, .featured, .prayers-page, .faq-section { padding-left: 1.25rem; padding-right: 1.25rem; }
+      .prayer-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+
+  <main>
+    <div class="bc" role="navigation" aria-label="Breadcrumb">
+      <a href={localePath("/", locale)}>{t(locale, "prayer.breadcrumbHome")}</a><span class="sep">/</span>
+      <span>{t(locale, "prayer.breadcrumbPrayers")}</span>
+    </div>
+    <div class="prayers-hero">
+      <h1>{t(locale, "prayers.h1")}</h1>
+      <StoreButtons variant="hero" campaign={storeCampaign} />
+      <p>{t(locale, "prayers.subtitle")}</p>
+    </div>
+
+    <section class="about">
+      <h2>{t(locale, "prayers.aboutTitle")}</h2>
+      <p>{t(locale, "prayers.aboutP1")}</p>
+      <p>{t(locale, "prayers.aboutP2")}</p>
+    </section>
+
+    <div class="links">
+      <a href={localePath("/bible-stories-for-sleep", locale)}>{t(locale, "prayers.linkSleep")}</a>
+      <a href={localePath("/verse-of-the-day", locale)}>{t(locale, "prayers.linkVerse")}</a>
+      <a href={localePath("/widget", locale)}>{t(locale, "prayers.linkWidget")}</a>
+      <a href={localePath("/bible-app", locale)}>{t(locale, "prayers.linkApp")}</a>
+    </div>
+
+    {featured.length > 0 && (
+      <section class="featured">
+        <h2>{t(locale, "prayers.featuredTitle")}</h2>
+        <p>{t(locale, "prayers.featuredSub")}</p>
+        <div class="prayer-grid">
+          {featured.map((p) => (
+            <a href={localePath(`/prayers/${p.slug}`, locale)} class="prayer-card">
+              <div class="prayer-card-title">{p.title}</div>
+              <div class="prayer-card-desc">{p.description}</div>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <div class="prayers-page">
+      {orderedCategories.map((cat) => (
+        <section class="cat-block">
+          <div class="cat-head">
+            <div class="cat-emoji">{catEmoji(cat.icon)}</div>
+            <h2 class="cat-title">{cat.name}</h2>
+          </div>
+          {cat.description && <p class="cat-desc">{cat.description}</p>}
+          <div class="prayer-grid">
+            {(prayersByCategory.get(cat.id) || []).map((p) => (
+              <a href={localePath(`/prayers/${p.slug}`, locale)} class="prayer-card">
+                <div class="prayer-card-title">{p.title}</div>
+                <div class="prayer-card-desc">{p.description}</div>
+              </a>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+
+    <section class="faq-section">
+      <h2>{t(locale, "prayers.faqTitle")}</h2>
+      {faqs.map((f) => (
+        <div class="faq-item">
+          <h3>{f.q}</h3>
+          <p>{f.a}</p>
+        </div>
+      ))}
+    </section>
+
+    <section class="bottom-cta">
+      <h2>{t(locale, "prayers.ctaTitle")}</h2>
+      <p>{t(locale, "prayers.ctaDesc")}</p>
+      <StoreButtons variant="hero" campaign={storeCampaign} />
+    </section>
+  </main>
+</Base>
