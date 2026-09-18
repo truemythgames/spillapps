@@ -34,6 +34,34 @@
 /es/widget /es/widget/ 301
 /es /es/ 301
 
+/bible-bff /bible-bff-alternative/ 301
+/bible-bff/ /bible-bff-alternative/ 301
+/bible-bff-alternative /bible-bff-alternative/ 301
+/es/bible-bff /es/alternativa-bible-bff/ 301
+/es/bible-bff/ /es/alternativa-bible-bff/ 301
+/es/bible-bff-alternative /es/alternativa-bible-bff/ 301
+/es/bible-bff-alternative/ /es/alternativa-bible-bff/ 301
+/alternativa-bible-bff /es/alternativa-bible-bff/ 301
+/alternativa-bible-bff/ /es/alternativa-bible-bff/ 301
+
+/bible-stories-for-adults /bible-stories-for-adults/ 301
+/es/bible-stories-for-adults /es/historias-biblicas-para-adultos/ 301
+/es/bible-stories-for-adults/ /es/historias-biblicas-para-adultos/ 301
+/historias-biblicas-para-adultos /es/historias-biblicas-para-adultos/ 301
+/historias-biblicas-para-adultos/ /es/historias-biblicas-para-adultos/ 301
+
+/bible-for-beginners /bible-for-beginners/ 301
+/es/bible-for-beginners /es/biblia-para-principiantes/ 301
+/es/bible-for-beginners/ /es/biblia-para-principiantes/ 301
+/biblia-para-principiantes /es/biblia-para-principiantes/ 301
+/biblia-para-principiantes/ /es/biblia-para-principiantes/ 301
+
+/haven-bible-chat-alternative /haven-bible-chat-alternative/ 301
+/es/haven-bible-chat-alternative /es/alternativa-haven-bible-chat/ 301
+/es/haven-bible-chat-alternative/ /es/alternativa-haven-bible-chat/ 301
+/alternativa-haven-bible-chat /es/alternativa-haven-bible-chat/ 301
+/alternativa-haven-bible-chat/ /es/alternativa-haven-bible-chat/ 301
+
 /stories/:slug /stories/:slug/ 301
 /es/stories/:slug /es/stories/:slug/ 301
 /characters/:id /characters/:id/ 301
