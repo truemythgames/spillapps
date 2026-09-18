@@ -17,7 +17,6 @@ const today = now.toLocaleDateString("en-US", { weekday: "long", month: "long", 
 
 const { title, description } = verseOfTheDaySeo(locale, verse, now);
 const h1 = `Verse of the day — ${verse.ref}`;
-const todayAnswer = t(locale, "votd.todayAnswer").replace("{ref}", verse.ref).replace("{text}", verse.text);
 const faqA5 = t(locale, "votd.faqA5").replace("{ref}", verse.ref).replace("{text}", verse.text);
 
 const breadcrumbLd = {
@@ -107,12 +106,6 @@ const webPageLd = {
       font-size: 1.1rem;
       line-height: 1.7;
       margin-bottom: 1.5rem;
-    }
-    .today-answer {
-      color: var(--text);
-      font-size: 1.05rem;
-      line-height: 1.7;
-      margin: 0 0 1rem;
     }
 
     .votd-content { max-width: 1200px; margin: 0 auto; padding: 0 2rem 4rem; }
@@ -364,7 +357,6 @@ const webPageLd = {
     <div class="votd-hero">
       <p class="votd-date">{today}</p>
       <h1>{h1}</h1>
-      <p class="today-answer">{todayAnswer}</p>
     </div>
 
     <div class="votd-content">

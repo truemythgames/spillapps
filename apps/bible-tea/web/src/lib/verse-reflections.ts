@@ -445,11 +445,10 @@ export function getVerseReflection(
   const href = locale === "es" ? `/es/stories/${relatedMeta.slug}/` : `/stories/${relatedMeta.slug}/`;
   const label = locale === "es" ? relatedMeta.es : relatedMeta.en;
 
-  const quote = localVerse.text.replace(/\s+/g, " ").trim();
   const body =
     locale === "es"
-      ? `El versículo del día de hoy es ${localVerse.ref}: «${quote}» ${ctx} ${apply} Quédate con esta frase un momento. Luego descarga Bible Tea gratis y escucha la historia detrás del pasaje.`
-      : `Today's Bible verse of the day is ${localVerse.ref}: “${quote}” ${ctx} ${apply} Stay with this sentence a minute. Then download Bible Tea for free and hear the story behind the passage.`;
+      ? `${ctx} ${apply} Quédate con esta frase un momento. Luego descarga Bible Tea y escucha la historia detrás del pasaje.`
+      : `${ctx} ${apply} Stay with this sentence a minute. Then download Bible Tea and hear the story behind the passage.`;
 
   return {
     body: body.replace(/\s+/g, " ").trim(),

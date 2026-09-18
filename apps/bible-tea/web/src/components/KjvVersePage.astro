@@ -19,7 +19,6 @@ const today = now.toLocaleDateString(locale === "es" ? "es-ES" : "en-US", {
 });
 const { title, description } = kjvVerseSeo(locale, kjv, now);
 const h1 = t(locale, "kjv.h1").replace("{ref}", kjv.ref);
-const todayAnswer = t(locale, "kjv.todayAnswer").replace("{ref}", kjv.ref).replace("{text}", kjv.text);
 
 const breadcrumbLd = {
   "@context": "https://schema.org",
@@ -69,7 +68,6 @@ const faqLd = {
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
-    .today-answer { color: var(--text-secondary); font-size: 1.05rem; line-height: 1.7; margin: 0; }
     .content { max-width: 1200px; margin: 0 auto; padding: 0 2rem 4rem; }
     .verse-card {
       background: var(--surface);
@@ -121,7 +119,6 @@ const faqLd = {
     <div class="hero">
       <p class="date">{today}</p>
       <h1>{h1}</h1>
-      <p class="today-answer">{todayAnswer}</p>
     </div>
 
     <div class="content">
