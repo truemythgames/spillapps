@@ -157,6 +157,12 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
       description:
         "John 4:1-42: a Samaritan woman meets Jesus at Jacob's well. Living water, five husbands, and the first witness in her town.",
     },
+    es: {
+      title: "La mujer samaritana — Juan 4:1-42 - Bible Tea",
+      h1: "La mujer en el pozo",
+      description:
+        "Juan 4:1-42: una samaritana encuentra a Jesús en el pozo de Jacob. Agua viva, cinco maridos, y la primera testigo de su pueblo.",
+    },
   },
   "walking-on-water": {
     en: {

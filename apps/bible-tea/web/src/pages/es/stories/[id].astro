@@ -167,17 +167,20 @@ function faqT(key: string): string {
     .replace(/\{count\}/g, String(catalog.length - 1));
 }
 const quickAnswer = storyAnswer(story.id, locale);
-const faqs = [
-  { q: faqT("story.faqQ1"), a: faqT("story.faqA1") },
-  { q: faqT("story.faqQ2"), a: faqT("story.faqA2") },
-  {
-    q: faqT("story.faqQ3"),
-    a: takeawayItems.length > 0
-      ? `${t(locale, "story.keyTakeaways")}: ${takeawayItems.slice(0, 3).join(". ")}. ${locale === "es" ? "Escucha el desglose completo en Bible Tea." : "Listen to the full breakdown on Bible Tea."}`
-      : faqT("story.faqA3"),
-  },
-  { q: faqT("story.faqQ4"), a: faqT("story.faqA4") },
-];
+const listenFaq = { q: faqT("story.faqQ4"), a: faqT("story.faqA4") };
+const faqs = storyPage
+  ? [...storyPage.faqs.map((f) => ({ q: f.q, a: f.aPlain })), listenFaq]
+  : [
+      { q: faqT("story.faqQ1"), a: faqT("story.faqA1") },
+      { q: faqT("story.faqQ2"), a: faqT("story.faqA2") },
+      {
+        q: faqT("story.faqQ3"),
+        a: takeawayItems.length > 0
+          ? `${t(locale, "story.keyTakeaways")}: ${takeawayItems.slice(0, 3).join(". ")}. Escucha el desglose completo en Bible Tea.`
+          : faqT("story.faqA3"),
+      },
+      listenFaq,
+    ];
 
 // Structured data: Article + FAQPage + BreadcrumbList + AudioObject
 const articleLd = {
@@ -205,8 +208,7 @@ const faqLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
   mainEntity: [
-    ...(quickAnswer ? [{ q: quickAnswer.question, a: quickAnswer.answer }] : []),
-    ...(storyPage ? storyPage.faqs.map((f) => ({ q: f.q, a: f.aPlain })) : []),
+    ...(quickAnswer && !storyPage ? [{ q: quickAnswer.question, a: quickAnswer.answer }] : []),
     ...faqs,
   ].map((f) => ({
     "@type": "Question",
@@ -641,6 +643,20 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
       margin-bottom: 1rem;
     }
 
+    .faq-section .story-question { margin-bottom: 1.5rem; }
+    .faq-section .story-question h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 0 0 0.5rem;
+    }
+    .faq-section .story-question p,
+    .faq-section .story-question :global(p) {
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin: 0;
+    }
+
     .faq-item {
       background: var(--surface);
       border: 1px solid var(--surface-border);
@@ -890,17 +906,6 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
           <h2>{t(locale, "story.meaningHeading")}</h2>
           <Fragment set:html={pageHtml.meaning} />
         </section>
-        {pageHtml.faqs.length > 0 && (
-          <section class="story-prose story-questions">
-            <h2>{t(locale, "story.questionsHeading")}</h2>
-            {pageHtml.faqs.map((f) => (
-              <div class="story-question">
-                <h3>{f.q}</h3>
-                <Fragment set:html={f.html} />
-              </div>
-            ))}
-          </section>
-        )}
       </article>
     )}
 
@@ -926,7 +931,7 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
       </div>
     </div>
 
-    {takeawayItems.length > 0 && (
+    {!pageHtml && takeawayItems.length > 0 && (
       <div class="takeaways">
         <h2>{t(locale, "story.keyTakeaways")}</h2>
         <ul class="takeaway-list">
@@ -955,12 +960,27 @@ const jsonLdArray = [articleLd, faqLd, breadcrumbLd, audioLd];
 
     <section class="faq-section">
       <h2>{t(locale, "story.faqTitle")}</h2>
-      {faqs.map((f) => (
-        <details class="faq-item">
-          <summary>{f.q}</summary>
-          <p>{f.a}</p>
-        </details>
-      ))}
+      {pageHtml ? (
+        <>
+          {pageHtml.faqs.map((f) => (
+            <div class="story-question">
+              <h3>{f.q}</h3>
+              <Fragment set:html={f.html} />
+            </div>
+          ))}
+          <div class="story-question">
+            <h3>{listenFaq.q}</h3>
+            <p>{listenFaq.a}</p>
+          </div>
+        </>
+      ) : (
+        faqs.map((f) => (
+          <details class="faq-item">
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))
+      )}
     </section>
 
     {(prev || next) && (
