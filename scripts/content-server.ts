@@ -8,6 +8,7 @@ import { fileURLToPath } from "node:url";
 import {
   type Story,
   SPEAKERS,
+  NARRATION_MODEL,
   generateTranscript,
   generateCoverImage,
   generateNarration,
@@ -129,7 +130,7 @@ app.post("/api/stories/:id/regenerate/narration/:speaker", async (req, res) => {
     saveContent(CONTENT_DIR, story.id, `narration-${speakerKey}.mp3`, buffer);
     updateMetadata(CONTENT_DIR, story.id, {
       [`narration_${speakerKey}`]: {
-        model: "eleven_multilingual_v2",
+        model: NARRATION_MODEL,
         voiceId: SPEAKERS[speakerKey].voiceId,
         generatedAt: new Date().toISOString(),
         sizeKB: Math.round(buffer.length / 1024),

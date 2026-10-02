@@ -3,7 +3,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import OpenAI from "openai";
-import { SPEAKERS, prepareForSpeech } from "./lib/generate-core";
+import { SPEAKERS, prepareForSpeech, NARRATION_MODEL } from "./lib/generate-core";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -99,7 +99,7 @@ async function generateNarration(
       },
       body: JSON.stringify({
         text: speechText,
-        model_id: "eleven_multilingual_v2",
+        model_id: NARRATION_MODEL,
         voice_settings: { ...speaker.voiceSettings, stability: 0.55, style: 0.2 },
       }),
     }

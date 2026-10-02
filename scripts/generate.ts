@@ -6,6 +6,7 @@ import { execSync } from "node:child_process";
 import OpenAI from "openai";
 import Replicate from "replicate";
 import { contentAppDir } from "./lib/content-dir.js";
+import { NARRATION_MODEL } from "./lib/generate-core.js";
 
 const R2_BUCKET = "spill-media";
 const R2_APP_PREFIX = process.env.R2_APP_PREFIX?.trim() || "bible-tea";
@@ -551,7 +552,7 @@ async function generateNarration(
       },
       body: JSON.stringify({
         text: speechText,
-        model_id: "eleven_turbo_v2_5",
+        model_id: NARRATION_MODEL,
         voice_settings: { ...speaker.voiceSettings },
       }),
     }
@@ -652,7 +653,7 @@ async function processStory(
           const buffer = await generateNarration(rawTranscript, key);
           writeFileSync(narrationPath, buffer);
           metadata[`narration_${key}`] = {
-            model: "eleven_multilingual_v2",
+            model: NARRATION_MODEL,
             voiceId: speaker.voiceId,
             generatedAt: new Date().toISOString(),
             sizeKB: Math.round(buffer.length / 1024),

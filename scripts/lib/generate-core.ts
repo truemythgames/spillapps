@@ -34,6 +34,9 @@ export const SPEAKERS = {
 
 export const DEFAULT_SPEAKER: keyof typeof SPEAKERS = "grace";
 
+/** ElevenLabs model for English narration. Spanish scripts still use eleven_turbo_v2_5. */
+export const NARRATION_MODEL = "eleven_v4";
+
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const replicate = new Replicate({ auth: process.env.REPLICATE_API_TOKEN });
 const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY!;
@@ -262,7 +265,7 @@ export async function generateNarration(
       },
       body: JSON.stringify({
         text: speechText,
-        model_id: "eleven_multilingual_v2",
+        model_id: NARRATION_MODEL,
         voice_settings: { ...speaker.voiceSettings },
       }),
     }

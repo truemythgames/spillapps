@@ -2,7 +2,7 @@ import "dotenv/config";
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { execSync } from "node:child_process";
-import { prepareForSpeech, SPEAKERS } from "./lib/generate-core";
+import { prepareForSpeech, SPEAKERS, NARRATION_MODEL } from "./lib/generate-core";
 
 const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY!;
 const R2_BUCKET = "spill-media";
@@ -52,7 +52,7 @@ async function generateNarration(text: string, speakerKey: keyof typeof SPEAKERS
       },
       body: JSON.stringify({
         text: speechText,
-        model_id: "eleven_multilingual_v2",
+        model_id: NARRATION_MODEL,
         voice_settings: { ...speaker.voiceSettings },
       }),
     }

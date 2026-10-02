@@ -2,7 +2,7 @@ import "dotenv/config";
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { SPEAKERS, prepareForSpeech } from "./lib/generate-core";
+import { SPEAKERS, prepareForSpeech, NARRATION_MODEL } from "./lib/generate-core";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -10,7 +10,7 @@ const CONTENT_DIR = join(ROOT, "apps", "bible-tea", "content");
 const PRAYERS_DIR = join(CONTENT_DIR, "prayers");
 const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY!;
 
-const MODEL_ID = "eleven_turbo_v2_5";
+const MODEL_ID_ES = "eleven_turbo_v2_5";
 const SPEAKER_KEYS: (keyof typeof SPEAKERS)[] = ["grace", "elijah"];
 
 interface CategoryEntry {
@@ -22,7 +22,11 @@ const catalog: CategoryEntry[] = JSON.parse(
   readFileSync(join(CONTENT_DIR, "prayer-catalog.json"), "utf8")
 );
 
-async function generateNarration(text: string, speakerKey: keyof typeof SPEAKERS): Promise<Buffer> {
+async function generateNarration(
+  text: string,
+  speakerKey: keyof typeof SPEAKERS,
+  modelId: string,
+): Promise<Buffer> {
   const speaker = SPEAKERS[speakerKey];
   const speechText = prepareForSpeech(text);
 
@@ -36,7 +40,7 @@ async function generateNarration(text: string, speakerKey: keyof typeof SPEAKERS
       },
       body: JSON.stringify({
         text: speechText,
-        model_id: MODEL_ID,
+        model_id: modelId,
         voice_settings: { ...speaker.voiceSettings, stability: 0.55, style: 0.2 },
       }),
     }
@@ -54,6 +58,7 @@ async function main() {
   const locale = process.argv.includes("--es") ? "es" : "en";
   const suffix = locale === "es" ? "-es" : "";
   const transcriptFile = locale === "es" ? "transcript.es.md" : "transcript.md";
+  const modelId = locale === "es" ? MODEL_ID_ES : NARRATION_MODEL;
 
   const allPrayers = catalog.flatMap((c) =>
     c.prayers.map((p) => ({ ...p, categoryName: c.category.name }))
@@ -87,7 +92,7 @@ async function main() {
 
       try {
         console.log(`  [tts] ${slug}:${speakerKey} (${i + 1}/${allPrayers.length})...`);
-        const audio = await generateNarration(transcript, speakerKey);
+        const audio = await generateNarration(transcript, speakerKey, modelId);
         writeFileSync(audioPath, audio);
         console.log(`  [ok]  ${slug}:${speakerKey} — ${(audio.length / 1024).toFixed(0)} KB`);
         done++;
