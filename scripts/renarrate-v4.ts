@@ -1,11 +1,11 @@
 /**
- * Re-narrate English Bible Tea stories + prayers with Grace on Eleven v4,
+ * Re-narrate English Bible Tea stories + prayers with one speaker on Eleven v4,
  * overwrite the live R2 objects, and update story metadata.
  *
  * Usage:
- *   npx tsx scripts/renarrate-grace-v4.ts            # run (resumable)
- *   npx tsx scripts/renarrate-grace-v4.ts --dry-run  # list work only
- *   npx tsx scripts/renarrate-grace-v4.ts --limit 5
+ *   npx tsx scripts/renarrate-v4.ts grace            # run (resumable)
+ *   npx tsx scripts/renarrate-v4.ts elijah --dry-run # list work only
+ *   npx tsx scripts/renarrate-v4.ts elijah --limit 5
  */
 import "dotenv/config";
 import { readFileSync, writeFileSync, existsSync, mkdirSync, copyFileSync, readdirSync } from "fs";
@@ -14,7 +14,12 @@ import { execSync } from "child_process";
 import { SPEAKERS, prepareForSpeech } from "./lib/generate-core";
 
 const MODEL_ID = "eleven_v4";
-const SPEAKER_KEY = "grace" as const;
+const args = process.argv.slice(2);
+const SPEAKER_KEY = args[0] as keyof typeof SPEAKERS;
+if (!(SPEAKER_KEY in SPEAKERS)) {
+  console.error(`Usage: renarrate-v4.ts <${Object.keys(SPEAKERS).join("|")}> [--dry-run] [--limit N]`);
+  process.exit(1);
+}
 const CONCURRENCY = 3;
 const MAX_CHARS = 10_000;
 const R2_BUCKET = "spill-media";
@@ -23,12 +28,11 @@ const R2_APP_PREFIX = "bible-tea";
 const ROOT = join(__dirname, "..");
 const CONTENT = join(ROOT, "apps/bible-tea/content");
 const BATCH_OUTPUT = join(__dirname, "narration-output");
-const BACKUP_DIR = join(ROOT, "tmp-mp3/grace-v2-backup");
-const PROGRESS_FILE = join(__dirname, "renarrate-grace-v4-progress.json");
+const BACKUP_DIR = join(ROOT, `tmp-mp3/${SPEAKER_KEY}-v2-backup`);
+const PROGRESS_FILE = join(__dirname, `renarrate-v4-${SPEAKER_KEY}-progress.json`);
 
 type Job = { kind: "stories" | "prayers"; slug: string; dir: string };
 
-const args = process.argv.slice(2);
 const dryRun = args.includes("--dry-run");
 const limitIdx = args.indexOf("--limit");
 const limit = limitIdx >= 0 ? Number(args[limitIdx + 1]) : Infinity;
@@ -120,7 +124,7 @@ async function main() {
   const todo = collectJobs()
     .filter((j) => !done.has(`${j.kind}/${j.slug}`))
     .slice(0, limit);
-  console.log(`=== Grace -> ${MODEL_ID}: ${todo.length} to do, ${done.size} already done ===`);
+  console.log(`=== ${SPEAKER_KEY} -> ${MODEL_ID}: ${todo.length} to do, ${done.size} already done ===`);
   if (dryRun) {
     todo.forEach((j) => console.log(`  ${j.kind}/${j.slug}`));
     return;
