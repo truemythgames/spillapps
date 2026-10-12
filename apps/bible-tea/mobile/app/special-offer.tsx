@@ -32,7 +32,7 @@ import {
   purchasePackage,
   restorePurchases,
   findWeeklyOfferPackage,
-  PRODUCT_IDS,
+  findYearlyOfferPackage,
   type PurchasesPackage,
 } from "@/lib/purchases";
 import { fonts, fontSize, spacing } from "@/lib/theme";
@@ -71,12 +71,7 @@ export default function SpecialOfferScreen() {
       .finally(() => setLoaded(true));
   }, []);
 
-  const yearly = packages.find(
-    (p) =>
-      p.identifier === "$rc_annual" ||
-      p.identifier === "yearly_offer" ||
-      p.product?.identifier?.startsWith(PRODUCT_IDS.yearlyOffer)
-  );
+  const yearly = findYearlyOfferPackage(packages);
   const weekly = findWeeklyOfferPackage(packages);
 
   const pricePerWeek = yearly?.product?.pricePerWeekString;

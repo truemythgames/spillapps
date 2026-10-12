@@ -25,8 +25,12 @@ const REVENUECAT_ANDROID_KEY = "goog_OrYzAxZViXKjAqteWSEQolNVWNU";
 
 const ENTITLEMENT_ID = "premium";
 
+/** Store product ids. Play's onboarding product id differs from App Store's. */
 export const PRODUCT_IDS = {
-  quarterlyOnboarding3DayTrial: "bibletea_quarterly_onboarding_3day_freetrial",
+  quarterlyOnboarding3DayTrial:
+    Platform.OS === "android"
+      ? "bibletea_quarterly_onboarding_3day_trial"
+      : "bibletea_quarterly_onboarding_3day_freetrial",
   quarterly30DayTrial: "bibletea_quarterly_30day_trial",
   quarterly3DayTrial: "bibletea_quarterly_3day_freetrial",
   weeklyOffer: "bibletea_weekly_offer",
@@ -102,76 +106,29 @@ export async function initPurchases(userId?: string): Promise<void> {
   getOfferings();
 }
 
-function idsOf(pkg: PurchasesPackage): { id: string; pid: string } {
-  return {
-    id: String(pkg?.identifier ?? ""),
-    pid: String(pkg?.product?.identifier ?? ""),
-  };
+/** Play reports subscriptions as "productId:basePlanId"; App Store ids have no suffix. */
+function baseProductId(id: unknown): string {
+  return String(id ?? "").split(":")[0];
 }
 
+/** RevenueCat package id wins; the store product id covers packages added from getProducts(). */
 export function matchPackage(
   packages: PurchasesPackage[],
   rcIdentifier: string,
   productId: string,
 ): PurchasesPackage | undefined {
-  return packages.find((p) => {
-    const { id, pid } = idsOf(p);
-    return (
-      id === rcIdentifier ||
-      id === productId ||
-      pid === productId ||
-      pid.startsWith(productId) ||
-      id.startsWith(productId) ||
-      id.includes(rcIdentifier) ||
-      pid.includes(productId)
-    );
-  });
-}
-
-function blob(pkg: PurchasesPackage): string {
-  const { id, pid } = idsOf(pkg);
-  return `${id} ${pid} ${pkg?.packageType ?? ""}`.toLowerCase();
-}
-
-function isWeeklyPeriod(pkg: PurchasesPackage): boolean {
-  const period = String(pkg?.product?.subscriptionPeriod ?? "").toUpperCase();
-  const type = String(pkg?.packageType ?? "").toUpperCase();
-  if (type === "WEEKLY") return true;
-  if (period === "P1W" || period === "P7D") return true;
-  const text = blob(pkg);
-  return text.includes("$rc_weekly") || text.includes("weekly") || /:p1w\b/.test(text);
-}
-
-function isTrialSku(pkg: PurchasesPackage): boolean {
-  return /freetrial|free_trial|free-trial|3day|30day/.test(blob(pkg));
-}
-
-function numericPrice(pkg: PurchasesPackage): number {
-  const product = pkg?.product;
-  const n = Number(product?.price);
-  if (n > 0) return n;
-  const micros = Number(product?.defaultOption?.fullPricePhase?.price?.amountMicros);
-  if (micros > 0) return micros / 1_000_000;
-  return Number(product?.pricePerWeek) || 0;
-}
-
-/** Start-small sheet: any weekly product, whatever RC/Play named it. */
-export function findWeeklyOfferPackage(packages: PurchasesPackage[]): PurchasesPackage | undefined {
-  if (!packages?.length) return undefined;
-
-  const named =
-    matchPackage(packages, "weekly_offer", PRODUCT_IDS.weeklyOffer) ||
-    packages.find((p) => /weekly[_-]?offer/.test(blob(p)));
-  if (named) return named;
-
-  const weeklies = packages.filter(isWeeklyPeriod);
   return (
-    weeklies.find((p) => !isTrialSku(p)) ||
-    weeklies[0] ||
-    packages
-      .filter((p) => numericPrice(p) > 0 && !/year|annual|quarter|month/.test(blob(p)))
-      .sort((a, b) => numericPrice(a) - numericPrice(b))[0]
+    packages.find((p) => p?.identifier === rcIdentifier) ??
+    packages.find((p) => baseProductId(p?.product?.identifier) === baseProductId(productId))
   );
+}
+
+export function findWeeklyOfferPackage(packages: PurchasesPackage[]): PurchasesPackage | undefined {
+  return matchPackage(packages ?? [], "weekly_offer", PRODUCT_IDS.weeklyOffer);
+}
+
+export function findYearlyOfferPackage(packages: PurchasesPackage[]): PurchasesPackage | undefined {
+  return matchPackage(packages ?? [], "$rc_annual", PRODUCT_IDS.yearlyOffer);
 }
 
 function isZeroPrice(raw: string): boolean {
@@ -239,8 +196,7 @@ function collectPackages(offerings: any): PurchasesPackage[] {
   const list: PurchasesPackage[] = [];
   const add = (pkgs: PurchasesPackage[] | undefined) => {
     for (const p of pkgs ?? []) {
-      const { id, pid } = idsOf(p);
-      const key = `${id}|${pid}`;
+      const key = `${p?.identifier ?? ""}|${p?.product?.identifier ?? ""}`;
       if (seen.has(key)) continue;
       seen.add(key);
       list.push(p);
