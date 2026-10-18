@@ -1,6 +1,6 @@
 import type { Locale } from "./i18n";
 
-export type LandingId = "bff" | "adults" | "beginners" | "haven";
+export type LandingId = "bff" | "adults" | "beginners" | "haven" | "scroll";
 
 export interface LandingCopy {
   canonicalPath: string;
@@ -69,6 +69,16 @@ const FEATURED = {
     "jesus-stops-a-storm",
     "the-good-samaritan",
     "david-and-goliath",
+  ],
+  scroll: [
+    "david-and-goliath",
+    "jonah-and-the-whale",
+    "walking-on-water",
+    "the-good-samaritan",
+    "jesus-stops-a-storm",
+    "the-woman-at-the-well",
+    "creation",
+    "the-resurrection",
   ],
 } as const;
 
@@ -270,6 +280,55 @@ const EN: Record<LandingId, Omit<LandingCopy, "canonicalPath" | "esPath" | "camp
     ],
     finalTitle: "If you wanted the stories too",
     finalDesc: "Download Bible Tea. Hear one. Then ask.",
+    linkApp: "Get the Bible app",
+    linkStories: "All stories",
+    linkSleep: "Stories for sleep",
+  },
+  scroll: {
+    title: "Scroll the Bible | Bible Tea",
+    description:
+      "Scroll the Bible. Same thumb, different feed — short stories that keep coming. Download Bible Tea and don’t stop.",
+    breadcrumb: "Scroll the Bible",
+    h1: "Scroll the Bible",
+    subtitle:
+      "You already know how to scroll. Do it with the Bible. A story starts. Then another. You don’t stop.",
+    storiesTitle: "The feed",
+    storiesSub: "A few minutes each. When one ends, the next one is waiting.",
+    midTitle: "Stay in it",
+    midDesc: "Download Bible Tea. Hit play. Don’t pick a reading plan. Scroll.",
+    aboutTitle: "The idea",
+    about: [
+      "You scroll everything else. The Bible can work the same way. Not a reading plan. Not homework. A feed of stories that keep coming.",
+      "That is scroll the Bible. You open Bible Tea. A story plays. When it ends, you start the next one. You stay in Scripture instead of hunting one verse and leaving.",
+      "Short audio, tied to the passage. Prayers, verse of the day, and a widget when you want them. The thing you came for is the scroll.",
+    ],
+    compare: null,
+    disclaimer: "",
+    faqTitle: "If you came to scroll",
+    faqs: [
+      {
+        q: "What does it mean to scroll the Bible?",
+        a: "Same motion as the rest of your phone. You keep going. Story, then story, then story. You don’t open a book and quit on page two.",
+      },
+      {
+        q: "How do I do it?",
+        a: "Download Bible Tea. Hit play. When the story ends, play the next one. That’s the whole idea.",
+      },
+      {
+        q: "Do I need to know where to start?",
+        a: "No. Open one. The next one is right there.",
+      },
+      {
+        q: "What’s in the app?",
+        a: "Audio Bible stories you keep playing, plus prayers, verse of the day, a widget, and chat. English and Spanish.",
+      },
+      {
+        q: "Where do I get it?",
+        a: "iPhone or Android. Tap the buttons on this page and start scrolling.",
+      },
+    ],
+    finalTitle: "Start scrolling",
+    finalDesc: "Download Bible Tea. Play a story. Keep going.",
     linkApp: "Get the Bible app",
     linkStories: "All stories",
     linkSleep: "Stories for sleep",
@@ -478,6 +537,55 @@ const ES: Record<LandingId, Omit<LandingCopy, "canonicalPath" | "esPath" | "camp
     linkStories: "Todas las historias",
     linkSleep: "Historias para dormir",
   },
+  scroll: {
+    title: "Scroll the Bible | Bible Tea",
+    description:
+      "Scroll the Bible. El mismo gesto, otro feed: historias cortas que no paran. Descarga Bible Tea y no pares.",
+    breadcrumb: "Scroll the Bible",
+    h1: "Scroll the Bible",
+    subtitle:
+      "Ya sabes hacer scroll. Hazlo con la Biblia. Empieza una historia. Luego otra. No pares.",
+    storiesTitle: "El feed",
+    storiesSub: "Unos minutos cada una. Cuando termina, la siguiente está esperando.",
+    midTitle: "Quédate dentro",
+    midDesc: "Descarga Bible Tea. Dale play. No elijas un plan de lectura. Haz scroll.",
+    aboutTitle: "La idea",
+    about: [
+      "Haces scroll con todo lo demás. La Biblia puede ir igual. No es un plan de lectura. No es tarea. Es un feed de historias que siguen viniendo.",
+      "Eso es scroll the Bible. Abres Bible Tea. Suena una historia. Cuando termina, pones la siguiente. Te quedas en la Escritura en vez de buscar un versículo y salir.",
+      "Audio corto, atado al pasaje. Oraciones, versículo del día y widget si los quieres. Lo que viniste a hacer es el scroll.",
+    ],
+    compare: null,
+    disclaimer: "",
+    faqTitle: "Si viniste a hacer scroll",
+    faqs: [
+      {
+        q: "¿Qué significa scroll the Bible?",
+        a: "El mismo gesto que con el resto del teléfono. Sigues. Historia, historia, historia. No abres un libro y lo dejas en la página dos.",
+      },
+      {
+        q: "¿Cómo se hace?",
+        a: "Descarga Bible Tea. Dale play. Cuando termina la historia, pon la siguiente. Esa es toda la idea.",
+      },
+      {
+        q: "¿Tengo que saber por dónde empezar?",
+        a: "No. Abre una. La siguiente está ahí.",
+      },
+      {
+        q: "¿Qué hay en la app?",
+        a: "Historias bíblicas en audio que sigues poniendo, más oraciones, versículo del día, widget y chat. Inglés y español.",
+      },
+      {
+        q: "¿Dónde la bajo?",
+        a: "iPhone o Android. Toca los botones de esta página y empieza a hacer scroll.",
+      },
+    ],
+    finalTitle: "Empieza el scroll",
+    finalDesc: "Descarga Bible Tea. Pon una historia. Sigue.",
+    linkApp: "Descarga la app",
+    linkStories: "Todas las historias",
+    linkSleep: "Historias para dormir",
+  },
 };
 
 const META: Record<LandingId, Pick<LandingCopy, "canonicalPath" | "esPath" | "campaign"> & { featuredIds: readonly string[] }> = {
@@ -505,6 +613,12 @@ const META: Record<LandingId, Pick<LandingCopy, "canonicalPath" | "esPath" | "ca
     campaign: "haven",
     featuredIds: FEATURED.haven,
   },
+  scroll: {
+    canonicalPath: "/scroll-the-bible",
+    esPath: "/scroll-the-bible",
+    campaign: "scroll",
+    featuredIds: FEATURED.scroll,
+  },
 };
 
 export function getLanding(id: LandingId, locale: Locale): LandingCopy {
@@ -519,4 +633,4 @@ export function getLanding(id: LandingId, locale: Locale): LandingCopy {
   };
 }
 
-export const LANDING_IDS = ["bff", "adults", "beginners", "haven"] as const satisfies LandingId[];
+export const LANDING_IDS = ["bff", "adults", "beginners", "haven", "scroll"] as const satisfies LandingId[];

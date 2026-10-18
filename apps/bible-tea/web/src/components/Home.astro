@@ -265,7 +265,8 @@ const iconAlt = locale === "es" ? "Ícono de Bible Tea" : "Bible Tea App Icon";
     }
     .hero-download :global(.store-buttons) { justify-content: flex-start; }
     .hero-jump {
-      display: inline-block;
+      display: block;
+      width: fit-content;
       margin-top: 1rem;
       color: var(--primary);
       font-weight: 600;
@@ -921,6 +922,7 @@ const iconAlt = locale === "es" ? "Ícono de Bible Tea" : "Bible Tea App Icon";
         <p class="hero-sub">{t(locale, "home.subtitle")}</p>
         <div class="hero-download"><StoreButtons variant="hero" campaign={homeCampaign} /></div>
         <a class="hero-jump" href="#how-it-works">{t(locale, "home.seeHow")} →</a>
+        <a class="hero-jump" href={localePath("/bible-app", locale)}>{t(locale, "home.appLink")}</a>
         <div class="hero-proof">
           <span class="stars" aria-hidden="true">★★★★★</span>
           <span><strong>{RATING}</strong> {t(locale, "home.proofAvg")}</span>

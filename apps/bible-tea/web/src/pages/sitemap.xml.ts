@@ -62,6 +62,7 @@ export const GET: APIRoute = async () => {
     { path: "/bible-stories-for-adults", lastmod: today, changefreq: "weekly", priority: 0.9 },
     { path: "/bible-for-beginners", lastmod: today, changefreq: "weekly", priority: 0.9 },
     { path: "/haven-bible-chat-alternative", lastmod: today, changefreq: "weekly", priority: 0.85 },
+    { path: "/scroll-the-bible", lastmod: today, changefreq: "weekly", priority: 0.9 },
     { path: "/prayer-for-today", lastmod: today, changefreq: "daily", priority: 0.9 },
     { path: "/verses", lastmod: today, changefreq: "weekly", priority: 0.85 },
     { path: "/widget", lastmod: today, changefreq: "monthly", priority: 0.8 },

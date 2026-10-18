@@ -117,11 +117,13 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
   "john-the-baptists-last-words": {
     en: {
       title: "What Were John the Baptist's Last Words? - Bible Tea",
+      h1: "What Were John the Baptist's Last Words?",
       description:
         "What were John the Baptist's last words? \"He must increase, I must decrease\" (John 3:30). The story behind them — and how he died. Listen on Bible Tea.",
     },
     es: {
       title: "Las Últimas Palabras de Juan el Bautista — Juan 3:30 - Bible Tea",
+      h1: "Las últimas palabras de Juan el Bautista",
       description:
         "¿Cuáles fueron las últimas palabras de Juan el Bautista? \"Es necesario que él crezca, y que yo mengüe\" (Juan 3:30). La historia completa, narrada.",
     },
@@ -167,11 +169,13 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
   "walking-on-water": {
     en: {
       title: "Jesus Walks on Water — Full Story (Matthew 14:22-33) - Bible Tea",
+      h1: "Jesus Walks on Water",
       description:
         "Jesus walks on water in the middle of a storm — and Peter steps out to join him. Who walked on water with Jesus, what happened, and what it means.",
     },
     es: {
-      title: "Jesús Camina sobre el Agua — Mateo 14:22-33 - Bible Tea",
+      title: "Jesús camina sobre las aguas — Mateo 14:22-33 - Bible Tea",
+      h1: "Jesús camina sobre las aguas",
       description:
         "Jesús camina sobre las aguas en medio de la tormenta — y Pedro sale a reunirse con él. Mateo 14:22-33, narrado como audio inmersivo.",
     },
@@ -445,6 +449,7 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
   "a-talking-donkey-and-a-hired-prophet": {
     en: {
       title: "Which Bible Character Talked to a Donkey? - Bible Tea",
+      h1: "Which Bible Character Talked to a Donkey?",
       description:
         "Which Bible character was spoken to by a donkey? Balaam — hired to curse Israel, until his donkey saw the angel he couldn't. Numbers 22, retold as audio.",
     },
@@ -505,14 +510,16 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
   },
   "jonah-and-the-whale": {
     en: {
-      title: "Jonah and the Whale — The Full Story (Jonah 1-4) - Bible Tea",
+      title: "Story of Jonah and the Whale — Bible Verse | Bible Tea",
+      h1: "Story of Jonah and the Whale",
       description:
-        "A prophet runs from God, a storm hits, and a great fish swallows him. Jonah and the whale (Jonah 1–4) — what happened next, retold as audio.",
+        "The story of Jonah and the whale, and the Bible verse that goes with it. A prophet runs, a storm hits, a great fish swallows him. Jonah 1–4, as audio.",
     },
     es: {
-      title: "Jonás y la Ballena — Historia Completa (Jonás 1-4) - Bible Tea",
+      title: "Historia de Jonás y la ballena | Bible Tea",
+      h1: "Historia de Jonás y la ballena",
       description:
-        "Un profeta huye de Dios, llega una tormenta y un gran pez se lo traga. Jonás y la ballena (Jonás 1–4) — qué pasó después, narrado como audio.",
+        "Historia de Jonás y la ballena: un profeta huye, llega una tormenta y un gran pez se lo traga. Jonás 1–4, narrado como audio.",
     },
   },
   "jesus-flips-tables": {
@@ -553,14 +560,16 @@ export const STORY_SEO: Record<string, LocalizedSeo> = {
   },
   "hosea-and-gomer": {
     en: {
-      title: "Hosea & Gomer — The Bible's Most Heartbreaking Love Story - Bible Tea",
+      title: "Hosea and Gomer — The Bible's Love Story | Bible Tea",
+      h1: "Hosea and Gomer",
       description:
-        "God tells Hosea to marry Gomer. She leaves — and he buys her back. The story of Hosea and Gomer (Hosea 1-3) and what it means. Listen on Bible Tea.",
+        "The story of Hosea and Gomer. God tells Hosea to marry her. She leaves — and he buys her back. Hosea 1–3, as audio.",
     },
     es: {
-      title: "Oseas y Gomer — La Historia de Amor Más Dolorosa - Bible Tea",
+      title: "Historia de Oseas y Gomer en la Biblia | Bible Tea",
+      h1: "Historia de Oseas y Gomer",
       description:
-        "Dios le dice a Oseas que se case con Gomer. Ella se va — y él la vuelve a comprar. Oseas 1–3 y lo que significa, narrado como audio.",
+        "Historia de Oseas y Gomer en la Biblia. Dios le dice a Oseas que se case con ella. Ella se va — y él la vuelve a comprar. Oseas 1–3, narrado.",
     },
   },
   "the-miraculous-catch": {
@@ -736,14 +745,16 @@ export function playlistSeo(id: string, locale: Locale): SeoOverride {
 export const CHARACTER_SEO: Record<string, LocalizedSeo> = {
   "ch-absalom": {
     en: {
-      title: "Who Was Absalom in the Bible? — David's Son | Bible Tea",
+      title: "Absalom — Who He Was in the Bible | Bible Tea",
+      h1: "Absalom",
       description:
-        "Who was Absalom in the Bible? David's son who stole Israel's heart and rebelled. Why he turned on his father (2 Samuel 13–18), retold as audio.",
+        "Absalom was David's son. He stole Israel's heart and rebelled against his father. Who Absalom was, and why he turned (2 Samuel 13–18), as audio.",
     },
     es: {
-      title: "¿Quién era Absalón en la Biblia? — Hijo de David | Bible Tea",
+      title: "Absalón — Quién era en la Biblia | Bible Tea",
+      h1: "Absalón",
       description:
-        "¿Quién era Absalón en la Biblia? El hijo de David que robó el corazón de Israel y se rebeló. 2 Samuel 13–18, narrado como audio.",
+        "Absalón era el hijo de David. Robó el corazón de Israel y se rebeló contra su padre. Quién era Absalón, 2 Samuel 13–18, narrado como audio.",
     },
   },
   "ch-isaac": {
@@ -1294,16 +1305,16 @@ export function sleepStoriesSeo(locale: Locale): { title: string; description: s
 export function bibleAppSeo(locale: Locale): { title: string; description: string } {
   if (locale === "es") {
     return {
-      title: clampTitle("App biblia — Historias en audio | Bible Tea"),
+      title: clampTitle("La app que lee la Biblia como un chisme | Bible Tea"),
       description: clampDescription(
-        "App biblia para iPhone y Android. Historias bíblicas en audio de cinco minutos, oraciones y un widget. Descarga Bible Tea y escúchalas.",
+        "La app que lee la Biblia como un chisme. Historias en audio, con voz de amiga, no de púlpito. Descarga Bible Tea en iPhone o Android.",
       ),
     };
   }
   return {
-    title: clampTitle("Bible App — Audio Bible Stories | Bible Tea"),
+    title: clampTitle("App That Reads the Bible Like Tea | Bible Tea"),
     description: clampDescription(
-      "Bible app for iPhone and Android. Listen to Bible stories in about five minutes, plus prayers and a verse widget. Download Bible Tea and hear them.",
+      "The app that reads the Bible like tea. A Bible app that sounds like tea — gossip, drama, and audio you finish. Download Bible Tea.",
     ),
   };
 }

@@ -62,6 +62,13 @@
 /alternativa-haven-bible-chat /es/alternativa-haven-bible-chat/ 301
 /alternativa-haven-bible-chat/ /es/alternativa-haven-bible-chat/ 301
 
+/scroll-the-bible /scroll-the-bible/ 301
+/scroll-the-bible-app /scroll-the-bible/ 301
+/scroll-the-bible-app/ /scroll-the-bible/ 301
+/es/scroll-the-bible /es/scroll-the-bible/ 301
+/es/scroll-the-bible-app /es/scroll-the-bible/ 301
+/es/scroll-the-bible-app/ /es/scroll-the-bible/ 301
+
 /stories/:slug /stories/:slug/ 301
 /es/stories/:slug /es/stories/:slug/ 301
 /characters/:id /characters/:id/ 301
