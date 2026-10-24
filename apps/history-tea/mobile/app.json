@@ -19,14 +19,25 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "app.historytea",
-      "buildNumber": "21",
+      "buildNumber": "22",
       "usesAppleSignIn": true,
       "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
         "UIBackgroundModes": [
           "audio"
         ],
-        "NSUserTrackingUsageDescription": "This identifier will be used to deliver personalized ads to you."
+        "NSUserTrackingUsageDescription": "This identifier will be used to deliver personalized ads to you.",
+        "UIApplicationSceneManifest": {
+          "UIApplicationSupportsMultipleScenes": false,
+          "UISceneConfigurations": {
+            "UIWindowSceneSessionRoleApplication": [
+              {
+                "UISceneConfigurationName": "Default Configuration",
+                "UISceneDelegateClassName": "$(PRODUCT_MODULE_NAME).SceneDelegate"
+              }
+            ]
+          }
+        }
       }
     },
     "android": {
@@ -81,7 +92,8 @@
         }
       ],
       "expo-tracking-transparency",
-      "./plugins/android-16-compat"
+      "./plugins/android-16-compat",
+      "./plugins/ios-scene-lifecycle"
     ],
     "experiments": {
       "typedRoutes": true

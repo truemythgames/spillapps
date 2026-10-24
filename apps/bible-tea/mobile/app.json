@@ -19,14 +19,25 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "app.bibletea",
-      "buildNumber": "86",
+      "buildNumber": "87",
       "appleTeamId": "T8QBXL5U75",
       "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
         "UIBackgroundModes": [
           "audio"
         ],
-        "NSUserTrackingUsageDescription": "This identifier will be used to deliver personalized ads to you."
+        "NSUserTrackingUsageDescription": "This identifier will be used to deliver personalized ads to you.",
+        "UIApplicationSceneManifest": {
+          "UIApplicationSupportsMultipleScenes": false,
+          "UISceneConfigurations": {
+            "UIWindowSceneSessionRoleApplication": [
+              {
+                "UISceneConfigurationName": "Default Configuration",
+                "UISceneDelegateClassName": "$(PRODUCT_MODULE_NAME).SceneDelegate"
+              }
+            ]
+          }
+        }
       }
     },
     "android": {
@@ -35,7 +46,7 @@
         "backgroundColor": "#0A0A0F"
       },
       "package": "app.bibletea",
-      "versionCode": 86,
+      "versionCode": 87,
       "googleServicesFile": "./google-services.json",
       "edgeToEdgeEnabled": true
     },
@@ -95,7 +106,8 @@
       "./plugins/verse-widget-plugin",
       "./plugins/android-verse-widget-plugin",
       "expo-tracking-transparency",
-      "./plugins/android-16-compat"
+      "./plugins/android-16-compat",
+      "./plugins/ios-scene-lifecycle"
     ],
     "experiments": {
       "typedRoutes": true
